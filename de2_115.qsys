@@ -16,7 +16,15 @@
    {
       datum baseAddress
       {
-         value = "135264";
+         value = "135328";
+         type = "String";
+      }
+   }
+   element infrared_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "135336";
          type = "String";
       }
    }
@@ -32,7 +40,7 @@
    {
       datum baseAddress
       {
-         value = "135248";
+         value = "135312";
          type = "String";
       }
    }
@@ -108,15 +116,15 @@
          type = "int";
       }
    }
-   element onchip_memory2_0.s1
+   element sd_wp_n.s1
    {
       datum baseAddress
       {
-         value = "65536";
+         value = "135248";
          type = "String";
       }
    }
-   element duosegmentlinks.s1
+   element sd_cmd.s1
    {
       datum baseAddress
       {
@@ -132,7 +140,31 @@
          type = "String";
       }
    }
-   element quadrosegment.s1
+   element duosegmentrechts.s1
+   {
+      datum baseAddress
+      {
+         value = "135280";
+         type = "String";
+      }
+   }
+   element sd_dat.s1
+   {
+      datum baseAddress
+      {
+         value = "135216";
+         type = "String";
+      }
+   }
+   element duosegmentlinks.s1
+   {
+      datum baseAddress
+      {
+         value = "135296";
+         type = "String";
+      }
+   }
+   element sd_clk.s1
    {
       datum baseAddress
       {
@@ -140,12 +172,52 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s1
+   element onchip_memory2_0.s1
    {
       datum baseAddress
       {
-         value = "135216";
+         value = "65536";
          type = "String";
+      }
+   }
+   element quadrosegment.s1
+   {
+      datum baseAddress
+      {
+         value = "135264";
+         type = "String";
+      }
+   }
+   element sd_clk
+   {
+      datum _sortIndex
+      {
+         value = "10";
+         type = "int";
+      }
+   }
+   element sd_cmd
+   {
+      datum _sortIndex
+      {
+         value = "11";
+         type = "int";
+      }
+   }
+   element sd_dat
+   {
+      datum _sortIndex
+      {
+         value = "12";
+         type = "int";
+      }
+   }
+   element sd_wp_n
+   {
+      datum _sortIndex
+      {
+         value = "13";
+         type = "int";
       }
    }
    element uart
@@ -171,7 +243,7 @@
  <parameter name="projectName" value="de2_115.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1399143285176" />
+ <parameter name="timeStamp" value="1399158732170" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk50.clk_in" type="clock" dir="end" />
@@ -204,6 +276,26 @@
  <interface
    name="infrared_0_conduit_end"
    internal="infrared_0.conduit_end"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sd_wp_n_external_connection"
+   internal="sd_wp_n.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sd_dat_external_connection"
+   internal="sd_dat.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sd_cmd_external_connection"
+   internal="sd_cmd.external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sd_clk_external_connection"
+   internal="sd_clk.external_connection"
    type="conduit"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
@@ -308,7 +400,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x10000' end='0x20000' /><slave name='cpu.jtag_debug_module' start='0x20800' end='0x21000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='infrared_0.avalon_slave' start='0x0' end='0x4' /><slave name='onchip_memory2_0.s1' start='0x10000' end='0x20000' /><slave name='cpu.jtag_debug_module' start='0x20800' end='0x21000' /><slave name='uart.s1' start='0x21000' end='0x21020' /><slave name='quadrosegment.s1' start='0x21020' end='0x21030' /><slave name='duosegmentrechts.s1' start='0x21030' end='0x21040' /><slave name='duosegmentlinks.s1' start='0x21040' end='0x21050' /><slave name='dotmatrix.control_slave' start='0x21050' end='0x21060' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x21060' end='0x21068' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory2_0.s1' start='0x10000' end='0x20000' /><slave name='cpu.jtag_debug_module' start='0x20800' end='0x21000' /><slave name='uart.s1' start='0x21000' end='0x21020' /><slave name='sd_clk.s1' start='0x21020' end='0x21030' /><slave name='sd_dat.s1' start='0x21030' end='0x21040' /><slave name='sd_cmd.s1' start='0x21040' end='0x21050' /><slave name='sd_wp_n.s1' start='0x21050' end='0x21060' /><slave name='quadrosegment.s1' start='0x21060' end='0x21070' /><slave name='duosegmentrechts.s1' start='0x21070' end='0x21080' /><slave name='duosegmentlinks.s1' start='0x21080' end='0x21090' /><slave name='dotmatrix.control_slave' start='0x21090' end='0x210A0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x210A0' end='0x210A8' /><slave name='infrared_0.avalon_slave' start='0x210A8' end='0x210AC' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="7" />
@@ -455,6 +547,78 @@
  <module kind="infrared" version="1.0" enabled="1" name="infrared_0">
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
  </module>
+ <module
+   kind="altera_avalon_pio"
+   version="13.0.1.99.2"
+   enabled="1"
+   name="sd_clk">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Output" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+  <parameter name="clockRate" value="50000000" />
+ </module>
+ <module
+   kind="altera_avalon_pio"
+   version="13.0.1.99.2"
+   enabled="1"
+   name="sd_cmd">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Bidir" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+  <parameter name="clockRate" value="50000000" />
+ </module>
+ <module
+   kind="altera_avalon_pio"
+   version="13.0.1.99.2"
+   enabled="1"
+   name="sd_dat">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Bidir" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="4" />
+  <parameter name="clockRate" value="50000000" />
+ </module>
+ <module
+   kind="altera_avalon_pio"
+   version="13.0.1.99.2"
+   enabled="1"
+   name="sd_wp_n">
+  <parameter name="bitClearingEdgeCapReg" value="false" />
+  <parameter name="bitModifyingOutReg" value="false" />
+  <parameter name="captureEdge" value="false" />
+  <parameter name="direction" value="Input" />
+  <parameter name="edgeType" value="RISING" />
+  <parameter name="generateIRQ" value="false" />
+  <parameter name="irqType" value="LEVEL" />
+  <parameter name="resetValue" value="0" />
+  <parameter name="simDoTestBenchWiring" value="false" />
+  <parameter name="simDrivenValue" value="0" />
+  <parameter name="width" value="1" />
+  <parameter name="clockRate" value="50000000" />
+ </module>
  <connection
    kind="avalon"
    version="13.0"
@@ -523,7 +687,7 @@
    start="cpu.data_master"
    end="jtag_uart_0.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021060" />
+  <parameter name="baseAddress" value="0x000210a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -547,7 +711,7 @@
    start="cpu.data_master"
    end="dotmatrix.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021050" />
+  <parameter name="baseAddress" value="0x00021090" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -582,7 +746,7 @@
    start="cpu.data_master"
    end="duosegmentlinks.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021040" />
+  <parameter name="baseAddress" value="0x00021080" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -591,7 +755,7 @@
    start="cpu.data_master"
    end="duosegmentrechts.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021030" />
+  <parameter name="baseAddress" value="0x00021070" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -600,7 +764,7 @@
    start="cpu.data_master"
    end="quadrosegment.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00021020" />
+  <parameter name="baseAddress" value="0x00021060" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -619,7 +783,7 @@
    start="cpu.data_master"
    end="infrared_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x000210a8" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -629,6 +793,50 @@
    end="infrared_0.interrupt_sender">
   <parameter name="irqNumber" value="2" />
  </connection>
+ <connection kind="clock" version="13.0" start="clk50.clk" end="sd_clk.clk" />
+ <connection kind="clock" version="13.0" start="clk50.clk" end="sd_cmd.clk" />
+ <connection kind="clock" version="13.0" start="clk50.clk" end="sd_dat.clk" />
+ <connection kind="clock" version="13.0" start="clk50.clk" end="sd_wp_n.clk" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk50.clk_reset"
+   end="sd_cmd.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk50.clk_reset"
+   end="sd_clk.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk50.clk_reset"
+   end="sd_wp_n.reset" />
+ <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_wp_n.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00021050" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_cmd.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00021040" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_dat.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00021030" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_clk.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00021020" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk50.clk_reset"
+   end="sd_dat.reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

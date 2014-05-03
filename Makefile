@@ -15,7 +15,11 @@ de2_115.pof: de2_115.flash
 download:
 	quartus_pgm de2_115_jtag.cdf
 
+urjtag:
+	jtag de2_115_urjtag.cmd
+
 clean:
 	rm -Rvf db incremental_db *.rpt *.summary *.smsg *.sof *.pof
 	rm -Rvf *.sopcinfo *.pin *.svf *.done *.jam *.qws *.qdf *.jdi *.flash
+	rm -Rvf *.ttf *.rbf *.jbc
 

@@ -1,3 +1,10 @@
+/*
+Jasper ter Weeme
+Alex Aalbertsberg
+*/
+
+#ifndef _SEGMENT_H_
+#define _SEGMENT_H_
 #include <stdint.h>
 
 template <class T> class Segment
@@ -26,5 +33,5 @@ class CombinedSegment
 public:
     CombinedSegment();
 };
-
+#endif
 
