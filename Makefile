@@ -16,5 +16,6 @@ download:
 	quartus_pgm de2_115_jtag.cdf
 
 clean:
-	rm -Rvf db incremental_db *.rpt *.summary *.smsg *.sof *.pof *.sopcinfo *.pin *.svf *.done *.jam
+	rm -Rvf db incremental_db *.rpt *.summary *.smsg *.sof *.pof
+	rm -Rvf *.sopcinfo *.pin *.svf *.done *.jam *.qws *.qdf *.jdi *.flash
 

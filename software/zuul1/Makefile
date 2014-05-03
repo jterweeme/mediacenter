@@ -7,3 +7,6 @@ all:
 	elf2flash --epcs --after=../../de2_115.flash --input=main.elf --output=main.flash
 	nios2-elf-objcopy -I srec -O ihex main.flash main.hex
 
+download:
+	nios2-download -g main.elf
+
