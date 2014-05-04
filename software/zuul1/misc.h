@@ -18,20 +18,22 @@ public:
     void setObserver(Observer *);
     void init(volatile uint32_t *base, int irq, int ctl);
 private:
-    InfraRood();
+    InfraRood() { }
     Observer *observer;
     void isr(void *context);
     static void isrBridge(void *context);
+    volatile uint32_t *base;
 };
 
 class Uart
 {
 public:
     static Uart *getInstance();
+    void init(volatile uint32_t *base);
     void putc(const char);
     void puts(const char *);
 private:
-    Uart(volatile uint32_t *base);
+    Uart() { }
     volatile uint32_t *base;
 };
 #endif

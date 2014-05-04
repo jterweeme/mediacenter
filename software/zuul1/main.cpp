@@ -49,6 +49,7 @@ int main()
     ir->setObserver(new Beam());
 
     Uart *uart = Uart::getInstance();
+    uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Opstarten\r\n");
 
     while (true) { }
