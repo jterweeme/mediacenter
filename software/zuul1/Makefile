@@ -3,7 +3,8 @@ INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
 
 all:
 	nios2-elf-g++ -c $(INCLUDES) main.cpp
-	nios2-elf-g++ -o main.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp main.o
+	nios2-elf-g++ -c $(INCLUDES) misc.cpp
+	nios2-elf-g++ -o main.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp main.o misc.o
 	elf2flash --epcs --after=../../de2_115.flash --input=main.elf --output=main.flash
 	nios2-elf-objcopy -I srec -O ihex main.flash main.hex
 

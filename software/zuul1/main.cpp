@@ -1,8 +1,12 @@
+#define SYSTEM_BUS_WIDTH 32
+
 #include <stdio.h>
 #include <system.h>
 #include <stdint.h>
 #include <altera_avalon_lcd_16207.h>
 #include <sys/alt_irq.h>
+#include <io.h>
+#include <altera_avalon_pio_regs.h>
 #include "lcd.h"
 #include "segment.h"
 #include "misc.h"
@@ -19,45 +23,15 @@ public:
     DuoSegmentRechts() : DuoSegment((volatile uint16_t *)DUOSEGMENTRECHTS_BASE) { }
 };
 
-InfraRood::InfraRood()
+class Beam : public Observer
 {
-    init();
-}
+public:
+    void update();
+};
 
-void InfraRood::init()
+void Beam::update()
 {
-    alt_ic_isr_register(INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID, INFRARED_0_IRQ, isr, 0, 0);
-}
-
-void InfraRood::isr(void *context)
-{
-    ::printf("InfraRood\r\n");
-}
-
-InfraRood *InfraRood::getInstance()
-{
-    static InfraRood instance;
-    return &instance;
-}
-
-Uart::Uart(volatile uint32_t *base)
-{
-    this->base = base;
-}
-
-void Uart::putc(const char c)
-{
-    while ((base[2] & (1<<6)) == 0)
-    {
-    }
-
-    base[1] = c;
-}
-
-void Uart::puts(const char *s)
-{
-    while (*s)
-        putc(*s++);
+    Uart::getInstance()->puts("Zap!\r\n");
 }
 
 int main()
@@ -71,8 +45,11 @@ int main()
     segmentQuadro.write(0x10829230);
 
     InfraRood *ir = InfraRood::getInstance();
-    Uart uart((volatile uint32_t *)UART_BASE);
-    uart.puts("Opstarten\r\n");
+    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, 0); // controller id!
+    ir->setObserver(new Beam());
+
+    Uart *uart = Uart::getInstance();
+    uart->puts("Opstarten\r\n");
 
     while (true) { }
 

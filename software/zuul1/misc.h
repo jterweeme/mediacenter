@@ -16,20 +16,22 @@ class InfraRood
 public:
     static InfraRood *getInstance();
     void setObserver(Observer *);
+    void init(volatile uint32_t *base, int irq, int ctl);
 private:
-    void init();
     InfraRood();
-    Observer *rh;
-    static void isr(void *context);
+    Observer *observer;
+    void isr(void *context);
+    static void isrBridge(void *context);
 };
 
 class Uart
 {
 public:
-    Uart(volatile uint32_t *base);
+    static Uart *getInstance();
     void putc(const char);
     void puts(const char *);
 private:
+    Uart(volatile uint32_t *base);
     volatile uint32_t *base;
 };
 #endif
