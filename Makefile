@@ -4,7 +4,7 @@
 all: de2_115.flash
 
 de2_115.sof:
-	quartus_sh --flow compile de2_115 -c de2_115
+	quartus_sh --flow compile mediacenter -c de2_115
 
 de2_115.flash: de2_115.sof
 	sof2flash --epcs --input=$< --output=$@
