@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>470</x>
+      <y>220</y>
+      <w>360</w>
+      <h>170</h>
+    </coordinates>
+    <panel_attributes>*Beam*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1000</x>
+      <y>240</y>
+      <w>250</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>*Observer*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1000</x>
+      <y>60</y>
+      <w>200</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*Uart*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>520</x>
+      <y>10</y>
+      <w>250</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>*InfraRood*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

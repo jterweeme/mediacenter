@@ -39,15 +39,15 @@ int main()
     DuoSegmentLinks segmentLinks;
     DuoSegmentRechts segmentRechts;
     QuadroSegment segmentQuadro((volatile uint32_t *)QUADROSEGMENT_BASE);
-
     segmentLinks.write(0xf940);
     segmentRechts.write(0xf910);
     segmentQuadro.write(0x10829230);
-
     InfraRood *ir = InfraRood::getInstance();
-    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, 0); // controller id!
-    ir->setObserver(new Beam());
 
+    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
+                        INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID);
+
+    ir->setObserver(new Beam());
     Uart *uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Opstarten\r\n");
