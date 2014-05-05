@@ -3,7 +3,7 @@ INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
 
 all: main.hex
 
-main.elf:
+main.elf: doemaar.altijd
 	nios2-elf-g++ -c $(INCLUDES) main.cpp
 	nios2-elf-g++ -c $(INCLUDES) misc.cpp
 	nios2-elf-g++ -c $(INCLUDES) primes1.cpp
@@ -15,6 +15,9 @@ main.flash: main.elf
 
 main.hex: main.flash
 	nios2-elf-objcopy -I srec -O ihex main.flash main.hex
+
+doemaar.altijd:
+	echo
 
 clean:
 	rm -Rvf *.o *.elf *.hex *.flash

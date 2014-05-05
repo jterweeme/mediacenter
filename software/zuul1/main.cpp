@@ -39,9 +39,10 @@ int main()
     DuoSegmentLinks segmentLinks;
     DuoSegmentRechts segmentRechts;
     QuadroSegment segmentQuadro((volatile uint32_t *)QUADROSEGMENT_BASE);
-    segmentLinks.write(0xf940);
-    segmentRechts.write(0xf910);
-    segmentQuadro.write(0x10829230);
+    segmentLinks.write(0x2430);
+    segmentRechts.write(0x9992);
+    segmentQuadro.write(0x82f80010);
+    segmentQuadro.setInt(9876);
     InfraRood *ir = InfraRood::getInstance();
 
     ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
