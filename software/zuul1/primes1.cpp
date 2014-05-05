@@ -1,15 +1,19 @@
 #include <stdio.h>
+#include <system.h>
+#include "misc.h"
+
 int main()
 {
+    Uart *uart = Uart::getInstance();
     printf("Opstarten\r\n");
 
     int aantal = 0;
     
-    for (int i = 2; i < 0xffff; i++)
+    for (int i = 2; i < 0x1f; i++)
     {
         bool priem = true;
         
-        for (int j = 2; j < 1; j++)
+        for (int j = 2; j < i; j++)
             if (i % j == 0)
                 priem = false;
 
@@ -17,7 +21,7 @@ int main()
             aantal++;
     }
 
-    printf("%u\n", aantal);
+    printf("%u\r\n", aantal);
     return 0;
 }
 

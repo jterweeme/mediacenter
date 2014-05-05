@@ -5,6 +5,9 @@ Alex Aalbertsberg
 
 #ifndef _MISC_H_
 #define _MISC_H_
+
+#include <stdint.h>
+
 class Observer
 {
 public:
