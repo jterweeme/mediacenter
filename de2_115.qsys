@@ -12,19 +12,19 @@
    element $${FILENAME}
    {
    }
+   element TERASIC_SRAM_0
+   {
+      datum _sortIndex
+      {
+         value = "13";
+         type = "int";
+      }
+   }
    element jtag_uart_0.avalon_jtag_slave
    {
       datum baseAddress
       {
          value = "4329632";
-         type = "String";
-      }
-   }
-   element mysram_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "2097152";
          type = "String";
       }
    }
@@ -108,14 +108,6 @@
          type = "int";
       }
    }
-   element mysram_0
-   {
-      datum _sortIndex
-      {
-         value = "13";
-         type = "int";
-      }
-   }
    element quadrosegment
    {
       datum _sortIndex
@@ -124,27 +116,11 @@
          type = "int";
       }
    }
-   element duosegmentrechts.s1
+   element sd_dat.s1
    {
       datum baseAddress
       {
-         value = "4329584";
-         type = "String";
-      }
-   }
-   element sd_wp_n.s1
-   {
-      datum baseAddress
-      {
-         value = "4329552";
-         type = "String";
-      }
-   }
-   element quadrosegment.s1
-   {
-      datum baseAddress
-      {
-         value = "4329568";
+         value = "4329520";
          type = "String";
       }
    }
@@ -156,11 +132,27 @@
          type = "String";
       }
    }
-   element sd_dat.s1
+   element quadrosegment.s1
    {
       datum baseAddress
       {
-         value = "4329520";
+         value = "4329568";
+         type = "String";
+      }
+   }
+   element sd_wp_n.s1
+   {
+      datum baseAddress
+      {
+         value = "4329552";
+         type = "String";
+      }
+   }
+   element duosegmentrechts.s1
+   {
+      datum baseAddress
+      {
+         value = "4329584";
          type = "String";
       }
    }
@@ -240,10 +232,10 @@
  <parameter name="globalResetBus" value="false" />
  <parameter name="hdlLanguage" value="VERILOG" />
  <parameter name="maxAdditionalLatency" value="1" />
- <parameter name="projectName" value="de2_115.qpf" />
+ <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1399296129004" />
+ <parameter name="timeStamp" value="1399303191060" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk50.clk_in" type="clock" dir="end" />
@@ -299,8 +291,8 @@
    type="conduit"
    dir="end" />
  <interface
-   name="mysram_0_conduit_end"
-   internal="mysram_0.conduit_end"
+   name="terasic_sram_0_conduit_end"
+   internal="TERASIC_SRAM_0.conduit_end"
    type="conduit"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
@@ -357,9 +349,9 @@
   <parameter name="cpuID_stored" value="0" />
   <parameter name="breakOffset" value="32" />
   <parameter name="userDefinedSettings" value="" />
-  <parameter name="resetSlave">mysram_0.avalon_slave</parameter>
+  <parameter name="resetSlave">TERASIC_SRAM_0.avalon_slave</parameter>
   <parameter name="mmu_TLBMissExcSlave" value="None" />
-  <parameter name="exceptionSlave">mysram_0.avalon_slave</parameter>
+  <parameter name="exceptionSlave">TERASIC_SRAM_0.avalon_slave</parameter>
   <parameter name="breakSlave">cpu.jtag_debug_module</parameter>
   <parameter name="setting_perfCounterWidth" value="32" />
   <parameter name="setting_interruptControllerType" value="Internal" />
@@ -404,8 +396,8 @@
   <parameter name="tightlyCoupledInstructionMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='mysram_0.avalon_slave' start='0x200000' end='0x400000' /><slave name='cpu.jtag_debug_module' start='0x420800' end='0x421000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='mysram_0.avalon_slave' start='0x200000' end='0x400000' /><slave name='cpu.jtag_debug_module' start='0x420800' end='0x421000' /><slave name='uart.s1' start='0x421000' end='0x421020' /><slave name='sd_clk.s1' start='0x421020' end='0x421030' /><slave name='sd_dat.s1' start='0x421030' end='0x421040' /><slave name='sd_cmd.s1' start='0x421040' end='0x421050' /><slave name='sd_wp_n.s1' start='0x421050' end='0x421060' /><slave name='quadrosegment.s1' start='0x421060' end='0x421070' /><slave name='duosegmentrechts.s1' start='0x421070' end='0x421080' /><slave name='duosegmentlinks.s1' start='0x421080' end='0x421090' /><slave name='dotmatrix.control_slave' start='0x421090' end='0x4210A0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x4210A0' end='0x4210A8' /><slave name='infrared_0.avalon_slave' start='0x4210A8' end='0x4210AC' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='TERASIC_SRAM_0.avalon_slave' start='0x0' end='0x200000' /><slave name='cpu.jtag_debug_module' start='0x420800' end='0x421000' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='TERASIC_SRAM_0.avalon_slave' start='0x0' end='0x200000' /><slave name='cpu.jtag_debug_module' start='0x420800' end='0x421000' /><slave name='uart.s1' start='0x421000' end='0x421020' /><slave name='sd_clk.s1' start='0x421020' end='0x421030' /><slave name='sd_dat.s1' start='0x421030' end='0x421040' /><slave name='sd_cmd.s1' start='0x421040' end='0x421050' /><slave name='sd_wp_n.s1' start='0x421050' end='0x421060' /><slave name='quadrosegment.s1' start='0x421060' end='0x421070' /><slave name='duosegmentrechts.s1' start='0x421070' end='0x421080' /><slave name='duosegmentlinks.s1' start='0x421080' end='0x421090' /><slave name='dotmatrix.control_slave' start='0x421090' end='0x4210A0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x4210A0' end='0x4210A8' /><slave name='infrared_0.avalon_slave' start='0x4210A8' end='0x4210AC' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="7" />
@@ -598,8 +590,10 @@
   <parameter name="width" value="1" />
   <parameter name="clockRate" value="50000000" />
  </module>
- <module kind="mysram" version="1.0" enabled="1" name="mysram_0">
-  <parameter name="AUTO_CLOCK_CLOCK_RATE" value="50000000" />
+ <module kind="TERASIC_SRAM" version="1.0" enabled="1" name="TERASIC_SRAM_0">
+  <parameter name="DATA_BITS" value="16" />
+  <parameter name="ADDR_BITS" value="20" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
  </module>
  <connection
    kind="avalon"
@@ -791,28 +785,32 @@
    version="13.0"
    start="clk50.clk_reset"
    end="sd_dat.reset" />
- <connection kind="clock" version="13.0" start="clk50.clk" end="mysram_0.clock" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="clk50.clk"
+   end="TERASIC_SRAM_0.clock_reset" />
  <connection
    kind="reset"
    version="13.0"
    start="clk50.clk_reset"
-   end="mysram_0.reset" />
+   end="TERASIC_SRAM_0.clock_reset_reset" />
  <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
-   end="mysram_0.avalon_slave">
+   end="TERASIC_SRAM_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00200000" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
    kind="avalon"
    version="13.0"
    start="cpu.instruction_master"
-   end="mysram_0.avalon_slave">
+   end="TERASIC_SRAM_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00200000" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
