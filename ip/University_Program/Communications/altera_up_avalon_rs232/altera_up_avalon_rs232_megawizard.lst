@@ -1,0 +1,11 @@
+[University Program|Communications]
+RS232 UART = "%t" "%w/../../../altera/common/lib/megawizard.pl" --wizard_file:"%w/altera_up_avalon_rs232_hw.tcl" --wizard:altera_up_avalon_rs232 --early_gen:on %f %o %h
+<INFO>
+<QIP_FILE_ENABLED/>
+<ACCEPT_OTHER_CNX VALUE="ON"/>
+<LANGUAGES   AHDL="OFF" />
+<PINPLAN SUPPORTED="OFF"/>
+<ALIAS>RS232 UART Controller</ALIAS>
+
+</INFO>
+

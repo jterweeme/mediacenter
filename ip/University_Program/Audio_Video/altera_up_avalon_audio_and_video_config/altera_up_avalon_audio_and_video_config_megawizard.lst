@@ -1,0 +1,11 @@
+[University Program|Audio & Video]
+Audio and Video Config = "%t" "%w/../../../altera/common/lib/megawizard.pl" --wizard_file:"%w/altera_up_avalon_audio_and_video_config_hw.tcl" --wizard:altera_up_avalon_audio_and_video_config --early_gen:on %f %o %h
+<INFO>
+<QIP_FILE_ENABLED/>
+<ACCEPT_OTHER_CNX VALUE="ON"/>
+<LANGUAGES   AHDL="OFF" />
+<PINPLAN SUPPORTED="OFF"/>
+<ALIAS>I2C bus for audio and video configuration on DE-series boards</ALIAS>
+
+</INFO>
+

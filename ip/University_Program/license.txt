@@ -1,0 +1,102 @@
+Altera University Design Suite License Agreement                                                           
+                                                                             
+Copyright (c) 1991-2013 Altera Corporation, San Jose, California, USA.           
+All rights reserved.                                                        
+
+SOFTWARE DISTRIBUTION AGREEMENT
+
+THIS SOFTWARE PROGRAM AND EXECUTABLE FILES, AND RELATED SPECIFICATION DOCUMENTATION ("PROGRAMS") (AVAILABLE FOR DOWNLOADING FROM THIS WEB SITE OR ENCLOSED WITH THE COMPUTER DISK ACCOMPANYING THIS NOTICE), ARE MADE FREELY AVAILABLE FOR USE BY ANYONE, SUBJECT TO CERTAIN TERMS AND CONDITIONS SET FORTH BELOW. PLEASE READ THESE TERMS AND CONDITIONS CAREFULLY BEFORE DOWNLOADING OR USING THE PROGRAMS. BY DOWNLOADING OR USING THE PROGRAMS YOU INDICATE YOUR ACCEPTANCE OF THESE TERMS AND CONDITIONS, WHICH CONSTITUTE THE LICENSE AGREEMENT (the "AGREEMENT") BETWEEN YOU AND ALTERA CORPORATION ("ALTERA") WITH REGARD TO THE PROGRAMS. IN THE EVENT THAT YOU DO NOT AGREE WITH ANY OF THESE TERMS AND CONDITIONS, DO NOT DOWNLOAD THE PROGRAMS OR PROMPTLY RETURN THE PROGRAMS TO ALTERA UNUSED.
+
+1.	License Terms 
+
+Subject to the terms and conditions of this Agreement, Altera grants to you a royalty-free, fully-paid-up, worldwide, nonexclusive, perpetual license  (with the right to grant sublicenses, and authorize sublicensees to sublicense further) to use, copy, prepare derivative works based on, and distribute the Programs and derivative works thereof, provided that any distribution or sublicense is subject to the same terms and conditions set forth in the Agreement. Any copies of the Programs or derivative works thereof will continue to be subject to the terms and conditions of this Agreement. You must include in any copies of the Programs or derivative works thereof any trademark, copyright, and other proprietary rights notices included in the Programs by Altera.
+
+2.	Disclaimer of Warranties and Remedies
+
+NO WARRANTIES, EITHER EXPRESS OR IMPLIED, ARE MADE WITH RESPECT TO THE PROGRAMS, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE AND NONINFRINGEMENT, AND ALTERA EXPRESSLY DISCLAIM ALL WARRANTIES NOT STATED HEREIN. YOU ASSUME THE ENTIRE RISK AS TO THE QUALITY, USE, AND PERFORMANCE OF THE PROGRAMS. SHOULD THE PROGRAMS PROVE DEFECTIVE OR FAIL TO PERFORM PROPERLY, YOU -- AND NOT ALTERA -- SHALL ASSUME THE ENTIRE COST AND RISK OF ANY REPAIR, SERVICE, CORRECTION, OR ANY OTHER LIABILITY OR DAMAGES CAUSED BY OR OTHERWISE ASSOCIATED WITH THE PROGRAMS. ALTERA DOES NOT WARRANT THAT THE PROGRAMS WILL MEET YOUR REQUIREMENTS, OR THAT THE OPERATION OF THE PROGRAMS WILL BE UNINTERRUPTED OR ERROR-FREE. YOU ALSO ASSUME RESPONSIBILITY FOR THE SELECTION, INSTALLATION, USE, AND RESULTS OF USING THE PROGRAMS. Some states do not allow the exclusion of implied warranties, so the above exclusion may not apply to you.
+
+ALTERA SHALL NOT BE LIABLE TO YOU OR ANY OTHER PERSON FOR ANY DAMAGES, INCLUDING ANY INCIDENTAL OR CONSEQUENTIAL DAMAGES, EXPENSES, LOST PROFITS, LOST SAVINGS, OR OTHER DAMAGES ARISING OUT OF OR OTHERWISE ASSOCIATED WITH THE USE OF OR INABILITY TO USE THE PROGRAMS. IN ANY EVENT, ALTERA'S LIABILITY UNDER THIS AGREEMENT SHALL NOT EXCEED THE LARGER OF EITHER THE AMOUNT YOU PAID ALTERA FOR USE OF THE PROGRAMS, OR ONE HUNDRED DOLLARS ($100). YOUR SOLE REMEDIES AND ALTERA'S ENTIRE LIABILITY ARE AS SET FORTH ABOVE. Some states do not allow the limitation or exclusion of incidental or consequential damages, so the above limitations or exclusions may not apply to you.
+
+To the extent that the Programs are derived from third-party software or other third-party materials, no such third-party provides any warranties with respect to the Programs, assumes any liability regarding use of the Programs, or undertakes to furnish you any support or information relating to the Programs.
+
+3.	General
+
+You acknowledge that Altera is not responsible for and is not obligated to provide, any support, including email and telephone support, for any purpose with respect to the Programs.
+
+You shall not export the Programs, or any product programmed by the Programs, without first obtaining any necessary U.S. or other governmental licenses and approvals.
+
+This Agreement constitutes the entire understanding and agreement applicable to the Programs, superseding any prior or contemporaneous understandings or agreements. It may not be modified except in a writing executed by Altera.  This Agreement will be governed by the laws of the State of California. You agree to submit to the jurisdiction of the courts in the State of California for the resolution of any dispute or claim arising out of or relating to this Agreement.  The prevailing party in any legal action or arbitration arising out of this Agreement shall be entitled to reimbursement for its expenses, including court costs and reasonable attorneys' fees, in addition to any other rights and remedies such party may have.
+
+BY USING THE PROGRAMS YOU ACKNOWLEDGE THAT YOU HAVE READ THIS AGREEMENT, UNDERSTAND IT, AND AGREE TO BE BOUND BY ITS TERMS AND CONDITIONS; YOU FURTHER AGREE THAT IT IS THE COMPLETE AND EXCLUSIVE STATEMENT OF THE AGREEMENT BETWEEN YOU AND ALTERA WHICH SUPERSEDES ANY PROPOSAL OR PRIOR AGREEMENT, ORAL OR WRITTEN, AND ANY OTHER COMMUNICATIONS BETWEEN YOU AND ALTERA RELATING TO THE SUBJECT MATTER OF THIS AGREEMENT.
+
+
+4.	U.S. Government Restricted Rights 
+
+The Programs and any accompanying documentation are provided with RESTRICTED RIGHTS. Use, duplication, or disclosure by the Government is subject to restrictions as set forth in subparagraph (c)(1)(ii) of The Rights in Technical Data and Computer Software clause at DFARS 252.227-7013 or subparagraphs (c)(1) and (2) of Commercial Computer Software--Restricted Rights at 48 CFR 52.227-19, as applicable. Contractor/manufacturer is Altera Corporation, 101 Innovation Drive, San Jose, CA 95134 and its licensors.  
+
+5.	Third Party Materials
+
+THIS SOFTWARE MAY CONTAIN PARTICULAR COMPONENTS, FILES OR PORTIONS WHICH ARE SUBJECT TO SEPARATE LICENSE AGREEMENTS WITH DIFFERENT TERMS AND CONDITIONS.  IN EACH SUCH CASE, THE APPLICABLE TERMS AND CONDITIONS ARE SET FORTH BELOW AND IN A FILE
+(CALLED "LICENSE.TXT") IN A SEPARATELY MARKED SECTION, WHERE TERMS AND CONDITIONS SET FORTH EXCLUSIVELY GOVERN THE NAMED COMPONENTS.  IN THE EVENT THAT YOU DO NOT AGREE WITH ANY OF THESE TERMS AND CONDITIONS, DO NOT DOWNLOAD, COPY, INSTALL OR USE THIS SOFTWARE.                                                                                                                                                                                           
+===================================================
+A. JGoodies (Compiled Java Archive)
+
+The following applies only to the compiled Java Archive JGoodies used within 
+the Nios II Debug Client.
+
+              The BSD License for the JGoodies Looks
+              ======================================
+
+Copyright (c) 2001-2006 JGoodies Karsten Lentzsch. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without 
+modification, are permitted provided that the following conditions are met:
+
+ o Redistributions of source code must retain the above copyright notice, 
+   this list of conditions and the following disclaimer. 
+    
+ o Redistributions in binary form must reproduce the above copyright notice, 
+   this list of conditions and the following disclaimer in the documentation 
+   and/or other materials provided with the distribution. 
+    
+ o Neither the name of JGoodies Karsten Lentzsch nor the names of 
+   its contributors may be used to endorse or promote products derived 
+   from this software without specific prior written permission. 
+    
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" 
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, 
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR 
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR 
+CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, 
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, 
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; 
+OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, 
+WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR 
+OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
+EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+===================================================
+B. FlexDock (Compiled Java Archive)
+
+The following applies only to the compiled Java Archive FlexDock used within 
+the Nios II Debug Client.
+
+Copyright (c) 2005 FlexDock Development Team. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of 
+this software and associated documentation files (the "Software"), to deal in the 
+Software without restriction, including without limitation the rights to use, 
+copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the 
+Software, and to permit persons to whom the Software is furnished to do so, subject 
+to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all 
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF 
+CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
+OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+

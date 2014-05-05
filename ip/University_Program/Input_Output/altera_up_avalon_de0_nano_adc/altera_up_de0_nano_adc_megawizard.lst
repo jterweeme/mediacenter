@@ -1,0 +1,11 @@
+[University Program|Generic IO]
+DE0Nano ADC Controller = "%t" "%w/../../../altera/common/lib/megawizard.pl" --wizard_file:"%w/altera_up_avalon_de0_nano_adc_mega_hw.tcl" --wizard:altera_up_avalon_de0_nano_adc_mega --early_gen:on %f %o %h
+<INFO>
+<QIP_FILE_ENABLED/>
+<ACCEPT_OTHER_CNX VALUE="ON"/>
+<LANGUAGES   AHDL="OFF"  VHDL="OFF"/>
+<PINPLAN SUPPORTED="OFF"/>
+<ALIAS>UP DE0-Nano ADC Controller</ALIAS>
+
+</INFO>
+

@@ -1,0 +1,11 @@
+[University Program|Audio & Video]
+Audio = "%t" "%w/../../../altera/common/lib/megawizard.pl" --wizard_file:"%w/altera_up_avalon_audio_hw.tcl" --wizard:altera_up_avalon_audio --early_gen:on %f %o %h
+<INFO>
+<QIP_FILE_ENABLED/>
+<ACCEPT_OTHER_CNX VALUE="ON"/>
+<LANGUAGES   AHDL="OFF" />
+<PINPLAN SUPPORTED="OFF"/>
+<ALIAS>Audio Controller for DE-Series Boards</ALIAS>
+
+</INFO>
+

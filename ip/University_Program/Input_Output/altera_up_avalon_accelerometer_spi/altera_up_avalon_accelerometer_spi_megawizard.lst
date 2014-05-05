@@ -1,0 +1,11 @@
+[University Program|Generic IO]
+Accelerometer SPI Mode = "%t" "%w/../../../altera/common/lib/megawizard.pl" --wizard_file:"%w/altera_up_avalon_accelerometer_spi_hw.tcl" --wizard:altera_up_avalon_accelerometer_spi_hw --early_gen:on %f %o %h
+<INFO>
+<QIP_FILE_ENABLED/>
+<ACCEPT_OTHER_CNX VALUE="ON"/>
+<LANGUAGES   AHDL="OFF" />
+<PINPLAN SUPPORTED="OFF"/>
+<ALIAS>Accelerometer Controller SPI Mode for the DE0-Nano Board</ALIAS>
+
+</INFO>
+

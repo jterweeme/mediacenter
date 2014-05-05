@@ -1,0 +1,11 @@
+[University Program|Generic IO]
+PS2 Controller = "%t" "%w/../../../altera/common/lib/megawizard.pl" --wizard_file:"%w/altera_up_avalon_ps2_hw.tcl" --wizard:altera_up_avalon_ps2 --early_gen:on %f %o %h
+<INFO>
+<QIP_FILE_ENABLED/>
+<ACCEPT_OTHER_CNX VALUE="ON"/>
+<LANGUAGES   AHDL="OFF" />
+<PINPLAN SUPPORTED="OFF"/>
+<ALIAS>PS2 controller of the DE-Series boards</ALIAS>
+
+</INFO>
+
