@@ -29,16 +29,23 @@ public:
     void update();
 };
 
+QuadroSegment segmentQuadro((volatile uint32_t *)QUADROSEGMENT_BASE);
+int i = 0;
+
 void Beam::update()
 {
     Uart::getInstance()->puts("Zap!\r\n");
+    segmentQuadro.setInt(++i);
 }
+
+class Test1
+{
+};
 
 int main()
 {
     DuoSegmentLinks segmentLinks;
     DuoSegmentRechts segmentRechts;
-    QuadroSegment segmentQuadro((volatile uint32_t *)QUADROSEGMENT_BASE);
     segmentLinks.write(0x2430);
     segmentRechts.write(0x9992);
     segmentQuadro.write(0x82f80010);
