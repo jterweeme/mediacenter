@@ -28,6 +28,14 @@ private:
     volatile uint32_t *base;
 };
 
+class JtagUart
+{
+public:
+    static JtagUart *getInstance();
+    void init(volatile uint32_t *base);
+    void puts(const char *);
+};
+
 class Uart
 {
 public:

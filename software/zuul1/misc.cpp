@@ -1,6 +1,7 @@
 #define SYSTEM_BUS_WIDTH 32
 
 #include <stdint.h>
+#include <stdio.h>
 #include <altera_avalon_pio_regs.h>
 #include <sys/alt_irq.h>
 #include <io.h>
@@ -44,6 +45,21 @@ Uart *Uart::getInstance()
     return &instance;
 }
 
+JtagUart *JtagUart::getInstance()
+{
+    static JtagUart instance;
+    return &instance;
+}
+
+void JtagUart::init(volatile uint32_t *base)
+{
+}
+
+void JtagUart::puts(const char *s)
+{
+    ::puts(s);
+}
+
 void Uart::init(volatile uint32_t *base)
 {
     this->base = base;
@@ -63,5 +79,4 @@ void Uart::puts(const char *s)
     while (*s)
         putc(*s++);
 }
-
 
