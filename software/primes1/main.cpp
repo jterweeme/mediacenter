@@ -24,7 +24,7 @@ int main()
           else
               printf("Card is not FAT16\n");
  
-          sd_fileh = alt_up_sd_card_fopen("file.txt", true);
+          sd_fileh = alt_up_sd_card_fopen("piraat.txt", true);
  
           if (sd_fileh < 0)
               printf("Problem creating file. Error %i", sd_fileh);

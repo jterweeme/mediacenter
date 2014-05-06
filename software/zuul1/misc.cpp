@@ -80,3 +80,33 @@ void Uart::puts(const char *s)
         putc(*s++);
 }
 
+void SDCard::init(const char *name)
+{
+    sd_card_dev = ::alt_up_sd_card_open_dev(name);
+}
+
+bool SDCard::isPresent()
+{
+    return alt_up_sd_card_is_Present();
+}
+
+bool SDCard::isFAT16()
+{
+    return alt_up_sd_card_is_FAT16();
+}
+
+int SDCard::fopen(char *fn)
+{
+    return alt_up_sd_card_fopen(fn, true);
+}
+
+bool SDCard::write(int sd_fileh, char c)
+{
+    return ::alt_up_sd_card_write(sd_fileh, c);
+}
+
+bool SDCard::fclose(int sd_fileh)
+{
+    return ::alt_up_sd_card_fclose(sd_fileh);
+}
+
