@@ -1,7 +1,7 @@
 # Jasper ter Weeme
 # Alex Aalbertsberg
 
-all: de2_115.flash
+all: de2_115.pof
 
 de2_115.sof:
 	quartus_sh --flow compile mediacenter -c de2_115
@@ -10,6 +10,7 @@ de2_115.flash: de2_115.sof
 	sof2flash --epcs --input=$< --output=$@
 
 de2_115.pof: de2_115.flash
+	make -C software
 	quartus_cpf --convert de2_115.cof
 
 download:
@@ -19,6 +20,7 @@ urjtag:
 	jtag de2_115_urjtag.cmd
 
 clean:
+	make -C software clean
 	rm -Rvf db incremental_db *.rpt *.summary *.smsg *.sof *.pof
 	rm -Rvf *.sopcinfo *.pin *.svf *.done *.jam *.qws *.qdf *.jdi *.flash
 	rm -Rvf *.ttf *.rbf *.jbc

@@ -137,12 +137,8 @@ set_global_assignment -name GENERATE_SVF_FILE ON
 set_global_assignment -name GENERATE_JAM_FILE ON
 set_global_assignment -name GENERATE_JBC_FILE ON
 set_location_assignment PIN_Y15 -to infrared_0_conduit_end_export
-set_location_assignment PIN_AE13 -to sd_clk_external_connection_export
-set_location_assignment PIN_AD14 -to sd_cmd_external_connection_export
-set_location_assignment PIN_AC14 -to sd_dat_external_connection_export[3]
 set_location_assignment PIN_AB14 -to sd_dat_external_connection_export[2]
 set_location_assignment PIN_AF13 -to sd_dat_external_connection_export[1]
-set_location_assignment PIN_AE14 -to sd_dat_external_connection_export[0]
 set_location_assignment PIN_AF14 -to sd_wp_n_external_connection_export
 set_global_assignment -name TCL_SCRIPT_FILE ip/mysram/mysram_hw.tcl
 set_global_assignment -name VERILOG_FILE ip/mysram/mysram.v
@@ -254,3 +250,7 @@ set_location_assignment PIN_T4 -to new_sdram_controller_0_wire_cs_n
 set_location_assignment PIN_Y7 -to new_sdram_controller_0_wire_addr[12]
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_AE5 -to up_clocks_0_sdram_clk_clk
+set_location_assignment PIN_AD14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd
+set_location_assignment PIN_AE13 -to altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock
+set_location_assignment PIN_AC14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3
+set_location_assignment PIN_AE14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat

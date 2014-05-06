@@ -1265,8 +1265,8 @@ bool SDCard::SDLIB_Init()
     alt_u32 TimeStart;
     memset(&gSdInfo, 0, sizeof(gSdInfo));
     gSdInfo.bSupport4Bits = SD_IsSupport4Bits();
-    SDCARD_DEBUG(("--- Power On, Card Identification Mode, Idle State\r\n"));
-    SDCARD_DEBUG(("sd %d-bit mode\r\n", gSdInfo.bSupport4Bits?4:1));
+    printf("--- Power On, Card Identification Mode, Idle State\r\n");
+    printf("sd %d-bit mode\r\n", gSdInfo.bSupport4Bits?4:1);
     usleep(74*10);
     SD_Init();
     SD_CMD0();
@@ -1400,6 +1400,8 @@ bool SD_CMD17(alt_u32 Addr, alt_u8 ExpectedStatus){
 
 void SDCard::waitInsert()
 {
+    printf("Komt ie hier?\r\n");
+
     bool bFirstTime2Detect = TRUE;
 
     while (!SDLIB_Init())
@@ -1407,7 +1409,7 @@ void SDCard::waitInsert()
         if (bFirstTime2Detect)
         {
             printf("Please insert SD card.\r\n");
-            bFirstTime2Detect = FALSE;
+            bFirstTime2Detect = true;
         }
 
         usleep(100*1000);
@@ -2146,6 +2148,7 @@ bool Fat_FileBrowseNext(FAT_BROWSE_HANDLE *pFatBrowseHandle, FILE_CONTEXT *pFile
 
 int Application::run()
 {
+    printf("Startup programma\r\n");
     alt_u8 szWaveFile[FILENAME_LEN];
     memset(&gWavePlay, 0, sizeof(gWavePlay));
     sdCard = new SDCard();

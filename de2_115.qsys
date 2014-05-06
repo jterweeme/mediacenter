@@ -12,11 +12,27 @@
    element $${FILENAME}
    {
    }
+   element Altera_UP_SD_Card_Avalon_Interface_0
+   {
+      datum _sortIndex
+      {
+         value = "11";
+         type = "int";
+      }
+   }
    element jtag_uart_0.avalon_jtag_slave
    {
       datum baseAddress
       {
-         value = "134221984";
+         value = "134222944";
+         type = "String";
+      }
+   }
+   element Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave
+   {
+      datum baseAddress
+      {
+         value = "134221824";
          type = "String";
       }
    }
@@ -24,7 +40,7 @@
    {
       datum baseAddress
       {
-         value = "134221992";
+         value = "134222952";
          type = "String";
       }
    }
@@ -40,7 +56,7 @@
    {
       datum baseAddress
       {
-         value = "134221968";
+         value = "134222928";
          type = "String";
       }
    }
@@ -104,7 +120,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "10";
          type = "int";
       }
    }
@@ -116,11 +132,11 @@
          type = "int";
       }
    }
-   element sd_wp_n.s1
+   element uart.s1
    {
       datum baseAddress
       {
-         value = "134221904";
+         value = "134222848";
          type = "String";
       }
    }
@@ -128,7 +144,7 @@
    {
       datum _lockedAddress
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
       datum baseAddress
@@ -137,35 +153,11 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s1
-   {
-      datum baseAddress
-      {
-         value = "134221936";
-         type = "String";
-      }
-   }
    element duosegmentlinks.s1
    {
       datum baseAddress
       {
-         value = "134221952";
-         type = "String";
-      }
-   }
-   element sd_clk.s1
-   {
-      datum baseAddress
-      {
-         value = "134221856";
-         type = "String";
-      }
-   }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "134221824";
+         value = "134222912";
          type = "String";
       }
    }
@@ -173,56 +165,16 @@
    {
       datum baseAddress
       {
-         value = "134221920";
+         value = "134222880";
          type = "String";
       }
    }
-   element sd_dat.s1
+   element duosegmentrechts.s1
    {
       datum baseAddress
       {
-         value = "134221872";
+         value = "134222896";
          type = "String";
-      }
-   }
-   element sd_cmd.s1
-   {
-      datum baseAddress
-      {
-         value = "134221888";
-         type = "String";
-      }
-   }
-   element sd_clk
-   {
-      datum _sortIndex
-      {
-         value = "10";
-         type = "int";
-      }
-   }
-   element sd_cmd
-   {
-      datum _sortIndex
-      {
-         value = "11";
-         type = "int";
-      }
-   }
-   element sd_dat
-   {
-      datum _sortIndex
-      {
-         value = "12";
-         type = "int";
-      }
-   }
-   element sd_wp_n
-   {
-      datum _sortIndex
-      {
-         value = "13";
-         type = "int";
       }
    }
    element uart
@@ -256,7 +208,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1399310529398" />
+ <parameter name="timeStamp" value="1399325686010" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk50.clk_in" type="clock" dir="end" />
@@ -292,26 +244,6 @@
    type="conduit"
    dir="end" />
  <interface
-   name="sd_wp_n_external_connection"
-   internal="sd_wp_n.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sd_dat_external_connection"
-   internal="sd_dat.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sd_cmd_external_connection"
-   internal="sd_cmd.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
-   name="sd_clk_external_connection"
-   internal="sd_clk.external_connection"
-   type="conduit"
-   dir="end" />
- <interface
    name="new_sdram_controller_0_wire"
    internal="new_sdram_controller_0.wire"
    type="conduit"
@@ -321,6 +253,11 @@
    internal="up_clocks_0.sdram_clk"
    type="clock"
    dir="start" />
+ <interface
+   name="altera_up_sd_card_avalon_interface_0_conduit_end"
+   internal="Altera_UP_SD_Card_Avalon_Interface_0.conduit_end"
+   type="conduit"
+   dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
   <parameter name="setting_showUnpublishedSettings" value="false" />
   <parameter name="setting_showInternalSettings" value="false" />
@@ -423,7 +360,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8000800' end='0x8001000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8000800' end='0x8001000' /><slave name='uart.s1' start='0x8001000' end='0x8001020' /><slave name='sd_clk.s1' start='0x8001020' end='0x8001030' /><slave name='sd_dat.s1' start='0x8001030' end='0x8001040' /><slave name='sd_cmd.s1' start='0x8001040' end='0x8001050' /><slave name='sd_wp_n.s1' start='0x8001050' end='0x8001060' /><slave name='quadrosegment.s1' start='0x8001060' end='0x8001070' /><slave name='duosegmentrechts.s1' start='0x8001070' end='0x8001080' /><slave name='duosegmentlinks.s1' start='0x8001080' end='0x8001090' /><slave name='dotmatrix.control_slave' start='0x8001090' end='0x80010A0' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x80010A0' end='0x80010A8' /><slave name='infrared_0.avalon_slave' start='0x80010A8' end='0x80010AC' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8000800' end='0x8001000' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x8001000' end='0x8001400' /><slave name='uart.s1' start='0x8001400' end='0x8001420' /><slave name='quadrosegment.s1' start='0x8001420' end='0x8001430' /><slave name='duosegmentrechts.s1' start='0x8001430' end='0x8001440' /><slave name='duosegmentlinks.s1' start='0x8001440' end='0x8001450' /><slave name='dotmatrix.control_slave' start='0x8001450' end='0x8001460' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x8001460' end='0x8001468' /><slave name='infrared_0.avalon_slave' start='0x8001468' end='0x800146C' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="7" />
@@ -544,78 +481,6 @@
  <module kind="infrared" version="1.0" enabled="1" name="infrared_0">
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
  </module>
- <module
-   kind="altera_avalon_pio"
-   version="13.0.1.99.2"
-   enabled="1"
-   name="sd_clk">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="direction" value="Output" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="1" />
-  <parameter name="clockRate" value="50000000" />
- </module>
- <module
-   kind="altera_avalon_pio"
-   version="13.0.1.99.2"
-   enabled="1"
-   name="sd_cmd">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="direction" value="Bidir" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="1" />
-  <parameter name="clockRate" value="50000000" />
- </module>
- <module
-   kind="altera_avalon_pio"
-   version="13.0.1.99.2"
-   enabled="1"
-   name="sd_dat">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="direction" value="Bidir" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="4" />
-  <parameter name="clockRate" value="50000000" />
- </module>
- <module
-   kind="altera_avalon_pio"
-   version="13.0.1.99.2"
-   enabled="1"
-   name="sd_wp_n">
-  <parameter name="bitClearingEdgeCapReg" value="false" />
-  <parameter name="bitModifyingOutReg" value="false" />
-  <parameter name="captureEdge" value="false" />
-  <parameter name="direction" value="Input" />
-  <parameter name="edgeType" value="RISING" />
-  <parameter name="generateIRQ" value="false" />
-  <parameter name="irqType" value="LEVEL" />
-  <parameter name="resetValue" value="0" />
-  <parameter name="simDoTestBenchWiring" value="false" />
-  <parameter name="simDrivenValue" value="0" />
-  <parameter name="width" value="1" />
-  <parameter name="clockRate" value="50000000" />
- </module>
  <module kind="altera_up_clocks" version="13.0" enabled="1" name="up_clocks_0">
   <parameter name="board" value="DE2-115" />
   <parameter name="sys_clk_freq" value="50" />
@@ -655,6 +520,14 @@
   <parameter name="clockRate" value="50000000" />
   <parameter name="componentName">$${FILENAME}_new_sdram_controller_0</parameter>
  </module>
+ <module
+   kind="Altera_UP_SD_Card_Avalon_Interface"
+   version="13.0"
+   enabled="1"
+   name="Altera_UP_SD_Card_Avalon_Interface_0">
+  <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ </module>
  <connection
    kind="avalon"
    version="13.0"
@@ -681,7 +554,7 @@
    end="jtag_uart_0.reset" />
  <connection kind="avalon" version="13.0" start="cpu.data_master" end="uart.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001000" />
+  <parameter name="baseAddress" value="0x08001400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -701,7 +574,7 @@
    start="cpu.data_master"
    end="jtag_uart_0.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080010a0" />
+  <parameter name="baseAddress" value="0x08001460" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -715,7 +588,7 @@
    start="cpu.data_master"
    end="dotmatrix.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001090" />
+  <parameter name="baseAddress" value="0x08001450" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -739,7 +612,7 @@
    start="cpu.data_master"
    end="duosegmentlinks.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001080" />
+  <parameter name="baseAddress" value="0x08001440" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -748,7 +621,7 @@
    start="cpu.data_master"
    end="duosegmentrechts.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001070" />
+  <parameter name="baseAddress" value="0x08001430" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -757,7 +630,7 @@
    start="cpu.data_master"
    end="quadrosegment.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001060" />
+  <parameter name="baseAddress" value="0x08001420" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -771,7 +644,7 @@
    start="cpu.data_master"
    end="infrared_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x080010a8" />
+  <parameter name="baseAddress" value="0x08001468" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -781,46 +654,6 @@
    end="infrared_0.interrupt_sender">
   <parameter name="irqNumber" value="2" />
  </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="sd_cmd.reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="sd_clk.reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="sd_wp_n.reset" />
- <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_wp_n.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001050" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_cmd.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001040" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_dat.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001030" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection kind="avalon" version="13.0" start="cpu.data_master" end="sd_clk.s1">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001020" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="sd_dat.reset" />
  <connection
    kind="clock"
    version="13.0"
@@ -868,26 +701,6 @@
    start="up_clocks_0.sys_clk"
    end="infrared_0.clock_sink" />
  <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.sys_clk"
-   end="sd_clk.clk" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.sys_clk"
-   end="sd_cmd.clk" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.sys_clk"
-   end="sd_dat.clk" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.sys_clk"
-   end="sd_wp_n.clk" />
- <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
@@ -913,6 +726,25 @@
    end="new_sdram_controller_0.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk50.clk_reset"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="up_clocks_0.sys_clk"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink" />
+ <connection
+   kind="avalon"
+   version="13.0"
+   start="cpu.data_master"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08001000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />

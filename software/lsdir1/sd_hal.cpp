@@ -2,7 +2,6 @@
 #include "sd_hal.h"
 #include <alt_types.h>
 #include <io.h>
-#include <system.h>
 
 typedef enum {FALSE = 0, TRUE} boolean;
 
