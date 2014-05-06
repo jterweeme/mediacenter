@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 6, 2014 12:13:25 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1399328005900</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 6, 2014 2:09:18 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1399378158632</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -905,38 +905,44 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>quadrosegment</slaveDescriptor>
+                <slaveDescriptor>audio_0</slaveDescriptor>
                 <addressRange>0x08001420 - 0x0800142F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>duosegmentrechts</slaveDescriptor>
+                <slaveDescriptor>quadrosegment</slaveDescriptor>
                 <addressRange>0x08001430 - 0x0800143F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>duosegmentlinks</slaveDescriptor>
+                <slaveDescriptor>duosegmentrechts</slaveDescriptor>
                 <addressRange>0x08001440 - 0x0800144F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>dotmatrix</slaveDescriptor>
+                <slaveDescriptor>duosegmentlinks</slaveDescriptor>
                 <addressRange>0x08001450 - 0x0800145F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>dotmatrix</slaveDescriptor>
+                <addressRange>0x08001460 - 0x0800146F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x08001460 - 0x08001467</addressRange>
+                <addressRange>0x08001470 - 0x08001477</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>infrared_0</slaveDescriptor>
-                <addressRange>0x08001468 - 0x0800146B</addressRange>
+                <addressRange>0x08001478 - 0x0800147B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
