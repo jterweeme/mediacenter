@@ -1,7 +1,6 @@
 #define SYSTEM_BUS_WIDTH 32
 
 #include <stdint.h>
-#include <stdio.h>
 #include <altera_avalon_pio_regs.h>
 #include <sys/alt_irq.h>
 #include <io.h>
@@ -45,21 +44,6 @@ Uart *Uart::getInstance()
     return &instance;
 }
 
-JtagUart *JtagUart::getInstance()
-{
-    static JtagUart instance;
-    return &instance;
-}
-
-void JtagUart::init(volatile uint32_t *base)
-{
-}
-
-void JtagUart::puts(const char *s)
-{
-    ::puts(s);
-}
-
 void Uart::init(volatile uint32_t *base)
 {
     this->base = base;
@@ -79,36 +63,5 @@ void Uart::puts(const char *s)
     while (*s)
         putc(*s++);
 }
-
-void SDCard::init(const char *name)
-{
-    sd_card_dev = ::alt_up_sd_card_open_dev(name);
-}
-
-bool SDCard::isPresent()
-{
-    return alt_up_sd_card_is_Present();
-}
-
-bool SDCard::isFAT16()
-{
-    return alt_up_sd_card_is_FAT16();
-}
-
-int SDCard::fopen(char *fn)
-{
-    return alt_up_sd_card_fopen(fn, true);
-}
-
-bool SDCard::write(int sd_fileh, char c)
-{
-    return ::alt_up_sd_card_write(sd_fileh, c);
-}
-
-bool SDCard::fclose(int sd_fileh)
-{
-    return ::alt_up_sd_card_fclose(sd_fileh);
-}
-
 
 

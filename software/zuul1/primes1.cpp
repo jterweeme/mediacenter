@@ -7,10 +7,6 @@ int main()
 {
     QuadroSegment seg((volatile uint32_t *)QUADROSEGMENT_BASE);
     Uart *uart = Uart::getInstance();
-    //uart->init((volatile uint32_t *)JTAG_UART_0_BASE);
-    //uart->puts("Bladiebla\r\n");
-    JtagUart *jtagUart = JtagUart::getInstance();
-    jtagUart->puts("Bladiebla\r\n");
     printf("Opstarten\r\n");
 
     int aantal = 0;
