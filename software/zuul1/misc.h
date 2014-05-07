@@ -8,7 +8,7 @@ Alex Aalbertsberg
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <Altera_UP_SD_Card Avalon_Interface.h>
+#include <Altera_UP_SD_Card_Avalon_Interface.h>
 
 class Observer
 {
