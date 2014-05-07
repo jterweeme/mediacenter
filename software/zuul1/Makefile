@@ -1,6 +1,6 @@
 MACHINE := -msys-crt0='../bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp
 INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
-NAAM = audiotest1
+NAAM = primes1
 
 all: $(NAAM).hex
 
@@ -18,7 +18,7 @@ $(NAAM).elf: doemaar.altijd
 	nios2-elf-g++ -o sdcardtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp sdcardtest1.o misc.o
 
 $(NAAM).flash: $(NAAM).elf
-	elf2flash --epcs --after=../../de2_115.flash --input=$(NAAM).elf --output=$(NAAM).flash
+	elf2flash --epcs --after=../../$@ --input=$(NAAM).elf --output=$(NAAM).flash
 
 $(NAAM).hex: $(NAAM).flash
 	nios2-elf-objcopy -I srec -O ihex $(NAAM).flash $(NAAM).hex
@@ -27,6 +27,7 @@ doemaar.altijd:
 	echo
 
 zuul1.png: zuul1.uxf
+	umlet -action=convert -format=png -filename=$< -output=$@
 
 clean:
 	rm -Rvf *.o *.elf *.hex *.flash

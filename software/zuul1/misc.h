@@ -55,5 +55,12 @@ private:
     alt_up_sd_card_dev *sd_card_dev;
 };
 
+class LCD
+{
+public:
+    LCD();
+    void init();
+    void writeHello();
+};
 #endif
 

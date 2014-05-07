@@ -3,7 +3,13 @@
 #include "segment.h"
 #include "misc.h"
 
-int main()
+class PrimesTest1
+{
+public:
+    int run();
+};
+
+int PrimesTest1::run()
 {
     QuadroSegment seg((volatile uint32_t *)QUADROSEGMENT_BASE);
     Uart *uart = Uart::getInstance();
@@ -11,11 +17,11 @@ int main()
 
     int aantal = 0;
     seg.setInt(0);
-    
+
     for (int i = 2; i < 0xffff; i++)
     {
         bool priem = true;
-        
+
         for (int j = 2; j < i; j++)
             if (i % j == 0)
                 priem = false;
@@ -26,6 +32,12 @@ int main()
 
     printf("%u\r\n", aantal);
     return 0;
+}
+
+int main()
+{
+    PrimesTest1 test1;
+    return test1.run();
 }
 
 
