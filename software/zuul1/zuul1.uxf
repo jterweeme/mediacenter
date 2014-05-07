@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<diagram program="umlet" version="12.2">
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
   <zoom_level>10</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>80</x>
       <y>280</y>
-      <w>110</w>
-      <h>50</h>
+      <w>210</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>*Beam*
 --
@@ -20,8 +19,8 @@
     <coordinates>
       <x>550</x>
       <y>290</y>
-      <w>150</w>
-      <h>50</h>
+      <w>250</w>
+      <h>100</h>
     </coordinates>
     <panel_attributes>*Observer*
 --
@@ -34,7 +33,7 @@
     <coordinates>
       <x>540</x>
       <y>20</y>
-      <w>210</w>
+      <w>290</w>
       <h>140</h>
     </coordinates>
     <panel_attributes>*Uart*
@@ -54,8 +53,8 @@
     <coordinates>
       <x>100</x>
       <y>20</y>
-      <w>300</w>
-      <h>170</h>
+      <w>380</w>
+      <h>200</h>
     </coordinates>
     <panel_attributes>*InfraRood*
 --
@@ -74,20 +73,20 @@
   <element>
     <type>com.umlet.element.Relation</type>
     <coordinates>
-      <x>160</x>
+      <x>260</x>
       <y>290</y>
-      <w>410</w>
+      <w>310</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-</panel_attributes>
-    <additional_attributes>390;30;30;30</additional_attributes>
+    <additional_attributes>290;30;30;30</additional_attributes>
   </element>
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
       <x>300</x>
       <y>600</y>
-      <w>120</w>
+      <w>170</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>DuoSegment
@@ -102,7 +101,7 @@
     <coordinates>
       <x>520</x>
       <y>590</y>
-      <w>140</w>
+      <w>210</w>
       <h>70</h>
     </coordinates>
     <panel_attributes>QuadroSegment
@@ -118,7 +117,7 @@
     <coordinates>
       <x>380</x>
       <y>460</y>
-      <w>180</w>
+      <w>280</w>
       <h>90</h>
     </coordinates>
     <panel_attributes>/Segment/
@@ -174,7 +173,7 @@
       <w>130</w>
       <h>80</h>
     </coordinates>
-    <panel_attributes>LCD
+    <panel_attributes>*LCD*
 --
 --
 +LCD()
@@ -185,9 +184,9 @@
   <element>
     <type>com.umlet.element.Class</type>
     <coordinates>
-      <x>190</x>
+      <x>150</x>
       <y>720</y>
-      <w>150</w>
+      <w>210</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>DuoSegmentLinks
@@ -201,7 +200,7 @@
     <coordinates>
       <x>380</x>
       <y>720</y>
-      <w>160</w>
+      <w>210</w>
       <h>50</h>
     </coordinates>
     <panel_attributes>DuoSegmentRechts
@@ -237,13 +236,13 @@
     <coordinates>
       <x>960</x>
       <y>470</y>
-      <w>90</w>
-      <h>50</h>
+      <w>150</w>
+      <h>90</h>
     </coordinates>
-    <panel_attributes>Test1
+    <panel_attributes>*Test1*
 --
 --
-+int main()</panel_attributes>
++init(): void</panel_attributes>
     <additional_attributes/>
   </element>
 </diagram>

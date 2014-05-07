@@ -39,9 +39,21 @@ void Beam::update()
 
 class Test1
 {
+public:
+    void init();
 };
 
 int main()
+{
+    Test1 test1;
+    test1.init();
+
+    while (true) { }
+
+    return 0;
+}
+
+void Test1::init()
 {
     DuoSegmentLinks segmentLinks;
     DuoSegmentRechts segmentRechts;
@@ -58,10 +70,6 @@ int main()
     Uart *uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Opstarten\r\n");
-
-    while (true) { }
-
-    return 0;
 }
 
 

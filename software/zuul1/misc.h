@@ -62,5 +62,14 @@ public:
     void init();
     void writeHello();
 };
+
+class Audio
+{
+public:
+    Audio();
+    void init(volatile uint32_t *base);
+private:
+    volatile uint32_t *base;
+};
 #endif
 
