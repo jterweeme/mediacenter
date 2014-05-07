@@ -60,7 +60,17 @@ int main()
 
 void Test1::init()
 {
-    segmentLinks.write(0x2430);
+    //LCD lcd;
+    //lcd.init(fopen(DOTMATRIX_NAME, "w"));
+    //lcd.write("Boeman");
+    FILE *fp = fopen(DOTMATRIX_NAME, "w");
+
+    
+    if (fp)
+        segmentLinks.write(0x3024);
+    else
+        segmentLinks.write(0x2430);
+
     segmentRechts.write(0x9992);
     segmentQuadro.write(0x82f80010);
     segmentQuadro.setInt(9876);

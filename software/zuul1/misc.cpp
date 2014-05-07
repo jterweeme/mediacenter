@@ -1,6 +1,8 @@
 #define SYSTEM_BUS_WIDTH 32
 
 #include <stdint.h>
+#include <stdio.h>
+#include <string.h>
 #include <altera_avalon_pio_regs.h>
 #include <sys/alt_irq.h>
 #include <io.h>
@@ -94,4 +96,13 @@ bool SDCard::fclose(int sd_fileh)
     return ::alt_up_sd_card_fclose(sd_fileh);
 }
 
+void LCD::init(FILE *fp)
+{
+    this->fp = fp;
+}
+
+void LCD::write(char *s)
+{
+    ::fwrite(s, strlen(s), 1, fp);
+}
 

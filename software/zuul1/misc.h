@@ -8,6 +8,7 @@ Alex Aalbertsberg
 
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <Altera_UP_SD_Card_Avalon_Interface.h>
 
 class Observer
@@ -58,9 +59,10 @@ private:
 class LCD
 {
 public:
-    LCD();
-    void init();
-    void writeHello();
+    void init(FILE *fp);
+    void write(char *);
+private:
+    FILE *fp;
 };
 
 class Audio
