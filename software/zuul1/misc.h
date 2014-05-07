@@ -7,6 +7,8 @@ Alex Aalbertsberg
 #define _MISC_H_
 
 #include <stdint.h>
+#include <stdbool.h>
+#include <Altera_UP_SD_Card Avalon_Interface.h>
 
 class Observer
 {
@@ -39,5 +41,19 @@ private:
     Uart() { }
     volatile uint32_t *base;
 };
+
+class SDCard
+{
+public:
+    void init(const char *);
+    bool isPresent();
+    bool isFAT16();
+    int fopen(char *);
+    bool write(int, char);
+    bool fclose(int);
+private:
+    alt_up_sd_card_dev *sd_card_dev;
+};
+
 #endif
 
