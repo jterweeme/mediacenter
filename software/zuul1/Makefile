@@ -4,7 +4,7 @@ NAAM = test1
 
 all: $(NAAM).hex
 
-$(NAAM).elf: doemaar.altijd
+$(NAAM).elf: doemaar.altijd zuul1.png
 	nios2-elf-g++ -c $(INCLUDES) test1.cpp
 	nios2-elf-g++ -c $(INCLUDES) misc.cpp
 	nios2-elf-g++ -c $(INCLUDES) primes1.cpp
@@ -18,10 +18,10 @@ $(NAAM).elf: doemaar.altijd
 	nios2-elf-g++ -o sdcardtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp sdcardtest1.o misc.o
 
 $(NAAM).flash: $(NAAM).elf
-	elf2flash --epcs --after=../../$@ --input=$(NAAM).elf --output=$(NAAM).flash
+	elf2flash --epcs --after=../../de2_115.flash --input=$(NAAM).elf --output=$@
 
 $(NAAM).hex: $(NAAM).flash
-	nios2-elf-objcopy -I srec -O ihex $(NAAM).flash $(NAAM).hex
+	nios2-elf-objcopy -I srec -O ihex $< $@
 
 doemaar.altijd:
 	echo
@@ -30,7 +30,7 @@ zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@
 
 clean:
-	rm -Rvf *.o *.elf *.hex *.flash
+	rm -Rvf *.o *.elf *.hex *.flash *.png
 
 download:
 	nios2-download -g $(NAAM).elf

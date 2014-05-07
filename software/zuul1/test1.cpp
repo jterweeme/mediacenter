@@ -41,6 +41,11 @@ class Test1
 {
 public:
     void init();
+private:
+    DuoSegmentLinks segmentLinks;
+    DuoSegmentRechts segmentRechts;
+    InfraRood *ir;
+    Uart *uart;
 };
 
 int main()
@@ -55,19 +60,17 @@ int main()
 
 void Test1::init()
 {
-    DuoSegmentLinks segmentLinks;
-    DuoSegmentRechts segmentRechts;
     segmentLinks.write(0x2430);
     segmentRechts.write(0x9992);
     segmentQuadro.write(0x82f80010);
     segmentQuadro.setInt(9876);
-    InfraRood *ir = InfraRood::getInstance();
+    ir = InfraRood::getInstance();
 
     ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
                         INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID);
 
     ir->setObserver(new Beam());
-    Uart *uart = Uart::getInstance();
+    uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Opstarten\r\n");
 }
