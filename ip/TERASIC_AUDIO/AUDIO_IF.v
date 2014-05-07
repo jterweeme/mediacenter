@@ -50,10 +50,11 @@ Compatibility:
 
 */
 
+/*
 `include "./AUDIO_ADC.v"
 `include "./AUDIO_DAC.v"
 `include "./audio_fifo.v"
-
+*/
 
 module AUDIO_IF(
 	avs_s1_clk,

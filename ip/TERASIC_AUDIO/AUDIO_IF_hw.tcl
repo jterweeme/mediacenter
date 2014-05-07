@@ -43,6 +43,9 @@ set_module_property ANALYZE_HDL TRUE
 # | files
 # | 
 add_file AUDIO_IF.v SYNTHESIS
+add_file AUDIO_ADC.v
+add_file AUDIO_DAC.v
+add_file audio_fifo.v
 # | 
 # +-----------------------------------
 

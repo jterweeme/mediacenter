@@ -12,6 +12,14 @@
    element $${FILENAME}
    {
    }
+   element AUDIO_IF_0
+   {
+      datum _sortIndex
+      {
+         value = "12";
+         type = "int";
+      }
+   }
    element Altera_UP_SD_Card_Avalon_Interface_0
    {
       datum _sortIndex
@@ -20,27 +28,11 @@
          type = "int";
       }
    }
-   element audio_0
-   {
-      datum _sortIndex
-      {
-         value = "12";
-         type = "int";
-      }
-   }
-   element audio_0.avalon_audio_slave
-   {
-      datum baseAddress
-      {
-         value = "134222880";
-         type = "String";
-      }
-   }
    element jtag_uart_0.avalon_jtag_slave
    {
       datum baseAddress
       {
-         value = "134222960";
+         value = "134222976";
          type = "String";
       }
    }
@@ -56,7 +48,15 @@
    {
       datum baseAddress
       {
-         value = "134222968";
+         value = "134222984";
+         type = "String";
+      }
+   }
+   element AUDIO_IF_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134222848";
          type = "String";
       }
    }
@@ -72,7 +72,7 @@
    {
       datum baseAddress
       {
-         value = "134222944";
+         value = "134222960";
          type = "String";
       }
    }
@@ -148,6 +148,38 @@
          type = "int";
       }
    }
+   element quadrosegment.s1
+   {
+      datum baseAddress
+      {
+         value = "134222912";
+         type = "String";
+      }
+   }
+   element duosegmentrechts.s1
+   {
+      datum baseAddress
+      {
+         value = "134222928";
+         type = "String";
+      }
+   }
+   element duosegmentlinks.s1
+   {
+      datum baseAddress
+      {
+         value = "134222944";
+         type = "String";
+      }
+   }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "134222880";
+         type = "String";
+      }
+   }
    element new_sdram_controller_0.s1
    {
       datum _lockedAddress
@@ -158,38 +190,6 @@
       datum baseAddress
       {
          value = "0";
-         type = "String";
-      }
-   }
-   element quadrosegment.s1
-   {
-      datum baseAddress
-      {
-         value = "134222896";
-         type = "String";
-      }
-   }
-   element duosegmentrechts.s1
-   {
-      datum baseAddress
-      {
-         value = "134222912";
-         type = "String";
-      }
-   }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "134222848";
-         type = "String";
-      }
-   }
-   element duosegmentlinks.s1
-   {
-      datum baseAddress
-      {
-         value = "134222928";
          type = "String";
       }
    }
@@ -224,7 +224,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1399397196183" />
+ <parameter name="timeStamp" value="1399455891772" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk50.clk_in" type="clock" dir="end" />
@@ -275,8 +275,8 @@
    type="conduit"
    dir="end" />
  <interface
-   name="audio_0_external_interface"
-   internal="audio_0.external_interface"
+   name="audio_if_0_conduit_end"
+   internal="AUDIO_IF_0.conduit_end"
    type="conduit"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
@@ -381,7 +381,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8000800' end='0x8001000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8000800' end='0x8001000' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x8001000' end='0x8001400' /><slave name='uart.s1' start='0x8001400' end='0x8001420' /><slave name='audio_0.avalon_audio_slave' start='0x8001420' end='0x8001430' /><slave name='quadrosegment.s1' start='0x8001430' end='0x8001440' /><slave name='duosegmentrechts.s1' start='0x8001440' end='0x8001450' /><slave name='duosegmentlinks.s1' start='0x8001450' end='0x8001460' /><slave name='dotmatrix.control_slave' start='0x8001460' end='0x8001470' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x8001470' end='0x8001478' /><slave name='infrared_0.avalon_slave' start='0x8001478' end='0x800147C' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8000800' end='0x8001000' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x8001000' end='0x8001400' /><slave name='AUDIO_IF_0.avalon_slave' start='0x8001400' end='0x8001420' /><slave name='uart.s1' start='0x8001420' end='0x8001440' /><slave name='quadrosegment.s1' start='0x8001440' end='0x8001450' /><slave name='duosegmentrechts.s1' start='0x8001450' end='0x8001460' /><slave name='duosegmentlinks.s1' start='0x8001460' end='0x8001470' /><slave name='dotmatrix.control_slave' start='0x8001470' end='0x8001480' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x8001480' end='0x8001488' /><slave name='infrared_0.avalon_slave' start='0x8001488' end='0x800148C' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="7" />
@@ -549,17 +549,8 @@
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
- <module
-   kind="altera_up_avalon_audio"
-   version="13.0"
-   enabled="1"
-   name="audio_0">
-  <parameter name="avalon_bus_type" value="Memory Mapped" />
-  <parameter name="audio_in" value="false" />
-  <parameter name="audio_out" value="true" />
-  <parameter name="dw" value="16" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ <module kind="AUDIO_IF" version="1.0" enabled="1" name="AUDIO_IF_0">
+  <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
  </module>
  <connection
    kind="avalon"
@@ -587,7 +578,7 @@
    end="jtag_uart_0.reset" />
  <connection kind="avalon" version="13.0" start="cpu.data_master" end="uart.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001400" />
+  <parameter name="baseAddress" value="0x08001420" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -607,7 +598,7 @@
    start="cpu.data_master"
    end="jtag_uart_0.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001470" />
+  <parameter name="baseAddress" value="0x08001480" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -621,7 +612,7 @@
    start="cpu.data_master"
    end="dotmatrix.control_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001460" />
+  <parameter name="baseAddress" value="0x08001470" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -645,7 +636,7 @@
    start="cpu.data_master"
    end="duosegmentlinks.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001450" />
+  <parameter name="baseAddress" value="0x08001460" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -654,7 +645,7 @@
    start="cpu.data_master"
    end="duosegmentrechts.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001440" />
+  <parameter name="baseAddress" value="0x08001450" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -663,7 +654,7 @@
    start="cpu.data_master"
    end="quadrosegment.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001430" />
+  <parameter name="baseAddress" value="0x08001440" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -677,7 +668,7 @@
    start="cpu.data_master"
    end="infrared_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001478" />
+  <parameter name="baseAddress" value="0x08001488" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -784,19 +775,19 @@
    kind="reset"
    version="13.0"
    start="clk50.clk_reset"
-   end="audio_0.clock_reset_reset" />
+   end="AUDIO_IF_0.clock_sink_reset" />
  <connection
    kind="clock"
    version="13.0"
    start="up_clocks_0.sys_clk"
-   end="audio_0.clock_reset" />
+   end="AUDIO_IF_0.clock_sink" />
  <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
-   end="audio_0.avalon_audio_slave">
+   end="AUDIO_IF_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08001420" />
+  <parameter name="baseAddress" value="0x08001400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />

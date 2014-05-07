@@ -41,7 +41,7 @@ set_global_assignment -name DEVICE EP4CE115F29C7
 set_global_assignment -name TOP_LEVEL_ENTITY de2_115
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "23:29:04  APRIL 17, 2014"
-set_global_assignment -name LAST_QUARTUS_VERSION 13.0
+set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
@@ -140,17 +140,6 @@ set_location_assignment PIN_Y15 -to infrared_0_conduit_end_export
 set_location_assignment PIN_AB14 -to sd_dat_external_connection_export[2]
 set_location_assignment PIN_AF13 -to sd_dat_external_connection_export[1]
 set_location_assignment PIN_AF14 -to sd_wp_n_external_connection_export
-set_global_assignment -name TCL_SCRIPT_FILE ip/mysram/mysram_hw.tcl
-set_global_assignment -name VERILOG_FILE ip/mysram/mysram.v
-set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
-set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
-set_global_assignment -name CUSP_FILE software/zuul1/main.cpp
-set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
-set_global_assignment -name TCL_SCRIPT_FILE ip/infrared/infrared_hw.tcl
-set_global_assignment -name VERILOG_FILE ip/infrared/main.v
-set_global_assignment -name CDF_FILE de2_115_jtag.cdf
-set_global_assignment -name VERILOG_FILE ip/infrared/infrared.v
-set_global_assignment -name QSYS_FILE de2_115.qsys
 set_location_assignment PIN_T8 -to terasic_sram_0_conduit_end_ADDR[19]
 set_location_assignment PIN_AB8 -to terasic_sram_0_conduit_end_ADDR[18]
 set_location_assignment PIN_AB9 -to terasic_sram_0_conduit_end_ADDR[17]
@@ -257,3 +246,19 @@ set_location_assignment PIN_F2 -to audio_0_external_interface_BCLK
 set_location_assignment PIN_D1 -to audio_0_external_interface_DACDAT
 set_location_assignment PIN_E3 -to audio_0_external_interface_DACLRCK
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_IF.v
+set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/audio_fifo.v
+set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_DAC.v
+set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_ADC.v
+set_global_assignment -name TCL_SCRIPT_FILE ip/TERASIC_AUDIO/AUDIO_IF_hw.tcl
+set_global_assignment -name TCL_SCRIPT_FILE ip/mysram/mysram_hw.tcl
+set_global_assignment -name VERILOG_FILE ip/mysram/mysram.v
+set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
+set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
+set_global_assignment -name CUSP_FILE software/zuul1/main.cpp
+set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
+set_global_assignment -name TCL_SCRIPT_FILE ip/infrared/infrared_hw.tcl
+set_global_assignment -name VERILOG_FILE ip/infrared/main.v
+set_global_assignment -name CDF_FILE de2_115_jtag.cdf
+set_global_assignment -name VERILOG_FILE ip/infrared/infrared.v
+set_global_assignment -name QSYS_FILE de2_115.qsys

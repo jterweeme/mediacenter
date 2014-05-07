@@ -2,11 +2,11 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 7, 2014 10:12:37 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1399450357815</BspGeneratedUnixTimeStamp>
-        <BspGeneratedLocation>C:\users\alex\mediacenter\software\bsp</BspGeneratedLocation>
-        <BspSettingsFile>.\settings.bsp</BspSettingsFile>
-        <SopcDesignFile>..\..\de2_115.sopcinfo</SopcDesignFile>
+        <BspGeneratedTimeStamp>May 7, 2014 12:31:14 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1399458674524</BspGeneratedUnixTimeStamp>
+        <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
+        <BspSettingsFile>./settings.bsp</BspSettingsFile>
+        <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
         <JdiFile>default</JdiFile>
         <Cpu>cpu</Cpu>
         <SchemaVersion>1.9</SchemaVersion>
@@ -899,50 +899,50 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>uart</slaveDescriptor>
+                <slaveDescriptor>AUDIO_IF_0</slaveDescriptor>
                 <addressRange>0x08001400 - 0x0800141F</addressRange>
+                <addressSpan>32</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>uart</slaveDescriptor>
+                <addressRange>0x08001420 - 0x0800143F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>audio_0</slaveDescriptor>
-                <addressRange>0x08001420 - 0x0800142F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>quadrosegment</slaveDescriptor>
-                <addressRange>0x08001430 - 0x0800143F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>duosegmentrechts</slaveDescriptor>
                 <addressRange>0x08001440 - 0x0800144F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>duosegmentlinks</slaveDescriptor>
+                <slaveDescriptor>duosegmentrechts</slaveDescriptor>
                 <addressRange>0x08001450 - 0x0800145F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>dotmatrix</slaveDescriptor>
+                <slaveDescriptor>duosegmentlinks</slaveDescriptor>
                 <addressRange>0x08001460 - 0x0800146F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>dotmatrix</slaveDescriptor>
+                <addressRange>0x08001470 - 0x0800147F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x08001470 - 0x08001477</addressRange>
+                <addressRange>0x08001480 - 0x08001487</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>infrared_0</slaveDescriptor>
-                <addressRange>0x08001478 - 0x0800147B</addressRange>
+                <addressRange>0x08001488 - 0x0800148B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
