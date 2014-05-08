@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <system.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include "segment.h"
 #include "misc.h"
 
@@ -10,16 +12,19 @@ public:
 private:
     QuadroSegment *seg;
     Uart *uart;
+    LCD *lcd;
 };
 
 int PrimesTest1::run()
 {
     seg = new QuadroSegment((volatile uint32_t *)QUADROSEGMENT_BASE);
     uart = Uart::getInstance();
-    ::printf("Opstarten\r\n");
 
     int aantal = 0;
     seg->setInt(0);
+    lcd = new LCD();
+    lcd->init(::open(CHARACTER_LCD_0_NAME, O_WRONLY));
+    lcd->write("Niceberg");
 
     for (int i = 2; i < 0xffff; i++)
     {

@@ -58,11 +58,11 @@ private:
 
 class LCD
 {
-public:
-    void init(FILE *fp);
-    void write(char *);
 private:
-    FILE *fp;
+    int fd;
+public:
+    void init(int fd) { this->fd = fd; }
+    void write(const char *);
 };
 
 class Audio

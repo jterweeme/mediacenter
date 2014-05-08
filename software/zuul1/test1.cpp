@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <system.h>
 #include <stdint.h>
-#include <altera_avalon_lcd_16207.h>
+//#include <altera_avalon_lcd_16207.h>
 #include <sys/alt_irq.h>
 #include <io.h>
 #include <altera_avalon_pio_regs.h>
@@ -50,6 +50,8 @@ private:
 
 int main()
 {
+    fopen("/dev/character_lcd_0", "w");
+
     Test1 test1;
     test1.init();
 
@@ -63,17 +65,19 @@ void Test1::init()
     //LCD lcd;
     //lcd.init(fopen(DOTMATRIX_NAME, "w"));
     //lcd.write("Boeman");
-    FILE *fp = fopen(DOTMATRIX_NAME, "w");
 
+
+    //if (fp == NULL)
+        segmentQuadro.setInt(20);
+
+    //fwrite("Ballo wereld", 12, 1, fp);
     
-    if (fp)
-        segmentLinks.write(0x3024);
-    else
-        segmentLinks.write(0x2430);
+    segmentLinks.write(0x3024);
+    segmentLinks.write(0x2430);
 
     segmentRechts.write(0x9992);
-    segmentQuadro.write(0x82f80010);
-    segmentQuadro.setInt(9876);
+    //segmentQuadro.write(0x82f80010);
+    //segmentQuadro.setInt(9876);
     ir = InfraRood::getInstance();
 
     ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
