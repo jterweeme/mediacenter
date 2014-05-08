@@ -102,3 +102,9 @@ void LCD::write(const char *s)
     ::write(fd, s, ::strlen(s));
 }
 
+void Audio::init(volatile uint32_t *base, const char *name)
+{
+    this->base = base;
+    this->name = name;
+}
+

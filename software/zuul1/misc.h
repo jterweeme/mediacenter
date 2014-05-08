@@ -83,10 +83,24 @@ public:
 class Audio
 {
 public:
-    Audio();
-    void init(volatile uint32_t *base);
+    void init(volatile uint32_t *base, const char *name);
 private:
     volatile uint32_t *base;
+    const char *name;
 };
+
+class Audio2
+{
+private:
+    int fd;
+public:
+    void init(int fd) { this->fd = fd; }
+
+    void write(const char *s)
+    {
+        ::write(fd, s, ::strlen(s));
+    }
+};
+
 #endif
 

@@ -50,8 +50,6 @@ private:
 
 int main()
 {
-    fopen("/dev/character_lcd_0", "w");
-
     Test1 test1;
     test1.init();
 
