@@ -9,6 +9,8 @@ Alex Aalbertsberg
 #include <stdint.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <string.h>
+#include <unistd.h>
 #include <Altera_UP_SD_Card_Avalon_Interface.h>
 
 class Observer
@@ -41,6 +43,19 @@ public:
 private:
     Uart() { }
     volatile uint32_t *base;
+};
+
+class JtagUart
+{
+private:
+    int fd;
+public:
+    void init(int fd) { this->fd = fd; }
+
+    void write(const char *s)
+    {
+        ::write(fd, s, ::strlen(s));
+    }
 };
 
 class SDCard
