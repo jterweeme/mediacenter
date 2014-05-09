@@ -8,6 +8,7 @@
 #include <sys/alt_irq.h>
 #include <io.h>
 #include "misc.h"
+#include <fcntl.h>
 
 void InfraRood::init(volatile uint32_t *base, int irq, int ctl)
 {
@@ -106,5 +107,7 @@ void Audio::init(volatile uint32_t *base, const char *name)
 {
     this->base = base;
     this->name = name;
+
+    fd = ::open(name, O_WRONLY);
 }
 

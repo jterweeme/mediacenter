@@ -84,9 +84,11 @@ class Audio
 {
 public:
     void init(volatile uint32_t *base, const char *name);
+    void write(const char *s);
 private:
     volatile uint32_t *base;
     const char *name;
+    int fd;
 };
 
 class Audio2
