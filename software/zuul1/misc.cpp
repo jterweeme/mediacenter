@@ -98,21 +98,10 @@ bool SDCard::fclose(int sd_fileh)
     return ::alt_up_sd_card_fclose(sd_fileh);
 }
 
-void LCD::write(const char *s)
-{
-    ::write(fd, s, ::strlen(s));
-}
-
-void Audio::write(const char *s)
-{
-    ::write(fd, s, ::strlen(s));
-}
-
 void Audio::init(volatile uint32_t *base, const char *name)
 {
     this->base = base;
     this->name = name;
-
     fd = ::open(name, O_WRONLY);
 }
 

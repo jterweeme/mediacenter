@@ -51,11 +51,7 @@ private:
     int fd;
 public:
     void init(int fd) { this->fd = fd; }
-
-    void write(const char *s)
-    {
-        ::write(fd, s, ::strlen(s));
-    }
+    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
 };
 
 class SDCard
@@ -77,7 +73,7 @@ private:
     int fd;
 public:
     void init(int fd) { this->fd = fd; }
-    void write(const char *);
+    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
 };
 
 class I2C
@@ -85,15 +81,15 @@ class I2C
 private:
     void start();
     void stop();
-    bool write(uint8_t data);
-    void read(uint8_t *data, bool ack);
+    bool private_write(uint8_t data);
+    void private_read(uint8_t *data, bool ack);
 };
 
 class Audio
 {
 public:
     void init(volatile uint32_t *base, const char *name);
-    void write(const char *s);
+    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
 private:
     volatile uint32_t *base;
     const char *name;
@@ -106,11 +102,7 @@ private:
     int fd;
 public:
     void init(int fd) { this->fd = fd; }
-
-    void write(const char *s)
-    {
-        ::write(fd, s, ::strlen(s));
-    }
+    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
 };
 
 #endif
