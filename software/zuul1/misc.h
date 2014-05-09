@@ -80,6 +80,15 @@ public:
     void write(const char *);
 };
 
+class I2C
+{
+private:
+    void start();
+    void stop();
+    bool write(uint8_t data);
+    void read(uint8_t *data, bool ack);
+};
+
 class Audio
 {
 public:

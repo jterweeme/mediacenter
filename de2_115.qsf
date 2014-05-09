@@ -126,9 +126,6 @@ set_global_assignment -name GENERATE_SVF_FILE ON
 set_global_assignment -name GENERATE_JAM_FILE ON
 set_global_assignment -name GENERATE_JBC_FILE ON
 set_location_assignment PIN_Y15 -to infrared_0_conduit_end_export
-set_location_assignment PIN_AB14 -to sd_dat_external_connection_export[2]
-set_location_assignment PIN_AF13 -to sd_dat_external_connection_export[1]
-set_location_assignment PIN_AF14 -to sd_wp_n_external_connection_export
 set_location_assignment PIN_T8 -to terasic_sram_0_conduit_end_ADDR[19]
 set_location_assignment PIN_AB8 -to terasic_sram_0_conduit_end_ADDR[18]
 set_location_assignment PIN_AB9 -to terasic_sram_0_conduit_end_ADDR[17]
@@ -231,9 +228,6 @@ set_location_assignment PIN_AD14 -to altera_up_sd_card_avalon_interface_0_condui
 set_location_assignment PIN_AE13 -to altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock
 set_location_assignment PIN_AC14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3
 set_location_assignment PIN_AE14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat
-set_location_assignment PIN_F2 -to audio_0_external_interface_BCLK
-set_location_assignment PIN_D1 -to audio_0_external_interface_DACDAT
-set_location_assignment PIN_E3 -to audio_0_external_interface_DACLRCK
 set_location_assignment PIN_L4 -to character_lcd_0_external_interface_EN
 set_location_assignment PIN_M5 -to character_lcd_0_external_interface_DATA[7]
 set_location_assignment PIN_M3 -to character_lcd_0_external_interface_DATA[6]
@@ -270,3 +264,9 @@ set_global_assignment -name CDF_FILE de2_115_jtag.cdf
 set_global_assignment -name VERILOG_FILE ip/infrared/infrared.v
 set_global_assignment -name QSYS_FILE de2_115.qsys
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_location_assignment PIN_D2 -to audio_if_0_conduit_end_ADCDAT
+set_location_assignment PIN_E1 -to audio_if_0_conduit_end_XCK
+set_location_assignment PIN_E3 -to audio_if_0_conduit_end_DACLRC
+set_location_assignment PIN_D1 -to audio_if_0_conduit_end_DACDAT
+set_location_assignment PIN_F2 -to audio_if_0_conduit_end_BCLK
+set_location_assignment PIN_C2 -to audio_if_0_conduit_end_ADCLRC

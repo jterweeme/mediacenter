@@ -16,6 +16,7 @@ class AudioTest1
 {
 private:
     Audio audio;
+    I2C i2cBus;
 public:
     int run();
 };
@@ -29,6 +30,7 @@ int AudioTest2::run()
 int AudioTest1::run()
 {
     audio.init((volatile uint32_t *)AUDIO_IF_0_BASE, AUDIO_IF_0_NAME);
+    audio.write("abcdefghijklmnopqrstuvwxyz");
 }
 
 int main()
