@@ -4,7 +4,7 @@ NAAM = audiotest1
 
 all: $(NAAM).hex
 
-$(NAAM).elf: doemaar.altijd zuul1.png
+$(NAAM).elf: doemaar.altijd
 	nios2-elf-gcc -g -c $(INCLUDES) test2.c
 	nios2-elf-g++ -g -c $(INCLUDES) test1.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) misc.cpp

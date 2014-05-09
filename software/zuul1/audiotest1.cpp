@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include "misc.h"
 
-class AudioTest1
+class AudioTest2
 {
 private:
     Audio2 audio;
@@ -12,7 +12,7 @@ public:
     int run();
 };
 
-class AudioTest2
+class AudioTest1
 {
 private:
     Audio audio;
@@ -34,8 +34,8 @@ int AudioTest2::run()
 int main()
 {
     //AudioTest1 at;
-    AudioTest2 at2;
-    return at2.run();
+    AudioTest1 at1;
+    return at1.run();
 }
 
 

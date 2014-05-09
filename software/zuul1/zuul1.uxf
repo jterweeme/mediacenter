@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="12.2">
   <zoom_level>10</zoom_level>
   <element>
     <type>com.umlet.element.Class</type>
@@ -343,5 +344,26 @@
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>30;30;30;120</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>580</x>
+      <y>200</y>
+      <w>240</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>bg=red
+*SDCard*
+--
+-alt_up_sd_card_dev *sd_card_dev;
+--
++void init(const char *);
++bool isPresent();
++bool isFAT16();
++int fopen(char *);
++bool write(int, char);
++bool fclose(int);</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

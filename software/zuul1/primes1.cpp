@@ -24,7 +24,7 @@ int PrimesTest1::run()
     seg->setInt(0);
     lcd = new LCD();
     lcd->init(::open(CHARACTER_LCD_0_NAME, O_WRONLY));
-    lcd->write("Niceberg");
+    lcd->write("Hiep hoi");
 
     for (int i = 2; i < 0xffff; i++)
     {
