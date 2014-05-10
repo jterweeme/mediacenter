@@ -87,13 +87,17 @@ private:
     void private_read(uint8_t *data, bool ack);
 public:
     void init(volatile uint32_t *scl, volatile uint32_t *sda);
+    I2C() { }
+    I2C(volatile uint32_t *scl, volatile uint32_t *sda) { init(scl, sda); }
 
 };
 
 class EEProm
 {
+private:
+    I2C *bus;
 public:
-    
+    EEProm(I2C *bus) { this->bus = bus; }
 };
 
 class Audio
