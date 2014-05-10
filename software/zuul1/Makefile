@@ -1,6 +1,6 @@
 MACHINE := -msys-crt0='../bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp
 INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
-NAAM = audiotest1
+NAAM = primes1
 
 all: $(NAAM).hex
 
