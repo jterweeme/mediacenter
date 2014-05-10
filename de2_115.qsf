@@ -251,7 +251,6 @@ set_location_assignment PIN_D14 -to eep_i2c_scl_external_connection_export
 set_location_assignment PIN_E14 -to eep_i2c_sda_external_connection_export
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name TCL_SCRIPT_FILE download.tcl
 set_global_assignment -name TCL_SCRIPT_FILE niosdownload.tcl
 set_global_assignment -name QSYS_FILE de2_115.qsys
@@ -278,3 +277,33 @@ set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
 set_global_assignment -name TCL_SCRIPT_FILE ip/infrared/infrared_hw.tcl
 set_global_assignment -name VERILOG_FILE ip/infrared/main.v
 set_global_assignment -name VERILOG_FILE ip/infrared/infrared.v
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_location_assignment PIN_D12 -to video_vga_controller_0_external_interface_B[7]
+set_location_assignment PIN_D11 -to video_vga_controller_0_external_interface_B[6]
+set_location_assignment PIN_C12 -to video_vga_controller_0_external_interface_B[5]
+set_location_assignment PIN_A11 -to video_vga_controller_0_external_interface_B[4]
+set_location_assignment PIN_B11 -to video_vga_controller_0_external_interface_B[3]
+set_location_assignment PIN_C11 -to video_vga_controller_0_external_interface_B[2]
+set_location_assignment PIN_A10 -to video_vga_controller_0_external_interface_B[1]
+set_location_assignment PIN_B10 -to video_vga_controller_0_external_interface_B[0]
+set_location_assignment PIN_F11 -to video_vga_controller_0_external_interface_BLANK
+set_location_assignment PIN_A12 -to video_vga_controller_0_external_interface_CLK
+set_location_assignment PIN_C9 -to video_vga_controller_0_external_interface_G[7]
+set_location_assignment PIN_F10 -to video_vga_controller_0_external_interface_G[6]
+set_location_assignment PIN_B8 -to video_vga_controller_0_external_interface_G[5]
+set_location_assignment PIN_C8 -to video_vga_controller_0_external_interface_G[4]
+set_location_assignment PIN_H12 -to video_vga_controller_0_external_interface_G[3]
+set_location_assignment PIN_F8 -to video_vga_controller_0_external_interface_G[2]
+set_location_assignment PIN_G11 -to video_vga_controller_0_external_interface_G[1]
+set_location_assignment PIN_G8 -to video_vga_controller_0_external_interface_G[0]
+set_location_assignment PIN_G13 -to video_vga_controller_0_external_interface_HS
+set_location_assignment PIN_H10 -to video_vga_controller_0_external_interface_R[7]
+set_location_assignment PIN_H8 -to video_vga_controller_0_external_interface_R[6]
+set_location_assignment PIN_J12 -to video_vga_controller_0_external_interface_R[5]
+set_location_assignment PIN_G10 -to video_vga_controller_0_external_interface_R[4]
+set_location_assignment PIN_F12 -to video_vga_controller_0_external_interface_R[3]
+set_location_assignment PIN_D10 -to video_vga_controller_0_external_interface_R[2]
+set_location_assignment PIN_E11 -to video_vga_controller_0_external_interface_R[1]
+set_location_assignment PIN_E12 -to video_vga_controller_0_external_interface_R[0]
+set_location_assignment PIN_C10 -to video_vga_controller_0_external_interface_SYNC
+set_location_assignment PIN_C13 -to video_vga_controller_0_external_interface_VS
