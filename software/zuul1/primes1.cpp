@@ -24,7 +24,7 @@ int PrimesTest1::run()
     seg->setInt(0);
     lcd = new LCD();
     lcd->init(::open(CHARACTER_LCD_0_NAME, O_WRONLY));
-    lcd->write("Hiep hoi");
+    lcd->write("Hoera");
 
     for (int i = 2; i < 0xffff; i++)
     {
@@ -38,7 +38,6 @@ int PrimesTest1::run()
             seg->setInt(++aantal);
     }
 
-    ::printf("%u\r\n", aantal);
     return 0;
 }
 

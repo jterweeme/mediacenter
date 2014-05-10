@@ -241,12 +241,21 @@ set_location_assignment PIN_M2 -to character_lcd_0_external_interface_RS
 set_location_assignment PIN_M1 -to character_lcd_0_external_interface_RW
 set_location_assignment PIN_L6 -to character_lcd_0_external_interface_BLON
 set_location_assignment PIN_L5 -to character_lcd_0_external_interface_ON
-set_global_assignment -name CUSP_FILE software/zuul1/test1.cpp
-set_global_assignment -name CUSP_FILE software/zuul1/sdcardtest1.cpp
-set_global_assignment -name CUSP_FILE software/zuul1/primes1.cpp
-set_global_assignment -name CUSP_FILE software/zuul1/misc.cpp
-set_global_assignment -name CUSP_FILE software/zuul1/jtagtest1.cpp
-set_global_assignment -name CUSP_FILE software/zuul1/audiotest1.cpp
+set_location_assignment PIN_D2 -to audio_if_0_conduit_end_ADCDAT
+set_location_assignment PIN_E1 -to audio_if_0_conduit_end_XCK
+set_location_assignment PIN_E3 -to audio_if_0_conduit_end_DACLRC
+set_location_assignment PIN_D1 -to audio_if_0_conduit_end_DACDAT
+set_location_assignment PIN_F2 -to audio_if_0_conduit_end_BCLK
+set_location_assignment PIN_C2 -to audio_if_0_conduit_end_ADCLRC
+set_location_assignment PIN_D14 -to eep_i2c_scl_external_connection_export
+set_location_assignment PIN_E14 -to eep_i2c_sda_external_connection_export
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name TCL_SCRIPT_FILE download.tcl
+set_global_assignment -name TCL_SCRIPT_FILE niosdownload.tcl
+set_global_assignment -name QSYS_FILE de2_115.qsys
+set_global_assignment -name CDF_FILE de2_115_jtag.cdf
 set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_IF.v
 set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/audio_fifo.v
 set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_DAC.v
@@ -254,21 +263,18 @@ set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_ADC.v
 set_global_assignment -name TCL_SCRIPT_FILE ip/TERASIC_AUDIO/AUDIO_IF_hw.tcl
 set_global_assignment -name TCL_SCRIPT_FILE ip/mysram/mysram_hw.tcl
 set_global_assignment -name VERILOG_FILE ip/mysram/mysram.v
+set_global_assignment -name TCL_SCRIPT_FILE software/primes1/maakfeil.tcl
+set_global_assignment -name TCL_SCRIPT_FILE nieuweflow.tcl
+set_global_assignment -name CUSP_FILE software/zuul1/test1.cpp
+set_global_assignment -name CUSP_FILE software/zuul1/sdcardtest1.cpp
+set_global_assignment -name CUSP_FILE software/zuul1/primes1.cpp
+set_global_assignment -name CUSP_FILE software/zuul1/misc.cpp
+set_global_assignment -name CUSP_FILE software/zuul1/jtagtest1.cpp
+set_global_assignment -name CUSP_FILE software/zuul1/audiotest1.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
 set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
 set_global_assignment -name CUSP_FILE software/zuul1/main.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
 set_global_assignment -name TCL_SCRIPT_FILE ip/infrared/infrared_hw.tcl
 set_global_assignment -name VERILOG_FILE ip/infrared/main.v
-set_global_assignment -name CDF_FILE de2_115_jtag.cdf
 set_global_assignment -name VERILOG_FILE ip/infrared/infrared.v
-set_global_assignment -name QSYS_FILE de2_115.qsys
-set_location_assignment PIN_D2 -to audio_if_0_conduit_end_ADCDAT
-set_location_assignment PIN_E1 -to audio_if_0_conduit_end_XCK
-set_location_assignment PIN_E3 -to audio_if_0_conduit_end_DACLRC
-set_location_assignment PIN_D1 -to audio_if_0_conduit_end_DACDAT
-set_location_assignment PIN_F2 -to audio_if_0_conduit_end_BCLK
-set_location_assignment PIN_C2 -to audio_if_0_conduit_end_ADCLRC
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_location_assignment PIN_D14 -to eep_i2c_scl_external_connection_export
-set_location_assignment PIN_E14 -to eep_i2c_sda_external_connection_export

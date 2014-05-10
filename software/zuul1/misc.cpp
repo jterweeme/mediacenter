@@ -98,6 +98,12 @@ bool SDCard::fclose(int sd_fileh)
     return ::alt_up_sd_card_fclose(sd_fileh);
 }
 
+void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
+{
+    this->scl = scl;
+    this->sda = sda;
+}
+
 void Audio::init(volatile uint32_t *base, const char *name)
 {
     this->base = base;

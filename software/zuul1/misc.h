@@ -79,10 +79,21 @@ public:
 class I2C
 {
 private:
+    volatile uint32_t *scl;
+    volatile uint32_t *sda;
     void start();
     void stop();
     bool private_write(uint8_t data);
     void private_read(uint8_t *data, bool ack);
+public:
+    void init(volatile uint32_t *scl, volatile uint32_t *sda);
+
+};
+
+class EEProm
+{
+public:
+    
 };
 
 class Audio
