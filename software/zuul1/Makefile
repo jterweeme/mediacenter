@@ -21,7 +21,7 @@ $(NAAM).elf: doemaar.altijd
 	nios2-elf-g++ -o primes1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp primes1.o misc.o
 	nios2-elf-g++ -o sdcardtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp sdcardtest1.o misc.o
 	nios2-elf-g++ -o eepromtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp eepromtest1.o misc.o
-	nios2-elf-g++ -o vgatest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp vgatest1.o
+	nios2-elf-g++ -o vgatest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp vgatest1.o misc.o
 
 $(NAAM).flash: $(NAAM).elf
 	elf2flash --epcs --after=../../de2_115.flash --input=$(NAAM).elf --output=$@

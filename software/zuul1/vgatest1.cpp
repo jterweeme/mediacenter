@@ -1,11 +1,24 @@
-#include <altera_up_avalon_video_character_buffer_with_dma.h>
+#include <system.h>
+#include "misc.h"
+
+class VGATest
+{
+public:
+    int run();
+private:
+    VGA *vga;
+};
+
+int VGATest::run()
+{
+    vga = new VGA("/dev/video_character_buffer_with_dma_0");
+    vga->draw('D', 31, 30);
+}
 
 int main()
 {
-    alt_up_char_buffer_dev *charbuffer;
-    charbuffer = alt_up_char_buffer_open_dev("/dev/video_character_buffer_with_dma_0");
-    alt_up_char_buffer_draw(charbuffer, 'Z', 30, 30);
-    return 0;
+    VGATest vt;
+    return vt.run();
 }
 
 

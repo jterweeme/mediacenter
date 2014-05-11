@@ -98,6 +98,16 @@ bool SDCard::fclose(int sd_fileh)
     return ::alt_up_sd_card_fclose(sd_fileh);
 }
 
+VGA::VGA(const char *devName)
+{
+    charBuffer = ::alt_up_char_buffer_open_dev(devName);
+}
+
+void VGA::draw(char c, int x, int y)
+{
+    ::alt_up_char_buffer_draw(charBuffer, c, x, y);
+}
+
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
 {
     this->scl = scl;

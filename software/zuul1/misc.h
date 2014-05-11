@@ -12,6 +12,7 @@ Alex Aalbertsberg
 #include <string.h>
 #include <unistd.h>
 #include <Altera_UP_SD_Card_Avalon_Interface.h>
+#include <altera_up_avalon_video_character_buffer_with_dma.h>
 
 class Observer
 {
@@ -109,6 +110,15 @@ private:
     volatile uint32_t *base;
     const char *name;
     int fd;
+};
+
+class VGA
+{
+public:
+    VGA(const char *devName);
+    void draw(char, int, int);
+private:
+    alt_up_char_buffer_dev *charBuffer;
 };
 
 class Audio2
