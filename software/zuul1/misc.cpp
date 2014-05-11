@@ -119,10 +119,4 @@ void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
     this->sda = sda;
 }
 
-void Audio::init(volatile uint32_t *base, const char *name)
-{
-    this->base = base;
-    this->name = name;
-    fd = ::open(name, O_WRONLY);
-}
 

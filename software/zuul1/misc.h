@@ -86,10 +86,12 @@ private:
     void stop();
     bool private_write(uint8_t data);
     void private_read(uint8_t *data, bool ack);
+    uint8_t read(uint8_t devAddr, uint8_t ctlAddr);
 public:
     void init(volatile uint32_t *scl, volatile uint32_t *sda);
     I2C() { }
     I2C(volatile uint32_t *scl, volatile uint32_t *sda) { init(scl, sda); }
+    void write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData);
 
 };
 
@@ -101,17 +103,6 @@ public:
     EEProm(I2C *bus) { this->bus = bus; }
 };
 
-class Audio
-{
-public:
-    void init(volatile uint32_t *base, const char *name);
-    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
-private:
-    volatile uint32_t *base;
-    const char *name;
-    int fd;
-};
-
 class VGA
 {
 private:
@@ -121,15 +112,6 @@ public:
     int clear() { ::alt_up_char_buffer_clear(charBuffer); }
     int draw(const char, const int, const int);
     int draw(const char *, const int, const int);
-};
-
-class Audio2
-{
-private:
-    int fd;
-public:
-    void init(int fd) { this->fd = fd; }
-    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
 };
 
 #endif

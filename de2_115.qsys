@@ -68,19 +68,19 @@
          type = "String";
       }
    }
-   element infrared_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "134231256";
-         type = "String";
-      }
-   }
    element AUDIO_IF_0.avalon_slave
    {
       datum baseAddress
       {
          value = "134231072";
+         type = "String";
+      }
+   }
+   element infrared_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134231256";
          type = "String";
       }
    }
@@ -188,19 +188,27 @@
          type = "int";
       }
    }
-   element duosegmentlinks.s1
-   {
-      datum baseAddress
-      {
-         value = "134231216";
-         type = "String";
-      }
-   }
    element timer_0.s1
    {
       datum baseAddress
       {
          value = "134231040";
+         type = "String";
+      }
+   }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "134231104";
+         type = "String";
+      }
+   }
+   element duosegmentlinks.s1
+   {
+      datum baseAddress
+      {
+         value = "134231216";
          type = "String";
       }
    }
@@ -212,27 +220,11 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s1
+   element eep_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "134231200";
-         type = "String";
-      }
-   }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "134231136";
-         type = "String";
-      }
-   }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "134231104";
+         value = "134231152";
          type = "String";
       }
    }
@@ -257,11 +249,19 @@
          type = "String";
       }
    }
-   element eep_i2c_scl.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "134231152";
+         value = "134231136";
+         type = "String";
+      }
+   }
+   element duosegmentrechts.s1
+   {
+      datum baseAddress
+      {
+         value = "134231200";
          type = "String";
       }
    }
@@ -320,7 +320,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1399763098791" />
+ <parameter name="timeStamp" value="1399832997087" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk50.clk_in" type="clock" dir="end" />

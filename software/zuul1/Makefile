@@ -7,10 +7,9 @@ LIBRARIES := -L ../bsp
 NAAM = vgatest1
 LINKY := -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES)
 
-all: $(NAAM).hex
+all: clean primes1.elf vgatest1.hex audiotest1.hex test1.hex primes1.hex
 
-$(NAAM).elf: doemaar.altijd
-	nios2-elf-gcc -g -c $(INCLUDES) test2.c
+%.elf:
 	nios2-elf-g++ -g -c $(INCLUDES) test1.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) misc.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) primes1.cpp
@@ -27,10 +26,10 @@ $(NAAM).elf: doemaar.altijd
 	nios2-elf-g++ -o eepromtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp eepromtest1.o misc.o
 	nios2-elf-g++ -o vgatest1.elf $(LINKY) vgatest1.o misc.o
 
-$(NAAM).flash: $(NAAM).elf
-	elf2flash --epcs --after=../../de2_115.flash --input=$(NAAM).elf --output=$@
+%.flash: %.elf
+	elf2flash --epcs --after=../../de2_115.flash --input=$< --output=$@
 
-$(NAAM).hex: $(NAAM).flash
+%.hex: %.flash
 	nios2-elf-objcopy -I srec -O ihex $< $@
 
 doemaar.altijd:
