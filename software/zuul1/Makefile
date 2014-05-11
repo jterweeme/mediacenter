@@ -7,7 +7,7 @@ LIBRARIES := -L ../bsp
 NAAM = vgatest1
 LINKY := -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES)
 
-all: clean primes1.elf vgatest1.hex audiotest1.hex test1.hex primes1.hex
+all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.hex test1.hex primes1.hex
 
 %.elf:
 	nios2-elf-g++ -g -c $(INCLUDES) test1.cpp

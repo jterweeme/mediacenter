@@ -16,7 +16,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "10";
          type = "int";
       }
    }
@@ -24,7 +24,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "9";
          type = "int";
       }
    }
@@ -88,15 +88,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
-         type = "int";
-      }
-   }
-   element clk50
-   {
-      datum _sortIndex
-      {
-         value = "0";
+         value = "11";
          type = "int";
       }
    }
@@ -104,7 +96,7 @@
    {
       datum _sortIndex
       {
-         value = "2";
+         value = "1";
          type = "int";
       }
    }
@@ -112,7 +104,7 @@
    {
       datum _sortIndex
       {
-         value = "5";
+         value = "4";
          type = "int";
       }
    }
@@ -120,7 +112,7 @@
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "5";
          type = "int";
       }
    }
@@ -128,7 +120,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "14";
          type = "int";
       }
    }
@@ -136,7 +128,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "15";
          type = "int";
       }
    }
@@ -144,7 +136,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "13";
          type = "int";
       }
    }
@@ -152,7 +144,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
    }
@@ -168,7 +160,7 @@
    {
       datum _sortIndex
       {
-         value = "3";
+         value = "2";
          type = "int";
       }
    }
@@ -176,7 +168,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "8";
          type = "int";
       }
    }
@@ -184,39 +176,15 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "6";
          type = "int";
       }
    }
-   element timer_0.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "134231040";
-         type = "String";
-      }
-   }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "134231104";
-         type = "String";
-      }
-   }
-   element duosegmentlinks.s1
-   {
-      datum baseAddress
-      {
-         value = "134231216";
-         type = "String";
-      }
-   }
-   element quadrosegment.s1
-   {
-      datum baseAddress
-      {
-         value = "134231184";
+         value = "134231136";
          type = "String";
       }
    }
@@ -225,6 +193,14 @@
       datum baseAddress
       {
          value = "134231152";
+         type = "String";
+      }
+   }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "134231104";
          type = "String";
       }
    }
@@ -249,11 +225,27 @@
          type = "String";
       }
    }
-   element eep_i2c_sda.s1
+   element quadrosegment.s1
    {
       datum baseAddress
       {
-         value = "134231136";
+         value = "134231184";
+         type = "String";
+      }
+   }
+   element duosegmentlinks.s1
+   {
+      datum baseAddress
+      {
+         value = "134231216";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "134231040";
          type = "String";
       }
    }
@@ -269,7 +261,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "12";
          type = "int";
       }
    }
@@ -277,7 +269,7 @@
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "3";
          type = "int";
       }
    }
@@ -285,7 +277,7 @@
    {
       datum _sortIndex
       {
-         value = "1";
+         value = "0";
          type = "int";
       }
    }
@@ -293,7 +285,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "17";
          type = "int";
       }
    }
@@ -301,7 +293,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "16";
          type = "int";
       }
    }
@@ -320,11 +312,9 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1399832997087" />
+ <parameter name="timeStamp" value="1399836324890" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
- <interface name="clk" internal="clk50.clk_in" type="clock" dir="end" />
- <interface name="reset" internal="clk50.clk_in_reset" type="reset" dir="end" />
  <interface
    name="uart_0_external_connection"
    internal="uart.external_connection"
@@ -394,6 +384,16 @@
    name="video_vga_controller_0_external_interface"
    internal="video_vga_controller_0.external_interface"
    type="conduit"
+   dir="end" />
+ <interface
+   name="clk"
+   internal="up_clocks_0.clk_in_primary"
+   type="clock"
+   dir="end" />
+ <interface
+   name="reset"
+   internal="up_clocks_0.clk_in_primary_reset"
+   type="reset"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
   <parameter name="setting_showUnpublishedSettings" value="false" />
@@ -512,12 +512,6 @@
   <parameter name="tightlyCoupledInstructionMaster2MapParam" value="" />
   <parameter name="tightlyCoupledInstructionMaster3MapParam" value="" />
  </module>
- <module kind="clock_source" version="13.0" enabled="1" name="clk50">
-  <parameter name="clockFrequency" value="50000000" />
-  <parameter name="clockFrequencyKnown" value="true" />
-  <parameter name="inputClockFrequency" value="0" />
-  <parameter name="resetSynchronousEdges" value="NONE" />
- </module>
  <module
    kind="altera_avalon_jtag_uart"
    version="13.0.1.99.2"
@@ -620,7 +614,7 @@
   <parameter name="vga_clk" value="true" />
   <parameter name="audio_clk" value="false" />
   <parameter name="audio_clk_freq" value="12.288" />
-  <parameter name="AUTO_CLK_IN_PRIMARY_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_CLK_IN_PRIMARY_CLOCK_RATE" value="0" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
  <module
@@ -782,12 +776,6 @@
   <parameter name="baseAddress" value="0x08002800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="reset" version="13.0" start="clk50.clk_reset" end="uart.reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="jtag_uart_0.reset" />
  <connection kind="avalon" version="13.0" start="cpu.data_master" end="uart.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x08003440" />
@@ -803,7 +791,6 @@
  <connection kind="interrupt" version="13.0" start="cpu.d_irq" end="uart.irq">
   <parameter name="irqNumber" value="1" />
  </connection>
- <connection kind="reset" version="13.0" start="clk50.clk_reset" end="cpu.reset_n" />
  <connection
    kind="avalon"
    version="13.0"
@@ -813,21 +800,6 @@
   <parameter name="baseAddress" value="0x080034d0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="duosegmentrechts.reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="duosegmentlinks.reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="quadrosegment.reset" />
  <connection
    kind="avalon"
    version="13.0"
@@ -856,11 +828,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="infrared_0.clock_sink_reset" />
- <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
@@ -876,16 +843,6 @@
    end="infrared_0.interrupt_sender">
   <parameter name="irqNumber" value="2" />
  </connection>
- <connection
-   kind="clock"
-   version="13.0"
-   start="clk50.clk"
-   end="up_clocks_0.clk_in_primary" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="up_clocks_0.clk_in_primary_reset" />
  <connection kind="clock" version="13.0" start="up_clocks_0.sys_clk" end="cpu.clk" />
  <connection
    kind="clock"
@@ -927,11 +884,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="new_sdram_controller_0.reset" />
- <connection
    kind="clock"
    version="13.0"
    start="up_clocks_0.sys_clk"
@@ -946,11 +898,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink_reset" />
- <connection
    kind="clock"
    version="13.0"
    start="up_clocks_0.sys_clk"
@@ -964,11 +911,6 @@
   <parameter name="baseAddress" value="0x08003000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="AUDIO_IF_0.clock_sink_reset" />
  <connection
    kind="clock"
    version="13.0"
@@ -989,11 +931,6 @@
    start="up_clocks_0.sys_clk"
    end="character_lcd_0.clock_reset" />
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="character_lcd_0.clock_reset_reset" />
- <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
@@ -1002,11 +939,6 @@
   <parameter name="baseAddress" value="0x080034dc" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="timer_0.reset" />
  <connection
    kind="clock"
    version="13.0"
@@ -1020,11 +952,6 @@
  <connection kind="interrupt" version="13.0" start="cpu.d_irq" end="timer_0.irq">
   <parameter name="irqNumber" value="3" />
  </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="i2c_sound.reset" />
  <connection
    kind="clock"
    version="13.0"
@@ -1040,11 +967,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="eep_i2c_scl.reset" />
- <connection
    kind="clock"
    version="13.0"
    start="up_clocks_0.sys_clk"
@@ -1058,11 +980,6 @@
   <parameter name="baseAddress" value="0x08003470" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="eep_i2c_sda.reset" />
  <connection
    kind="avalon"
    version="13.0"
@@ -1083,11 +1000,6 @@
    start="video_character_buffer_with_dma_0.avalon_char_source"
    end="video_vga_controller_0.avalon_vga_sink" />
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="video_character_buffer_with_dma_0.clock_reset_reset" />
- <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
@@ -1106,11 +1018,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk50.clk_reset"
-   end="video_vga_controller_0.clock_reset_reset" />
- <connection
    kind="clock"
    version="13.0"
    start="up_clocks_0.vga_clk"
@@ -1120,6 +1027,91 @@
    version="13.0"
    start="up_clocks_0.vga_clk"
    end="video_character_buffer_with_dma_0.clock_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="cpu.reset_n" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="jtag_uart_0.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="uart.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="duosegmentlinks.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="duosegmentrechts.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="quadrosegment.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="infrared_0.clock_sink_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="new_sdram_controller_0.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="AUDIO_IF_0.clock_sink_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="character_lcd_0.clock_reset_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="timer_0.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="i2c_sound.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="eep_i2c_scl.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="eep_i2c_sda.reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="video_vga_controller_0.clock_reset_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="up_clocks_0.sys_clk_reset"
+   end="video_character_buffer_with_dma_0.clock_reset_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>
