@@ -12,7 +12,9 @@ private:
 int VGATest::run()
 {
     vga = new VGA("/dev/video_character_buffer_with_dma_0");
-    vga->draw('D', 31, 30);
+    vga->clear();
+    vga->draw('D', 30, 30);
+    vga->draw("Hallo wereld", 30, 31);
 }
 
 int main()

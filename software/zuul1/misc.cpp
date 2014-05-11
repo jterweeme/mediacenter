@@ -103,9 +103,14 @@ VGA::VGA(const char *devName)
     charBuffer = ::alt_up_char_buffer_open_dev(devName);
 }
 
-void VGA::draw(char c, int x, int y)
+int VGA::draw(const char c, const int x, const int y)
 {
-    ::alt_up_char_buffer_draw(charBuffer, c, x, y);
+    return ::alt_up_char_buffer_draw(charBuffer, c, x, y);
+}
+
+int VGA::draw(const char *s, const int x, const int y)
+{
+    return ::alt_up_char_buffer_string(charBuffer, s, x, y);
 }
 
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)

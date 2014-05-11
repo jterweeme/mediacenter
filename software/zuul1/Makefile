@@ -1,6 +1,11 @@
+# Alex Aalbertsberg
+# Jasper ter Weeme
+
 MACHINE := -msys-crt0='../bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp
 INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
+LIBRARIES := -L ../bsp
 NAAM = vgatest1
+LINKY := -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES)
 
 all: $(NAAM).hex
 
@@ -14,14 +19,13 @@ $(NAAM).elf: doemaar.altijd
 	nios2-elf-g++ -g -c $(INCLUDES) sdcardtest1.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) eepromtest1.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) vgatest1.cpp
-	nios2-elf-g++ -o test1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp test1.o misc.o
-	nios2-elf-gcc -o test2.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp test2.o
-	nios2-elf-g++ -o jtagtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp jtagtest1.o misc.o
+	nios2-elf-g++ -o test1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) test1.o misc.o
+	nios2-elf-g++ -o jtagtest1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) jtagtest1.o misc.o
 	nios2-elf-g++ -o audiotest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp audiotest1.o misc.o
 	nios2-elf-g++ -o primes1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp primes1.o misc.o
 	nios2-elf-g++ -o sdcardtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp sdcardtest1.o misc.o
 	nios2-elf-g++ -o eepromtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp eepromtest1.o misc.o
-	nios2-elf-g++ -o vgatest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp vgatest1.o misc.o
+	nios2-elf-g++ -o vgatest1.elf $(LINKY) vgatest1.o misc.o
 
 $(NAAM).flash: $(NAAM).elf
 	elf2flash --epcs --after=../../de2_115.flash --input=$(NAAM).elf --output=$@

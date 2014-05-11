@@ -114,11 +114,13 @@ private:
 
 class VGA
 {
-public:
-    VGA(const char *devName);
-    void draw(char, int, int);
 private:
     alt_up_char_buffer_dev *charBuffer;
+public:
+    VGA(const char *devName);
+    int clear() { ::alt_up_char_buffer_clear(charBuffer); }
+    int draw(const char, const int, const int);
+    int draw(const char *, const int, const int);
 };
 
 class Audio2
