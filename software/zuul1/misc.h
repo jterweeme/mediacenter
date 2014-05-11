@@ -95,6 +95,17 @@ public:
 
 };
 
+class SoundCard
+{
+private:
+    I2C *i2cBus;
+public:
+    SoundCard(I2C *i2cBus) { this->i2cBus = i2cBus; }
+    bool init();
+    bool regWrite(uint8_t index, uint16_t data);
+    static const uint8_t addr = 0x34;
+};
+
 class EEProm
 {
 private:

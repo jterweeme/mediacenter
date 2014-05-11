@@ -113,10 +113,22 @@ int VGA::draw(const char *s, const int x, const int y)
     return ::alt_up_char_buffer_string(charBuffer, s, x, y);
 }
 
+bool SoundCard::init()
+{
+}
+
+bool SoundCard::regWrite(uint8_t index, uint16_t data)
+{
+    i2cBus->write(addr, 1, 1);
+}
+
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
 {
     this->scl = scl;
     this->sda = sda;
 }
 
+void I2C::write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData)
+{
 
+}
