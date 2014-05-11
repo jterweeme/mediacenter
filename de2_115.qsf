@@ -59,7 +59,6 @@ set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_RO
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_location_assignment PIN_Y2 -to clk_clk
-set_location_assignment PIN_M21 -to reset_reset_n
 set_location_assignment PIN_G12 -to uart_0_external_connection_rxd
 set_location_assignment PIN_G9 -to uart_0_external_connection_txd
 set_location_assignment PIN_AA14 -to duosegmentlinks_external_connection_export[14]
@@ -126,47 +125,6 @@ set_global_assignment -name GENERATE_SVF_FILE ON
 set_global_assignment -name GENERATE_JAM_FILE ON
 set_global_assignment -name GENERATE_JBC_FILE ON
 set_location_assignment PIN_Y15 -to infrared_0_conduit_end_export
-set_location_assignment PIN_T8 -to terasic_sram_0_conduit_end_ADDR[19]
-set_location_assignment PIN_AB8 -to terasic_sram_0_conduit_end_ADDR[18]
-set_location_assignment PIN_AB9 -to terasic_sram_0_conduit_end_ADDR[17]
-set_location_assignment PIN_AC11 -to terasic_sram_0_conduit_end_ADDR[16]
-set_location_assignment PIN_AB11 -to terasic_sram_0_conduit_end_ADDR[15]
-set_location_assignment PIN_AA4 -to terasic_sram_0_conduit_end_ADDR[14]
-set_location_assignment PIN_AC3 -to terasic_sram_0_conduit_end_ADDR[13]
-set_location_assignment PIN_AB4 -to terasic_sram_0_conduit_end_ADDR[12]
-set_location_assignment PIN_AD3 -to terasic_sram_0_conduit_end_ADDR[11]
-set_location_assignment PIN_AF2 -to terasic_sram_0_conduit_end_ADDR[10]
-set_location_assignment PIN_T7 -to terasic_sram_0_conduit_end_ADDR[9]
-set_location_assignment PIN_AF5 -to terasic_sram_0_conduit_end_ADDR[8]
-set_location_assignment PIN_AC5 -to terasic_sram_0_conduit_end_ADDR[7]
-set_location_assignment PIN_AB5 -to terasic_sram_0_conduit_end_ADDR[6]
-set_location_assignment PIN_AE6 -to terasic_sram_0_conduit_end_ADDR[5]
-set_location_assignment PIN_AB6 -to terasic_sram_0_conduit_end_ADDR[4]
-set_location_assignment PIN_AC7 -to terasic_sram_0_conduit_end_ADDR[3]
-set_location_assignment PIN_AE7 -to terasic_sram_0_conduit_end_ADDR[2]
-set_location_assignment PIN_AD7 -to terasic_sram_0_conduit_end_ADDR[1]
-set_location_assignment PIN_AB7 -to terasic_sram_0_conduit_end_ADDR[0]
-set_location_assignment PIN_AG3 -to terasic_sram_0_conduit_end_DQ[15]
-set_location_assignment PIN_AF3 -to terasic_sram_0_conduit_end_DQ[14]
-set_location_assignment PIN_AE4 -to terasic_sram_0_conduit_end_DQ[13]
-set_location_assignment PIN_AE3 -to terasic_sram_0_conduit_end_DQ[12]
-set_location_assignment PIN_AE1 -to terasic_sram_0_conduit_end_DQ[11]
-set_location_assignment PIN_AE2 -to terasic_sram_0_conduit_end_DQ[10]
-set_location_assignment PIN_AD2 -to terasic_sram_0_conduit_end_DQ[9]
-set_location_assignment PIN_AD1 -to terasic_sram_0_conduit_end_DQ[8]
-set_location_assignment PIN_AF7 -to terasic_sram_0_conduit_end_DQ[7]
-set_location_assignment PIN_AH6 -to terasic_sram_0_conduit_end_DQ[6]
-set_location_assignment PIN_AG6 -to terasic_sram_0_conduit_end_DQ[5]
-set_location_assignment PIN_AF6 -to terasic_sram_0_conduit_end_DQ[4]
-set_location_assignment PIN_AH4 -to terasic_sram_0_conduit_end_DQ[3]
-set_location_assignment PIN_AG4 -to terasic_sram_0_conduit_end_DQ[2]
-set_location_assignment PIN_AF4 -to terasic_sram_0_conduit_end_DQ[1]
-set_location_assignment PIN_AH3 -to terasic_sram_0_conduit_end_DQ[0]
-set_location_assignment PIN_AF8 -to terasic_sram_0_conduit_end_CE_n
-set_location_assignment PIN_AD4 -to terasic_sram_0_conduit_end_LB_n
-set_location_assignment PIN_AD5 -to terasic_sram_0_conduit_end_OE_n
-set_location_assignment PIN_AC4 -to terasic_sram_0_conduit_end_UB_n
-set_location_assignment PIN_AE8 -to terasic_sram_0_conduit_end_WE_n
 set_location_assignment PIN_U1 -to new_sdram_controller_0_wire_dq[31]
 set_location_assignment PIN_U4 -to new_sdram_controller_0_wire_dq[30]
 set_location_assignment PIN_T3 -to new_sdram_controller_0_wire_dq[29]
@@ -277,7 +235,6 @@ set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
 set_global_assignment -name TCL_SCRIPT_FILE ip/infrared/infrared_hw.tcl
 set_global_assignment -name VERILOG_FILE ip/infrared/main.v
 set_global_assignment -name VERILOG_FILE ip/infrared/infrared.v
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_D12 -to video_vga_controller_0_external_interface_B[7]
 set_location_assignment PIN_D11 -to video_vga_controller_0_external_interface_B[6]
 set_location_assignment PIN_C12 -to video_vga_controller_0_external_interface_B[5]
@@ -307,3 +264,6 @@ set_location_assignment PIN_E11 -to video_vga_controller_0_external_interface_R[
 set_location_assignment PIN_E12 -to video_vga_controller_0_external_interface_R[0]
 set_location_assignment PIN_C10 -to video_vga_controller_0_external_interface_SYNC
 set_location_assignment PIN_C13 -to video_vga_controller_0_external_interface_VS
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_location_assignment PIN_B14 -to clk27_clk
+set_location_assignment PIN_M21 -to reset_reset_n
