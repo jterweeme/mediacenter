@@ -59,9 +59,9 @@ class SDCard
 {
 public:
     void init(const char *);
-    bool isPresent();
-    bool isFAT16();
-    int fopen(char *);
+    bool isPresent() { ::alt_up_sd_card_is_Present(); }
+    bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
+    int fopen(char *fn) { ::alt_up_sd_card_fopen(fn, true); }
     bool write(int, char);
     bool fclose(int);
 private:

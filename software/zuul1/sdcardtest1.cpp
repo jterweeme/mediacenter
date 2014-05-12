@@ -6,24 +6,31 @@ class SDCardTest
 {
 public:
     int run();
+    void init();
 private:
     SDCard *sdCard;
     int bestand;
+    Uart *uart;
 };
 
 char buffer[512] = "WELCOME TO THE INTERFACE!!\r\n\0";
 
-int SDCardTest::run()
+void SDCardTest::init()
 {
     sdCard = new SDCard();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
-    
+    uart = Uart::getInstance();
+    uart->init((volatile uint32_t *)UART_BASE);
+}
+
+int SDCardTest::run()
+{
     if (sdCard->isPresent())
     {
         if (sdCard->isFAT16())
-            ::printf("Kaart is FAT16\r\n");
+            uart->puts("Kaart is FAT16\r\n");
         else
-            ::printf("Kaart is niet FAT16\r\n");
+            uart->puts("Kaart is niet FAT16\r\n");
 
         bestand = sdCard->fopen("lucky.txt");
         
@@ -54,6 +61,7 @@ int SDCardTest::run()
 int main()
 {
     SDCardTest test;
+    test.init();
     return test.run();
 }
 
