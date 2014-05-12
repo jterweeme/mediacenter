@@ -23,7 +23,7 @@ void AudioTest1::init()
 {
     i2cBus = new I2C((volatile uint32_t *)SND_I2C_SCL_BASE, (volatile uint32_t *)SND_I2C_SDA_BASE);
     soundCard = new SoundCard(i2cBus);
-    
+    soundCard->init();
 }
 
 int main()

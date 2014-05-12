@@ -115,11 +115,13 @@ int VGA::draw(const char *s, const int x, const int y)
 
 bool SoundCard::init()
 {
+    regWrite(15, DATA_RESET);
+    regWrite(9, DATA_INACTIVE_INTERFACE);
 }
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
 {
-    i2cBus->write(addr, 1, 1);
+    i2cBus->write(ADDR, 1, 1);
 }
 
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
@@ -130,5 +132,61 @@ void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
 
 void I2C::write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData)
 {
-
+    start();
+    stop();
+    ::usleep(7*1000);
 }
+
+void I2C::start()
+{
+    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 1);
+    IOWR_ALTERA_AVALON_PIO_DATA(sda, 1);
+    IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+    ::usleep(1);
+    IOWR_ALTERA_AVALON_PIO_DATA(sda, 0);
+    ::usleep(1);
+    IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+    ::usleep(1);
+}
+
+void I2C::stop()
+{
+    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 1);
+    IOWR_ALTERA_AVALON_PIO_DATA(sda, 0);
+    IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+    ::usleep(1);
+    IOWR_ALTERA_AVALON_PIO_DATA(sda, 1);
+    ::usleep(1);
+}
+
+bool I2C::private_write(uint8_t data)
+{
+    uint8_t mask = 0x80;
+    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 1);
+
+    for (int i = 0; i < 8; i++)
+    {
+        IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+        
+        if (data & mask)
+            IOWR_ALTERA_AVALON_PIO_DATA(sda, 1);
+        else
+            IOWR_ALTERA_AVALON_PIO_DATA(sda, 0);
+
+        mask >>= 1;
+        IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+        ::usleep(1);
+        IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+        ::usleep(1);
+    }
+    
+    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 0);
+    IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+    ::usleep(1);
+    IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+    ::usleep(1);
+    return 0;
+}
+
+
+

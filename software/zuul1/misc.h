@@ -103,7 +103,13 @@ public:
     SoundCard(I2C *i2cBus) { this->i2cBus = i2cBus; }
     bool init();
     bool regWrite(uint8_t index, uint16_t data);
-    static const uint8_t addr = 0x34;
+    static const uint8_t ADDR = 0x34;
+    static const uint16_t DATA_RESET = 0;
+    static const uint16_t DATA_INACTIVE_INTERFACE = 0;
+    static const uint16_t DATA_LEFT_LINE_IN_VOLUME = 0x0017;
+    static const uint16_t DATA_RIGHT_LINE_IN_VOLUME = 0x0017;
+    static const uint16_t DATA_LEFT_HEADPHONE_OUT_VOLUME = 0x005b;
+    static const uint16_t DATA_RIGHT_HEADPHONE_OUT_VOLUME = 0x005b;
 };
 
 class EEProm
