@@ -4,7 +4,7 @@ JedecChain;
 	DefaultMfr(6E);
 
 	P ActionCode(Cfg)
-		Device PartName(EP4CE115F29) Path("/data/stenden/fpga/tmp/mediacenter/") File("de2_115.sof") MfrSpec(OpMask(1));
+		Device PartName(EP4CE115F29) File("de2_115.sof") MfrSpec(OpMask(1));
 
 ChainEnd;
 

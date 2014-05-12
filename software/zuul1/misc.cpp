@@ -117,6 +117,7 @@ bool SoundCard::init()
 {
     regWrite(15, DATA_RESET);
     regWrite(9, DATA_INACTIVE_INTERFACE);
+    regWrite(9, ACTIVE);
 }
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)

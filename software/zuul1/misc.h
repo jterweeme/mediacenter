@@ -110,6 +110,7 @@ public:
     static const uint16_t DATA_RIGHT_LINE_IN_VOLUME = 0x0017;
     static const uint16_t DATA_LEFT_HEADPHONE_OUT_VOLUME = 0x005b;
     static const uint16_t DATA_RIGHT_HEADPHONE_OUT_VOLUME = 0x005b;
+    static const uint16_t ACTIVE = 1;
 };
 
 class EEProm
