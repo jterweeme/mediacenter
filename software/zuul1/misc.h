@@ -86,12 +86,12 @@ private:
     void stop();
     bool private_write(uint8_t data);
     void private_read(uint8_t *data, bool ack);
-    uint8_t read(uint8_t devAddr, uint8_t ctlAddr);
 public:
     void init(volatile uint32_t *scl, volatile uint32_t *sda);
     I2C() { }
     I2C(volatile uint32_t *scl, volatile uint32_t *sda) { init(scl, sda); }
     void write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData);
+    uint8_t read(uint8_t devAddr, uint8_t ctlAddr);
 
 };
 
