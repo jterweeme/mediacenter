@@ -16,7 +16,6 @@ public:
 
 int AudioTest1::run()
 {
-    
     return 0;
 }
 

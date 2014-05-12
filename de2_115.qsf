@@ -41,7 +41,7 @@ set_global_assignment -name DEVICE EP4CE115F29C7
 set_global_assignment -name TOP_LEVEL_ENTITY de2_115
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "23:29:04  APRIL 17, 2014"
-set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
+set_global_assignment -name LAST_QUARTUS_VERSION 13.0
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name DEVICE_FILTER_PACKAGE FBGA
@@ -266,6 +266,6 @@ set_location_assignment PIN_C10 -to video_vga_controller_0_external_interface_SY
 set_location_assignment PIN_C13 -to video_vga_controller_0_external_interface_VS
 set_location_assignment PIN_B14 -to clk27_clk
 set_location_assignment PIN_M21 -to reset_reset_n
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_B7 -to snd_i2c_scl_external_connection_export
 set_location_assignment PIN_A8 -to snd_i2c_sda_external_connection_export
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
