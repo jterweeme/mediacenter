@@ -4,6 +4,7 @@
 #include "I2C.h"
 #include "AUDIO.h"
 #include "AUDIO_REG.h"
+#include "misc.h"
 
 
 #ifdef DEBUG_AUDIO
@@ -17,6 +18,7 @@ static alt_u16  reg_file[10+10];
 
 bool Audio::AUDIO_Init(void)
 {
+    Uart::getInstance()->puts("Audio Init\r\n");
     bool bSuccess = TRUE;
     bSuccess = aduio_RegWrite(15, 0x0000);
     bSuccess = aduio_RegWrite(9, 0x0000);
@@ -37,6 +39,8 @@ bool Audio::AUDIO_Init(void)
     if (bSuccess)
         bSuccess = aduio_RegWrite(9, 0x0001);  // active interface
     
+    Uart::getInstance()->puts("Komt ie hier?\r\n");
+
     return bSuccess;        
          
 }
@@ -224,7 +228,9 @@ bool AUDIO_SetLineInVol(alt_u16 l_vol, alt_u16 r_vol){
     return bSuccess;
 }
 
-bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol){
+bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol)
+{
+    Uart::getInstance()->puts("setlineoutvol\r\n");
     bool bSuccess;
     alt_u16 control;
 
@@ -243,7 +249,7 @@ bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol){
         bSuccess = aduio_RegWrite(3, control);        
     }    
     
-    AUDIO_DEBUG(("[AUDIO] set Line-Out vol(%d,%d) %s\r\n", l_vol, r_vol, bSuccess?"success":"fail"));
+    //AUDIO_DEBUG(("[AUDIO] set Line-Out vol(%d,%d) %s\r\n", l_vol, r_vol, bSuccess?"success":"fail"));
     
     return bSuccess;
 }
@@ -277,7 +283,9 @@ bool AUDIO_EnableSiteTone(bool bEnable){
     return bSuccess;        
 }
 
-bool aduio_RegWrite(alt_u8 reg_index, alt_u16 data16){
+bool aduio_RegWrite(alt_u8 reg_index, alt_u16 data16)
+{
+    Uart::getInstance()->puts("Komt ie hier (regwrite)?");
     bool bSuccess;
     alt_u8 data, control;
     if (reg_index <= 10)
@@ -285,10 +293,13 @@ bool aduio_RegWrite(alt_u8 reg_index, alt_u16 data16){
     data = data16 & 0xFF;
     control = (reg_index << 1) & 0xFE;
     control |= ((data16 >> 8) & 0x01);
-    AUDIO_DEBUG(("[AUDIO] set audio reg[%02d] = %04Xh\r\n", reg_index, data16));
+    //AUDIO_DEBUG(("[AUDIO] set audio reg[%02d] = %04Xh\r\n", reg_index, data16));
     bSuccess = I2C_Write(SND_I2C_SCL_BASE, SND_I2C_SDA_BASE, I2C_AUDIO_ADDR, control, data);
-    if (!bSuccess) 
-        AUDIO_DEBUG(("[AUDIO] write reg fail!!!!\r\n"));
+
+    if (!bSuccess)
+        Uart::getInstance()->puts("Audio write reg fail\r\n");
+        //AUDIO_DEBUG(("[AUDIO] write reg fail!!!!\r\n"));
+
     usleep(50*1000);  // wait audio chip read        
     return bSuccess;        
 }

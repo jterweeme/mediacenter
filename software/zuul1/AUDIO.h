@@ -1,6 +1,6 @@
 #ifndef AUDIO_H_
 #define AUDIO_H_
-
+#include "misc.h"
 
 
 typedef enum{
@@ -59,7 +59,10 @@ void AUDIO_FifoClear(void);
 class Audio
 {
 public:
-    Audio() { }
+    Audio()
+    { 
+        Uart::getInstance()->puts("Audio constructor\r\n");
+    }
     bool AUDIO_Init();
 };
 

@@ -38,7 +38,7 @@
 
 
 
-bool SDLIB_Init(void);
+bool SDLIB_Init();
 bool SDLIB_ReadBlock512(alt_u32 block_number, alt_u8 *buff);
 bool SDLIB_WriteBlock512(alt_u32 block_number, alt_u8 szDataWrite[]);
 //bool SD_GetCSD(alt_u8 szCSD[], alt_u8 len);

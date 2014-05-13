@@ -9,6 +9,7 @@
 #include "WaveLib.h"
 #include "I2C.h"
 #include "AUDIO.h"
+#include "misc.h"
 
 
 #ifdef DEBUG_APP
@@ -20,8 +21,8 @@
 #define DEMO_PRINTF printf
 
 #define LCD_DISPLAY
-#define SEG7_DISPLAY
-#define DISPLAY_WAVE_POWER
+//#define SEG7_DISPLAY
+//#define DISPLAY_WAVE_POWER
 #define SUPPORT_PLAY_MODE
 #define xENABLE_DEBOUNCE
 
@@ -76,6 +77,7 @@ static bool bPlaySwitch = TRUE;
 class Main
 {
 public:
+    Main();
     int run();
     void update_status();
     void wait_sdcard_insert();
@@ -96,6 +98,11 @@ private:
     Audio *audio;
 };
 
+Main::Main()
+{
+    Uart::getInstance()->puts("Main constructor\r\n");
+}
+
 void Main::update_status(void)
 {
     char szText[64];       
@@ -108,7 +115,7 @@ void Main::DisplayTime(alt_u32 TimeElapsed)
 {
     alt_u32 msx10;
     msx10 = TimeElapsed*100/alt_ticks_per_second();
-    SEG7_Decimal(msx10, 0x01 << 2);
+    //SEG7_Decimal(msx10, 0x01 << 2);
 }
 
 void Main::lcd_open()
@@ -134,9 +141,12 @@ void Main::led_display_count(alt_u8 count)
 
 void Main::wait_sdcard_insert()
 {
+    Uart::getInstance()->puts("Wait SDCard Insert\r\n");
     bool bFirstTime2Detect = TRUE;
     alt_u8 led_mask = 0x02;
     LED_AllOff();
+
+    //SDLIB_Init();
 
     while(!SDLIB_Init())
     {
@@ -145,6 +155,9 @@ void Main::wait_sdcard_insert()
 
         usleep(100*1000);
     }
+
+
+    Uart::getInstance()->puts("SD card inserted 1\r\n");
 }
 
 bool Main::is_supporrted_sample_rate(int sample_rate)
@@ -487,12 +500,14 @@ bool Main::Fat_Test(FAT_HANDLE hFat, char *pDumpFile)
     return bSuccess;
 }
 
+
 int main()
 {
-    Main main;
-    return main.run();
+    Uart::getInstance()->init((volatile uint32_t *)UART_BASE);
+    Uart::getInstance()->puts("Int Main\r\n");
+    Main *main = new Main();
+    return main->run();
 }
-
 
 int Main::run()
 {
@@ -500,34 +515,44 @@ int Main::run()
     alt_u32 cnt, uSongStartTime, uTimeElapsed;
     alt_8 led_mask = 0x03;
     alt_u8 szWaveFile[FILENAME_LEN];
-    lcd_open();
+    Uart::getInstance()->puts("LCD open\r\n");
+    //lcd_open();
     audio = new Audio();
 
     if (!audio->AUDIO_Init())
     {
+        Uart::getInstance()->puts("Audio Init fail\r\n");
         lcd_display(("Audio Init fail!\n\n"));
         return 0;
     }
     
-    memset(&gWavePlay, 0, sizeof(gWavePlay));
+    Uart::getInstance()->puts("Audio Init success\r\n");
+    ::memset(&gWavePlay, 0, sizeof(gWavePlay));
     gWavePlay.nVolume = HW_DEFAULT_VOL;
-    AUDIO_SetLineOutVol(gWavePlay.nVolume, gWavePlay.nVolume); 
+    AUDIO_SetLineOutVol(gWavePlay.nVolume, gWavePlay.nVolume);
+    Uart::getInstance()->puts("Volume set\r\n");
   
+/*
     while(1)
     {
         wait_sdcard_insert();
+        Uart::getInstance()->puts("SD card inserted\r\n");
         hFat = Fat_Mount(FAT_SD_CARD, 0);
-        if (!hFat){
+
+        if (!hFat)
+        {
+            Uart::getInstance()->puts("SD card mount fail\r\n");
             lcd_display(("SD card mount fail.\n\n"));
             return 0;
         }  
-        else{
-           if (build_wave_play_list(hFat) == 0){
-            lcd_display(("No Wave Files.\n\n"));
-            return 0;
+        else
+        {
+            if (build_wave_play_list(hFat) == 0)
+            {
+                lcd_display(("No Wave Files.\n\n"));
+                return 0;
             }
         }
-        
    
         bool bSdacrdReady = TRUE;
         nPlayIndex = 0;
@@ -542,7 +567,8 @@ int Main::run()
             update_status();
             cnt = 0;
             uSongStartTime = alt_nticks();
-            while(!bPlayDone && bSdacrdReady){
+            while(!bPlayDone && bSdacrdReady)
+            {
                 bool bLastSongPressed  = FALSE;
                 bool bNextSongPressed  = FALSE;
                 bool bEndOfFile = FALSE;
@@ -604,7 +630,7 @@ int Main::run()
             }
             waveplay_stop();    
         }
-  }
+  }*/
 
   return 0;
 }

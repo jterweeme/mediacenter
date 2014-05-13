@@ -5,7 +5,7 @@
 #include <stdio.h>
 #include "sd_lib.h"
 #include "sd_protocol.h"
-
+#include "misc.h"
 
 
 #ifdef DEBUG_SDCARD
@@ -44,49 +44,38 @@ static SD_INFO gSdInfo;
 
 
 //-------------------------------------------------------------------------
-bool SDLIB_Init(void)
+bool SDLIB_Init()
 {
+    Uart::getInstance()->puts("SDLIB init\r\n");
     bool bSuccess = FALSE, bTimeout = FALSE;
     alt_u8  szThisCID[16];
     const int nTimeout = alt_ticks_per_second();
     alt_u32 TimeStart;
-
-    
-   // alt_u8 x,y;
     memset(&gSdInfo, 0, sizeof(gSdInfo));
     gSdInfo.bSupport4Bits = SD_IsSupport4Bits();
-
-    SDCARD_DEBUG(("--- Power On, Card Identification Mode, Idle State\r\n"));
-    SDCARD_DEBUG(("sd %d-bit mode\r\n", gSdInfo.bSupport4Bits?4:1));
+    Uart::getInstance()->puts("--- Power On, Card Identification Mode, Idle State\r\n");
+    //Uart::getInstance()->puts("sd %d-bit mode\r\n", gSdInfo.bSupport4Bits?4:1);
   
     usleep(74*10);
-    
     SD_Init();
-
-    
-    //========================== CMD0 (None Response) ========
-    // Reset all cards to idle state
     SD_CMD0();
     usleep(100*1000);
     
-    //========================== CMD8 (Response R7) ==========
-    //Sends SD Memory Card interface condition (Added in SDHC 2.0)
-    if (SD_CMD8(SD_VHS_2V7_3V6, CMD8_DEFAULT_TEST_PATTERN)){
-        // OCR: Operation Condistions Register
-        //gSdInfo.HostOCR32 = 0x01 << 30; //argument=0x40FF8000; // support HC
+    if (SD_CMD8(SD_VHS_2V7_3V6, CMD8_DEFAULT_TEST_PATTERN))
+    {
         gSdInfo.HostOCR32 = 0x40FF8000;
         gSdInfo.bVer2 = TRUE;
         gSdInfo.bSDHC = TRUE;
-        SDCARD_DEBUG((" 2.0 \r\n"));
-    }else{
-        gSdInfo.HostOCR32 = 0x00040000;   
-        SDCARD_TRACE(("CMD8 not supported\r\n"));
-        
-        // Reset cards to idle state
+        Uart::getInstance()->puts(" 2.0 \r\n");
+    }
+    else
+    {
+        gSdInfo.HostOCR32 = 0x00040000;
+        Uart::getInstance()->puts("CMD8 not supported\r\n");
         SD_CMD0();
         usleep(100*1000);        
     }
-    //========================== ACMD41 (CMD55) ==============
+
     TimeStart = alt_nticks();
     while(!bSuccess && !bTimeout){
         if (!SD_CMD55(gSdInfo.RCA16, SD_STATE_IDLE)){  // execute cmd55 before execute and ACMD
@@ -108,41 +97,31 @@ bool SDLIB_Init(void)
             }
         }
     }
-    if (!bSuccess){
+    if (!bSuccess)
+    {
         return FALSE;
     }
    
-    //========================== CMD2 ========================    
-    // issue cmd2 & wait response 
-    // ALL_SEND_CID (CMD2): Asks any card to send the CID numbers on the CMD line
     if (!SD_CMD2(gSdInfo.szCID, sizeof(gSdInfo.szCID))){
         SDCARD_ERROR(("CMD2 fail\r\n"));
         return FALSE;
     }
-    SDCARD_TRACE(("--- Power On, Card Identification Mode, Identification State\r\n"));
 
-    //========================== CMD3 ========================        
-    // issue cmd3 & wait response, finally get RCA
-    // CMD3 (SEND_RELATIVE_ADDR): Ask the card to publish a new relative address (RCA)
-    if (!SD_CMD3(&gSdInfo.RCA16)){
-        SDCARD_ERROR(("CMD3 fail\r\n"));
+    Uart::getInstance()->puts("--- Power On, Card Identification Mode, Identification State\r\n");
+
+    if (!SD_CMD3(&gSdInfo.RCA16))
+    {
+        Uart::getInstance()->puts("CMD3 fail\r\n");
         return FALSE;
     }    
     
-    // above is Card Identification Mode
-    //*************** now, wer are in Data Transfer Mode ********************************/
-    //### Standby-by state in Data-transfer mode
-    
-    //========================== CMD9 ========================
     SDCARD_DEBUG(("--- enter data-transfer mode, Standby state\r\n"));
-    // issue cmd9 with given RCA & wait response 
+
     if (!SD_CMD9(gSdInfo.RCA16, gSdInfo.szCSD, sizeof(gSdInfo.szCSD))){
         SDCARD_DEBUG(("CMD9 fail\r\n"));
         return FALSE;
     }
     
-    //========================== CMD10 ========================
-    // richard add  (query card identification)  
     if (!SD_CMD10(gSdInfo.RCA16, szThisCID, sizeof(szThisCID))){
         SDCARD_DEBUG(("CMD10 fail\r\n"));
         return FALSE;
@@ -191,10 +170,11 @@ bool SDLIB_Init(void)
             return FALSE;
         }    
     
-       
-        SDCARD_DEBUG(("ACMD42[SET_CLR_CARD_DETECT], connect card\r\n"));
-        if (!SD_ACMD42(TRUE, SD_STATE_TRAN)){  // connect card
-            SDCARD_DEBUG(("ACMD42 NG\r\n"));
+        Uart::getInstance()->puts("ACMD42[SET_CLR_CARD_DETECT], connect card\r\n");
+
+        if (!SD_ACMD42(TRUE, SD_STATE_TRAN))
+        {
+            Uart::getInstance()->puts("ACMD42 NG\r\n");
             return FALSE;
         }   
     }
@@ -221,22 +201,18 @@ bool SDLIB_Init(void)
     else     
         printf("!!!!!write ng\r\n");
 #endif
-     
-    SDCARD_DEBUG(("SDLIB_Init success\r\n"));
-    
-    return TRUE;
+    Uart::getInstance()->puts("SDLIB_Init success\r\n");
+    return true;
 }
 
 
 bool SDLIB_ReadBlock512(alt_u32 block_number, alt_u8 *buff)
 {
-    // buffer size muse be 512 byte
     bool bSuccess;  
     alt_u32  addr;
   
-    // issue cmd17 for 'Single Block Read'. parameter: block address
     if (gSdInfo.bSDHC)
-        addr = block_number; // note. for SDHC, argument for addr of CMD7 is block number
+        addr = block_number;
     else 
         addr = block_number * 512;
     if (!SD_CMD17(addr, SD_STATE_TRAN)){  // 4-bit mode

@@ -1,5 +1,6 @@
 #define SYSTEM_BUS_WIDTH 32
 
+#include "misc.h"
 #include "terasic_includes.h"
 #include "FatFileSystem.h"
 #include "FatInternal.h"
@@ -8,27 +9,19 @@
 
 #ifdef SUPPORT_SD_CARD
     #include "sd_lib.h"
-#endif //SUPPORT_USB_DISK
+#endif
 
 #ifdef SUPPORT_USB_DISK
     #include "..\terasic_usb_isp1761\class\usb_disk\usb_disk.h"
     #include "..\terasic_usb_isp1761\usb_host\usb_hub.h"
-#endif //SUPPORT_USB_DISK
-
-#ifdef DEBUG_FAT
-    #define FAT_DEBUG(x)    {DEBUG(("[FAT]")); DEBUG(x);}
-#else
-    #define FAT_DEBUG(x)
 #endif
 
-//extern VOLUME_INFO gVolumeInfo;
+#define FAT_DEBUG(x) {Uart::getInstance()->puts(x);}
 
-
-
-
-CLUSTER_TYPE fat16ClusterType(alt_u32 Fat){
+CLUSTER_TYPE fat16ClusterType(alt_u32 Fat)
+{
     CLUSTER_TYPE Type;
-    Fat = Fat & 0xFFFF; // 16 bits
+    Fat = Fat & 0xFFFF;
     
     if (Fat > 0 && Fat < 0xFFF0)
         Type = CLUSTER_NEXT_INFILE;
@@ -47,11 +40,11 @@ CLUSTER_TYPE fat16ClusterType(alt_u32 Fat){
 
 CLUSTER_TYPE fat32ClusterType(alt_u32 Fat){
     CLUSTER_TYPE Type;
-    Fat = Fat & 0xFFFFFFF; // 28 bits
+    Fat = Fat & 0xFFFFFFF;
     
     if (Fat > 0 && Fat < 0xFFFFFF0)
         Type = CLUSTER_NEXT_INFILE;
-    else if (Fat >= 0xFFFFFF8) // && Fat <= (unsigned short)0xFFFF)
+    else if (Fat >= 0xFFFFFF8)
         Type = CLUSTER_LAST_INFILE;
     else if (Fat == (alt_u32)0x00)
         Type = CLUSTER_UNUSED;
@@ -68,23 +61,18 @@ alt_u32 fatNextCluster(VOLUME_INFO *pVol, alt_u32 ThisCluster){
     CLUSTER_TYPE ClusterType;
     alt_u32 NextCluster;
 #ifdef FAT_READONLY    
-//    const int nFatEntrySize = 2; // 2 byte for FAT16
-
-//    NextCluster =  *(unsigned short *)(gVolumeInfo.szFatTable + ThisCluster*nFatEntrySize); 
     NextCluster =  *(unsigned short *)(pVol->szFatTable + (ThisCluster << 1));
-     
     ClusterType = fatClusterType(pVol, NextCluster);
+
     if (ClusterType != CLUSTER_NEXT_INFILE && ClusterType != CLUSTER_LAST_INFILE){
         NextCluster = 0;  // invalid cluster
     }        
 #else
     alt_32 nFatEntryPerSecter;
-    const alt_32 nFatEntrySize = (pVol->Partition_Type == PARTITION_FAT32)?4:2; // 2 byte for FAT16
+    const alt_32 nFatEntrySize = (pVol->Partition_Type == PARTITION_FAT32)?4:2;
     alt_u32 Secter;
-   // char szBlock[512];
     nFatEntryPerSecter = pVol->BPB_BytsPerSec/nFatEntrySize; 
     Secter = pVol->FatEntrySecter + (ThisCluster*nFatEntrySize)/pVol->BPB_BytsPerSec;
-    //if (pVol->ReadBlock512(pVol->DiskHandle, Secter,szBlock)){
     if (fatReadSecter(pVol, Secter)){
         if (pVol->Partition_Type == PARTITION_FAT32){
             NextCluster = *(alt_u32*)(pVol->Secter_Data + (ThisCluster%nFatEntryPerSecter)*nFatEntrySize); 
@@ -110,7 +98,7 @@ alt_u32 fatFindUnusedCluster(VOLUME_INFO *pVol){
     alt_u32 UnusedCluster=-1, ThisCluster = 2, ClusterEntryValue;
     void *pFatEntry;
 
-    const alt_32 nFatEntrySize = (pVol->Partition_Type == PARTITION_FAT32)?4:2; // 2 byte for FAT16
+    const alt_32 nFatEntrySize = (pVol->Partition_Type == PARTITION_FAT32)?4:2;
     const alt_32 nFatEntryPerSecter = pVol->BPB_BytsPerSec/nFatEntrySize;
     alt_u32 Secter;
     bool bDone = FALSE;
@@ -149,7 +137,7 @@ bool fatDelClusterList(VOLUME_INFO *pVol, alt_u32 StartCluster){
     void *pFatEntryValue;
     
     
-    const int nFatEntrySize = (pVol->Partition_Type == PARTITION_FAT32)?4:2; // 2 byte for FAT16
+    const int nFatEntrySize = (pVol->Partition_Type == PARTITION_FAT32)?4:2;
     const int nFatEntryPerSecter = pVol->BPB_BytsPerSec/nFatEntrySize;
      
     ClusterIndex = StartCluster;
@@ -196,7 +184,7 @@ void fatDumpDate(unsigned short Date){
     Year = ((Date >> 9) & 0x1F) + 1980;
     Month = ((Date >> 5) & 0xF);
     Day = ((Date >> 0) & 0x1F);
-    FAT_DEBUG(("%d,%d,%d", Year, Month, Day)); 
+    //FAT_DEBUG(("%d,%d,%d", Year, Month, Day)); 
 }
 
 void fatDumpTime(unsigned short Date){
@@ -204,7 +192,7 @@ void fatDumpTime(unsigned short Date){
     H = ((Date >> 9) & 0x1F);
     M = ((Date >> 5) & 0x3F);
     S = ((Date >> 0) & 0x1F)*2;
-    FAT_DEBUG(("%d:%d:%d", H, M, S));     
+    //FAT_DEBUG(("%d:%d:%d", H, M, S));     
 }
 
 bool fatIsLastDir(FAT_DIRECTORY *pDir){
@@ -238,11 +226,12 @@ void fatDump(FAT_DIRECTORY *pDir){
     char szInvalidName[] = {0x22, 0x2A, 0x2B, 0x2C, 0x2E, 0x2F, 0x3A, 0x3B, 0x3C, 0x3E, 0x3F, 0x5B, 0x5C, 0x5D, 0x7C};
     int i;
     if (pDir->Name[0] == (char)0xE5){
-        FAT_DEBUG(("the directory entry is free.\n"));
+        Uart::getInstance()->puts("the directory entry is free.\n");
         return;
     }
-    if (pDir->Name[0] == 0x00){
-        FAT_DEBUG(("the directory entry is free, and there are no allocated directory entries after tis one.\n"));
+    if (pDir->Name[0] == 0x00)
+    {
+        Uart::getInstance()->puts("the directory entry is free, and there are no allocated directory entries after tis one.\n");
         return;
     }
     
@@ -260,12 +249,12 @@ void fatDump(FAT_DIRECTORY *pDir){
     
     //printf("sizeof(FAT_TABLE):%d\n", (int)sizeof(FAT_TABLE));
     if (pDir->Name[0] == 0x05){
-        FAT_DEBUG(("Name:%c%c%c%c%c%c%c%c\n", 0xE5,pDir->Name[1],pDir->Name[2],pDir->Name[3],pDir->Name[4],pDir->Name[5],pDir->Name[6],pDir->Name[6]));
+        //FAT_DEBUG(("Name:%c%c%c%c%c%c%c%c\n", 0xE5,pDir->Name[1],pDir->Name[2],pDir->Name[3],pDir->Name[4],pDir->Name[5],pDir->Name[6],pDir->Name[6]));
     }else{
-        FAT_DEBUG(("Name:%c%c%c%c%c%c%c%c\n", pDir->Name[0],pDir->Name[1],pDir->Name[2],pDir->Name[3],pDir->Name[4],pDir->Name[5],pDir->Name[6],pDir->Name[6]));
+        //FAT_DEBUG(("Name:%c%c%c%c%c%c%c%c\n", pDir->Name[0],pDir->Name[1],pDir->Name[2],pDir->Name[3],pDir->Name[4],pDir->Name[5],pDir->Name[6],pDir->Name[6]));
     }        
-    FAT_DEBUG(("Extention:%c%c%c\n", pDir->Extension[0],pDir->Extension[1],pDir->Extension[2]));
-    FAT_DEBUG(("Attribute:%02Xh\n", pDir->Attribute));
+    //FAT_DEBUG(("Extention:%c%c%c\n", pDir->Extension[0],pDir->Extension[1],pDir->Extension[2]));
+    //FAT_DEBUG(("Attribute:%02Xh\n", pDir->Attribute));
     if (pDir->Attribute & ATTR_READ_ONLY)
         FAT_DEBUG(("  Read-Only\n"));
     if (pDir->Attribute & ATTR_HIDDEN)
@@ -282,11 +271,11 @@ void fatDump(FAT_DIRECTORY *pDir){
         FAT_DEBUG(("  Long Name\n"));
     FAT_DEBUG(("CreateTime:")); fatDumpTime(pDir->CreateTime);FAT_DEBUG(("\n"));
     FAT_DEBUG(("CreateDate:")); fatDumpDate(pDir->LastAccessDate);FAT_DEBUG(("\n"));
-    FAT_DEBUG(("ClusterHi:%04Xh\n", pDir->FirstLogicalClusterHi));
+    //FAT_DEBUG(("ClusterHi:%04Xh\n", pDir->FirstLogicalClusterHi));
     FAT_DEBUG(("LastWriteTime:")); fatDumpTime(pDir->LastWriteTime);FAT_DEBUG(("\n"));
     FAT_DEBUG(("LastWriteDate:")); fatDumpDate(pDir->LastWriteDate);FAT_DEBUG(("\n"));
-    FAT_DEBUG(("Cluster:%04Xh(%d)\n", pDir->FirstLogicalCluster,pDir->FirstLogicalCluster));
-    FAT_DEBUG(("File Size:%08Xh(%ld)\n", pDir->FileSize, (long)pDir->FileSize));
+    //FAT_DEBUG(("Cluster:%04Xh(%d)\n", pDir->FirstLogicalCluster,pDir->FirstLogicalCluster));
+    //FAT_DEBUG(("File Size:%08Xh(%ld)\n", pDir->FileSize, (long)pDir->FileSize));
 }
 
 
@@ -318,8 +307,6 @@ bool fatReadSecter(VOLUME_INFO *pVol, alt_u32 nSecter){
     return bSuccess;          
 }     
 
-//=================================================================================
-//// add in v2.0
 FAT_DIRECTORY* fatFindDirectory(VOLUME_INFO *pVol, alt_u32 nDirectoryIndex){
     FAT_DIRECTORY *pDir=NULL;
     alt_u32 nSecterOffset, nSecter, nByteOffset;
@@ -335,8 +322,6 @@ FAT_DIRECTORY* fatFindDirectory(VOLUME_INFO *pVol, alt_u32 nDirectoryIndex){
     return pDir;        
 }
 
-//=================================================================================
-//// add in v2.0
 alt_u32 fatFindUnusedDirectory(VOLUME_INFO *pVol){
     alt_u32 Dir = -1;
     FAT_DIRECTORY *pDir=NULL;
@@ -365,61 +350,45 @@ alt_u32 fatFindUnusedDirectory(VOLUME_INFO *pVol){
     return Dir;      
 }
 
-//=================================================================================
-bool fatMount(VOLUME_INFO *pVol){
+bool fatMount(VOLUME_INFO *pVol)
+{
+    Uart::getInstance()->puts("Fat Mount\r\n");
     bool bSuccess = TRUE;
     alt_32 FirstPartitionEntry,PartitionType,FirstSectionInVolume1;
     alt_32 nFatTableSize,nFatTableSecterNum;//, i;
     alt_u8 szBlock[512];
     
-    // parsing Boot Sector system
-    // Read the Master Boot Record(MBR) of FAT file system (Locate the section 0)
-    // Offset: 
-    // 000h(446 bytes): Executable Code (Boots Computer) 
-    // 1BEh( 16 bytes): 1st Partition Entry
-    // 1CEh( 16 bytes): 2nd Partition Entry
-    // 1DEh( 16 bytes): 3nd Partition Entry
-    // 1EEh( 16 bytes): 4nd Partition Entry
-    // 1FEh(  2 bytes): Executable Maker (55h AAh)
-    
-    // read first block (secotor 0), BPB(BIOS Parameter Block) or called as boot sector or reserved sector
-    if (!pVol->ReadBlock512(pVol->DiskHandle, 0, szBlock)){
-        FAT_DEBUG(("Read section 0 error.\n"));
+    if (!pVol->ReadBlock512(pVol->DiskHandle, 0, szBlock))
+    {
+        Uart::getInstance()->puts("Read section 0 error.\n");
         return FALSE;
     }    
-    /*
-    if (szBlock[510] != 0x55 || szBlock[511] != 0x55){
-        FAT_DEBUG(("Invalid 0xAA55 signature\n"));
-        return FALSE;
-    }
-    */
         
-    // check file system 
     FirstPartitionEntry = 0x1BE;
-    //PartitionType = szBlock[FirstPartitionEntry + 4];
     PartitionType = szBlock[0x01C2];
-    if (PartitionType == PARTITION_FAT16){
-        FAT_DEBUG(("FAT16\n"));
-    }else if (PartitionType == PARTITION_FAT32){
+
+    if (PartitionType == PARTITION_FAT16)
+    {
+        Uart::getInstance()->puts("FAT16\r\n");
+    }
+    else if (PartitionType == PARTITION_FAT32)
+    {
         FAT_DEBUG(("FAT32\n"));
-    }else{        
-        FAT_DEBUG(("the partition type(%d) is not supported.\n", PartitionType));
-        return FALSE; // only support FAT16 in this example
-    }       
+    }
+    else
+    {        
+        return false;
+    } 
     pVol->Partition_Type = PartitionType; 
-    // 2.2 Find the first section of partition 1                    
     FirstSectionInVolume1 = fatArray2Value(&szBlock[FirstPartitionEntry + 8],4);
-                            //szBlock[FirstPartitionEntry + 8 + 3]*256*256*256 + 
-                            //szBlock[FirstPartitionEntry + 8 + 2]*256*256 + 
-                            //szBlock[FirstPartitionEntry + 8 + 1]*256 + 
-                            //szBlock[FirstPartitionEntry + 8];        
     
-    //3 Parsing the Volume Boot Record(BR)
-    //3.1  Read the Volume Boot Record(BR)
+
     if (!pVol->ReadBlock512(pVol->DiskHandle, FirstSectionInVolume1, szBlock)){
         FAT_DEBUG(("Read first sector in volume one fail.\n"));
         return FALSE;
-    }        
+    }
+
+
     pVol->PartitionStartSecter = FirstSectionInVolume1;     
     pVol->BPB_BytsPerSec = szBlock[0x0B+1]*256 + szBlock[0x0B];
     pVol->BPB_SecPerCluster = szBlock[0x0D];
@@ -428,17 +397,16 @@ bool fatMount(VOLUME_INFO *pVol){
     pVol->BPB_RootEntCnt = szBlock[0x11+1]*256 + szBlock[0x11]; 
     pVol->BPB_FATSz = szBlock[0x16+1]*256 + szBlock[0x16];
     
-    // add for v2.0
     pVol->Secter_Index = -1;
     memset(pVol->Secter_Data, 0, MY_SECTER_SIZE); // 512 bytes
-    
+
+   
     if (pVol->Partition_Type == PARTITION_FAT32){
-        pVol->BPB_FATSz = fatArray2Value(&szBlock[0x24], 4);  // BPB_FATSz32
-        //pVol->BPB_RootEntCnt = fatArray2Value(&szBlock[0x2C], 4);  // BPB_RootClus            
+        pVol->BPB_FATSz = fatArray2Value(&szBlock[0x24], 4);
     }
     
-    if (pVol->BPB_BytsPerSec != MY_SECTER_SIZE){
-        FAT_DEBUG(("This program only supports FAT BPB_BytsPerSec == %d\n", MY_SECTER_SIZE));
+    if (pVol->BPB_BytsPerSec != MY_SECTER_SIZE)
+    {
         return FALSE; // only support FAT16 in this example
     }       
 #ifdef DUMP_DEBUG    
@@ -450,11 +418,18 @@ bool fatMount(VOLUME_INFO *pVol){
     FAT_DEBUG(("Maxmun Root Directory Entries: %04Xh(%d)\n", gVolumeInfo.BPB_RootEntCnt, gVolumeInfo.BPB_RootEntCnt));
     FAT_DEBUG(("Sectors Per FAT: %04Xh(%d)\n", gVolumeInfo.BPB_FATSz, gVolumeInfo.BPB_FATSz));
 #endif    
+
+
     //
     pVol->FatEntrySecter = pVol->PartitionStartSecter + pVol->BPB_RsvdSecCnt;
+
+
+
     pVol->RootDirectoryEntrySecter = pVol->FatEntrySecter + pVol->BPB_NumFATs * pVol->BPB_FATSz;
+       Uart::getInstance()->puts("Komt ie hier X?\r\n");
     pVol->DataEntrySecter = pVol->RootDirectoryEntrySecter + ((pVol->BPB_RootEntCnt*32)+(pVol->BPB_BytsPerSec-1))/pVol->BPB_BytsPerSec;
-    
+
+  
     // read FAT table into memory
     pVol->nBytesPerCluster = pVol->BPB_BytsPerSec * pVol->BPB_SecPerCluster;
     nFatTableSecterNum = pVol->BPB_NumFATs * pVol->BPB_FATSz;
@@ -542,10 +517,8 @@ FAT_HANDLE fatMountSdcard(void){
     return hFat;   
 }
 
-#endif ////===================== SUPPORT_SD_CARD =================================================
+#endif
 
-
-//===================== SUPPORT_USB_DISK =================================================
 #ifdef SUPPORT_USB_DISK
 
 
