@@ -1,3 +1,5 @@
+#define SYSTEM_BUS_WIDTH 32
+
 #include "sd_lib.h"
 #include <stdint.h>
 #include "terasic_includes.h"
