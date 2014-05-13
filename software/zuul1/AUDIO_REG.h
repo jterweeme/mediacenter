@@ -12,8 +12,8 @@
 #define MASK_STATUS_DAC_FULL    0x01
 #define MASK_STATUS_ADC_EMPTY   0x02
 
-#define IOWR_AUDIO(index, data16)    IOWR(AUDIO_BASE, index, data16)
-#define IORD_AUDIO(index)            IORD(AUDIO_BASE, index)
+#define IOWR_AUDIO(index, data16)    IOWR(AUDIO_IF_0_BASE, index, data16)
+#define IORD_AUDIO(index)            IORD(AUDIO_IF_0_BASE, index)
 
 #define AUDIO_DAC_FULL()          ((IORD_AUDIO(AUDIO_STATUS_PORT) & MASK_STATUS_DAC_FULL)?TRUE:FALSE)     
 #define AUDIO_DAC_WRITE_L(data16) IOWR_AUDIO(AUDIO_DAC_LFIFO_PORT, data16)     

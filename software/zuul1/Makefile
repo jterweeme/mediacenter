@@ -19,6 +19,9 @@ all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.elf audiotest1.hex t
 	nios2-elf-g++ -g -c $(INCLUDES) eepromtest1.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) vgatest1.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) ofm1.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) AUDIO.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) I2C.cpp
+	#nios2-elf-g++ -g -c $(INCLUDES) SEG7.cpp
 	nios2-elf-g++ -o test1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) test1.o misc.o
 	nios2-elf-g++ -o jtagtest1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) jtagtest1.o misc.o
 	nios2-elf-g++ -o audiotest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp audiotest1.o misc.o

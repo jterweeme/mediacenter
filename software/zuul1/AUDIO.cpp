@@ -1,3 +1,4 @@
+#define SYSTEM_BUS_WIDTH 32
 
 #include "terasic_includes.h"
 #include "I2C.h"
@@ -285,7 +286,7 @@ bool aduio_RegWrite(alt_u8 reg_index, alt_u16 data16){
     control = (reg_index << 1) & 0xFE;
     control |= ((data16 >> 8) & 0x01);
     AUDIO_DEBUG(("[AUDIO] set audio reg[%02d] = %04Xh\r\n", reg_index, data16));
-    bSuccess = I2C_Write(I2C_SCL_BASE, I2C_SDA_BASE, I2C_AUDIO_ADDR, control, data);
+    bSuccess = I2C_Write(SND_I2C_SCL_BASE, SND_I2C_SDA_BASE, I2C_AUDIO_ADDR, control, data);
     if (!bSuccess) 
         AUDIO_DEBUG(("[AUDIO] write reg fail!!!!\r\n"));
     usleep(50*1000);  // wait audio chip read        
