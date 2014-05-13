@@ -22,6 +22,16 @@ all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.elf audiotest1.hex t
 	nios2-elf-g++ -g -c $(INCLUDES) AUDIO.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) I2C.cpp
 	nios2-elf-g++ -g -c $(INCLUDES) main.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) LCD.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) debug.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) WaveLib.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) FatInternal.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) FatFileSystem.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) sd_lib.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) sd_hal.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) sd_protocol.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) crc7.cpp
+	nios2-elf-g++ -g -c $(INCLUDES) crc16.cpp
 	nios2-elf-g++ -o test1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) test1.o misc.o
 	nios2-elf-g++ -o jtagtest1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) jtagtest1.o misc.o
 	nios2-elf-g++ -o audiotest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp audiotest1.o misc.o
@@ -29,6 +39,7 @@ all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.elf audiotest1.hex t
 	nios2-elf-g++ -o sdcardtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp sdcardtest1.o misc.o
 	nios2-elf-g++ -o eepromtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp eepromtest1.o misc.o
 	nios2-elf-g++ -o vgatest1.elf $(LINKY) vgatest1.o misc.o
+	nios2-elf-g++ -o sdaudio1.elf $(LINKY) main.o AUDIO.o I2C.o LCD.o debug.o WaveLib.o FatInternal.o FatFileSystem.o sd_lib.o sd_protocol.o sd_hal.o crc7.o crc16.o
 	nios2-elf-g++ -o ofm1.elf $(LINKY) ofm1.o misc.o
 
 %.flash: %.elf

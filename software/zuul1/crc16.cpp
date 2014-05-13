@@ -1,3 +1,5 @@
+#define SYSTEM_BUS_WIDTH 32
+
 #include "terasic_includes.h"
 #include "crc16.h"
 

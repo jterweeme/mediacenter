@@ -1,10 +1,4 @@
-/*
- *      crc7.c
- *
- * This source code is licensed under the GNU General Public License,
- * Version 2. See the file COPYING for more details.
- */
-
+#define SYSTEM_BUS_WIDTH 32
 
 #include "terasic_includes.h"
 #include "crc7.h"
