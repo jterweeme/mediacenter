@@ -28,6 +28,7 @@ class Audio
 {
 public:
     Audio();
+    Audio(I2C *i2c);
     bool AUDIO_MicBoost(bool bBoost);
     bool AUDIO_SetLineInVol(alt_u16 l_vol, alt_u16 r_vol);
     bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol);

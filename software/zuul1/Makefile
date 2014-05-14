@@ -45,7 +45,7 @@ audiotest1.elf: audiotest1.o misc.o
 eepromtest1.elf: eepromtest1.o misc.o
 jtagtest1.elf: jtagtest1.o
 ofm1.elf: ofm1.o misc.o
-piano1.elf: piano1.o
+piano1.elf: piano1.o misc.o
 primes1.elf: primes1.o misc.o
 sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o

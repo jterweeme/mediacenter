@@ -147,12 +147,33 @@ bool SoundCard::init()
 {
     regWrite(15, DATA_RESET);
     regWrite(9, DATA_INACTIVE_INTERFACE);
+    regWrite(0, 0x0017);
+    regWrite(1, 0x0017);
+    regWrite(2, 0x005b);
+    regWrite(3, 0x005b);
+    regWrite(4, 0x0015 | 0x20 | 0x08 | 0x01);
+    regWrite(5, 0x0000);
+    regWrite(6, 0);
+    regWrite(7, 0x0042);
+    regWrite(8, 0x0002);
     regWrite(9, ACTIVE);
+    return true;
 }
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
 {
-    i2cBus->write(ADDR, 1, 1);
+    uint8_t foo = data & 0xff;
+    uint8_t control = (index << 1) & 0xfe;
+    control |= ((foo >> 8) & 0x01);
+    i2cBus->write(0x34, control, data);
+    ::usleep(50 * 1000);
+    return true;
+}
+
+void SoundCard::writeDacOut(uint16_t left, uint16_t right)
+{
+    IOWR(base, 0, left);
+    IOWR(base, 1, right);
 }
 
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)

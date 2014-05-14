@@ -168,10 +168,12 @@ class SoundCard
 {
 private:
     I2C *i2cBus;
+    volatile uint32_t *base;
 public:
-    SoundCard(I2C *i2cBus) { this->i2cBus = i2cBus; }
+    SoundCard(I2C *i2cBus, volatile uint32_t *base) { this->i2cBus = i2cBus; this->base = base; }
     bool init();
     bool regWrite(uint8_t index, uint16_t data);
+    void writeDacOut(uint16_t left, uint16_t right);
     static const uint8_t ADDR = 0x34;
     static const uint16_t DATA_RESET = 0;
     static const uint16_t DATA_INACTIVE_INTERFACE = 0;

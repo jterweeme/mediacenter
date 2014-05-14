@@ -2,7 +2,6 @@
 
 #include "terasic_includes.h"
 #include <system.h>
-//#include "I2C.h"
 #include "AUDIO.h"
 #include "AUDIO_REG.h"
 #include "misc.h"
@@ -11,14 +10,18 @@ static alt_u16  reg_file[10+10];
 
 Audio::Audio()
 {
-//    i2cBus = new I2CBus();
     i2c = new I2C((volatile uint32_t *)SND_I2C_SCL_BASE, (volatile uint32_t *)SND_I2C_SDA_BASE);
+}
+
+Audio::Audio(I2C *i2c)
+{
+    this->i2c = i2c;
 }
 
 bool Audio::AUDIO_Init(void)
 {
     Uart::getInstance()->puts("Audio Init\r\n");
-    bool bSuccess = TRUE;
+    bool bSuccess = true;
     bSuccess = aduio_RegWrite(15, 0x0000);
     bSuccess = aduio_RegWrite(9, 0x0000);
     bSuccess = aduio_RegWrite(0, 0x0017);
@@ -122,11 +125,13 @@ bool Audio::AUDIO_DacEnableSoftMute(bool bEnable)
     alt_u16 mask;
     control = reg_file[5];
     mask = 0x01 << 3;
+
     if (bEnable)
         control |= mask;
     else        
         control &= ~mask;
-    bSuccess = aduio_RegWrite(5, control);  // Left Line In: set left line in volume
+
+    bSuccess = aduio_RegWrite(5, control);
     return bSuccess;      
 }
 
@@ -137,11 +142,13 @@ bool Audio::AUDIO_MicMute(bool bMute)
     alt_u16 mask;
     control = reg_file[4];
     mask = 0x01 << 1;
+
     if (bMute)
         control |= mask;
     else        
         control &= ~mask;
-    bSuccess = aduio_RegWrite(4, control);  // Left Line In: set left line in volume
+
+    bSuccess = aduio_RegWrite(4, control);
     return bSuccess;        
 }
 
@@ -160,13 +167,11 @@ bool Audio::AUDIO_LineInMute(bool bMute)
         control_l &= ~mask;
         control_r &= ~mask;
     }        
-    bSuccess = aduio_RegWrite(0, control_l);  // Left Line In: set left line in volume
+    bSuccess = aduio_RegWrite(0, control_l);
     if (bSuccess)
-        bSuccess = aduio_RegWrite(1, control_r);  // Left Line In: set left line in volume
+        bSuccess = aduio_RegWrite(1, control_r);
     return bSuccess;        
 }
-
-
 
 bool Audio::AUDIO_SetInputSource(alt_u8 InputSource)
 {
@@ -179,7 +184,7 @@ bool Audio::AUDIO_SetInputSource(alt_u8 InputSource)
         control |= mask;
     else        
         control &= ~mask;
-    bSuccess = aduio_RegWrite(4, control);  // Left Line In: set left line in volume
+    bSuccess = aduio_RegWrite(4, control);
     return bSuccess;       
 }
 
@@ -319,3 +324,5 @@ void Audio::AUDIO_AdcFifoGetData(short *pch_left, short *pch_right)
 void Audio::AUDIO_FifoClear(void){
     AUDIO_FIFO_CLEAR();
 }
+
+
