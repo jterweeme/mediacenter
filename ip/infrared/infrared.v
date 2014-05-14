@@ -7,10 +7,10 @@ parameter IDLE = 2'b00;
 parameter GUIDANCE = 2'b01;   
 parameter DATAREAD = 2'b10;
 
-parameter IDLE_HIGH_DUR      =  262143;
-parameter GUIDE_LOW_DUR      =  230000;
-parameter GUIDE_HIGH_DUR     =  210000;
-parameter DATA_HIGH_DUR      =  41500;
+parameter IDLE_HIGH_DUR      = 262143;
+parameter GUIDE_LOW_DUR      = 230000;
+parameter GUIDE_HIGH_DUR     = 210000;
+parameter DATA_HIGH_DUR      = 41500;
 parameter BIT_AVAILABLE_DUR  = 20000;
 
 reg DATA_REAY;
@@ -67,89 +67,83 @@ always @( negedge iRST_n  or  posedge iCLK)
          end
    end
 
-always @(negedge iRST_n or  posedge iCLK )
-   begin
-      if(!iRST_n)
+always @(negedge iRST_n or posedge iCLK) begin
+    if(!iRST_n)
          state_count <= 0;   //rst
-      else
+    else
          begin
-            if( state_count_flag )    //the counter start when the  flag is set 1
+            if( state_count_flag )
                 state_count <= state_count + 1'b1;
             else
-                state_count <= 0;     //the counter stop when the  flag is set 0                        
-         end
-   end
+                state_count <= 0;
+    end
+end
 
-always @( negedge iRST_n  or  posedge iCLK)
-   begin
-      if( !iRST_n )
-         state_count_flag <= 1'b0; // reset off
-       else
+always @( negedge iRST_n or posedge iCLK) begin
+    if (!iRST_n)
+        state_count_flag <= 1'b0;
+    else
+            begin
+                if((state == GUIDANCE) &&(iIRDA))
+                    state_count_flag <= 1'b1;
+                else
+                    state_count_flag <= 1'b0;
+    end
+end
 
-         begin
-               if((state == GUIDANCE) &&(iIRDA))     // posedge start
-                    state_count_flag <= 1'b1;       //on
-                else   //negedge
-                    state_count_flag <= 1'b0;       //off               
-         end
-   end
-
-always @(negedge iRST_n or posedge iCLK )
-   begin
-       if(!iRST_n)
-          state <= IDLE;    //RST 
-       else
+always @(negedge iRST_n or posedge iCLK) begin
+    if(!iRST_n)
+        state <= IDLE;
+    else
 
           begin
-                if( (state == IDLE) &&(idle_count > GUIDE_LOW_DUR))  // state chang from IDLE to Guidance when detect the negedge and the low voltage last for >2.6ms
+                if ((state == IDLE) &&(idle_count > GUIDE_LOW_DUR))
                    state <= GUIDANCE;
-                else if ( state == GUIDANCE )      //state change from GUIDANCE to dataread if state_coun>13107 =2.6ms
+                else if ( state == GUIDANCE )
                        begin
                          if( state_count > GUIDE_HIGH_DUR )
                              state <= DATAREAD;
                        end
-                     else if(state == DATAREAD)    //state change from DATAREAD to IDLE when data_count >IDLE_HIGH_DUR = 5.2ms,or the bit count = 33
+                     else if(state == DATAREAD)
                             begin
                                 if( (data_count >= IDLE_HIGH_DUR ) || (bitcount>= 6'b100001) )
                                      state <= IDLE;
                             end
                            else
-                              state <= IDLE; //default
-
+                              state <= IDLE;
           end
-
-   end
+end
 
 always @(negedge iRST_n or  posedge iCLK)
    begin
       if(!iRST_n)
-         data_count <= 1'b0;  //clear
+         data_count <= 1'b0;
       else
 
          begin
             if(data_count_flag)
                 data_count <= data_count + 1'b1;
             else
-                data_count <= 1'b0;  //stop and clear
+                data_count <= 1'b0;
          end
    end
 
 always @(negedge iRST_n  or posedge iCLK  )
     begin
        if(!iRST_n)
-            data_count_flag <= 0;              //reset off the counter
+            data_count_flag <= 0;
        else
 
             begin
              if(state == DATAREAD)
                begin
                  if(iIRDA)
-                     data_count_flag <= 1'b1;  //on when posedge
+                     data_count_flag <= 1'b1;
                  else
-                     data_count_flag <= 1'b0;  //off when negedge
+                     data_count_flag <= 1'b0;
                end
              else
-               data_count_flag <= 1'b0;        //off when other state               
+               data_count_flag <= 1'b0;
          end
     end
 

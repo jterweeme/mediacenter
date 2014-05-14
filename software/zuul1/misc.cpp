@@ -10,6 +10,17 @@
 #include "misc.h"
 #include <fcntl.h>
 
+const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8, 0x00, 0x10};
+
+void QuadroSegment::setInt(unsigned int n)
+{
+    unsigned int a = n / 1000 % 10;
+    unsigned int b = n / 100 % 10;
+    unsigned int c = n / 10 % 10;
+    unsigned int d = n % 10;
+    *base = lut[a] << 24 | lut[b] << 16 | lut[c] << 8 | lut[d];
+}
+
 void InfraRood::init(volatile uint32_t *base, int irq, int ctl)
 {
     this->base = base;
@@ -66,11 +77,6 @@ void Uart::puts(const char *s)
 {
     while (*s)
         putc(*s++);
-}
-
-void SDCard::init(const char *name)
-{
-    sd_card_dev = ::alt_up_sd_card_open_dev(name);
 }
 
 bool SDCard::write(int sd_fileh, char c)

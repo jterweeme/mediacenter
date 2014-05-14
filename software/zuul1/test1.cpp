@@ -3,11 +3,9 @@
 #include <stdio.h>
 #include <system.h>
 #include <stdint.h>
-//#include <altera_avalon_lcd_16207.h>
 #include <sys/alt_irq.h>
 #include <io.h>
 #include <altera_avalon_pio_regs.h>
-#include "segment.h"
 #include "misc.h"
 
 class DuoSegmentLinks : public DuoSegment
@@ -33,9 +31,15 @@ public:
 
 void Beam::update()
 {
-    static int i = 0;
-    Uart::getInstance()->puts("Zap!\r\n");
-    qs->setInt(++i);
+    unsigned int button = IORD(INFRARED_0_BASE, 0);
+    qs->setInt(button);
+
+    switch (button)
+    {
+    case 0:
+        Uart::getInstance()->puts("A\r\n");
+        break;
+    }
 }
 
 class Test1

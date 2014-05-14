@@ -1,7 +1,6 @@
 #include <system.h>
 #include <stdlib.h>
 #include "misc.h"
-#include "segment.h"
 
 class Box
 {
@@ -51,7 +50,7 @@ void OrthodoxFileManager1::init()
         {
             char fn[13];
             int foo = ::alt_up_sd_card_find_first("/.", fn);
-            foo = ::alt_up_sd_card_find_next(fn);
+            foo = sdCard->findNext(fn);
             quadroSegment->setInt(foo);
             uart->puts(fn);
         }

@@ -532,6 +532,37 @@ int Main::run()
     AUDIO_SetLineOutVol(gWavePlay.nVolume, gWavePlay.nVolume);
     Uart::getInstance()->puts("Volume set\r\n");
   
+    SDCard sdCard;
+    sdCard.init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
+    
+    if (sdCard.isPresent())
+    {
+        if (sdCard.isFAT16())
+        {
+            char fn[13];
+            ::alt_up_sd_card_find_first("/.", fn);
+            sdCard.findNext(fn);
+
+            short int fd = ::alt_up_sd_card_fopen(fn, 0);
+            
+            short int bijt;
+            int fs = 0;
+            
+            for (int i = 0; i < 1000; i++)
+                bijt = ::alt_up_sd_card_read(fd);
+
+            Uart::getInstance()->puts("Onzin\r\n");
+            ::printf("%u\r\n", fs);
+
+/*
+            for (int i = 0; i < 100; i++)
+            {
+                bijt = ::alt_up_sd_card_read(fd);
+                Uart::getInstance()->putc((char)bijt);
+            }*/
+        }
+    }
+
 /*
     while(1)
     {

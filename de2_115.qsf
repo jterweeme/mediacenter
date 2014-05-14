@@ -264,12 +264,8 @@ set_location_assignment PIN_B14 -to clk27_clk
 set_location_assignment PIN_M21 -to reset_reset_n
 set_location_assignment PIN_B7 -to snd_i2c_scl_external_connection_export
 set_location_assignment PIN_A8 -to snd_i2c_sda_external_connection_export
-set_location_assignment PIN_AE13 -to sd_clk_external_connection_export
-set_location_assignment PIN_AD14 -to sd_cmd_external_connection_export
-set_location_assignment PIN_AE14 -to sd_dat_external_connection_export[0]
 set_location_assignment PIN_AF13 -to sd_dat_external_connection_export[1]
 set_location_assignment PIN_AB14 -to sd_dat_external_connection_export[2]
-set_location_assignment PIN_AC14 -to sd_dat_external_connection_export[3]
 set_location_assignment PIN_AF14 -to sd_wp_n_external_connection_export
 set_location_assignment PIN_M23 -to key_external_connection_export[0]
 set_location_assignment PIN_N21 -to key_external_connection_export[2]
@@ -320,3 +316,7 @@ set_location_assignment PIN_F21 -to ledr_external_connection_export[3]
 set_location_assignment PIN_E19 -to ledr_external_connection_export[2]
 set_location_assignment PIN_F19 -to ledr_external_connection_export[1]
 set_location_assignment PIN_G19 -to ledr_external_connection_export[0]
+set_location_assignment PIN_AC14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat3
+set_location_assignment PIN_AE14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat
+set_location_assignment PIN_AD14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd
+set_location_assignment PIN_AE13 -to altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock

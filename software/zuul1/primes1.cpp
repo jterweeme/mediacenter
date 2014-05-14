@@ -2,7 +2,6 @@
 #include <system.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include "segment.h"
 #include "misc.h"
 
 class PrimesTest1

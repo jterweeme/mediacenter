@@ -14,6 +14,36 @@ Alex Aalbertsberg
 #include <Altera_UP_SD_Card_Avalon_Interface.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
 
+extern const uint8_t lut[];
+
+template <class T> class Segment
+{
+protected:
+    volatile T *base;
+public:
+    Segment(volatile T *base) { this->base = base; }
+    void write(T value) { *base = value; }
+};
+
+class DuoSegment : public Segment<uint16_t>
+{
+public:
+    DuoSegment(volatile uint16_t *base) : Segment<uint16_t>(base) { }
+};
+
+class QuadroSegment : public Segment<uint32_t>
+{
+public:
+    QuadroSegment(volatile uint32_t *base) : Segment<uint32_t>(base) { }
+    void setInt(unsigned int n);
+};
+
+class CombinedSegment
+{
+public:
+    CombinedSegment();
+};
+
 class Observer
 {
 public:
@@ -55,17 +85,19 @@ public:
     void write(const char *s) { ::write(fd, s, ::strlen(s)); }
 };
 
+// moet nog Singleton worden
 class SDCard
 {
+private:
+    alt_up_sd_card_dev *sd_card_dev;
 public:
-    void init(const char *);
+    void init(const char *name) { sd_card_dev = ::alt_up_sd_card_open_dev(name); }
     bool isPresent() { ::alt_up_sd_card_is_Present(); }
     bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
     int fopen(char *fn) { ::alt_up_sd_card_fopen(fn, true); }
     bool write(int, char);
     bool fclose(int);
-private:
-    alt_up_sd_card_dev *sd_card_dev;
+    short int findNext(char *fn) { ::alt_up_sd_card_find_next(fn); }
 };
 
 class LCD

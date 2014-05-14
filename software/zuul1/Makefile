@@ -4,11 +4,11 @@
 MACHINE := -msys-crt0='../bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp
 INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
 LIBRARIES := -L ../bsp
-NAAM = sdaudio1
+NAAM = test1
 LINKY := -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES)
 COMPILEER = $(INCLUDES) -O2 -g
 
-all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.elf audiotest1.hex test1.hex primes1.hex
+all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.elf audiotest1.hex test1.elf test1.hex primes1.hex
 
 %.elf:
 	nios2-elf-g++ -c $(COMPILEER) test1.cpp
