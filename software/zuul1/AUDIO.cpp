@@ -45,13 +45,15 @@ bool Audio::AUDIO_Init(void)
          
 }
 
-bool AUDIO_InterfaceActive(bool bActive){
+bool Audio::AUDIO_InterfaceActive(bool bActive)
+{
     bool bSuccess;
     bSuccess = aduio_RegWrite(9, bActive?0x0001:0x0000); 
     return bSuccess;
 }
 
-bool AUDIO_MicBoost(bool bBoost){
+bool Audio::AUDIO_MicBoost(bool bBoost)
+{
     bool bSuccess;
     alt_u16 control;
     control = reg_file[4];
@@ -63,7 +65,8 @@ bool AUDIO_MicBoost(bool bBoost){
     return bSuccess;
 }
 
-bool AUDIO_AdcEnableHighPassFilter(bool bEnable){
+bool Audio::AUDIO_AdcEnableHighPassFilter(bool bEnable)
+{
     bool bSuccess;
     alt_u16 control;
     control = reg_file[5];
@@ -77,7 +80,7 @@ bool AUDIO_AdcEnableHighPassFilter(bool bEnable){
 
 
 
-bool AUDIO_DacDeemphasisControl(alt_u8 deemphasis_type)
+bool Audio::AUDIO_DacDeemphasisControl(alt_u8 deemphasis_type)
 {
     bool bSuccess;
     alt_u16 control;
@@ -94,7 +97,8 @@ bool AUDIO_DacDeemphasisControl(alt_u8 deemphasis_type)
     return bSuccess;       
 }
 
-bool AUDIO_DacEnableZeroCross(bool bEnable){
+bool Audio::AUDIO_DacEnableZeroCross(bool bEnable)
+{
     bool bSuccess;
     alt_u16 control_l, control_r;
     alt_u16 mask;
@@ -114,7 +118,8 @@ bool AUDIO_DacEnableZeroCross(bool bEnable){
     return bSuccess;      
 }
 
-bool AUDIO_DacEnableSoftMute(bool bEnable){
+bool Audio::AUDIO_DacEnableSoftMute(bool bEnable)
+{
     bool bSuccess;
     alt_u16 control;
     alt_u16 mask;
@@ -128,7 +133,8 @@ bool AUDIO_DacEnableSoftMute(bool bEnable){
     return bSuccess;      
 }
 
-bool AUDIO_MicMute(bool bMute){
+bool Audio::AUDIO_MicMute(bool bMute)
+{
     bool bSuccess;
     alt_u16 control;
     alt_u16 mask;
@@ -142,7 +148,8 @@ bool AUDIO_MicMute(bool bMute){
     return bSuccess;        
 }
 
-bool AUDIO_LineInMute(bool bMute){
+bool Audio::AUDIO_LineInMute(bool bMute)
+{
     bool bSuccess;
     alt_u16 control_l, control_r;
     alt_u16 mask;
@@ -164,7 +171,8 @@ bool AUDIO_LineInMute(bool bMute){
 
 
 
-bool AUDIO_SetInputSource(alt_u8 InputSource){
+bool Audio::AUDIO_SetInputSource(alt_u8 InputSource)
+{
     bool bSuccess;
     alt_u16 control;
     alt_u16 mask;
@@ -179,7 +187,8 @@ bool AUDIO_SetInputSource(alt_u8 InputSource){
 }
 
 // See datasheet page 39
-bool AUDIO_SetSampleRate(alt_u8 SampleRate){
+bool Audio::AUDIO_SetSampleRate(alt_u8 SampleRate)
+{
     bool bSuccess;
     alt_u16 control;
     control = 0;
@@ -207,7 +216,8 @@ bool AUDIO_SetSampleRate(alt_u8 SampleRate){
 
 
 
-bool AUDIO_SetLineInVol(alt_u16 l_vol, alt_u16 r_vol){
+bool Audio::AUDIO_SetLineInVol(alt_u16 l_vol, alt_u16 r_vol)
+{
     bool bSuccess;
     alt_u16 control;
     
@@ -228,7 +238,7 @@ bool AUDIO_SetLineInVol(alt_u16 l_vol, alt_u16 r_vol){
     return bSuccess;
 }
 
-bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol)
+bool Audio::AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol)
 {
     Uart::getInstance()->puts("setlineoutvol\r\n");
     bool bSuccess;
@@ -253,7 +263,8 @@ bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol)
 }
 
 
-bool AUDIO_EnableByPass(bool bEnable){
+bool Audio::AUDIO_EnableByPass(bool bEnable)
+{
     bool bSuccess;
     alt_u16 control;
     alt_u16 mask;
@@ -267,7 +278,8 @@ bool AUDIO_EnableByPass(bool bEnable){
     return bSuccess;  	
 }
 
-bool AUDIO_EnableSiteTone(bool bEnable){
+bool Audio::AUDIO_EnableSiteTone(bool bEnable)
+{
     bool bSuccess;
     alt_u16 control;
     alt_u16 mask;
@@ -291,8 +303,7 @@ bool aduio_RegWrite(alt_u8 reg_index, alt_u16 data16)
     data = data16 & 0xFF;
     control = (reg_index << 1) & 0xFE;
     control |= ((data16 >> 8) & 0x01);
-    //AUDIO_DEBUG(("[AUDIO] set audio reg[%02d] = %04Xh\r\n", reg_index, data16));
-    bSuccess = I2C_Write(SND_I2C_SCL_BASE, SND_I2C_SDA_BASE, I2C_AUDIO_ADDR, control, data);
+    bSuccess = I2CBus::I2C_Write(SND_I2C_SCL_BASE, SND_I2C_SDA_BASE, I2C_AUDIO_ADDR, control, data);
 
     if (!bSuccess)
         Uart::getInstance()->puts("Audio write reg fail\r\n");

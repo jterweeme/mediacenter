@@ -32,7 +32,12 @@ typedef enum{
 
 
 
-// config 
+
+
+class Audio
+{
+public:
+    Audio() { }
 bool AUDIO_MicBoost(bool bBoost);
 bool AUDIO_SetLineInVol(alt_u16 l_vol, alt_u16 r_vol);
 bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol);
@@ -49,20 +54,11 @@ bool AUDIO_InterfaceActive(bool bActive);
 bool AUDIO_EnableByPass(bool bEnable);
 bool AUDIO_EnableSiteTone(bool bEnable);
 
-// play & record
 bool AUDIO_DacFifoNotFull(void);
 void AUDIO_DacFifoSetData(short ch_left, short ch_right);
 bool AUDIO_AdcFifoNotEmpty(void);
 void AUDIO_AdcFifoGetData(short *pch_left, short *pch_right);
 void AUDIO_FifoClear(void);
-
-class Audio
-{
-public:
-    Audio()
-    { 
-        Uart::getInstance()->puts("Audio constructor\r\n");
-    }
     bool AUDIO_Init();
 };
 

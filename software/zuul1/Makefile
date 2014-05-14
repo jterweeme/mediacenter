@@ -19,7 +19,7 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 .PHONY: all
 
-all: audiotest1.hex eepromtest1.hex jtagtest1.hex ofm1.hex piano1.hex primes1.hex sdaudio1.hex sdaudio2.hex sdcardtest1.hex test1.hex
+all: audiotest1.hex eepromtest1.hex jtagtest1.hex ofm1.hex piano1.hex primes1.hex sdaudio2.hex sdcardtest1.hex test1.hex
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
@@ -27,7 +27,6 @@ jtagtest1.hex: jtagtest1.flash
 ofm1.hex: ofm1.flash
 piano1.hex: piano1.flash
 primes1.hex: primes1.flash
-sdaudio1.hex: sdaudio1.flash
 sdaudio2.hex: sdaudio2.flash
 sdcardtest1.hex: sdcardtest1.flash
 test1.hex: test1.flash
@@ -38,7 +37,6 @@ jtagtest1.flash: jtagtest1.elf
 ofm1.flash: ofm1.elf
 piano1.flash: piano1.elf
 primes1.flash: primes1.elf
-sdaudio1.flash: sdaudio1.elf
 sdaudio2.flash: sdaudio2.elf
 sdcardtest1.flash: sdcardtest1.elf
 test1.flash: test1.elf
@@ -49,7 +47,6 @@ jtagtest1.elf: jtagtest1.o
 ofm1.elf: ofm1.o misc.o
 piano1.elf: piano1.o
 primes1.elf: primes1.o misc.o
-sdaudio1.elf: sdaudio1.o AUDIO.o I2C.o LCD.o WaveLib.o FatInternal.o FatFileSystem.o sd_lib.o sd_hal.o misc.o LED.o debug.o crc16.o sd_protocol.o crc7.o
 sdaudio2.elf: sdaudio2.o AUDIO.o I2C.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o
 test1.elf: test1.o misc.o
@@ -71,7 +68,7 @@ ofm1.o: ofm1.cpp
 piano1.o: piano1.cpp
 primes1.o: primes1.cpp
 sdaudio1.o: sdaudio1.cpp misc.h
-sdaudio2.o: sdaudio2.cpp misc.h
+sdaudio2.o: sdaudio2.cpp misc.h LED.h I2C.h AUDIO.h AUDIO_REG.h
 sdcardtest1.o: sdcardtest1.cpp
 sd_hal.o: sd_hal.cpp
 sd_lib.o: sd_lib.cpp

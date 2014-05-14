@@ -93,7 +93,7 @@ int Main::run()
     Uart::getInstance()->puts("Audio Init success\r\n");
     ::memset(&gWavePlay, 0, sizeof(gWavePlay));
     gWavePlay.nVolume = HW_DEFAULT_VOL;
-    AUDIO_SetLineOutVol(gWavePlay.nVolume, gWavePlay.nVolume);
+    audio->AUDIO_SetLineOutVol(gWavePlay.nVolume, gWavePlay.nVolume);
     Uart::getInstance()->puts("Volume set\r\n");
 
     for (int i = 0; i < 99999; i++)
