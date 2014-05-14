@@ -12,6 +12,27 @@
 
 const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8, 0x00, 0x10};
 
+void DuoSegment::setInt(unsigned int n)
+{
+    unsigned int a = n / 10 % 10;
+    unsigned int b = n % 10;
+    *base = lut[a] << 8 | lut[b];
+}
+
+CombinedSegment::CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q)
+{
+    this->l = l;
+    this->r = r;
+    this->q = q;
+}
+
+void CombinedSegment::setInt(unsigned int n)
+{
+    l->setInt(n / 1000000);
+    r->setInt(n / 10000);
+    q->setInt(n);
+}
+
 void QuadroSegment::setInt(unsigned int n)
 {
     unsigned int a = n / 1000 % 10;

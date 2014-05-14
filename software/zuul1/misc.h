@@ -29,6 +29,7 @@ class DuoSegment : public Segment<uint16_t>
 {
 public:
     DuoSegment(volatile uint16_t *base) : Segment<uint16_t>(base) { }
+    void setInt(unsigned int n);
 };
 
 class QuadroSegment : public Segment<uint32_t>
@@ -41,7 +42,12 @@ public:
 class CombinedSegment
 {
 public:
-    CombinedSegment();
+    CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q);
+    void setInt(unsigned int n);
+private:
+    DuoSegment *l;
+    DuoSegment *r;
+    QuadroSegment *q;
 };
 
 class Observer
