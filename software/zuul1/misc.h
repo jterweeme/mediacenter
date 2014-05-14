@@ -174,6 +174,7 @@ public:
     bool init();
     bool regWrite(uint8_t index, uint16_t data);
     void writeDacOut(uint16_t left, uint16_t right);
+    void setOutputVolume(int vol);
     static const uint8_t ADDR = 0x34;
     static const uint16_t DATA_RESET = 0;
     static const uint16_t DATA_INACTIVE_INTERFACE = 0;

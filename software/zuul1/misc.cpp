@@ -160,6 +160,12 @@ bool SoundCard::init()
     return true;
 }
 
+void SoundCard::setOutputVolume(int vol)
+{
+    regWrite(2, 0x006a);
+    regWrite(3, 0x006a);
+}
+
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
 {
     uint8_t foo = data & 0xff;

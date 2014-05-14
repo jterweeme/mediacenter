@@ -77,7 +77,7 @@ vgatest1.o: vgatest1.cpp
 WaveLib.o: WaveLib.cpp
 
 download: sdaudio2.elf
-	nios2-download -g sdaudio2.elf
+	nios2-download -g piano1.elf
 
 clean:
 	rm -Rvf *.o *.elf *.flash *.hex
