@@ -296,7 +296,6 @@ bool aduio_RegWrite(alt_u8 reg_index, alt_u16 data16)
 
     if (!bSuccess)
         Uart::getInstance()->puts("Audio write reg fail\r\n");
-        //AUDIO_DEBUG(("[AUDIO] write reg fail!!!!\r\n"));
 
     usleep(50*1000);  // wait audio chip read        
     return bSuccess;        

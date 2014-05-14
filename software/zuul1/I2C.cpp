@@ -3,19 +3,11 @@
 #include "terasic_includes.h"
 #include "I2C.h"
 
-// Note. Remember to reset device befroe acceess I2C interface
 #ifdef DEBUG_I2C
     #define I2C_DEBUG(x)    DEBUG(x)  
 #else
     #define I2C_DEBUG(x)
 #endif
-
-
-//#define E2_I2C_SCL_BASE         PIO_ID_EEPROM_SCL_BASE
-//#define E2_I2C_DAT_BASE         PIO_ID_EEPROM_DAT_BASE
-
-//void dump_message(char *pMessage);
-//#define DEBUG_DUMP dump_message
 
 #define SDA_DIR_IN(data_base)   IOWR_ALTERA_AVALON_PIO_DIRECTION(data_base,0)
 #define SDA_DIR_OUT(data_base)  IOWR_ALTERA_AVALON_PIO_DIRECTION(data_base,1) 
@@ -24,7 +16,6 @@
 #define SDA_READ(data_base)     IORD_ALTERA_AVALON_PIO_DATA(data_base)
 #define SCL_HIGH(clk_base)     IOWR_ALTERA_AVALON_PIO_DATA(clk_base, 1)
 #define SCL_LOW(clk_base)      IOWR_ALTERA_AVALON_PIO_DATA(clk_base, 0)
-//#define SCL_DELAY    usleep(10)
 #define SCL_DELAY    usleep(1)
 
 void i2c_start(alt_u32 clk_base, alt_u32 data_base);
@@ -35,24 +26,17 @@ void i2c_read(alt_u32 clk_base, alt_u32 data_base, alt_u8 *pData, bool bAck);
 
 
 bool I2C_Write(alt_u32 clk_base, alt_u32 data_base, alt_8 DeviceAddr, alt_u8 ControlAddr, alt_u8 ControlData){
-    bool bSuccess = TRUE;
-    //alt_u8 DeviceAddr;
-    
-    // device id
-    //DeviceAddr = HMB_E2_I2C_ID;
+    bool bSuccess = true;
 
     i2c_start(clk_base, data_base);
     if (!i2c_write(clk_base, data_base, DeviceAddr)){  // send ID
         bSuccess = FALSE;
-        I2C_DEBUG(("I2C HMB_E2 Fail: Address NACK!\n"));
     }
     if (bSuccess && !i2c_write(clk_base, data_base, ControlAddr)){ // send sub-address
         bSuccess = FALSE;
-        I2C_DEBUG(("I2C HMB_E2 Fail: SubAddress NACK!\n"));
     }            
     if (bSuccess && !i2c_write(clk_base, data_base, ControlData)){  
         bSuccess = FALSE;
-        I2C_DEBUG(("I2C HMB_E2 Fail: write NACK!\n"));
     }
     i2c_stop(clk_base, data_base);
     
@@ -65,11 +49,7 @@ bool I2C_Write(alt_u32 clk_base, alt_u32 data_base, alt_8 DeviceAddr, alt_u8 Con
 
 bool I2C_Read(alt_u32 clk_base, alt_u32 data_base, alt_8 DeviceAddr, alt_u8 ControlAddr, alt_u8 *pControlData){
     bool bSuccess = TRUE;
-    //alt_u8 DeviceAddr;
    
-    // device id
-    //DeviceAddr = HMB_E2_I2C_ID;
-
     i2c_start(clk_base, data_base);
     if (!i2c_write(clk_base, data_base, DeviceAddr)){  // send ID
         bSuccess = FALSE;
@@ -97,13 +77,8 @@ bool I2C_Read(alt_u32 clk_base, alt_u32 data_base, alt_8 DeviceAddr, alt_u8 Cont
 bool I2C_MultipleRead(alt_u32 clk_base, alt_u32 data_base, alt_8 DeviceAddr, alt_u8 szData[], alt_u16 len){
     int i;
     bool bSuccess = TRUE;
-    //alt_u8 DeviceAddr, 
     alt_u8 ControlAddr = 0;
-    
    
-    // device id
-    //DeviceAddr = HMB_E2_I2C_ID;
-
     i2c_start(clk_base, data_base);
     if (!i2c_write(clk_base, data_base, DeviceAddr)){  // send ID
         bSuccess = FALSE;
@@ -132,15 +107,6 @@ bool I2C_MultipleRead(alt_u32 clk_base, alt_u32 data_base, alt_8 DeviceAddr, alt
     
 }
 
-
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////
-///////////// Interncal function (i2cXXX) body //////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////////////////////
-
-
-//SDA 1->0 while SCL=1
 void i2c_start(alt_u32 clk_base, alt_u32 data_base){
     
     // make sure it is in normal state
@@ -189,23 +155,17 @@ bool i2c_write(alt_u32 clk_base, alt_u32 data_base, alt_u8 Data){ // return true
         }else{    
             SDA_LOW(data_base);
         }
-        Mask >>= 1; // there is a delay in this command
-        // clock high
+        Mask >>= 1;
         SCL_HIGH(clk_base);
         SCL_DELAY;
         SCL_LOW(clk_base);
         SCL_DELAY;
     }
     
-    //===== get ack
-    SDA_DIR_IN(data_base);  // data read mode
-    //SCL_DELAY;
-    // clock high
-    SCL_HIGH(clk_base);  // clock high
-    SCL_DELAY;  // clock high delay
+    SDA_DIR_IN(data_base);
+    SCL_HIGH(clk_base);
+    SCL_DELAY;
     bAck = SDA_READ(data_base)?FALSE:TRUE;  // get ack
-    //SCL_DELAY;
-    //SDA_DIR_OUT;
     SCL_LOW(clk_base); // clock low         
     SCL_DELAY; // clock low delay
     return bAck;
@@ -231,9 +191,8 @@ void i2c_read(alt_u32 clk_base, alt_u32 data_base, alt_u8 *pData, bool bAck){ //
         SCL_DELAY;
     }
     
-    // send ACK
-    SCL_LOW(clk_base);  // new, make sure data change at clk low
-    SDA_DIR_OUT(data_base);  // set data write mode
+    SCL_LOW(clk_base);
+    SDA_DIR_OUT(data_base);
     if (bAck)
         SDA_LOW(data_base);
     else
@@ -244,8 +203,6 @@ void i2c_read(alt_u32 clk_base, alt_u32 data_base, alt_u8 *pData, bool bAck){ //
     SCL_DELAY; // clock low delay
     SDA_LOW(data_base);  // data low
     SCL_DELAY; // data low delay
-//    SDA_DIR_IN;  // set data read mode
-    
     *pData = Data;
 }
 
