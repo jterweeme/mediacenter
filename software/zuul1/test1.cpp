@@ -79,7 +79,7 @@ void Test1::init()
     segmentLinks.write(0x2430);
     segmentLinks.setInt(12345);
     segmentRechts.write(0x9992);
-    segmentRechts.setHex(0x32);
+    segmentRechts.setHex(0x3f);
     ir = InfraRood::getInstance();
 
     ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
