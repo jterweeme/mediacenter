@@ -164,6 +164,9 @@ void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
 void I2C::write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData)
 {
     start();
+    private_write(devAddr);
+    private_write(ctlAddr);
+    private_write(ctlData);
     stop();
     ::usleep(7*1000);
 }

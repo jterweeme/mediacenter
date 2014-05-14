@@ -1,77 +1,19 @@
 #define SYSTEM_BUS_WIDTH 32
 
-#include "sd_lib.h"
 #include <stdint.h>
-#include "terasic_includes.h"
-#include "LED.h"
-#include "FatFileSystem.h"
-#include "FatInternal.h"
-#include "I2C.h"
+#include <io.h>
 #include "AUDIO.h"
 #include "AUDIO_REG.h"
 #include "misc.h"
 
-#define LCD_DISPLAY
-#define SUPPORT_PLAY_MODE
-#define xENABLE_DEBOUNCE
-
-#define MAX_VOL 8
-#define AUTO_NEXT_SONG
-#define HW_MAX_VOL     127
-#define HW_MIN_VOL     47
-#define HW_DEFAULT_VOL  120
-
-#define MAX_FILE_NUM    128
-#define FILENAME_LEN    32
-
-typedef struct{
-    int nFileNum;
-    char szFilename[MAX_FILE_NUM][FILENAME_LEN];
-}WAVE_PLAY_LIST;
-
-
-static WAVE_PLAY_LIST gWavePlayList;
-#define WAVE_BUF_SIZE  512
-typedef struct{
-    FAT_FILE_HANDLE hFile;
-    alt_u8          szBuf[WAVE_BUF_SIZE];
-    alt_u32         uWavePlayIndex;
-    alt_u32         uWaveReadPos;
-    alt_u32         uWavePlayPos;
-    alt_u32         uWaveMaxPlayPos;
-    char szFilename[FILENAME_LEN];
-    alt_u8          nVolume;
-    bool            bRepeatMode;
-}PLAYWAVE_CONTEXT;
-
-static PLAYWAVE_CONTEXT gWavePlay;
-static FAT_HANDLE hFat;
-static int nMute_Volume = 0;
-static bool bLastSwitch = FALSE;
-static bool bNextSwitch = FALSE;
-static bool bMuteSwitch = FALSE;
-static bool bPlaySwitch = TRUE;
-
 class Main
 {
 public:
-    Main();
+    Main() { }
     int run();
-    void update_status();
-    void handle_key(bool *pNexSongPressed);
-    void handle_IrDA(bool * pNexSongPressed,alt_u32 id);
-    bool waveplay_execute(bool *bEOF);
-    bool waveplay_start(char *pFilename);
-    void DisplayTime(alt_u32 TimeElapsed);
-    bool is_supporrted_sample_rate(int sample_rate);
 private:
     Audio *audio;
 };
-
-Main::Main()
-{
-    Uart::getInstance()->puts("Main constructor\r\n");
-}
 
 int main()
 {
@@ -80,31 +22,55 @@ int main()
     return main->run();
 }
 
+uint16_t geluid[] = {
+0x0000,
+0x0000,
+0x0000,
+0x0000,
+0x0000,
+0x0000,
+0x0246,
+0x0c36,
+0x0cfc,
+0x0c17,
+0x0aee,
+0x0aa0
+};
+
 int Main::run()
 {
     audio = new Audio();
 
     if (!audio->AUDIO_Init())
-    {
-        Uart::getInstance()->puts("Audio Init fail\r\n");
         return 0;
-    }
     
     Uart::getInstance()->puts("Audio Init success\r\n");
-    ::memset(&gWavePlay, 0, sizeof(gWavePlay));
-    gWavePlay.nVolume = HW_DEFAULT_VOL;
-    audio->AUDIO_SetLineOutVol(gWavePlay.nVolume, gWavePlay.nVolume);
+    audio->AUDIO_SetLineOutVol(120, 120);
     Uart::getInstance()->puts("Volume set\r\n");
 
-    for (int i = 0; i < 99999; i++)
+    for (int i = 0; i < 9999; i++)
     {
-        AUDIO_DAC_WRITE_L(i);
-        AUDIO_DAC_WRITE_R(i);
-        usleep(10);
+        for (int j = 0; j < 12; j++)
+        {
+            AUDIO_DAC_WRITE_L(geluid[j]);
+            AUDIO_DAC_WRITE_R(geluid[j]);
+            //usleep(2);
+        }
+        //usleep(200);
+    }
+
+    for (int i = 0; i < 9999; i++)
+    {
+        for (int j = 0; j < 12; j++)
+        {
+            AUDIO_DAC_WRITE_L(geluid[j]);
+            AUDIO_DAC_WRITE_R(geluid[j]);
+            usleep(2);
+        }
+        //usleep(200);
     }
 
     Uart::getInstance()->puts("Le fin\r\n");
-
     return 0;
 }
 

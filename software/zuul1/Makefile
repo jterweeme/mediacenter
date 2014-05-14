@@ -47,7 +47,7 @@ jtagtest1.elf: jtagtest1.o
 ofm1.elf: ofm1.o misc.o
 piano1.elf: piano1.o
 primes1.elf: primes1.o misc.o
-sdaudio2.elf: sdaudio2.o AUDIO.o I2C.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
+sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o
 test1.elf: test1.o misc.o
 
@@ -59,7 +59,6 @@ debug.o: debug.cpp
 eepromtest1.o: eepromtest1.cpp
 FatFileSystem.o: FatFileSystem.cpp
 FatInternal.o: FatInternal.cpp
-I2C.o: I2C.cpp I2C.h
 jtagtest1.o: jtagtest1.cpp
 LCD.o: LCD.cpp LCD.h
 LED.o: LED.cpp
@@ -67,8 +66,7 @@ misc.o: misc.cpp misc.h
 ofm1.o: ofm1.cpp
 piano1.o: piano1.cpp
 primes1.o: primes1.cpp
-sdaudio1.o: sdaudio1.cpp misc.h
-sdaudio2.o: sdaudio2.cpp misc.h LED.h I2C.h AUDIO.h AUDIO_REG.h
+sdaudio2.o: sdaudio2.cpp misc.h LED.h AUDIO.h AUDIO_REG.h
 sdcardtest1.o: sdcardtest1.cpp
 sd_hal.o: sd_hal.cpp
 sd_lib.o: sd_lib.cpp
