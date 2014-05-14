@@ -83,6 +83,8 @@ public:
     static const uint16_t MENU = 0xee11;
     static const uint16_t RETURN = 0xe817;
     static const uint16_t PLAY = 0xe916;
+    static const uint16_t LEFT = 0xeb14;
+    static const uint16_t RIGHT = 0xe718;
     static const uint16_t MUTE = 0xf30c;
 };
 

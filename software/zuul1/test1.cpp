@@ -79,11 +79,32 @@ void Beam::update()
     case TerasicRemote::NUM_9:
         uart->puts("9\r\n");
         break;
+    case TerasicRemote::CH_UP:
+        uart->puts("Channel Up\r\n");
+        break;
+    case TerasicRemote::CH_DOWN:
+        uart->puts("Channel Down\r\n");
+        break;
+    case TerasicRemote::VOL_UP:
+        uart->puts("Volume Up\r\n");
+        break;
+    case TerasicRemote::VOL_DOWN:
+        uart->puts("Volume Down\r\n");
+        break;
     case TerasicRemote::MENU:
         uart->puts("Menu\r\n");
         break;
+    case TerasicRemote::RETURN:
+        uart->puts("Return\r\n");
+        break;
     case TerasicRemote::PLAY:
         uart->puts("Play\r\n");
+        break;
+    case TerasicRemote::LEFT:
+        uart->puts("Left\r\n");
+        break;
+    case TerasicRemote::RIGHT:
+        uart->puts("Right\r\n");
         break;
     case TerasicRemote::MUTE:
         uart->puts("Mute\r\n");
