@@ -10,13 +10,18 @@
 #include "misc.h"
 #include <fcntl.h>
 
-const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8, 0x00, 0x10};
+const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8, 0x00, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16};
 
 void DuoSegment::setInt(unsigned int n)
 {
     unsigned int a = n / 10 % 10;
     unsigned int b = n % 10;
     *base = lut[a] << 8 | lut[b];
+}
+
+void DuoSegment::setHex(uint8_t n)
+{
+    *base = lut[n >> 4] << 8 | lut[n % 16];
 }
 
 CombinedSegment::CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q)

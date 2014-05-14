@@ -30,6 +30,7 @@ class DuoSegment : public Segment<uint16_t>
 public:
     DuoSegment(volatile uint16_t *base) : Segment<uint16_t>(base) { }
     void setInt(unsigned int n);
+    void setHex(uint8_t n);
 };
 
 class QuadroSegment : public Segment<uint32_t>
@@ -54,6 +55,19 @@ class Observer
 {
 public:
     virtual void update() = 0;
+};
+
+class TerasicRemote
+{
+public:
+    static const uint32_t A = 2406;
+    static const uint32_t B = 5686;
+    static const uint32_t C = 726;
+    static const uint32_t NUM_0 = 7606;
+    static const uint32_t NUM_1 = 5926;
+    static const uint32_t NUM_2 = 4246;
+    static const uint32_t NUM_3 = 2566;
+    static const uint32_t NUM_4 = 886;
 };
 
 class InfraRood

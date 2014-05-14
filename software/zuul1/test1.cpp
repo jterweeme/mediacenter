@@ -34,11 +34,18 @@ void Beam::update()
     unsigned int button = IORD(INFRARED_0_BASE, 0);
     cs->setInt(button);
 
-    switch (button)
+    switch (button % 10000)
     {
-    case 0:
+    case TerasicRemote::A:
         Uart::getInstance()->puts("A\r\n");
         break;
+    case TerasicRemote::B:
+        Uart::getInstance()->puts("B\r\n");
+        break;
+    case TerasicRemote::C:
+        Uart::getInstance()->puts("C\r\n");
+        break;
+
     }
 }
 
@@ -72,6 +79,7 @@ void Test1::init()
     segmentLinks.write(0x2430);
     segmentLinks.setInt(12345);
     segmentRechts.write(0x9992);
+    segmentRechts.setHex(0x32);
     ir = InfraRood::getInstance();
 
     ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
