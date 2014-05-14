@@ -249,8 +249,6 @@ bool AUDIO_SetLineOutVol(alt_u16 l_vol, alt_u16 r_vol)
         bSuccess = aduio_RegWrite(3, control);        
     }    
     
-    //AUDIO_DEBUG(("[AUDIO] set Line-Out vol(%d,%d) %s\r\n", l_vol, r_vol, bSuccess?"success":"fail"));
-    
     return bSuccess;
 }
 

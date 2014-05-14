@@ -65,11 +65,25 @@ public:
     static const uint16_t A = 0xf00f;
     static const uint16_t B = 0xec13;
     static const uint16_t C = 0xef10;
+    static const uint16_t POWER = 0xed12;
     static const uint16_t NUM_0 = 0xff00;
     static const uint16_t NUM_1 = 0xfe01;
     static const uint16_t NUM_2 = 0xfd02;
     static const uint16_t NUM_3 = 0xfc03;
     static const uint16_t NUM_4 = 0xfb04;
+    static const uint16_t NUM_5 = 0xfa05;
+    static const uint16_t NUM_6 = 0xf906;
+    static const uint16_t NUM_7 = 0xf807;
+    static const uint16_t NUM_8 = 0xf708;
+    static const uint16_t NUM_9 = 0xf609;
+    static const uint16_t CH_UP = 0xe51a;
+    static const uint16_t CH_DOWN = 0xe11e;
+    static const uint16_t VOL_UP = 0xe41b;
+    static const uint16_t VOL_DOWN = 0xe01f;
+    static const uint16_t MENU = 0xee11;
+    static const uint16_t RETURN = 0xe817;
+    static const uint16_t PLAY = 0xe916;
+    static const uint16_t MUTE = 0xf30c;
 };
 
 class InfraRood
@@ -146,7 +160,6 @@ public:
     I2C(volatile uint32_t *scl, volatile uint32_t *sda) { init(scl, sda); }
     void write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData);
     uint8_t read(uint8_t devAddr, uint8_t ctlAddr);
-
 };
 
 class SoundCard
