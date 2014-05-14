@@ -3,62 +3,82 @@
 
 MACHINE := -msys-crt0='../bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp
 INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
-LIBRARIES := -L ../bsp
-NAAM = test1
-LINKY := -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES)
-COMPILEER = $(INCLUDES) -O2 -g
+LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
-all: clean primes1.elf vgatest1.elf vgatest1.hex audiotest1.elf audiotest1.hex test1.elf test1.hex primes1.hex
+%.o:
+	nios2-elf-g++ $(INCLUDES) -O2 -g -c -o $@ $<
 
 %.elf:
-	nios2-elf-g++ -c $(COMPILEER) test1.cpp
-	nios2-elf-g++ -c $(COMPILEER) misc.cpp
-	nios2-elf-g++ -c $(COMPILEER) primes1.cpp
-	nios2-elf-g++ -c $(COMPILEER) audiotest1.cpp
-	nios2-elf-g++ -c $(COMPILEER) jtagtest1.cpp
-	nios2-elf-g++ -c $(COMPILEER) sdcardtest1.cpp
-	nios2-elf-g++ -c $(COMPILEER) eepromtest1.cpp
-	nios2-elf-g++ -c $(COMPILEER) vgatest1.cpp
-	nios2-elf-g++ -c $(COMPILEER) ofm1.cpp
-	nios2-elf-g++ -c $(COMPILEER) AUDIO.cpp
-	nios2-elf-g++ -c $(COMPILEER) I2C.cpp
-	nios2-elf-g++ -c $(COMPILEER) main.cpp
-	nios2-elf-g++ -c $(COMPILEER) LCD.cpp
-	nios2-elf-g++ -c $(COMPILEER) debug.cpp
-	nios2-elf-g++ -c $(COMPILEER) WaveLib.cpp
-	nios2-elf-g++ -c $(COMPILEER) FatInternal.cpp
-	nios2-elf-g++ -c $(COMPILEER) FatFileSystem.cpp
-	nios2-elf-g++ -c $(COMPILEER) sd_lib.cpp
-	nios2-elf-g++ -c $(COMPILEER) sd_hal.cpp
-	nios2-elf-g++ -c $(COMPILEER) sd_protocol.cpp
-	nios2-elf-g++ -c $(COMPILEER) crc7.cpp
-	nios2-elf-g++ -c $(COMPILEER) crc16.cpp
-	nios2-elf-g++ -c $(COMPILEER) LED.cpp
-	nios2-elf-g++ -o test1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) test1.o misc.o
-	nios2-elf-g++ -o jtagtest1.elf -T'../bsp//linker.x' $(MACHINE) $(LIBRARIES) jtagtest1.o misc.o
-	nios2-elf-g++ -o audiotest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp audiotest1.o misc.o
-	nios2-elf-g++ -o primes1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp primes1.o misc.o
-	nios2-elf-g++ -o sdcardtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp sdcardtest1.o misc.o
-	nios2-elf-g++ -o eepromtest1.elf -T'../bsp//linker.x' $(MACHINE) -L ../bsp eepromtest1.o misc.o
-	nios2-elf-g++ -o vgatest1.elf $(LINKY) vgatest1.o misc.o
-	nios2-elf-g++ -o sdaudio1.elf $(LINKY) main.o AUDIO.o I2C.o LCD.o debug.o WaveLib.o FatInternal.o FatFileSystem.o sd_lib.o sd_protocol.o sd_hal.o crc7.o crc16.o LED.o misc.o
-	nios2-elf-g++ -o ofm1.elf $(LINKY) ofm1.o misc.o
+	nios2-elf-g++ $(LDFLAGS) -o $@ $^
 
-%.flash: %.elf
+%.flash:
 	elf2flash --epcs --after=../../de2_115.flash --input=$< --output=$@
 
-%.hex: %.flash
+%.hex:
 	nios2-elf-objcopy -I srec -O ihex $< $@
 
-doemaar.altijd:
-	echo
+.PHONY: all
 
-zuul1.png: zuul1.uxf
-	umlet -action=convert -format=png -filename=$< -output=$@
+all: audiotest1.hex eepromtest1.hex jtagtest1.hex ofm1.hex piano1.hex primes1.hex sdaudio1.hex sdcardtest1.hex test1.hex
+
+audiotest1.hex: audiotest1.flash
+eepromtest1.hex: eepromtest1.flash
+jtagtest1.hex: jtagtest1.flash
+ofm1.hex: ofm1.flash
+piano1.hex: piano1.flash
+primes1.hex: primes1.flash
+sdaudio1.hex: sdaudio1.flash
+sdcardtest1.hex: sdcardtest1.flash
+test1.hex: test1.flash
+
+audiotest1.flash: audiotest1.elf
+eepromtest1.flash: eepromtest1.elf
+jtagtest1.flash: jtagtest1.elf
+ofm1.flash: ofm1.elf
+piano1.flash: piano1.elf
+primes1.flash: primes1.elf
+sdaudio1.flash: sdaudio1.elf
+sdcardtest1.flash: sdcardtest1.elf
+test1.flash: test1.elf
+
+audiotest1.elf: audiotest1.o misc.o
+eepromtest1.elf: eepromtest1.o misc.o
+jtagtest1.elf: jtagtest1.o
+ofm1.elf: ofm1.o misc.o
+piano1.elf: piano1.o
+primes1.elf: primes1.o misc.o
+sdaudio1.elf: main.o AUDIO.o I2C.o LCD.o WaveLib.o FatInternal.o FatFileSystem.o sd_lib.o sd_hal.o misc.o LED.o debug.o crc16.o sd_protocol.o crc7.o
+sdcardtest1.elf: sdcardtest1.o misc.o
+test1.elf: test1.o misc.o
+
+AUDIO.o: AUDIO.cpp AUDIO.h
+audiotest1.o: audiotest1.cpp
+crc16.o: crc16.cpp
+crc7.o: crc7.cpp
+debug.o: debug.cpp
+eepromtest1.o: eepromtest1.cpp
+FatFileSystem.o: FatFileSystem.cpp
+FatInternal.o: FatInternal.cpp
+I2C.o: I2C.cpp I2C.h
+jtagtest1.o: jtagtest1.cpp
+LCD.o: LCD.cpp LCD.h
+LED.o: LED.cpp
+main2.o: main2.cpp misc.h
+main.o: main.cpp misc.h
+misc.o: misc.cpp misc.h
+ofm1.o: ofm1.cpp
+piano1.o: piano1.cpp
+primes1.o: primes1.cpp
+sdcardtest1.o: sdcardtest1.cpp
+sd_hal.o: sd_hal.cpp
+sd_lib.o: sd_lib.cpp
+sd_protocol.o: sd_protocol.cpp
+SEG7.o: SEG7.cpp
+test1.o: test1.cpp misc.h
+vgatest1.o: vgatest1.cpp
+WaveLib.o: WaveLib.cpp
 
 clean:
-	rm -Rvf *.o *.elf *.hex *.flash *.png
+	rm -Rvf *.o *.elf *.flash *.hex
 
-download:
-	nios2-download -g $(NAAM).elf
 
