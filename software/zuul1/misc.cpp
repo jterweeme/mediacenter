@@ -25,11 +25,23 @@ void DuoSegment::setHex(uint8_t n)
     *base = lut[n >> 4] << 8 | lut[n % 16];
 }
 
+void QuadroSegment::setHex(uint16_t n)
+{
+    *base = lut[n >> 12] << 24 | lut[(n >> 8) % 16] << 16 | lut[(n >> 4) % 16] << 8 | lut[n % 16];
+}
+
 CombinedSegment::CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q)
 {
     this->l = l;
     this->r = r;
     this->q = q;
+}
+
+void CombinedSegment::setHex(uint32_t n)
+{
+    l->setHex(n >> 24);
+    r->setHex(n >> 16);
+    q->setHex((uint16_t)n);
 }
 
 void CombinedSegment::setInt(unsigned int n)

@@ -31,10 +31,10 @@ public:
 
 void Beam::update()
 {
-    unsigned int button = IORD(INFRARED_0_BASE, 0);
-    cs->setInt(button);
+    uint32_t button = IORD(INFRARED_0_BASE, 0);
+    cs->setHex(button);
 
-    switch (button % 10000)
+    switch (button >> 16)
     {
     case TerasicRemote::A:
         Uart::getInstance()->puts("A\r\n");
@@ -75,6 +75,7 @@ void Test1::init()
 {
     segmentQuadro = new QuadroSegment((volatile uint32_t *)QUADROSEGMENT_BASE);
     segmentQuadro->setInt(12345);
+    segmentQuadro->setHex(0xabcd);
     segmentLinks.write(0x3024);
     segmentLinks.write(0x2430);
     segmentLinks.setInt(12345);

@@ -38,6 +38,7 @@ class QuadroSegment : public Segment<uint32_t>
 public:
     QuadroSegment(volatile uint32_t *base) : Segment<uint32_t>(base) { }
     void setInt(unsigned int n);
+    void setHex(uint16_t n);
 };
 
 class CombinedSegment
@@ -45,6 +46,7 @@ class CombinedSegment
 public:
     CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q);
     void setInt(unsigned int n);
+    void setHex(uint32_t n);
 private:
     DuoSegment *l;
     DuoSegment *r;
@@ -60,14 +62,14 @@ public:
 class TerasicRemote
 {
 public:
-    static const uint32_t A = 2406;
-    static const uint32_t B = 5686;
-    static const uint32_t C = 726;
-    static const uint32_t NUM_0 = 7606;
-    static const uint32_t NUM_1 = 5926;
-    static const uint32_t NUM_2 = 4246;
-    static const uint32_t NUM_3 = 2566;
-    static const uint32_t NUM_4 = 886;
+    static const uint16_t A = 0xf00f;
+    static const uint16_t B = 0xec13;
+    static const uint16_t C = 0xef10;
+    static const uint16_t NUM_0 = 0xff00;
+    static const uint16_t NUM_1 = 0xfe01;
+    static const uint16_t NUM_2 = 0xfd02;
+    static const uint16_t NUM_3 = 0xfc03;
+    static const uint16_t NUM_4 = 0xfb04;
 };
 
 class InfraRood
