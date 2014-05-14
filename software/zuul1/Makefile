@@ -50,7 +50,7 @@ ofm1.elf: ofm1.o misc.o
 piano1.elf: piano1.o
 primes1.elf: primes1.o misc.o
 sdaudio1.elf: sdaudio1.o AUDIO.o I2C.o LCD.o WaveLib.o FatInternal.o FatFileSystem.o sd_lib.o sd_hal.o misc.o LED.o debug.o crc16.o sd_protocol.o crc7.o
-sdaudio2.elf: sdaudio2.o
+sdaudio2.elf: sdaudio2.o AUDIO.o I2C.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o
 test1.elf: test1.o misc.o
 
@@ -80,6 +80,9 @@ SEG7.o: SEG7.cpp
 test1.o: test1.cpp misc.h
 vgatest1.o: vgatest1.cpp
 WaveLib.o: WaveLib.cpp
+
+download: sdaudio2.elf
+	nios2-download -g sdaudio2.elf
 
 clean:
 	rm -Rvf *.o *.elf *.flash *.hex
