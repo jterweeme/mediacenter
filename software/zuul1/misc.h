@@ -102,6 +102,14 @@ private:
     volatile uint32_t *base;
 };
 
+class MyFile
+{
+private:
+    int fd;
+public:
+    MyFile(int fd) { this->fd = fd; }
+};
+
 class Uart
 {
 public:
@@ -133,6 +141,7 @@ public:
     bool isPresent() { ::alt_up_sd_card_is_Present(); }
     bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
     int fopen(char *fn) { ::alt_up_sd_card_fopen(fn, true); }
+    MyFile *openFile(char *fn) { return new MyFile(fopen(fn)); }
     bool write(int, char);
     bool fclose(int);
     short int findNext(char *fn) { ::alt_up_sd_card_find_next(fn); }
