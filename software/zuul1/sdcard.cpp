@@ -1,66 +1,12 @@
-/******************************************************************************
-*                                                                             *
-* License Agreement                                                           *
-*                                                                             *
-* Copyright (c) 2006 Altera Corporation, San Jose, California, USA.           *
-* All rights reserved.                                                        *
-*                                                                             *
-* Permission is hereby granted, free of charge, to any person obtaining a     *
-* copy of this software and associated documentation files (the "Software"),  *
-* to deal in the Software without restriction, including without limitation   *
-* the rights to use, copy, modify, merge, publish, distribute, sublicense,    *
-* and/or sell copies of the Software, and to permit persons to whom the       *
-* Software is furnished to do so, subject to the following conditions:        *
-*                                                                             *
-* The above copyright notice and this permission notice shall be included in  *
-* all copies or substantial portions of the Software.                         *
-*                                                                             *
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR  *
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,    *
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE *
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER      *
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING     *
-* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER         *
-* DEALINGS IN THE SOFTWARE.                                                   *
-*                                                                             *
-* This agreement shall be governed in all respects by the laws of the State   *
-* of California and by the laws of the United States of America.              *
-*                                                                             *
-******************************************************************************/
+#define SYSTEM_BUS_WIDTH 32
 
 #include <errno.h>
 #include <priv/alt_file.h>
 #include <io.h>
 #include <stdio.h>
 #include <string.h>
-#include "Altera_UP_SD_Card_Avalon_Interface.h"
+#include "sdcard.h"
 
-///////////////////////////////////////////////////////////////////////////
-// Local Define Statements
-///////////////////////////////////////////////////////////////////////////
-
-#define CHAR_TO_UPPER(ch)	((char) (((ch >= 'a') && (ch <= 'z')) ? ((ch-'a')+'A'): ch))
-
-// Data Buffer Address
-#define SD_CARD_BUFFER(base, x)			(base + x)
-// 128-bit Card Identification Number
-#define SD_CARD_CID(base, x)			(base + 0x0200 + x)
-// 128-bit Card Specific Data Register
-#define SD_CARD_CSD(base, x)			(base + 0x0210 + x)
-// 32-bit Operating Conditions Register
-#define SD_CARD_OCR(base)				(base + 0x0220)
-// 32-bit Card Status Register
-#define SD_CARD_STATUS(base)			(base + 0x0224)
-// 16-bit Relative Card Address Register
-#define SD_CARD_RCA(base)				(base + 0x0228)
-// 32-bit Card Argument Register
-#define SD_CARD_ARGUMENT(base)			(base + 0x022C)
-// 16-bit Card Command Register
-#define SD_CARD_COMMAND(base)			(base + 0x0230)
-// 16-bit Card Auxiliary Status Register
-#define SD_CARD_AUX_STATUS(base)		(base + 0x0234)
-// 32-bit R1 Response Register
-#define SD_CARD_R1_RESPONSE(base)		(base + 0x0238)
 
 #define CMD_READ_BLOCK					17
 #define CMD_WRITE_BLOCK					24
@@ -1068,7 +1014,7 @@ int find_first_empty_record_in_a_subdirectory(int start_cluster_index)
 				if ((new_cluster & 0x0000fff8) == 0x0000fff8)
 				{
 					int new_dir_cluster; 
-					if (find_first_empty_cluster(&new_dir_cluster))
+					if (find_first_empty_cluster((unsigned int *)&new_dir_cluster))
 					{
 						// Add the new cluster to the linked list of the given directory.
 						if (mark_cluster(cluster, ((short int) (new_dir_cluster)), true) &&
@@ -1197,7 +1143,7 @@ bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir
                 location = get_dir_divider_location( &(name[last_dir_separator]) );
             }
             
-            convert_filename_to_name_extension(&(name[last_dir_separator]), file_record->name, file_record->extension);
+            convert_filename_to_name_extension(&(name[last_dir_separator]), (char *)file_record->name, (char *)file_record->extension);
                          
             file_record->attributes = 0;
             file_record->create_time = 0;
@@ -1508,7 +1454,7 @@ short int alt_up_sd_card_find_next(char *file_name)
 					{
 						short int new_cluster;
 
-						if (get_cluster_flag(cluster, &new_cluster))
+						if (get_cluster_flag(cluster, (unsigned short *)&new_cluster))
 						{
 							if ((new_cluster & 0x0000fff8) == 0x0000fff8)
 							{
@@ -1567,7 +1513,7 @@ short int alt_up_sd_card_fopen(char *name, bool create)
 			int index;
 
             /* Get home directory cluster location for the specified file. 0 means root directory. */
-            if (!get_home_directory_cluster_for_file(name, &home_directory_cluster, &home_dir))
+            if (!get_home_directory_cluster_for_file(name, (int *)&home_directory_cluster, &home_dir))
             {
                 return file_record_index;
             }
@@ -1848,7 +1794,7 @@ bool alt_up_sd_card_write(short int file_handle, char byte_of_data)
 }
 
 
-bool alt_up_sd_card_fclose(short int file_handle)
+bool SDCard::alt_up_sd_card_fclose(short int file_handle)
 // This function closes an opened file and saves data to SD Card if necessary.
 {
     bool result = false;

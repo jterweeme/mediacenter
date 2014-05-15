@@ -8,81 +8,34 @@
 #ifdef __cplusplus
 extern "C"
 {
-#endif /* __cplusplus */
-
-/*
- * Device structure definition. Each instance of the driver uses one
- * of these structures to hold its associated state.
- */
-typedef struct alt_up_sd_card_dev {
-	/// @brief character mode device structure 
-	/// @sa Developing Device Drivers for the HAL in Nios II Software Developer's Handbook
-	alt_dev dev;
-	/// @brief the base address of the device
-	unsigned int base;
-
-} alt_up_sd_card_dev;
-
-#ifndef bool
-    typedef enum e_bool { false = 0, true = 1 } bool;
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-// HAL system functions
+#define CHAR_TO_UPPER(ch)   ((char) (((ch >= 'a') && (ch <= 'z')) ? ((ch-'a')+'A'): ch))
+
+#define SD_CARD_BUFFER(base, x)         (base + x)
+#define SD_CARD_CID(base, x)            (base + 0x0200 + x)
+#define SD_CARD_CSD(base, x)            (base + 0x0210 + x)
+#define SD_CARD_OCR(base)               (base + 0x0220)
+#define SD_CARD_STATUS(base)            (base + 0x0224)
+#define SD_CARD_RCA(base)               (base + 0x0228)
+#define SD_CARD_ARGUMENT(base)          (base + 0x022C)
+#define SD_CARD_COMMAND(base)           (base + 0x0230)
+#define SD_CARD_AUX_STATUS(base)        (base + 0x0234)
+#define SD_CARD_R1_RESPONSE(base)       (base + 0x0238)
+
+
+typedef struct alt_up_sd_card_dev
+{
+	alt_dev dev;
+	unsigned int base;
+}
+alt_up_sd_card_dev;
 
 alt_up_sd_card_dev* alt_up_sd_card_open_dev(const char *name);
-/* Open an SD Card Interface if it is connected to the system. */
-
-
 bool alt_up_sd_card_is_Present(void);
-/* Check if there is an SD Card insterted into the SD Card socket.
- */
-
-
 bool alt_up_sd_card_is_FAT16(void);
-/* This function reads the SD card data in an effort to determine if the card is formated as a FAT16
- * volume. Please note that FAT12 has a similar format, but will not be supported by this driver.
- */
-
-
 short int alt_up_sd_card_fopen(char *name, bool create);
-/* This function reads the SD card data in an effort to determine if the card is formated as a FAT16
- * volume. Please note that FAT12 has a similar format, but will not be supported by this driver.
- * 
- * Inputs:
- *      name - a file name including a directory, relative to the root directory
- *      create - a flag set to true to create a file if it does not already exist
- * Output:
- *      An index to the file record assigned to the specified file. -1 is returned if the file could not be opened.
- */
-
-
 short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
-/* This function sets up a search algorithm to go through a given directory looking for files.
- * If the search directory is valid, then the function searches for the first file it finds.
- * Inputs:
- *		directory_to_search_through - name of the directory to search through
- *		file_name - an array to store a name of the file found. Must be 13 bytes long (12 bytes for file name and 1 byte of NULL termination).
- * Outputs:
- *		0 - success
- *		1 - invalid directory
- *		2 - No card or incorrect card format.
- *
- * To specify a directory give the name in a format consistent with the following regular expression:
- * [{[valid_chars]+}/]*.
- * 
- * In other words, give a path name starting at the root directory, where each directory name is followed by a '/'.
- * Then, append a '.' to the directory name. Examples:
- * "." - look through the root directory
- * "first/." - look through a directory named "first" that is located in the root directory.
- * "first/sub/." - look through a directory named "sub", that is located within the subdirectory named "first". "first" is located in the root directory.
- * Invalid examples include:
- * "/.", "/////." - this is not the root directory.
- * "/first/." - the first character may not be a '/'.
- */
-
-
-
 short int alt_up_sd_card_find_next(char *file_name);
 /* This function searches for the next file in a given directory, as specified by the find_first function.
  * Inputs:
@@ -95,9 +48,6 @@ short int alt_up_sd_card_find_next(char *file_name);
  */
 
 void alt_up_sd_card_set_attributes(short int file_handle, short int attributes);
-/* Set file attributes as needed.
- */
-
 short int alt_up_sd_card_get_attributes(short int file_handle);
 /* Return file attributes, or -1 if the file_handle is invalid.
  */
@@ -112,7 +62,7 @@ bool alt_up_sd_card_write(short int file_handle, char byte_of_data);
 /* Write a single character to a given file. Return true if successful, and false otherwise. */
 
 
-bool alt_up_sd_card_fclose(short int file_handle);
+
 // This function closes an opened file and saves data to SD Card if necessary.
 
 
@@ -153,6 +103,32 @@ bool alt_up_sd_card_fclose(short int file_handle);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+class MyFile
+{
+private:
+    int fd;
+public:
+    MyFile(int fd) { this->fd = fd; }
+};
+
+
+// moet nog Singleton worden
+class SDCard
+{
+private:
+    alt_up_sd_card_dev *sd_card_dev;
+    bool alt_up_sd_card_fclose(short int file_handle);
+public:
+    void init(const char *name) { sd_card_dev = ::alt_up_sd_card_open_dev(name); }
+    bool isPresent() { ::alt_up_sd_card_is_Present(); }
+    bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
+    int fopen(char *fn) { ::alt_up_sd_card_fopen(fn, true); }
+    MyFile *openFile(char *fn) { return new MyFile(fopen(fn)); }
+    bool write(int, char);
+    bool fclose(int);
+    short int findNext(char *fn) { ::alt_up_sd_card_find_next(fn); }
+};
 
 #endif /* __ALTERA_UP_SD_CARD_AVALON_INTERFACE_H__ */
 

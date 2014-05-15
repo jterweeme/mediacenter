@@ -11,8 +11,8 @@ Alex Aalbertsberg
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <Altera_UP_SD_Card_Avalon_Interface.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
+#include "sdcard.h"
 
 extern const uint8_t lut[];
 
@@ -102,14 +102,6 @@ private:
     volatile uint32_t *base;
 };
 
-class MyFile
-{
-private:
-    int fd;
-public:
-    MyFile(int fd) { this->fd = fd; }
-};
-
 class Uart
 {
 public:
@@ -129,22 +121,6 @@ private:
 public:
     void init(int fd) { this->fd = fd; }
     void write(const char *s) { ::write(fd, s, ::strlen(s)); }
-};
-
-// moet nog Singleton worden
-class SDCard
-{
-private:
-    alt_up_sd_card_dev *sd_card_dev;
-public:
-    void init(const char *name) { sd_card_dev = ::alt_up_sd_card_open_dev(name); }
-    bool isPresent() { ::alt_up_sd_card_is_Present(); }
-    bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
-    int fopen(char *fn) { ::alt_up_sd_card_fopen(fn, true); }
-    MyFile *openFile(char *fn) { return new MyFile(fopen(fn)); }
-    bool write(int, char);
-    bool fclose(int);
-    short int findNext(char *fn) { ::alt_up_sd_card_find_next(fn); }
 };
 
 class LCD

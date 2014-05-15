@@ -46,13 +46,13 @@ wavplay1.flash: wavplay1.elf
 audiotest1.elf: audiotest1.o misc.o
 eepromtest1.elf: eepromtest1.o misc.o
 jtagtest1.elf: jtagtest1.o
-ofm1.elf: ofm1.o misc.o
-piano1.elf: piano1.o misc.o
-primes1.elf: primes1.o misc.o
+ofm1.elf: ofm1.o misc.o sdcard.o
+piano1.elf: piano1.o misc.o sdcard.o
+primes1.elf: primes1.o misc.o sdcard.o
 #sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
-sdcardtest1.elf: sdcardtest1.o misc.o
-test1.elf: test1.o misc.o
-wavplay1.elf: wavplay1.o misc.o
+sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
+test1.elf: test1.o misc.o sdcard.o
+wavplay1.elf: wavplay1.o misc.o sdcard.o
 
 AUDIO.o: AUDIO.cpp AUDIO.h
 audiotest1.o: audiotest1.cpp
@@ -70,6 +70,7 @@ ofm1.o: ofm1.cpp
 piano1.o: piano1.cpp
 primes1.o: primes1.cpp
 sdaudio2.o: sdaudio2.cpp misc.h LED.h AUDIO.h AUDIO_REG.h
+sdcard.o: sdcard.cpp sdcard.h
 sdcardtest1.o: sdcardtest1.cpp
 #sd_hal.o: sd_hal.cpp
 #sd_lib.o: sd_lib.cpp
@@ -80,8 +81,8 @@ vgatest1.o: vgatest1.cpp
 WaveLib.o: WaveLib.cpp
 wavplay1.o: wavplay1.cpp misc.h
 
-download: piano1.elf
-	nios2-download -g piano1.elf
+download: ofm1.elf
+	nios2-download -g ofm1.elf
 
 clean:
 	rm -Rvf *.o *.elf *.flash *.hex
