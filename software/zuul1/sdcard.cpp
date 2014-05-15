@@ -1509,7 +1509,6 @@ short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
     		}
     		if (file_record_index >= 0)
     		{
-          uart->puts("Komt ie hier?\r\n");
     			/* If file record is found, then look for the specified file. If the create flag is set to true 
     			 * and the file is not found, then it should be created in the current directory. 
     			 */

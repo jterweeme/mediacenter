@@ -147,7 +147,7 @@ public:
     void init(const char *name) { sd_card_dev = ::alt_up_sd_card_open_dev(name); }
     bool isPresent() { ::alt_up_sd_card_is_Present(); }
     bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
-    int fopen(char *fn) { alt_up_sd_card_fopen(fn, true); }
+    int fopen(char *fn) { alt_up_sd_card_fopen(fn, false); }
     MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
     bool write(int, char);
     bool fclose(int);
