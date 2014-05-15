@@ -163,8 +163,11 @@ bool SoundCard::init()
 
 void SoundCard::setOutputVolume(int vol)
 {
-    regWrite(2, vol);
-    regWrite(3, vol);
+    if(vol < 128)
+    {
+        regWrite(2, vol);
+        regWrite(3, vol);
+    }
 }
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
