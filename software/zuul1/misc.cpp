@@ -1,6 +1,7 @@
 #define SYSTEM_BUS_WIDTH 32
 
 #include <stdint.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
@@ -162,8 +163,8 @@ bool SoundCard::init()
 
 void SoundCard::setOutputVolume(int vol)
 {
-    regWrite(2, 0x006a);
-    regWrite(3, 0x006a);
+    regWrite(2, vol);
+    regWrite(3, vol);
 }
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)

@@ -84,7 +84,7 @@ void Piano1::init()
     i2c = new I2C((volatile uint32_t *)SND_I2C_SCL_BASE, (volatile uint32_t *)SND_I2C_SDA_BASE);
     soundCard = new SoundCard(i2c, (volatile uint32_t *)AUDIO_IF_0_BASE);
     soundCard->init();
-    soundCard->setOutputVolume(100);
+    soundCard->setOutputVolume(120);
     ir = InfraRood::getInstance();
     volatile uint32_t *irBase = (volatile uint32_t *)INFRARED_0_BASE;
     ir->init(irBase, INFRARED_0_IRQ, INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID);
