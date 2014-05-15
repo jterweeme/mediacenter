@@ -58,10 +58,12 @@ int waveGetChunkOffset(char *szWave, const int nSize, const unsigned int ChunkID
 bool WAVE_IsWaveFile(char *szWave, const int nSize)
 {
     bool bYes = FALSE;
-    if (nSize >= sizeof(WAVE_HEADER)){
-                WAVE_HEADER *pHeader = (WAVE_HEADER *)szWave;
-                if ((pHeader->ChunkID == TAG_RIFF) && (pHeader->Format == TAG_WAVE)){
-                        int nOffset = waveGetChunkOffset(szWave, nSize, CHUNK_FORMAT);
+    if (nSize >= sizeof(WAVE_HEADER))
+    {
+        WAVE_HEADER *pHeader = (WAVE_HEADER *)szWave;
+        if ((pHeader->ChunkID == TAG_RIFF) && (pHeader->Format == TAG_WAVE))
+        {
+            int nOffset = waveGetChunkOffset(szWave, nSize, CHUNK_FORMAT);
                         if (nOffset){
                                 PCM_FORMAT_CHUNK *pPcmChunk = (PCM_FORMAT_CHUNK *)(szWave+nOffset);
                                 if (pPcmChunk->Size == 16 && pPcmChunk->AudioFormat == 1){ // uncompress PCM
