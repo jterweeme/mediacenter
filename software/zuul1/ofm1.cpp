@@ -51,8 +51,21 @@ void OrthodoxFileManager1::init()
             char fn[13];
             int foo = ::alt_up_sd_card_find_first("/.", fn);
             foo = sdCard->findNext(fn);
-            quadroSegment->setInt(foo);
             uart->puts(fn);
+            int fd = sdCard->fopen("TITEL.WAV");
+            //MyFile *file = sdCard->openFile(fn);
+            uart->puts("Test\r\n");
+
+
+            short int bijt;
+            int i = 0;
+
+/*
+            while (bijt = file->read() >= 0)
+            {
+                i++;
+                quadroSegment->setInt(i);
+            }*/
         }
         else
         {

@@ -49,31 +49,6 @@ typedef struct s_FAT_12_16_boot_sector {
 } t_FAT_12_16_boot_sector;
 
 
-typedef struct s_file_record {
-	unsigned char name[8];
-	unsigned char extension[3];
-	unsigned char attributes;
-	unsigned short int create_time;
-	unsigned short int create_date;
-	unsigned short int last_access_date;
-	unsigned short int last_modified_time;
-	unsigned short int last_modified_date;
-	unsigned short int start_cluster_index;
-	unsigned int file_size_in_bytes;
-	/* The following fields are only used when a file has been created or opened. */
-	unsigned int current_cluster_index;
-    unsigned int current_sector_in_cluster;
-	unsigned int current_byte_position;
-    // Absolute location of the file record on the SD Card.
-    unsigned int file_record_cluster;
-    unsigned int file_record_sector_in_cluster;
-    short int    file_record_offset;
-    // Is this record in use and has the file been modified.
-    unsigned int home_directory_cluster;
-    bool         modified;
-	bool		 in_use;
-} t_file_record;
-
 
 typedef struct s_find_data {
 	unsigned int directory_root_cluster; // 0 means root directory.
@@ -775,9 +750,11 @@ bool get_home_directory_cluster_for_file(char *file_name, int *home_directory_cl
 }
 
 
-bool find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *file_record)
+bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *file_record)
 // Given a cluster and a file name, check if the file already exists. Return the file record if the file is found.
 {
+    Uart *uart = Uart::getInstance();
+    uart->puts("find-file-in-directory\r\n");
     int location = get_dir_divider_location( file_name );
     int last_dir_separator = 0;
     char name[8] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
@@ -1482,7 +1459,7 @@ short int alt_up_sd_card_find_next(char *file_name)
 }
 
 
-short int alt_up_sd_card_fopen(char *name, bool create)
+short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
 /* This function reads the SD card data in an effort to determine if the card is formated as a FAT16
  * volume. Please note that FAT12 has a similar format, but will not be supported by this driver.
  * 
@@ -1494,10 +1471,13 @@ short int alt_up_sd_card_fopen(char *name, bool create)
  *		Return -2 if the specified file has already been opened previously.
  */
 {
+    Uart *uart = Uart::getInstance();
+    uart->puts("alt_up_sdcard_fopen\r\n");
 	short int file_record_index = -1;
 
 	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
 	{
+
         unsigned int home_directory_cluster = 0;
         t_file_record home_dir;
         
@@ -1517,7 +1497,7 @@ short int alt_up_sd_card_fopen(char *name, bool create)
             {
                 return file_record_index;
             }
-            
+ 
     		/* Find a free file slot to store file specs in. */
     		for (index = 0; index < MAX_FILES_OPENED; index++)
     		{
@@ -1529,12 +1509,15 @@ short int alt_up_sd_card_fopen(char *name, bool create)
     		}
     		if (file_record_index >= 0)
     		{
+          uart->puts("Komt ie hier?\r\n");
     			/* If file record is found, then look for the specified file. If the create flag is set to true 
     			 * and the file is not found, then it should be created in the current directory. 
     			 */
-                
-                if (find_file_in_directory(home_directory_cluster, name, &(active_files[file_record_index])))
+
+                if (this->find_file_in_directory(home_directory_cluster, name, &(active_files[file_record_index])))
                 {
+
+
                     if (create)
                     {
                         /* Do not allow overwriting existing files for now. */
@@ -1557,6 +1540,7 @@ short int alt_up_sd_card_fopen(char *name, bool create)
 							{
 								// file already in use.
 								file_record_index = -2;
+
 								break;
 							}
 						}
@@ -1830,4 +1814,11 @@ bool SDCard::alt_up_sd_card_fclose(short int file_handle)
     
     return result;
 }
+
+short int MyFile::read()
+{
+    sd->readFile(fd);
+}
+
+
 

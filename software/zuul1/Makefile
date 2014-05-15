@@ -6,7 +6,7 @@ INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
 LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 %.o:
-	nios2-elf-g++ $(INCLUDES) -O2 -g -c -o $@ $<
+	nios2-elf-g++ $(INCLUDES) -O9 -c -o $@ $<
 
 %.elf:
 	nios2-elf-g++ $(LDFLAGS) -o $@ $^

@@ -4,11 +4,7 @@
 #include <stddef.h>
 #include <alt_types.h>
 #include <sys/alt_dev.h>
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
+#include "misc.h"
 
 #define CHAR_TO_UPPER(ch)   ((char) (((ch >= 'a') && (ch <= 'z')) ? ((ch-'a')+'A'): ch))
 
@@ -31,10 +27,36 @@ typedef struct alt_up_sd_card_dev
 }
 alt_up_sd_card_dev;
 
+typedef struct s_file_record {
+    unsigned char name[8];
+    unsigned char extension[3];
+    unsigned char attributes;
+    unsigned short int create_time;
+    unsigned short int create_date;
+    unsigned short int last_access_date;
+    unsigned short int last_modified_time;
+    unsigned short int last_modified_date;
+    unsigned short int start_cluster_index;
+    unsigned int file_size_in_bytes;
+    /* The following fields are only used when a file has been created or opened. */
+    unsigned int current_cluster_index;
+    unsigned int current_sector_in_cluster;
+    unsigned int current_byte_position;
+    // Absolute location of the file record on the SD Card.
+    unsigned int file_record_cluster;
+    unsigned int file_record_sector_in_cluster;
+    short int    file_record_offset;
+    // Is this record in use and has the file been modified.
+    unsigned int home_directory_cluster;
+    bool         modified;
+    bool         in_use;
+} t_file_record;
+
+
 alt_up_sd_card_dev* alt_up_sd_card_open_dev(const char *name);
 bool alt_up_sd_card_is_Present(void);
 bool alt_up_sd_card_is_FAT16(void);
-short int alt_up_sd_card_fopen(char *name, bool create);
+
 short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
 short int alt_up_sd_card_find_next(char *file_name);
 /* This function searches for the next file in a given directory, as specified by the find_first function.
@@ -100,16 +122,16 @@ bool alt_up_sd_card_write(short int file_handle, char byte_of_data);
 
 
 
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+class SDCard;
 
 class MyFile
 {
 private:
     int fd;
+    SDCard *sd;
 public:
-    MyFile(int fd) { this->fd = fd; }
+    MyFile(int fd, SDCard *sd) { this->fd = fd; this->sd = sd; }
+    short int read();
 };
 
 
@@ -119,14 +141,17 @@ class SDCard
 private:
     alt_up_sd_card_dev *sd_card_dev;
     bool alt_up_sd_card_fclose(short int file_handle);
+    short int alt_up_sd_card_fopen(char *name, bool create);
+    bool find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *file_record);
 public:
     void init(const char *name) { sd_card_dev = ::alt_up_sd_card_open_dev(name); }
     bool isPresent() { ::alt_up_sd_card_is_Present(); }
     bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
-    int fopen(char *fn) { ::alt_up_sd_card_fopen(fn, true); }
-    MyFile *openFile(char *fn) { return new MyFile(fopen(fn)); }
+    int fopen(char *fn) { alt_up_sd_card_fopen(fn, true); }
+    MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
     bool write(int, char);
     bool fclose(int);
+    short int readFile(int fd) { ::alt_up_sd_card_read(fd); }
     short int findNext(char *fn) { ::alt_up_sd_card_find_next(fn); }
 };
 

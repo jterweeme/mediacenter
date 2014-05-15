@@ -227,11 +227,43 @@
          type = "int";
       }
    }
-   element timer_0.s1
+   element uart.s1
    {
       datum baseAddress
       {
-         value = "134231040";
+         value = "134231104";
+         type = "String";
+      }
+   }
+   element ledg.s1
+   {
+      datum baseAddress
+      {
+         value = "134231168";
+         type = "String";
+      }
+   }
+   element duosegmentrechts.s1
+   {
+      datum baseAddress
+      {
+         value = "134231296";
+         type = "String";
+      }
+   }
+   element sw.s1
+   {
+      datum baseAddress
+      {
+         value = "134231184";
+         type = "String";
+      }
+   }
+   element ledr.s1
+   {
+      datum baseAddress
+      {
+         value = "134231152";
          type = "String";
       }
    }
@@ -251,11 +283,11 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s1
+   element timer_0.s1
    {
       datum baseAddress
       {
-         value = "134231296";
+         value = "134231040";
          type = "String";
       }
    }
@@ -267,67 +299,11 @@
          type = "String";
       }
    }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "134231104";
-         type = "String";
-      }
-   }
-   element quadrosegment.s1
-   {
-      datum baseAddress
-      {
-         value = "134231280";
-         type = "String";
-      }
-   }
-   element ledg.s1
-   {
-      datum baseAddress
-      {
-         value = "134231168";
-         type = "String";
-      }
-   }
-   element snd_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "134231232";
-         type = "String";
-      }
-   }
    element key.s1
    {
       datum baseAddress
       {
          value = "134231200";
-         type = "String";
-      }
-   }
-   element sw.s1
-   {
-      datum baseAddress
-      {
-         value = "134231184";
-         type = "String";
-      }
-   }
-   element duosegmentlinks.s1
-   {
-      datum baseAddress
-      {
-         value = "134231312";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "134231152";
          type = "String";
       }
    }
@@ -341,6 +317,30 @@
       datum baseAddress
       {
          value = "0";
+         type = "String";
+      }
+   }
+   element quadrosegment.s1
+   {
+      datum baseAddress
+      {
+         value = "134231280";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "134231232";
+         type = "String";
+      }
+   }
+   element duosegmentlinks.s1
+   {
+      datum baseAddress
+      {
+         value = "134231312";
          type = "String";
       }
    }
@@ -436,7 +436,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1400172649712" />
+ <parameter name="timeStamp" value="1400188053781" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -616,7 +616,7 @@
   <parameter name="mmu_tlbPtrSz" value="7" />
   <parameter name="mmu_tlbNumWays" value="16" />
   <parameter name="mmu_processIDNumBits" value="8" />
-  <parameter name="impl" value="Tiny" />
+  <parameter name="impl" value="Small" />
   <parameter name="icache_size" value="4096" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
   <parameter name="icache_ramBlockType" value="Automatic" />
