@@ -19,7 +19,7 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 .PHONY: all
 
-all: jtagtest1.hex ofm1.hex piano1.hex primes1.hex sdcardtest1.hex test1.hex wavplay1.hex
+all: jtagtest1.hex ofm1.hex piano1.hex primes1.hex sdcardtest1.hex test1.hex wavplay1.hex mytest1.elf
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
@@ -46,6 +46,7 @@ wavplay1.flash: wavplay1.elf
 audiotest1.elf: audiotest1.o misc.o
 eepromtest1.elf: eepromtest1.o misc.o
 jtagtest1.elf: jtagtest1.o
+mytest1.elf: mytest1.o misc.o
 ofm1.elf: ofm1.o misc.o sdcard.o
 piano1.elf: piano1.o misc.o sdcard.o
 primes1.elf: primes1.o misc.o sdcard.o
@@ -66,6 +67,7 @@ jtagtest1.o: jtagtest1.cpp
 LCD.o: LCD.cpp LCD.h
 LED.o: LED.cpp
 misc.o: misc.cpp misc.h
+mytest1.o: mytest1.cpp misc.h
 ofm1.o: ofm1.cpp
 piano1.o: piano1.cpp
 primes1.o: primes1.cpp
@@ -81,8 +83,8 @@ vgatest1.o: vgatest1.cpp
 WaveLib.o: WaveLib.cpp
 wavplay1.o: wavplay1.cpp misc.h
 
-download: ofm1.elf
-	nios2-download -g ofm1.elf
+download: mytest1.elf
+	nios2-download -g $<
 
 clean:
 	rm -Rvf *.o *.elf *.flash *.hex

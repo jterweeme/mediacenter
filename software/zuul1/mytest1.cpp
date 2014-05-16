@@ -2,7 +2,8 @@
 #include <system.h>
 #include <stdbool.h>
 #include <sys/alt_irq.h>
- 
+#include "misc.h"
+
 class MyTimerTest
 {
 public:
@@ -13,6 +14,9 @@ public:
 
 void MyTimerTest::init()
 {
+    Uart *uart = Uart::getInstance();
+    uart->init((volatile uint32_t *)UART_BASE);
+    uart->puts("init\r\n");
     ::alt_ic_isr_register(MYTIMER1_0_IRQ_INTERRUPT_CONTROLLER_ID, MYTIMER1_0_IRQ, isr, 0, 0);
 }
 
@@ -27,15 +31,13 @@ int MyTimerTest::run()
 
 void MyTimerTest::isr(void *context)
 {
-    ::printf("Interrupt\r\n");
+    Uart::getInstance()->puts("Interrupt\r\n");
 }
 
 int main()
 {
     MyTimerTest mtt;
-    
+    mtt.init();
     return mtt.run();
 }
-
-
 

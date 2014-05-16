@@ -12,7 +12,6 @@ set_module_property EDITABLE true
 set_module_property ANALYZE_HDL TRUE
 
 add_file main.v {SYNTHESIS SIMULATION}
-add_file infrared.v {SYNTHESIS SIMULATION}
 
 add_interface avalon_slave avalon end
 set_interface_property avalon_slave addressAlignment NATIVE
