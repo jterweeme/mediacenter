@@ -11,7 +11,7 @@ set_module_property INSTANTIATE_IN_SYSTEM_MODULE true
 set_module_property EDITABLE true
 set_module_property ANALYZE_HDL TRUE
 
-add_file main.v {SYNTHESIS SIMULATION}
+add_file main.vhd {SYNTHESIS SIMULATION}
 
 add_interface avalon_slave avalon end
 set_interface_property avalon_slave addressAlignment NATIVE

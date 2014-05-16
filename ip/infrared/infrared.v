@@ -28,9 +28,9 @@ reg [31:0] oDATA;
 
 initial
     begin
-        state =  IDLE;     //state initial
-        DATA_REAY = 1'b0;  //set the dataready flag to 0
-        bitcount = 0;      //set the data reg pointer to 0
+        state =  IDLE;
+        DATA_REAY = 1'b0;
+        bitcount = 0;
         DATA = 0;          //clear the data reg
         DATA_BUF = 0;      //clear the data buf
         state_count = 0;   //guide high level time counter 0
@@ -40,11 +40,10 @@ initial
 
 assign oDATA_REAY = DATA_REAY;
 
-always @(negedge iRST_n or  posedge iCLK )
-   begin
-      if(!iRST_n)
-         idle_count <= 0;   //rst
-      else
+always @(negedge iRST_n or  posedge iCLK ) begin
+    if(!iRST_n)
+        idle_count <= 0;
+    else
          begin
             if( idle_count_flag )    //the counter start when the  flag is set 1
                 idle_count <= idle_count + 1'b1;
@@ -53,13 +52,10 @@ always @(negedge iRST_n or  posedge iCLK )
          end
    end
 
-always @( negedge iRST_n  or  posedge iCLK)
-   begin
-      if( !iRST_n )
-         idle_count_flag <= 1'b0;   // reset off
-       else
-
-         begin
+always @( negedge iRST_n  or  posedge iCLK) begin
+    if( !iRST_n )
+            idle_count_flag <= 1'b0;
+    else begin
                if((state == IDLE) &&(!iIRDA))       // negedge start
                     idle_count_flag <= 1'b1;        //on
                 else                                //negedge
@@ -82,12 +78,11 @@ end
 always @( negedge iRST_n or posedge iCLK) begin
     if (!iRST_n)
         state_count_flag <= 1'b0;
-    else
-            begin
-                if((state == GUIDANCE) &&(iIRDA))
-                    state_count_flag <= 1'b1;
-                else
-                    state_count_flag <= 1'b0;
+    else begin
+        if((state == GUIDANCE) &&(iIRDA))
+            state_count_flag <= 1'b1;
+        else
+            state_count_flag <= 1'b0;
     end
 end
 

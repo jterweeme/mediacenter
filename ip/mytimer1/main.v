@@ -1,3 +1,7 @@
+/*
+Jasper ter Weeme
+*/
+
 module mytimer1(
     clk,
     reset_n,
@@ -18,33 +22,23 @@ output  [31:0]  s_readdata;
 input           s_write;
 input   [31:0]  s_writedata;
 
-wire data_ready;
-reg pre_data_ready;
-reg [24:0] cnt;
+reg [26:0] cnt;
 
 always @ (posedge clk or negedge reset_n)
 begin
-    if (~reset_n)
-        pre_data_ready <= 1'b0;
-    else
-        pre_data_ready <= data_ready;
-end
-
-always @ (posedge clk) begin
-    cnt <= cnt + 1;
-end
-
-always @ (posedge clk or negedge reset_n)
-begin
-    if (~reset_n)
+    if (~reset_n) begin
+        cnt <= 26'b0;
         irq <= 1'b0;
-    //else if (~pre_data_ready & data_ready)
-    else if (cnt == 24'b1)
-        irq <= 1'b1;
-    else if (~s_cs_n & s_write)
-        irq <= 1'b0;
+    end else begin
+        cnt <= cnt + 1;
+        
+        if (cnt == 26'b1)
+            irq <= 1'b1;
+        else if (~s_cs_n & s_write)
+            irq <= 1'b0;
+    
+    end    
 end
-
 
 endmodule
 
