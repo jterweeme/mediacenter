@@ -20,6 +20,8 @@ input   [31:0]  s_writedata;
 
 wire data_ready;
 reg pre_data_ready;
+reg [24:0] cnt;
+
 always @ (posedge clk or negedge reset_n)
 begin
     if (~reset_n)
@@ -28,11 +30,16 @@ begin
         pre_data_ready <= data_ready;
 end
 
+always @ (posedge clk) begin
+    cnt <= cnt + 1;
+end
+
 always @ (posedge clk or negedge reset_n)
 begin
     if (~reset_n)
         irq <= 1'b0;
-    else if (~pre_data_ready & data_ready)
+    //else if (~pre_data_ready & data_ready)
+    else if (cnt == 24'b1)
         irq <= 1'b1;
     else if (~s_cs_n & s_write)
         irq <= 1'b0;

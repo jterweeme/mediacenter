@@ -1,7 +1,10 @@
+#define SYSTEM_BUS_WIDTH 32
+
 #include <stdio.h>
 #include <system.h>
 #include <stdbool.h>
 #include <sys/alt_irq.h>
+#include <io.h>
 #include "misc.h"
 
 class MyTimerTest
@@ -32,6 +35,7 @@ int MyTimerTest::run()
 void MyTimerTest::isr(void *context)
 {
     Uart::getInstance()->puts("Interrupt\r\n");
+    IOWR(MYTIMER1_0_BASE, 0, 0);
 }
 
 int main()
