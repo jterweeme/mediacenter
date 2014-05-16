@@ -6,7 +6,8 @@ use ieee.numeric_std.all;
 
 entity toetsenbord1 is
     port (clk, rst, kd, kc: in std_logic;
-        s_readdata: out std_logic_vector(7 downto 0));
+        s_readdata: out std_logic_vector(7 downto 0);
+        irq: out std_logic);
 end toetsenbord1;
 
 architecture behavior of toetsenbord1 is

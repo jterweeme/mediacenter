@@ -124,3 +124,11 @@ set_interface_property conduit_end SVD_ADDRESS_GROUP ""
 add_interface_port conduit_end kd export Input 1
 add_interface_port conduit_end kc export Input 1
 
+add_interface interrupt_sender interrupt end
+set_interface_property interrupt_sender associatedAddressablePoint avalon_slave_0
+
+set_interface_property interrupt_sender associatedClock clock
+set_interface_property interrupt_sender ENABLED true
+
+add_interface_port interrupt_sender irq irq Output 1
+
