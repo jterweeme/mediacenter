@@ -44,33 +44,6 @@ void OrthodoxFileManager1::init()
     box = new Box(vga);
     vga->clear();
     
-    if (sdCard->isPresent())
-    {
-        if (sdCard->isFAT16())
-        {
-            char fn[13];
-            int foo = ::alt_up_sd_card_find_first("/.", fn);
-            foo = sdCard->findNext(fn);
-            uart->puts(fn);
-            //MyFile *file = sdCard->openFile(fn);
-            int fd = sdCard->fopen(fn);
-            quadroSegment->setHex(fd);
-            int bar = ::alt_up_sd_card_read(fd);
-            quadroSegment->setHex(bar);
-            uart->puts("Test\r\n");
-
-
-            short int bijt;
-            //bijt = file->read();
-
-            uart->puts("Onzin\r\n");
-
-        }
-        else
-        {
-            uart->puts("Geen FAT16\r\n");
-        }
-    }
 }
 
 void Box::draw()
@@ -83,6 +56,42 @@ void Box::draw()
 int OrthodoxFileManager1::run()
 {
     box->draw();
+
+    if (sdCard->isPresent())
+    {
+        if (sdCard->isFAT16())
+        {
+            char fn[13];
+            int foo = sdCard->alt_up_sd_card_find_first("/.", fn);
+
+            
+            while ((foo = sdCard->findNext(fn)) >= 0)
+            {
+                uart->puts(fn);
+                uart->puts("\r\n");
+            }
+/*
+            //MyFile *file = sdCard->openFile(fn);
+            int fd = sdCard->fopen(fn);
+            quadroSegment->setHex(fd);
+            int bar = ::alt_up_sd_card_read(fd);
+            quadroSegment->setHex(bar);
+            uart->puts("Test\r\n");
+
+
+            short int bijt;
+            //bijt = file->read();
+
+            uart->puts("Onzin\r\n");
+*/
+
+        }
+        else
+        {
+            uart->puts("Geen FAT16\r\n");
+        }
+    }
+
     return 0;
 }
 

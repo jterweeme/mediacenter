@@ -10,58 +10,7 @@
 
 #define CMD_READ_BLOCK					17
 #define CMD_WRITE_BLOCK					24
-
-// FAT 12/16 related stuff
-//#define BOOT_SECTOR_DATA_SIZE			0x005A
 #define MAX_FILES_OPENED				20
-
-/******************************************************************************/
-/******  LOCAL DATA STRUCTURES  ***********************************************/
-/******************************************************************************/
-
-
-typedef struct s_FAT_12_16_boot_sector {
-	unsigned char jump_instruction[3];
-	char OEM_name[8];
-	unsigned short int sector_size_in_bytes;
-	unsigned char sectors_per_cluster;
-	unsigned short int reserved_sectors;
-	unsigned char number_of_FATs;
-	unsigned short int max_number_of_dir_entires;
-	unsigned short int number_of_sectors_in_partition;
-	unsigned char media_descriptor;
-	unsigned short int number_of_sectors_per_table;
-	unsigned short int number_of_sectors_per_track;
-	unsigned short int number_of_heads;
-	unsigned int number_of_hidden_sectors;
-	unsigned int total_sector_count_if_above_32MB;
-	unsigned char drive_number;
-	unsigned char current_head;
-	unsigned char boot_signature;
-	unsigned char volume_id[4];
-	char volume_label[11];
-	unsigned char file_system_type[8];
-	unsigned char bits_for_cluster_index;
-	unsigned int first_fat_sector_offset;
-	unsigned int second_fat_sector_offset;
-	unsigned int root_directory_sector_offset; 
-	unsigned int data_sector_offset; 
-} t_FAT_12_16_boot_sector;
-
-
-
-typedef struct s_find_data {
-	unsigned int directory_root_cluster; // 0 means root directory.
-	unsigned int current_cluster_index;
-	unsigned int current_sector_in_cluster;
-	short int file_index_in_sector;
-	bool valid;
-} t_find_data;
-
-
-///////////////////////////////////////////////////////////////////////////
-// Local Variables
-///////////////////////////////////////////////////////////////////////////
 
 
 bool		initialized = false;
@@ -92,8 +41,7 @@ t_find_data search_data;
 ///////////////////////////////////////////////////////////////////////////
 
         
-bool Write_Sector_Data(int sector_index, int partition_offset)
-// This function writes a sector at the specified address on the SD Card.
+bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
 {
     bool result = false;
     
@@ -120,7 +68,7 @@ bool Write_Sector_Data(int sector_index, int partition_offset)
 }
 
 
-bool Save_Modified_Sector()
+bool SDCard::Save_Modified_Sector()
 // If the sector has been modified, then save it to the SD Card.
 {
     bool result = true;
@@ -132,7 +80,7 @@ bool Save_Modified_Sector()
 }
 
 
-bool Read_Sector_Data(int sector_index, int partition_offset)
+bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 // This function reads a sector at the specified address on the SD Card.
 {
 	bool result = false;
@@ -168,8 +116,7 @@ bool Read_Sector_Data(int sector_index, int partition_offset)
 }
 
 
-bool get_cluster_flag(unsigned int cluster_index, unsigned short int *flag)
-// Read a cluster flag.
+bool SDCard::get_cluster_flag(unsigned int cluster_index, unsigned short int *flag)
 {
     unsigned int sector_index = (cluster_index / 256) + fat_partition_offset_in_512_byte_sectors;
     
@@ -187,8 +134,7 @@ bool get_cluster_flag(unsigned int cluster_index, unsigned short int *flag)
 }
 
 
-bool mark_cluster(unsigned int cluster_index, short int flag, bool first_fat)
-// Place a marker on the specified cluster in a given FAT.
+bool SDCard::mark_cluster(unsigned int cluster_index, short int flag, bool first_fat)
 {
     unsigned int sector_index = (cluster_index / 256) +  fat_partition_offset_in_512_byte_sectors;
     
@@ -214,7 +160,7 @@ bool mark_cluster(unsigned int cluster_index, short int flag, bool first_fat)
 }
 
 
-bool Check_for_Master_Boot_Record(void)
+bool SDCard::Check_for_Master_Boot_Record(void)
 // This function reads the first 512 bytes on the SD Card. This data should
 // contain the Master Boot Record. If it does, then print
 // relevant information and return true. Otherwise, return false. 
@@ -264,8 +210,8 @@ bool Check_for_Master_Boot_Record(void)
 }
 
 
-bool Read_File_Record_At_Offset(int offset, t_file_record *record, unsigned int cluster_index, unsigned int sector_in_cluster)
-// This function reads a file record
+bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
+        unsigned int cluster_index, unsigned int sector_in_cluster)
 {
 	bool result = false;
 	if (((offset & 0x01f) == 0) && (alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
@@ -299,7 +245,7 @@ bool Read_File_Record_At_Offset(int offset, t_file_record *record, unsigned int 
 }
 
 
-bool Write_File_Record_At_Offset(int offset, t_file_record *record)
+bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
 // This function writes a file record at a given offset. The offset is given in bytes.
 {
     bool result = false;
@@ -335,12 +281,7 @@ bool Write_File_Record_At_Offset(int offset, t_file_record *record)
 }
 
 
-bool Check_for_DOS_FAT(int FAT_partition_start_sector)
-// This function reads the boot sector for the FAT file system on the SD Card.
-// The offset_address should point to the sector on the card where the boot sector is located.
-// The sector number is specified either in the master Boot Record, or is 0 by default for a purely FAT
-// based file system. If the specified sector contains a FAT boot sector, then this function prints the
-// relevant information and returns 1. Otherwise, it returns 0. 
+bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
 {
 	bool result = false;
 	int counter = 0;
@@ -427,8 +368,7 @@ bool Check_for_DOS_FAT(int FAT_partition_start_sector)
 }
 
 
-bool Look_for_FAT16(void)
-// Read the SD card to determine if it contains a FAT16 partition.
+bool SDCard::Look_for_FAT16()
 {
 	bool result = false;
 
@@ -472,8 +412,7 @@ bool Look_for_FAT16(void)
 }
  
 
-void filename_to_upper_case(char *file_name)
-// Change file name to upper case.
+void SDCard::filename_to_upper_case(char *file_name)
 {
     int index;
     int length = strlen(file_name);
@@ -488,7 +427,7 @@ void filename_to_upper_case(char *file_name)
 }
 
 
-bool check_file_name_for_FAT16_compliance(char *file_name)
+bool SDCard::check_file_name_for_FAT16_compliance(char *file_name)
 // Check if the file complies with FAT16 naming convention.
 {
     int length = strlen(file_name);
@@ -527,7 +466,7 @@ bool check_file_name_for_FAT16_compliance(char *file_name)
 }
 
 
-int get_dir_divider_location(char *name)
+int SDCard::get_dir_divider_location(char *name)
 // Find a directory divider location.
 {
     int index = 0;
@@ -550,7 +489,7 @@ int get_dir_divider_location(char *name)
 }
 
 
-bool match_file_record_to_name_ext(t_file_record *file_record, char *name, char *extension)
+bool SDCard::match_file_record_to_name_ext(t_file_record *file_record, char *name, char *extension)
 /* See if the given name and extension match the file record. Return true if this is so, false otherwise. */
 {
     bool match = true;
@@ -576,8 +515,8 @@ bool match_file_record_to_name_ext(t_file_record *file_record, char *name, char 
 }
 
 
-bool get_home_directory_cluster_for_file(char *file_name, int *home_directory_cluster, t_file_record *file_record)
-// Scan the directories in given in the file name and find the root directory for the file.
+bool SDCard::get_home_directory_cluster_for_file(char *file_name,
+        int *home_directory_cluster, t_file_record *file_record)
 {
     bool result = false;
     int home_dir_cluster = 0;
@@ -894,8 +833,7 @@ bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name
 }
 
 
-bool find_first_empty_cluster(unsigned int *cluster_number)
-// Find the first empty cluster. It will be marked by a 0 entry in the File Allocation Table.
+bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 {
     unsigned int sector = boot_sector_data.first_fat_sector_offset;
     unsigned int cluster_index = 2;
@@ -947,7 +885,7 @@ bool find_first_empty_cluster(unsigned int *cluster_number)
 }
 
 
-int find_first_empty_record_in_a_subdirectory(int start_cluster_index)
+int SDCard::find_first_empty_record_in_a_subdirectory(int start_cluster_index)
 // Search for a free spot in a subdirectory. Return an encoded location for the file record.
 {
     int result = -1;
@@ -1018,8 +956,7 @@ int find_first_empty_record_in_a_subdirectory(int start_cluster_index)
 }
 
 
-int find_first_empty_record_in_root_directory()
-// Find a first unused record location to use. Return -1 if none is found.
+int SDCard::find_first_empty_record_in_root_directory()
 {
     int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) / boot_sector_data.sector_size_in_bytes);
     int sector_index;
@@ -1053,8 +990,7 @@ int find_first_empty_record_in_root_directory()
     return result;
 }
 
-void convert_filename_to_name_extension(char *filename, char *name, char *extension)
-// This function converts the file name into a name . extension format.
+void SDCard::convert_filename_to_name_extension(char *filename, char *name, char *extension)
 {
     int counter;
     int local = 0;
@@ -1087,8 +1023,7 @@ void convert_filename_to_name_extension(char *filename, char *name, char *extens
 
 }
 
-bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir)
-// Create a file in a given directory. Expand the directory if needed.
+bool SDCard::create_file(char *name, t_file_record *file_record, t_file_record *home_dir)
 {
     unsigned int cluster_number;
     bool result = false;
@@ -1165,7 +1100,7 @@ bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir
 }
 
 
-void copy_file_record_name_to_string(t_file_record *file_record, char *file_name)
+void SDCard::copy_file_record_name_to_string(t_file_record *file_record, char *file_name)
 /* Copy a file name from the file record to a given string */
 {
 	int index;
@@ -1201,12 +1136,8 @@ void copy_file_record_name_to_string(t_file_record *file_record, char *file_name
 ///////////////////////////////////////////////////////////////////////////
 
 
-alt_up_sd_card_dev* alt_up_sd_card_open_dev(const char* name)
+alt_up_sd_card_dev* SDCard::alt_up_sd_card_open_dev(const char* name)
 {
-	// find the device from the device list 
-	// (see altera_hal/HAL/inc/priv/alt_file.h 
-	// and altera_hal/HAL/src/alt_find_dev.c 
-	// for details)
 	alt_up_sd_card_dev *dev = (alt_up_sd_card_dev *) alt_find_dev(name, &alt_dev_list);
 
 	if (dev != NULL)
@@ -1226,8 +1157,7 @@ alt_up_sd_card_dev* alt_up_sd_card_open_dev(const char* name)
 }
 
 
-bool alt_up_sd_card_is_Present(void)
-// Check if there is an SD Card insterted into the SD Card socket.
+bool SDCard::alt_up_sd_card_is_Present()
 {
     bool result = false;
 
@@ -1253,21 +1183,14 @@ bool alt_up_sd_card_is_Present(void)
 }
 
 
-bool alt_up_sd_card_is_FAT16(void)
-/* This function reads the SD card data in an effort to determine if the card is formated as a FAT16
- * volume. Please note that FAT12 has a similar format, but will not be supported by this driver.
- * If the card contains a FAT16 volume, the local data structures will be initialized to allow reading and writing
- * to the SD card as though it was a hard drive.
- */
+bool SDCard::alt_up_sd_card_is_FAT16(void)
 {
 	bool result = false;
 
 	if (alt_up_sd_card_is_Present())
 	{
-		// Check if an SD Card is in the SD Card slot.
 		if (initialized == false)
 		{
-			// Now determine if the card is formatted as FAT 16.
 			is_sd_card_formated_as_FAT16 = Look_for_FAT16();
 			initialized = is_sd_card_formated_as_FAT16;
 			search_data.valid = false;
@@ -1276,7 +1199,6 @@ bool alt_up_sd_card_is_FAT16(void)
 	}
 	else
 	{
-		// If not then you may as well not open the device.
 		initialized = false;
 		is_sd_card_formated_as_FAT16 = false;
 	}
@@ -1285,29 +1207,7 @@ bool alt_up_sd_card_is_FAT16(void)
 }
 
 
-short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name)
-/* This function sets up a search algorithm to go through a given directory looking for files.
- * If the search directory is valid, then the function searches for the first file it finds.
- * Inputs:
- *		directory_to_search_through - name of the directory to search through
- *		file_name - an array to store a name of the file found. Must be 13 bytes long (12 bytes for file name and 1 byte of NULL termination).
- * Outputs:
- *		0 - success
- *		1 - invalid directory
- *		2 - No card or incorrect card format.
- *
- * To specify a directory give the name in a format consistent with the following regular expression:
- * [{[valid_chars]+}/]*.
- * 
- * In other words, give a path name starting at the root directory, where each directory name is followed by a '/'.
- * Then, append a '.' to the directory name. Examples:
- * "." - look through the root directory
- * "first/." - look through a directory named "first" that is located in the root directory.
- * "first/sub/." - look through a directory named "sub", that is located within the subdirectory named "first". "first" is located in the root directory.
- * Invalid examples include:
- * "/.", "/////." - this is not the root directory.
- * "/first/." - the first character may not be a '/'.
- */
+short int SDCard::alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name)
 {
 	short int result = 2;
 	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
@@ -1333,16 +1233,7 @@ short int alt_up_sd_card_find_first(char *directory_to_search_through, char *fil
 }
 
 
-short int alt_up_sd_card_find_next(char *file_name)
-/* This function searches for the next file in a given directory, as specified by the find_first function.
- * Inputs:
- *		file_name - an array to store a name of the file found. Must be 13 bytes long (12 bytes for file name and 1 byte of NULL termination).
- * Outputs:
- *		-1 - end of directory.
- *		0 - success
- *		2 - No card or incorrect card format.
- *		3 - find_first has not been called successfully.
- */
+short int SDCard::alt_up_sd_card_find_next(char *file_name)
 {
 	short int result = 2;
 	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
@@ -1354,8 +1245,9 @@ short int alt_up_sd_card_find_next(char *file_name)
 
 			if (cluster == 0)
 			{
-				// Searching through the root directory
-				int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) / boot_sector_data.sector_size_in_bytes);
+				int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+                        boot_sector_data.sector_size_in_bytes);
+
 				int sector_index = search_data.current_sector_in_cluster;
 				int file_counter = search_data.file_index_in_sector+1;
     
@@ -1573,9 +1465,7 @@ short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
 }
 
 
-void alt_up_sd_card_set_attributes(short int file_handle, short int attributes)
-/* Return file attributes, or -1 if the file_handle is invalid.
- */
+void SDCard::alt_up_sd_card_set_attributes(short int file_handle, short int attributes)
 {
     if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
     {
@@ -1587,9 +1477,7 @@ void alt_up_sd_card_set_attributes(short int file_handle, short int attributes)
 }
 
 
-short int alt_up_sd_card_get_attributes(short int file_handle)
-/* Return file attributes, or -1 if the file_handle is invalid.
- */
+short int SDCard::alt_up_sd_card_get_attributes(short int file_handle)
 {
 	short int result = -1;
     if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
@@ -1602,7 +1490,7 @@ short int alt_up_sd_card_get_attributes(short int file_handle)
 	return result;
 }
 
-short int alt_up_sd_card_read(short int file_handle)
+short int SDCard::alt_up_sd_card_read(short int file_handle)
 /* Read a single character from a given file. Return -1 if at the end of a file. Any other negative number
  * means that the file could not be read. A number between 0 and 255 is an ASCII character read from the SD Card. */
 {
@@ -1669,7 +1557,7 @@ short int alt_up_sd_card_read(short int file_handle)
 }
 
 
-bool alt_up_sd_card_write(short int file_handle, char byte_of_data)
+bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 /* Write a single character to a given file. Return true if successful, and false otherwise. */
 {
     bool result = false;
@@ -1818,6 +1706,17 @@ short int MyFile::read()
 {
     sd->readFile(fd);
 }
+
+bool SDCard::write(int sd_fileh, char c)
+{
+    return this->alt_up_sd_card_write(sd_fileh, c);
+}
+
+bool SDCard::fclose(int sd_fileh)
+{
+    return alt_up_sd_card_fclose(sd_fileh);
+}
+
 
 
 

@@ -19,7 +19,6 @@
 #define SD_CARD_AUX_STATUS(base)        (base + 0x0234)
 #define SD_CARD_R1_RESPONSE(base)       (base + 0x0238)
 
-
 typedef struct alt_up_sd_card_dev
 {
 	alt_dev dev;
@@ -38,66 +37,56 @@ typedef struct s_file_record {
     unsigned short int last_modified_date;
     unsigned short int start_cluster_index;
     unsigned int file_size_in_bytes;
-    /* The following fields are only used when a file has been created or opened. */
     unsigned int current_cluster_index;
     unsigned int current_sector_in_cluster;
     unsigned int current_byte_position;
-    // Absolute location of the file record on the SD Card.
     unsigned int file_record_cluster;
     unsigned int file_record_sector_in_cluster;
     short int    file_record_offset;
-    // Is this record in use and has the file been modified.
     unsigned int home_directory_cluster;
     bool         modified;
     bool         in_use;
 } t_file_record;
 
+typedef struct s_FAT_12_16_boot_sector {
+    unsigned char jump_instruction[3];
+    char OEM_name[8];
+    unsigned short int sector_size_in_bytes;
+    unsigned char sectors_per_cluster;
+    unsigned short int reserved_sectors;
+    unsigned char number_of_FATs;
+    unsigned short int max_number_of_dir_entires;
+    unsigned short int number_of_sectors_in_partition;
+    unsigned char media_descriptor;
+    unsigned short int number_of_sectors_per_table;
+    unsigned short int number_of_sectors_per_track;
+    unsigned short int number_of_heads;
+    unsigned int number_of_hidden_sectors;
+    unsigned int total_sector_count_if_above_32MB;
+    unsigned char drive_number;
+    unsigned char current_head;
+    unsigned char boot_signature;
+    unsigned char volume_id[4];
+    char volume_label[11];
+    unsigned char file_system_type[8];
+    unsigned char bits_for_cluster_index;
+    unsigned int first_fat_sector_offset;
+    unsigned int second_fat_sector_offset;
+    unsigned int root_directory_sector_offset;
+    unsigned int data_sector_offset;
+} t_FAT_12_16_boot_sector;
 
-alt_up_sd_card_dev* alt_up_sd_card_open_dev(const char *name);
-bool alt_up_sd_card_is_Present(void);
-bool alt_up_sd_card_is_FAT16(void);
-
-short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
-short int alt_up_sd_card_find_next(char *file_name);
-/* This function searches for the next file in a given directory, as specified by the find_first function.
- * Inputs:
- *		file_name - an array to store a name of the file found. Must be 13 bytes long (12 bytes for file name and 1 byte of NULL termination).
- * Outputs:
- *		-1 - end of directory.
- *		0 - success
- *		2 - No card or incorrect card format.
- *		4 - find_first has not been called successfully.
- */
-
-void alt_up_sd_card_set_attributes(short int file_handle, short int attributes);
-short int alt_up_sd_card_get_attributes(short int file_handle);
-/* Return file attributes, or -1 if the file_handle is invalid.
- */
-
-
-short int alt_up_sd_card_read(short int file_handle);
-/* Read a single character from the given file. Return -1 if at the end of a file. Any other negative number
- * means that the file could not be read. A number between 0 and 255 is an ASCII character read from the SD Card. */
-
-
-bool alt_up_sd_card_write(short int file_handle, char byte_of_data);
-/* Write a single character to a given file. Return true if successful, and false otherwise. */
-
-
-
-// This function closes an opened file and saves data to SD Card if necessary.
-
-
-//////////////////////////////////////////////////////////////////////////
-// file-like operation functions
-
-//////////////////////////////////////////////////////////////////////////
-// direct operation functions
+typedef struct s_find_data {
+    unsigned int directory_root_cluster;
+    unsigned int current_cluster_index;
+    unsigned int current_sector_in_cluster;
+    short int file_index_in_sector;
+    bool valid;
+} t_find_data;
 
 
-/*
- * Macros used by alt_sys_init 
- */
+
+
 #define ALTERA_UP_SD_CARD_AVALON_INTERFACE_INSTANCE(name, device)	\
   static alt_up_sd_card_dev device =		\
   {                                                 	\
@@ -142,17 +131,54 @@ private:
     alt_up_sd_card_dev *sd_card_dev;
     bool alt_up_sd_card_fclose(short int file_handle);
     short int alt_up_sd_card_fopen(char *name, bool create);
-    bool find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *file_record);
+
+    bool find_file_in_directory(int directory_start_cluster, char *file_name,
+                t_file_record *file_record);
+
+    short int alt_up_sd_card_find_next(char *file_name);
+    alt_up_sd_card_dev *alt_up_sd_card_open_dev(const char *name);
+    bool alt_up_sd_card_is_Present();
+    bool alt_up_sd_card_is_FAT16();
+    bool Write_Sector_Data(int sector_index, int partition_offset);
+    bool Save_Modified_Sector();
+    bool Read_Sector_Data(int sector_index, int partition_offset);
+    bool get_cluster_flag(unsigned int cluster_index, unsigned short int *flag);
+    bool mark_cluster(unsigned int cluster_index, short int flag, bool first_fat);
+    void alt_up_sd_card_set_attributes(short int file_handle, short int attributes);
+    short int alt_up_sd_card_get_attributes(short int file_handle);
+    short int alt_up_sd_card_read(short int file_handle);
+    bool alt_up_sd_card_write(short int file_handle, char byte_of_data);
+    bool Check_for_Master_Boot_Record(void);
+    bool Write_File_Record_At_Offset(int offset, t_file_record *record);
+    bool Look_for_FAT16();
+    bool Check_for_DOS_FAT(int FAT_partition_start_sector);
+    void filename_to_upper_case(char *file_name);
+    bool check_file_name_for_FAT16_compliance(char *file_name);
+    int get_dir_divider_location(char *name);
+    bool match_file_record_to_name_ext(t_file_record *file_record, char *name, char *extension);
+    bool find_first_empty_cluster(unsigned int *cluster_number);
+    int find_first_empty_record_in_a_subdirectory(int start_cluster_index);
+    int find_first_empty_record_in_root_directory();
+    void convert_filename_to_name_extension(char *filename, char *name, char *extension);
+    bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir);
+    void copy_file_record_name_to_string(t_file_record *file_record, char *file_name);
+
+    bool get_home_directory_cluster_for_file(char *file_name,
+            int *home_directory_cluster, t_file_record *file_record);
+
+    bool Read_File_Record_At_Offset(int offset, t_file_record *record,
+        unsigned int cluster_index, unsigned int sector_in_cluster);
 public:
-    void init(const char *name) { sd_card_dev = ::alt_up_sd_card_open_dev(name); }
-    bool isPresent() { ::alt_up_sd_card_is_Present(); }
-    bool isFAT16() { ::alt_up_sd_card_is_FAT16(); }
-    int fopen(char *fn) { alt_up_sd_card_fopen(fn, false); }
+    void init(const char *name) { sd_card_dev = this->alt_up_sd_card_open_dev(name); }
+    bool isPresent() { this->alt_up_sd_card_is_Present(); }
+    bool isFAT16() { this->alt_up_sd_card_is_FAT16(); }
+    int fopen(char *fn) { this->alt_up_sd_card_fopen(fn, false); }
     MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
     bool write(int, char);
     bool fclose(int);
-    short int readFile(int fd) { ::alt_up_sd_card_read(fd); }
-    short int findNext(char *fn) { ::alt_up_sd_card_find_next(fn); }
+    short int readFile(int fd) { this->alt_up_sd_card_read(fd); }
+    short int findNext(char *fn) { this->alt_up_sd_card_find_next(fn); }
+    short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
 };
 
 #endif /* __ALTERA_UP_SD_CARD_AVALON_INTERFACE_H__ */
