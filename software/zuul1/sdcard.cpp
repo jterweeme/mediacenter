@@ -1579,7 +1579,6 @@ short int SDCard::alt_up_sd_card_read(short int file_handle)
 
 
 bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
-/* Write a single character to a given file. Return true if successful, and false otherwise. */
 {
     bool result = false;
     
@@ -1595,10 +1594,8 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
             {
                 if ((active_files[file_handle].current_byte_position > 0) && (buffer_offset == 0))
                 {
-                    // Read in a new sector of data.
                     if (active_files[file_handle].current_sector_in_cluster == boot_sector_data.sectors_per_cluster - 1)
                     {
-                        // Go to the next cluster.
                         unsigned short int next_cluster;
                         if (get_cluster_flag(active_files[file_handle].current_cluster_index, &next_cluster))
                         {
@@ -1624,12 +1621,10 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
             }
 			else
 			{
-				/* You are adding data to the end of the file, so increment its size and look for an additional data cluster if needed. */
 				if ((active_files[file_handle].current_byte_position > 0) && (buffer_offset == 0))
 				{
 					if (active_files[file_handle].current_sector_in_cluster == boot_sector_data.sectors_per_cluster - 1)
 					{
-						/* Find a new cluster if possible. */
 						unsigned int cluster_number;
 
 						if (find_first_empty_cluster(&cluster_number))

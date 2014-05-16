@@ -12,23 +12,20 @@ entity mytimer2 is
 end mytimer2;
 
 architecture behavior of mytimer2 is
-    signal cnt: unsigned(24 downto 0);
+    signal cnt: unsigned(26 downto 0);
 begin
     process (clk, reset_n) begin
         if reset_n = '0' then
             cnt <= (others => '0');
+            irq <= '0';
         else
             cnt <= cnt + 1;
-        end if;
-    end process;
 
-    process (clk, reset_n) begin
-        if (reset_n = '0') then
-            irq <= '0';
-        elsif cnt = "111111111111111111111111" then
-            irq <= '1';
-        elsif (s_cs_n = '0' and s_write = '1') then
-            irq <= '0';
+            if cnt = "111111111111111111111111111" then
+                irq <= '1';
+            elsif s_cs_n = '0' and s_write = '1' then
+                irq <= '0';
+            end if;
         end if;
     end process;
 end behavior;

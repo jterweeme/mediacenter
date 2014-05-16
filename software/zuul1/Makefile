@@ -83,7 +83,7 @@ vgatest1.o: vgatest1.cpp
 WaveLib.o: WaveLib.cpp
 wavplay1.o: wavplay1.cpp misc.h
 
-download: mytest1.elf
+download: wavplay1.elf
 	nios2-download -g $<
 
 clean:

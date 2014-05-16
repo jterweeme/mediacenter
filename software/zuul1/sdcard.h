@@ -191,6 +191,6 @@ public:
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
 };
 
-#endif /* __ALTERA_UP_SD_CARD_AVALON_INTERFACE_H__ */
+#endif
 
 

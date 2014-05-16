@@ -146,7 +146,8 @@ bool SoundCard::init()
     regWrite(5, 0x0000);
     regWrite(6, 0);
     regWrite(7, 0x0042);
-    regWrite(8, 0x0002);
+    //regWrite(8, 0x0002);
+    regWrite(8, 0x000f);
     regWrite(9, ACTIVE);
     return true;
 }
