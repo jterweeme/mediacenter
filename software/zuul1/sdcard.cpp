@@ -28,19 +28,11 @@ t_FAT_12_16_boot_sector boot_sector_data;
 
 alt_up_sd_card_dev	*device_pointer = NULL;
 
-// Pointers to currently opened files.
 t_file_record active_files[MAX_FILES_OPENED];
 bool current_sector_modified = false;
 unsigned int current_sector_index = 0;
-
 t_find_data search_data;
 
-
-///////////////////////////////////////////////////////////////////////////
-// Local Functions
-///////////////////////////////////////////////////////////////////////////
-
-        
 bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
 {
     bool result = false;
@@ -49,14 +41,11 @@ bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
     {
         short int reg_state = 0xff;
 
-		/* Multiply sector offset by sector size to get the address. Sector size is 512. Also,
-         * the SD card reads data in 512 byte chunks, so the address must be a multiple of 512. */
         IOWR_32DIRECT(command_argument_register, 0, (sector_index + partition_offset)*512);
         IOWR_16DIRECT(command_register, 0, CMD_WRITE_BLOCK);
         do {
             reg_state = (short int) IORD_16DIRECT(aux_status_register,0);
         } while ((reg_state & 0x04)!=0);
-        // Make sure the request did not time out.
         if ((reg_state & 0x10) == 0)
         {
             result = true;
@@ -69,7 +58,6 @@ bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
 
 
 bool SDCard::Save_Modified_Sector()
-// If the sector has been modified, then save it to the SD Card.
 {
     bool result = true;
     if (current_sector_modified)
@@ -81,7 +69,6 @@ bool SDCard::Save_Modified_Sector()
 
 
 bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
-// This function reads a sector at the specified address on the SD Card.
 {
 	bool result = false;
     
@@ -89,7 +76,6 @@ bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 	{
 		short int reg_state = 0xff;
         
-        /* Write data to the SD card if the current buffer is out of date. */
         if (current_sector_modified)
         {
             if (Write_Sector_Data(current_sector_index, 0) == false)
@@ -97,14 +83,11 @@ bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
                 return false;
             }
         }
-		/* Multiply sector offset by sector size to get the address. Sector size is 512. Also,
-		 * the SD card reads data in 512 byte chunks, so the address must be a multiple of 512. */
         IOWR_32DIRECT(command_argument_register, 0, (sector_index + partition_offset)*512);
         IOWR_16DIRECT(command_register, 0, CMD_READ_BLOCK);
 		do {
 			reg_state = (short int) IORD_16DIRECT(aux_status_register,0);
 		} while ((reg_state & 0x04)!=0);
-		// Make sure the request did not time out.
 		if ((reg_state & 0x10) == 0)
 		{
 			result = true;
@@ -161,39 +144,28 @@ bool SDCard::mark_cluster(unsigned int cluster_index, short int flag, bool first
 
 
 bool SDCard::Check_for_Master_Boot_Record(void)
-// This function reads the first 512 bytes on the SD Card. This data should
-// contain the Master Boot Record. If it does, then print
-// relevant information and return true. Otherwise, return false. 
 {
 	bool result = false;
 	int index;
 	int end, offset, partition_size;
 
-	/* Load the first 512 bytes of data from SD card. */
 	if (Read_Sector_Data(0, 0))
 	{
 		end =  (short int) IORD_16DIRECT(device_pointer->base,0x1fe);
 
-		// Check if the end of the sector contains an end string 0xaa55.
 		if ((end & 0x0000ffff) == 0x0000aa55)
 		{
-			// Check four partition entries and see if any are valid
 			for (index = 0; index < 4; index++)
 			{
 				int partition_data_offset = (index * 16) + 0x01be;
 				char type;
-		        
-				// Read Partition type
 				type = (unsigned char) IORD_8DIRECT(device_pointer->base,partition_data_offset + 0x04);
 
-				// Check if this is an FAT parition
 				if ((type == 1) || (type == 4) || (type == 6) || (type == 14))
 				{
-					// Get partition offset and size.
 					offset = (((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x0A)) << 16) | ((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x08));
 					partition_size = (((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x0E)) << 16) | ((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x0C));
 		            
-					// Check if the partition is valid
 					if (partition_size > 0)
 					{
 						result = true;
@@ -227,15 +199,13 @@ bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
 			record->extension[counter] = (char) IORD_8DIRECT(device_pointer->base, offset+counter+8);
 		}        
 		record->attributes          =   (char) IORD_8DIRECT(device_pointer->base, offset+11);
-		/* Ignore reserved bytes at locations 12 and 13. */
-		record->create_time         =   (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+14);
-		record->create_date         =   (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+16);
-		record->last_access_date    =   (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+18);
-		/* Ignore reserved bytes at locations 20 and 21. */
-		record->last_modified_time  =	(unsigned short int) IORD_16DIRECT(device_pointer->base, offset+22);
-		record->last_modified_date  =	(unsigned short int) IORD_16DIRECT(device_pointer->base, offset+24);
-		record->start_cluster_index =	(unsigned short int) IORD_16DIRECT(device_pointer->base, offset+26);
-		record->file_size_in_bytes  =	(unsigned int) IORD_32DIRECT(device_pointer->base, offset+28);
+		record->create_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+14);
+		record->create_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+16);
+		record->last_access_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+18);
+		record->last_modified_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+22);
+		record->last_modified_date = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+24);
+		record->start_cluster_index =(unsigned short int)IORD_16DIRECT(device_pointer->base, offset+26);
+		record->file_size_in_bytes  =(unsigned int) IORD_32DIRECT(device_pointer->base, offset+28);
 		record->file_record_cluster = cluster_index;
 		record->file_record_sector_in_cluster = sector_in_cluster;
 		record->file_record_offset = offset;
@@ -246,7 +216,6 @@ bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
 
 
 bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
-// This function writes a file record at a given offset. The offset is given in bytes.
 {
     bool result = false;
     if (((offset & 0x01f) == 0) && (alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
@@ -265,11 +234,9 @@ bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
             IOWR_8DIRECT(device_pointer->base, offset+counter+8, record->extension[counter]);
         }        
         IOWR_8DIRECT(device_pointer->base, offset+11, record->attributes);
-        /* Ignore reserved bytes at locations 12 and 13. */
         IOWR_16DIRECT(device_pointer->base, offset+14, record->create_time);
         IOWR_16DIRECT(device_pointer->base, offset+16, record->create_date);
         IOWR_16DIRECT(device_pointer->base, offset+18, record->last_access_date);
-        /* Ignore reserved bytes at locations 20 and 21. */
         IOWR_16DIRECT(device_pointer->base, offset+22, record->last_modified_time);
         IOWR_16DIRECT(device_pointer->base, offset+24, record->last_modified_date);
         IOWR_16DIRECT(device_pointer->base, offset+26, record->start_cluster_index);
@@ -467,7 +434,6 @@ bool SDCard::check_file_name_for_FAT16_compliance(char *file_name)
 
 
 int SDCard::get_dir_divider_location(char *name)
-// Find a directory divider location.
 {
     int index = 0;
     int length = strlen(name);
@@ -490,7 +456,6 @@ int SDCard::get_dir_divider_location(char *name)
 
 
 bool SDCard::match_file_record_to_name_ext(t_file_record *file_record, char *name, char *extension)
-/* See if the given name and extension match the file record. Return true if this is so, false otherwise. */
 {
     bool match = true;
 	int index;
@@ -557,14 +522,14 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
             
             for (sector_index = 0; sector_index < max_root_dir_sectors; sector_index++)
             {
-                if (Read_Sector_Data(sector_index+boot_sector_data.root_directory_sector_offset, fat_partition_offset_in_512_byte_sectors))
+                if (Read_Sector_Data(sector_index + boot_sector_data.root_directory_sector_offset,
+                        fat_partition_offset_in_512_byte_sectors))
                 {
                     int file_counter;
                     
                     for (file_counter = 0; file_counter < 16; file_counter++)
                     {
                        
-                        // Read file record.
                         Read_File_Record_At_Offset(file_counter*32, file_record, 0, sector_index);
                         if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
                         {
@@ -572,7 +537,7 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
                             if (match)
                             {
                                 new_cluster = file_record->start_cluster_index;
-                                file_record->file_record_cluster = 1; // Home directory is a subdirectory in the root directory.
+                                file_record->file_record_cluster = 1;
                                 break;
                             }
                         }
@@ -637,8 +602,6 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
                         break;
                     }
                 }
-                // If this is the end of the cluster and the directory has not been found, then see if there is another cluster
-                // that holds data for the current directory.
                 if (new_cluster == home_dir_cluster)
                 {
 					unsigned short int next_cluster;
@@ -689,8 +652,8 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
 }
 
 
-bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *file_record)
-// Given a cluster and a file name, check if the file already exists. Return the file record if the file is found.
+bool SDCard::find_file_in_directory(int directory_start_cluster,
+            char *file_name, t_file_record *file_record)
 {
     Uart *uart = Uart::getInstance();
     uart->puts("find-file-in-directory\r\n");
@@ -704,7 +667,6 @@ bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name
 	int length = strlen(file_name);
     bool result = false;
     
-    // Skip through all directory separators.
     while (location > 0)
     {
         last_dir_separator = last_dir_separator+location+1;
@@ -731,7 +693,6 @@ bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name
     // Look for the file.
     if (directory_start_cluster == 0)
     {
-        /* We are in the root directory. Scan the directory (of predefined size) and see if you can find the specified file. */
         int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) / boot_sector_data.sector_size_in_bytes);
         int sector_index;
         
@@ -744,7 +705,6 @@ bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name
                 
                 for (file_counter = 0; file_counter < 16; file_counter++)
                 {
-                    // Read file record.
                     Read_File_Record_At_Offset(file_counter*32, file_record, 0, sector_index);
                     if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
                     {
@@ -805,15 +765,12 @@ bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name
                     break;
                 }
             }
-            // If this is the end of the cluster and the file has not been found, then see if there is another cluster
-            // that holds data for the current directory.
             if (result == false)
             {
 				unsigned short int new_cluster;
 
 				if (get_cluster_flag(cluster, &new_cluster))
 				{
-					// The directory needs to be expanded to store more files.
 					if ((new_cluster & 0x0000fff8) == 0x0000fff8)
 					{
 						return false;
@@ -822,7 +779,6 @@ bool SDCard::find_file_in_directory(int directory_start_cluster, char *file_name
 				}
 				else
                 {
-                    // Directory path is invalid.                 
                     return false;
                 }
             }              
@@ -886,7 +842,6 @@ bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 
 
 int SDCard::find_first_empty_record_in_a_subdirectory(int start_cluster_index)
-// Search for a free spot in a subdirectory. Return an encoded location for the file record.
 {
     int result = -1;
     int cluster = start_cluster_index;
@@ -918,27 +873,22 @@ int SDCard::find_first_empty_record_in_a_subdirectory(int start_cluster_index)
                 break;
             }
         }
-        // If this is the end of the cluster and the file has not been found, then see if there is another cluster
-        // that holds data for the current directory.
         if (result < 0)
         {
 			unsigned short int new_cluster;
 			if (get_cluster_flag(cluster, &new_cluster))
 			{
-                // The directory needs to be expanded to store more files.
 				if ((new_cluster & 0x0000fff8) == 0x0000fff8)
 				{
 					int new_dir_cluster; 
 					if (find_first_empty_cluster((unsigned int *)&new_dir_cluster))
 					{
-						// Add the new cluster to the linked list of the given directory.
 						if (mark_cluster(cluster, ((short int) (new_dir_cluster)), true) &&
 							mark_cluster(new_dir_cluster, ((short int) (0xffff)), true) &&
 							mark_cluster(cluster, ((short int) (new_dir_cluster)), false) &&
 							mark_cluster(new_dir_cluster, ((short int) (0xffff)), false))
 						{
 							Save_Modified_Sector();
-							// The new file will begin at the first entry of the directory.
 							result = new_dir_cluster;                           
 						}
 					}
@@ -947,7 +897,6 @@ int SDCard::find_first_empty_record_in_a_subdirectory(int start_cluster_index)
 			}
 			else
 			{
-				// Error encountered.                 
 				result = -1;
 			}
         }              
@@ -972,8 +921,6 @@ int SDCard::find_first_empty_record_in_root_directory()
             for (file_counter = 0; file_counter < 16; file_counter++)
             {
                 unsigned short int leading_char;
-                
-                // Read first character of the file record.
                 leading_char = ((unsigned char) IORD_8DIRECT(device_pointer->base, file_counter*32));
                 if ((leading_char == 0x00e5) || (leading_char == 0))
                 {
@@ -1101,7 +1048,6 @@ bool SDCard::create_file(char *name, t_file_record *file_record, t_file_record *
 
 
 void SDCard::copy_file_record_name_to_string(t_file_record *file_record, char *file_name)
-/* Copy a file name from the file record to a given string */
 {
 	int index;
 	int flength = 0;
@@ -1130,11 +1076,6 @@ void SDCard::copy_file_record_name_to_string(t_file_record *file_record, char *f
 	}
 	file_name[flength] = 0;
 }
-
-///////////////////////////////////////////////////////////////////////////
-// Direct functions
-///////////////////////////////////////////////////////////////////////////
-
 
 alt_up_sd_card_dev* SDCard::alt_up_sd_card_open_dev(const char* name)
 {
@@ -1167,13 +1108,11 @@ bool SDCard::alt_up_sd_card_is_Present()
     }
 	else if (initialized == true)
 	{
-		int index;
-
 		initialized = false;
 		search_data.valid = false;
 		is_sd_card_formated_as_FAT16 = false;
 
-		for(index = 0; index < MAX_FILES_OPENED; index++)
+		for (int index = 0; index < MAX_FILES_OPENED; index++)
 		{
 			active_files[index].in_use = false;
 			active_files[index].modified = false;
@@ -1232,6 +1171,116 @@ short int SDCard::alt_up_sd_card_find_first(char *directory_to_search_through, c
 	return result;
 }
 
+short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
+{
+	short int result = 2;
+	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+	{
+		if (search_data.valid)
+		{
+			t_file_record file_record;
+			int cluster = search_data.current_cluster_index;
+
+			if (cluster == 0)
+			{
+				int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+                        boot_sector_data.sector_size_in_bytes);
+
+				int sector_index = search_data.current_sector_in_cluster;
+				int file_counter = search_data.file_index_in_sector+1;
+    
+				for (; sector_index < max_root_dir_sectors; sector_index++)
+				{
+					if (Read_Sector_Data(sector_index + boot_sector_data.root_directory_sector_offset,
+											fat_partition_offset_in_512_byte_sectors))
+					{
+						for (; file_counter < 16; file_counter++)
+						{
+                            if (Read_File_Record_At_Offset(file_counter*32, &file_record,
+                                    0, sector_index))
+							{
+								if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
+								{
+									search_data.file_index_in_sector = file_counter;
+									search_data.current_sector_in_cluster = sector_index;
+									copy_file_record_name_to_string(&file_record, file_name);
+                                    ::memcpy(fr, &file_record, sizeof(file_record));
+									return 0;
+								}
+							}
+						}
+						file_counter = 0;
+					}
+					else
+					{
+						break;
+					}
+				}
+				result = -1;
+			}
+			else
+			{
+				int file_counter = search_data.file_index_in_sector+1;
+				do 
+				{
+					int start_sector = ( cluster - 2 ) * ( boot_sector_data.sectors_per_cluster ) + boot_sector_data.data_sector_offset;
+					int sector_index = search_data.current_sector_in_cluster;
+			        
+					for (; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
+					{
+						if (Read_Sector_Data(sector_index + start_sector, fat_partition_offset_in_512_byte_sectors))
+						{        
+							for (; file_counter < 16; file_counter++)
+							{
+								if (Read_File_Record_At_Offset(file_counter*32, &file_record, cluster, sector_index))
+								{
+									if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
+									{
+										search_data.current_cluster_index = cluster;
+										search_data.file_index_in_sector = file_counter;
+										search_data.current_sector_in_cluster = sector_index;
+										copy_file_record_name_to_string(&file_record, file_name);
+                                        ::memcpy(fr, &file_record, sizeof(file_record));
+										return 0;
+									}
+								}
+							}
+							file_counter = 0;
+						}
+						else
+						{
+							break;
+						}
+					}
+					if (sector_index >= boot_sector_data.sectors_per_cluster)
+					{
+						short int new_cluster;
+
+						if (get_cluster_flag(cluster, (unsigned short *)&new_cluster))
+						{
+							if ((new_cluster & 0x0000fff8) == 0x0000fff8)
+							{
+								result = -1;
+								search_data.valid = false;
+							}
+							cluster = ((new_cluster) & 0x0000fff8);
+						}
+						else
+						{
+							result = -1;
+						}
+					}              
+				} while (cluster < 0x0000fff8);
+			}
+		}
+		else
+		{
+			result = 3;
+		}
+	}
+	return result;
+
+}
 
 short int SDCard::alt_up_sd_card_find_next(char *file_name)
 {
@@ -1253,20 +1302,18 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
     
 				for (; sector_index < max_root_dir_sectors; sector_index++)
 				{
-					if (Read_Sector_Data(   sector_index + boot_sector_data.root_directory_sector_offset,
+					if (Read_Sector_Data(sector_index + boot_sector_data.root_directory_sector_offset,
 											fat_partition_offset_in_512_byte_sectors))
 					{
 						for (; file_counter < 16; file_counter++)
 						{
-							if (Read_File_Record_At_Offset(file_counter*32, &file_record, 0, sector_index))
+                            if (Read_File_Record_At_Offset(file_counter*32, &file_record,
+                                    0, sector_index))
 							{
 								if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
 								{
-									/* Update search structure. */
 									search_data.file_index_in_sector = file_counter;
 									search_data.current_sector_in_cluster = sector_index;
-
-									/* Copy file name.*/
 									copy_file_record_name_to_string(&file_record, file_name);
 									return 0;
 								}
@@ -1299,12 +1346,9 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 								{
 									if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
 									{
-										/* Update search structure. */
 										search_data.current_cluster_index = cluster;
 										search_data.file_index_in_sector = file_counter;
 										search_data.current_sector_in_cluster = sector_index;
-
-										/* Copy file name.*/
 										copy_file_record_name_to_string(&file_record, file_name);
 										return 0;
 									}
@@ -1317,8 +1361,6 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 							break;
 						}
 					}
-					// If this is the end of the cluster and the file has not been found, then see if there is another cluster
-					// that holds data for the current directory.
 					if (sector_index >= boot_sector_data.sectors_per_cluster)
 					{
 						short int new_cluster;
@@ -1334,7 +1376,6 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 						}
 						else
 						{
-							// Error encountered.                 
 							result = -1;
 						}
 					}              
@@ -1343,7 +1384,6 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 		}
 		else
 		{
-			// Call Find_First first.
 			result = 3;
 		}
 	}
@@ -1352,16 +1392,6 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 
 
 short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
-/* This function reads the SD card data in an effort to determine if the card is formated as a FAT16
- * volume. Please note that FAT12 has a similar format, but will not be supported by this driver.
- * 
- * Inputs:
- *      name - a file name including a directory, relative to the root directory
- *      create - a flag set to true to create a file if it does not already exist
- * Output:
- *      An index to the file record assigned to the specified file. -1 is returned if the file could not be opened.
- *		Return -2 if the specified file has already been opened previously.
- */
 {
     Uart *uart = Uart::getInstance();
     uart->puts("alt_up_sdcard_fopen\r\n");
@@ -1369,7 +1399,6 @@ short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
 
 	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
 	{
-
         unsigned int home_directory_cluster = 0;
         t_file_record home_dir;
         
@@ -1468,31 +1497,23 @@ short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
 void SDCard::alt_up_sd_card_set_attributes(short int file_handle, short int attributes)
 {
     if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
-    {
         if (active_files[file_handle].in_use)
-        {
             active_files[file_handle].attributes = ((char)(attributes & 0x00ff));
-        }
-    }
 }
 
 
 short int SDCard::alt_up_sd_card_get_attributes(short int file_handle)
 {
 	short int result = -1;
+
     if ((file_handle >= 0) && (file_handle < MAX_FILES_OPENED))
-    {
         if (active_files[file_handle].in_use)
-		{
 			result = ((active_files[file_handle].attributes) & 0x00ff);
-		}
-	}
+
 	return result;
 }
 
 short int SDCard::alt_up_sd_card_read(short int file_handle)
-/* Read a single character from a given file. Return -1 if at the end of a file. Any other negative number
- * means that the file could not be read. A number between 0 and 255 is an ASCII character read from the SD Card. */
 {
     short int ch = -1;
     
@@ -1717,6 +1738,20 @@ bool SDCard::fclose(int sd_fileh)
     return alt_up_sd_card_fclose(sd_fileh);
 }
 
+MyFileRecord::MyFileRecord(t_file_record *fr)
+{
+    this->fr = new t_file_record;
+    ::memcpy(fr, this->fr, sizeof(t_file_record));
+}
+
+const char *MyFileRecord::toString()
+{
+    //static char filename[13] = "hello\0\0\0\0";
+    //::memset(filename, 0, sizeof(filename));
+    //::strncpy(filename, (char *)fr->name, 5);
+    Uart::getInstance()->puts((const char *)this->fr->name);
+    return (const char *)fr->name;
+}
 
 
 

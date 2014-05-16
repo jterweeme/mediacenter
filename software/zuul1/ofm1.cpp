@@ -62,16 +62,29 @@ int OrthodoxFileManager1::run()
         if (sdCard->isFAT16())
         {
             char fn[13];
+            t_file_record fr;
             int foo = sdCard->alt_up_sd_card_find_first("/.", fn);
 
-            
+            while ((foo = sdCard->findNext(fn, &fr)) >= 0)
+            {
+                //uart->puts(fn);
+                char dinges[255];
+                ::sprintf(dinges, "%s %u\r\n", (const char *)fr.name, fr.file_size_in_bytes);
+                //uart->puts((const char *)fr.name);
+                uart->puts(dinges);
+                uart->puts("\r\n");
+            }
+
+/*
             while ((foo = sdCard->findNext(fn)) >= 0)
             {
+                //uart->puts((const char *)fr.name);
                 uart->puts(fn);
                 uart->puts("\r\n");
             }
-/*
+*/
             //MyFile *file = sdCard->openFile(fn);
+/*
             int fd = sdCard->fopen(fn);
             quadroSegment->setHex(fd);
             int bar = ::alt_up_sd_card_read(fd);

@@ -113,6 +113,15 @@ typedef struct s_find_data {
 
 class SDCard;
 
+class MyFileRecord
+{
+private:
+    t_file_record *fr;
+public:
+    MyFileRecord(t_file_record *fr);
+    const char *toString();
+};
+
 class MyFile
 {
 private:
@@ -131,11 +140,8 @@ private:
     alt_up_sd_card_dev *sd_card_dev;
     bool alt_up_sd_card_fclose(short int file_handle);
     short int alt_up_sd_card_fopen(char *name, bool create);
-
-    bool find_file_in_directory(int directory_start_cluster, char *file_name,
-                t_file_record *file_record);
-
     short int alt_up_sd_card_find_next(char *file_name);
+    short int alt_up_sd_card_find_next(char *file_name, t_file_record *fr);
     alt_up_sd_card_dev *alt_up_sd_card_open_dev(const char *name);
     bool alt_up_sd_card_is_Present();
     bool alt_up_sd_card_is_FAT16();
@@ -163,6 +169,9 @@ private:
     bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir);
     void copy_file_record_name_to_string(t_file_record *file_record, char *file_name);
 
+    bool find_file_in_directory(int directory_start_cluster, char *file_name,
+                t_file_record *file_record);
+
     bool get_home_directory_cluster_for_file(char *file_name,
             int *home_directory_cluster, t_file_record *file_record);
 
@@ -178,6 +187,7 @@ public:
     bool fclose(int);
     short int readFile(int fd) { this->alt_up_sd_card_read(fd); }
     short int findNext(char *fn) { this->alt_up_sd_card_find_next(fn); }
+    short int findNext(char *fn, t_file_record *fr) { this->alt_up_sd_card_find_next(fn, fr); }
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
 };
 
