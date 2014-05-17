@@ -138,8 +138,13 @@ void VGATerminal::putc(const char c)
 {
     if (c == 0x0a)
     {
-        x = 0;
         y++;
+        return;
+    }
+
+    if (c == 0x0d)
+    {
+        x = 0;
         return;
     }
 
