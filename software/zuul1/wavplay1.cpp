@@ -1,4 +1,7 @@
+#define SYSTEM_BUS_WIDTH 32
+
 #include <system.h>
+#include <io.h>
 #include "misc.h"
 
 class WavPlay1
@@ -24,10 +27,12 @@ void WavPlay1::init()
     soundCard = new SoundCard(i2c, (volatile uint32_t *)AUDIO_IF_0_BASE);
     soundCard->init();
     soundCard->setOutputVolume(100);
+    soundCard->setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);
 }
 
 uint8_t buf[512];
 uint16_t sample;
+uint16_t sample_r;
 
 int WavPlay1::run()
 {
@@ -35,7 +40,7 @@ int WavPlay1::run()
     {
         if (sdCard->isFAT16())
         {
-            myFile = sdCard->openFile("TEST.WAV");
+            myFile = sdCard->openFile("ENIKDA~1.WAV");
             
             for (int i = 0; i < 44; i++)
                 myFile->read();      // skip header
@@ -44,11 +49,12 @@ int WavPlay1::run()
 
             for (int i = 0; i < 512000; i++)
             {
-                uint8_t foo = myFile->read();
                 sample = 0;
-                sample += foo;
-                foo = myFile->read();
-                sample += foo << 8;
+                sample_r = 0;
+                sample += myFile->read();
+                sample += myFile->read() << 8;
+                sample_r += myFile->read();
+                sample_r += myFile->read() << 8;
                 soundCard->writeDacOut(sample, sample);    
             }
 

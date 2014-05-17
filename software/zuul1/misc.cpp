@@ -134,6 +134,24 @@ int VGA::draw(const char *s, const int x, const int y)
     return ::alt_up_char_buffer_string(charBuffer, s, x, y);
 }
 
+void VGATerminal::putc(const char c)
+{
+    if (c == 0x0a)
+    {
+        x = 0;
+        y++;
+        return;
+    }
+
+    this->draw(c, x++, y);
+
+    if (x >= COLS)
+    {
+        x = 0;
+        y++;
+    }
+}
+
 bool SoundCard::init()
 {
     regWrite(15, DATA_RESET);
@@ -146,8 +164,8 @@ bool SoundCard::init()
     regWrite(5, 0x0000);
     regWrite(6, 0);
     regWrite(7, 0x0042);
-    //regWrite(8, 0x0002);
-    regWrite(8, 0x000f);
+    regWrite(8, 0x0002);
+    //regWrite(8, 0x000f);
     regWrite(9, ACTIVE);
     return true;
 }
@@ -175,6 +193,21 @@ void SoundCard::writeDacOut(uint16_t left, uint16_t right)
 {
     IOWR(base, 0, left);
     IOWR(base, 1, right);
+}
+
+void SoundCard::setSampleRate(uint8_t ssr)
+{
+    uint16_t control;
+
+    switch (ssr)
+    {
+        case RATE_ADC44K1_DAC44K1:
+            control = (0x8) << 2;
+            break;
+    }
+
+    control |= 0x02;
+    regWrite(8, control);
 }
 
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)

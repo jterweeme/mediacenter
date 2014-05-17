@@ -160,6 +160,7 @@ public:
     bool regWrite(uint8_t index, uint16_t data);
     void writeDacOut(uint16_t left, uint16_t right);
     void setOutputVolume(int vol);
+    void setSampleRate(uint8_t sr);
     static const uint8_t ADDR = 0x34;
     static const uint16_t DATA_RESET = 0;
     static const uint16_t DATA_INACTIVE_INTERFACE = 0;
@@ -168,6 +169,13 @@ public:
     static const uint16_t DATA_LEFT_HEADPHONE_OUT_VOLUME = 0x005b;
     static const uint16_t DATA_RIGHT_HEADPHONE_OUT_VOLUME = 0x005b;
     static const uint16_t ACTIVE = 1;
+    static const uint8_t RATE_ADC48K_DAC48K = 0;
+    static const uint8_t RATE_ADC48K_DAC8K = 1;
+    static const uint8_t RATE_ADC8K_DAC48K = 2;
+    static const uint8_t RATE_ADC8K_DAC8K = 3;
+    static const uint8_t RATE_ADC32K_DAC32K = 4;
+    static const uint8_t RATE_ADC96K_DAC96K = 5;
+    static const uint8_t RATE_ADC44K1_DAC44K1 = 6;
 };
 
 class EEProm
@@ -187,6 +195,17 @@ public:
     int clear() { ::alt_up_char_buffer_clear(charBuffer); }
     int draw(const char, const int, const int);
     int draw(const char *, const int, const int);
+};
+
+class VGATerminal : public VGA
+{
+private:
+    int x, y;
+    static const uint8_t COLS = 80;
+public:
+    VGATerminal(const char *devName) : VGA(devName) { x = y = 0; }
+    void putc(const char c);
+    void puts(const char *s) { while (*s) putc(*s++); }
 };
 
 #endif

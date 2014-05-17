@@ -19,7 +19,7 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 .PHONY: all
 
-all: jtagtest1.hex ofm1.hex piano1.hex primes1.hex sdcardtest1.hex test1.hex wavplay1.hex mytest1.elf
+all: vgatest1.hex ofm1.hex piano1.hex primes1.hex sdcardtest1.hex test1.hex wavplay1.hex mytest1.elf
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
@@ -30,6 +30,7 @@ primes1.hex: primes1.flash
 #sdaudio2.hex: sdaudio2.flash
 sdcardtest1.hex: sdcardtest1.flash
 test1.hex: test1.flash
+vgatest1.hex: vgatest1.flash
 wavplay1.hex: wavplay1.flash
 
 audiotest1.flash: audiotest1.elf
@@ -41,6 +42,7 @@ primes1.flash: primes1.elf
 #sdaudio2.flash: sdaudio2.elf
 sdcardtest1.flash: sdcardtest1.elf
 test1.flash: test1.elf
+vgatest1.flash: vgatest1.elf
 wavplay1.flash: wavplay1.elf
 
 audiotest1.elf: audiotest1.o misc.o
@@ -53,6 +55,7 @@ primes1.elf: primes1.o misc.o sdcard.o
 #sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
 test1.elf: test1.o misc.o sdcard.o
+vgatest1.elf: vgatest1.o misc.o
 wavplay1.elf: wavplay1.o misc.o sdcard.o
 
 AUDIO.o: AUDIO.cpp AUDIO.h
@@ -83,7 +86,7 @@ vgatest1.o: vgatest1.cpp
 WaveLib.o: WaveLib.cpp
 wavplay1.o: wavplay1.cpp misc.h
 
-download: wavplay1.elf
+download: vgatest1.elf
 	nios2-download -g $<
 
 clean:
