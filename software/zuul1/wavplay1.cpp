@@ -30,7 +30,7 @@ void WavPlay1::init()
     soundCard->setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);
 }
 
-uint8_t buf[512];
+uint8_t buf[5120000];
 uint16_t sample;
 uint16_t sample_r;
 
@@ -45,19 +45,22 @@ int WavPlay1::run()
             for (int i = 0; i < 44; i++)
                 myFile->read();      // skip header
 
+
+            for (int i = 0; i < 5120000; i++)
+                buf[i] = myFile->read();
+
             uart->puts("Muziek begint\r\n");
 
-            for (int i = 0; i < 512000; i++)
+            for (int i = 0; i < 5120000;)
             {
                 sample = 0;
                 sample_r = 0;
-                sample += myFile->read();
-                sample += myFile->read() << 8;
-                sample_r += myFile->read();
-                sample_r += myFile->read() << 8;
-                soundCard->writeDacOut(sample, sample);    
+                sample += buf[i++];
+                sample += buf[i++] << 8;
+                //sample_r += buf[i++];
+                //sample_r += buf[i++] << 8;
+                soundCard->writeDacOut(sample, sample);
             }
-
             
 
             uart->puts("done\r\n");
