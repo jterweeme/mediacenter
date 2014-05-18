@@ -64,6 +64,8 @@ set_sw_property auto_initialize true
 # Location in generated BSP that sources will be copied into
 set_sw_property bsp_subdirectory drivers
 
+set_sw_property supported_interrupt_apis "legacy_interrupt_api enhanced_interrupt_api"
+
 #
 # Source file listings...
 #

@@ -78,6 +78,7 @@ mytest1.o: mytest1.cpp misc.h
 ofm1.o: ofm1.cpp
 piano1.o: piano1.cpp
 primes1.o: primes1.cpp
+ps2.o: ps2.cpp
 sdaudio2.o: sdaudio2.cpp misc.h LED.h AUDIO.h AUDIO_REG.h
 sdcard.o: sdcard.cpp sdcard.h
 sdcardtest1.o: sdcardtest1.cpp
