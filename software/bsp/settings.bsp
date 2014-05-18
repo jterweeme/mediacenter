@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 17, 2014 2:28:35 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400329715791</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 18, 2014 1:42:08 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400370128566</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -989,38 +989,44 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>video_character_buffer_with_dma_0_avalon_char_control_slave</slaveDescriptor>
+                <slaveDescriptor>ps2_0</slaveDescriptor>
                 <addressRange>0x08003510 - 0x08003517</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>jtag_uart_0</slaveDescriptor>
+                <slaveDescriptor>video_character_buffer_with_dma_0_avalon_char_control_slave</slaveDescriptor>
                 <addressRange>0x08003518 - 0x0800351F</addressRange>
+                <addressSpan>8</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>jtag_uart_0</slaveDescriptor>
+                <addressRange>0x08003520 - 0x08003527</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mytimer1_0</slaveDescriptor>
-                <addressRange>0x08003520 - 0x08003523</addressRange>
+                <addressRange>0x08003528 - 0x0800352B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>infrared_0</slaveDescriptor>
-                <addressRange>0x08003524 - 0x08003527</addressRange>
+                <addressRange>0x0800352C - 0x0800352F</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>character_lcd_0</slaveDescriptor>
-                <addressRange>0x08003528 - 0x08003529</addressRange>
+                <addressRange>0x08003530 - 0x08003531</addressRange>
                 <addressSpan>2</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
-                <addressRange>0x0800352A - 0x0800352A</addressRange>
+                <addressRange>0x08003532 - 0x08003532</addressRange>
                 <addressSpan>1</addressSpan>
                 <attributes/>
         </MemoryMap>
