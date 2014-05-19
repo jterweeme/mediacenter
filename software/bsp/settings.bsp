@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 18, 2014 5:58:41 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400428721536</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 20, 2014 12:28:58 AM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400538538698</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -1007,27 +1007,27 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>mytimer1_0</slaveDescriptor>
-                <addressRange>0x08003528 - 0x0800352B</addressRange>
-                <addressSpan>4</addressSpan>
+                <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
+                <addressRange>0x08003528 - 0x08003528</addressRange>
+                <addressSpan>1</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>infrared_0</slaveDescriptor>
+                <slaveDescriptor>mytimer1_0</slaveDescriptor>
                 <addressRange>0x0800352C - 0x0800352F</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>character_lcd_0</slaveDescriptor>
-                <addressRange>0x08003530 - 0x08003531</addressRange>
-                <addressSpan>2</addressSpan>
+                <slaveDescriptor>infrared_0</slaveDescriptor>
+                <addressRange>0x08003530 - 0x08003533</addressRange>
+                <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
-                <addressRange>0x08003532 - 0x08003532</addressRange>
-                <addressSpan>1</addressSpan>
+                <slaveDescriptor>character_lcd_0</slaveDescriptor>
+                <addressRange>0x08003534 - 0x08003535</addressRange>
+                <addressSpan>2</addressSpan>
                 <attributes/>
         </MemoryMap>
         <LinkerSection>
