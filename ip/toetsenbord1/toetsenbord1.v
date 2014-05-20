@@ -8,10 +8,15 @@ module toetsenbord1(
     input s_write,
     input [7:0] s_writedata,
     input kc,
-    input kd
+    input kd,
+    output [6:0] sseg0,
+    output [6:0] sseg1
 );
 
-reg [3:0] cnt;
+wire [7:0] scancode_data;
+reg [31:0] cnt;
+
+assign s_readdata = scancode_data;
 
 always @(posedge clk or negedge reset_n) begin
     if (~reset_n)
@@ -29,10 +34,20 @@ always @(posedge clk or negedge reset_n) begin
         cnt <= cnt + 1'b1;
 end
 
+display2 display_inst1(
+    .MUXOUT(scancode_data[3:0]),
+    .seg(sseg0)
+);
+
+display2 display_inst2(
+    .MUXOUT(scancode_data[7:4]),
+    .seg(sseg1)
+);
+
 scancode scancode_inst(
     .pclk(cnt[3]),
     .rst(reset_n),
-    .s_readdata(s_readdata),
+    .s_readdata(scancode_data),
     .kc(kc),
     .kd(kd)
 );

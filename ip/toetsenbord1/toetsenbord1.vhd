@@ -32,7 +32,7 @@ begin
         if rst = '0' then
             ShiftRegSig1 <= (others => '0');
             ShiftRegSig2 <= (others => '0');
-        elsif falling_edge(pclk) then
+        elsif falling_edge(kci) then
             ShiftRegSig1(10 downto 0) <= KDI & ShiftRegSig1(10 downto 1);
             ShiftRegSig2(10 downto 1) <= ShiftRegSig1(0) & ShiftRegSig2(10 downto 2);
         end if;
@@ -41,7 +41,7 @@ begin
     process (ShiftRegSig1, ShiftRegSig2, rst, kci) begin
         if rst = '0' then
             s_readdata <= "10000000";
-        elsif rising_edge(pclk) and ShiftRegSig2(8 downto 1) = "11110000" then
+        elsif rising_edge(kci) and ShiftRegSig2(8 downto 1) = "11110000" then
             s_readdata <= ShiftRegSig1(8 downto 1);
         end if;
     end process;

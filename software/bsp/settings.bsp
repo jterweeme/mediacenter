@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 20, 2014 11:06:01 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400576761018</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 20, 2014 2:10:36 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400587836360</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -1008,20 +1008,26 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mytimer1_0</slaveDescriptor>
-                <addressRange>0x0800352C - 0x0800352F</addressRange>
+                <addressRange>0x08003528 - 0x0800352B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>infrared_0</slaveDescriptor>
-                <addressRange>0x08003530 - 0x08003533</addressRange>
+                <addressRange>0x0800352C - 0x0800352F</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>character_lcd_0</slaveDescriptor>
-                <addressRange>0x08003534 - 0x08003535</addressRange>
+                <addressRange>0x08003530 - 0x08003531</addressRange>
                 <addressSpan>2</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
+                <addressRange>0x08003532 - 0x08003532</addressRange>
+                <addressSpan>1</addressSpan>
                 <attributes/>
         </MemoryMap>
         <LinkerSection>
