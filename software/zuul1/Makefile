@@ -55,7 +55,7 @@ audiotest1.elf: audiotest1.o misc.o
 eepromtest1.elf: eepromtest1.o misc.o
 jtagtest1.elf: jtagtest1.o
 kbtest1.elf: kbtest1.o misc.o
-kbtest2.elf: kbtest2.o
+kbtest2.elf: kbtest2.o misc.o
 md5test1.elf: md5test1.o misc.o sdcard.o md5.o
 mytest1.elf: mytest1.o misc.o
 ofm1.elf: ofm1.o misc.o sdcard.o

@@ -30,7 +30,7 @@ always @(posedge clk or negedge reset_n) begin
 end
 
 scancode scancode_inst(
-    .pclk(cnt[5]),
+    .pclk(cnt[3]),
     .rst(reset_n),
     .s_readdata(s_readdata)
 );
