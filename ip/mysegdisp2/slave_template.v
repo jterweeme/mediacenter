@@ -98,7 +98,7 @@ module slave_template(
 
 	register_with_bytelanes register_0 (clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
 		defparam register_0.DATA_WIDTH = DATA_WIDTH;
-
+/*
 	always @ (posedge clk or posedge reset)
 	begin
 		if (reset == 1)
@@ -117,7 +117,7 @@ module slave_template(
 				endcase
 			end
 		end
-	end
+	end*/
 	
 	
 	assign user_write = slave_write_d1;

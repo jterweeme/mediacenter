@@ -248,7 +248,6 @@ set_location_assignment PIN_AE14 -to altera_up_sd_card_avalon_interface_0_condui
 set_location_assignment PIN_AD14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd
 set_location_assignment PIN_AE13 -to altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock
 
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_Y19 -to mysegdisp2_0_user_interface_export[30]
 set_location_assignment PIN_AF23 -to mysegdisp2_0_user_interface_export[29]
 set_location_assignment PIN_AD24 -to mysegdisp2_0_user_interface_export[28]
@@ -331,3 +330,4 @@ set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
 set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
 set_global_assignment -name CUSP_FILE software/zuul1/main.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
