@@ -142,7 +142,7 @@ void Test1::init()
 {
     vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
     vgaTerminal->clear();
-    segmentQuadro = new QuadroSegment((volatile uint32_t *)QUADROSEGMENT_BASE);
+    segmentQuadro = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
     segmentQuadro->setInt(12345);
     segmentQuadro->setHex(0xabcd);
     segmentLinks.write(0x3024);
