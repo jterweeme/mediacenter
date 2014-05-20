@@ -94,16 +94,7 @@ module slave_template(
 		end
 	end
 	
-
-
 	register_with_bytelanes register_0 (clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
-		//defparam register_0.DATA_WIDTH = DATA_WIDTH;
-	
-	//assign user_write = slave_write_d1;
-	//assign user_read = slave_read;
-	//assign user_chipselect = (slave_write_d1 == 1)? address_decode_d1 : address_decode;
-	//assign user_byteenable = (slave_write_d1 == 1)? internal_byteenable_d1 : internal_byteenable;
-	
 endmodule
 
 

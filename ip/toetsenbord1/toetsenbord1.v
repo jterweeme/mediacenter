@@ -13,7 +13,7 @@ module toetsenbord1(
     output [6:0] coe_sseg1
 );
 
-wire [7:0] scancode_data;
+reg [7:0] scancode_data;
 reg [31:0] cnt;
 
 /*

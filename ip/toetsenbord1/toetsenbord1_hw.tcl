@@ -85,7 +85,7 @@ add_interface_port clock_reset csi_reset_n reset_n Input 1
 # connection point s1
 # 
 add_interface s1 avalon end
-set_interface_property s1 addressUnits WORDS
+set_interface_property s1 addressAlignment NATIVE
 set_interface_property s1 associatedClock clock
 set_interface_property s1 associatedReset clock_reset
 set_interface_property s1 bitsPerSymbol 8
@@ -96,7 +96,8 @@ set_interface_property s1 holdTime 0
 set_interface_property s1 linewrapBursts false
 set_interface_property s1 maximumPendingReadTransactions 0
 set_interface_property s1 readLatency 0
-set_interface_property s1 readWaitTime 1
+set_interface_property s1 readWaitStates 2
+set_interface_property s1 readWaitTime 2
 set_interface_property s1 setupTime 0
 set_interface_property s1 timingUnits Cycles
 set_interface_property s1 writeWaitTime 0
@@ -107,10 +108,6 @@ set_interface_property s1 SVD_ADDRESS_GROUP ""
 
 add_interface_port s1 avs_s1_read read Input 1
 add_interface_port s1 avs_s1_readdata readdata Output 8
-set_interface_assignment s1 embeddedsw.configuration.isFlash 0
-set_interface_assignment s1 embeddedsw.configuration.isMemoryDevice 0
-set_interface_assignment s1 embeddedsw.configuration.isNonVolatileStorage 0
-set_interface_assignment s1 embeddedsw.configuration.isPrintableDevice 0
 
 
 # 

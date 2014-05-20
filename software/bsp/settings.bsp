@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 20, 2014 9:53:21 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400615601878</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 20, 2014 10:48:45 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400618925855</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -1001,27 +1001,27 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>mytimer1_0</slaveDescriptor>
+                <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
                 <addressRange>0x08003550 - 0x08003553</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>infrared_0</slaveDescriptor>
+                <slaveDescriptor>mytimer1_0</slaveDescriptor>
                 <addressRange>0x08003554 - 0x08003557</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>character_lcd_0</slaveDescriptor>
-                <addressRange>0x08003558 - 0x08003559</addressRange>
-                <addressSpan>2</addressSpan>
+                <slaveDescriptor>infrared_0</slaveDescriptor>
+                <addressRange>0x08003558 - 0x0800355B</addressRange>
+                <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
-                <addressRange>0x0800355A - 0x0800355A</addressRange>
-                <addressSpan>1</addressSpan>
+                <slaveDescriptor>character_lcd_0</slaveDescriptor>
+                <addressRange>0x0800355C - 0x0800355D</addressRange>
+                <addressSpan>2</addressSpan>
                 <attributes/>
         </MemoryMap>
         <LinkerSection>
