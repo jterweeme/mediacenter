@@ -42,12 +42,12 @@ end
 
 display2 display_inst1(
     .MUXOUT(scancode_data[3:0]),
-    .seg(avs_s1_sseg0)
+    .seg(coe_sseg1)
 );
 
 display2 display_inst2(
     .MUXOUT(scancode_data[7:4]),
-    .seg(avs_s1_sseg1)
+    .seg(coe_sseg0)
 );
 
 scancode scancode_inst(
