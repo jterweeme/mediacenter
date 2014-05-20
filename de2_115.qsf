@@ -217,7 +217,6 @@ set_location_assignment PIN_Y24 -to sw_external_connection_export[16]
 set_location_assignment PIN_AA22 -to sw_external_connection_export[15]
 set_location_assignment PIN_AA23 -to sw_external_connection_export[14]
 set_location_assignment PIN_AA24 -to sw_external_connection_export[13]
-set_location_assignment PIN_F17 -to ledg_external_connection_export[8]
 set_location_assignment PIN_G21 -to ledg_external_connection_export[7]
 set_location_assignment PIN_G22 -to ledg_external_connection_export[6]
 set_location_assignment PIN_G20 -to ledg_external_connection_export[5]
@@ -248,22 +247,6 @@ set_location_assignment PIN_AC14 -to altera_up_sd_card_avalon_interface_0_condui
 set_location_assignment PIN_AE14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_dat
 set_location_assignment PIN_AD14 -to altera_up_sd_card_avalon_interface_0_conduit_end_b_SD_cmd
 set_location_assignment PIN_AE13 -to altera_up_sd_card_avalon_interface_0_conduit_end_o_SD_clock
-set_location_assignment PIN_G6 -to toetsenbord1_0_conduit_end_kc
-set_location_assignment PIN_H5 -to toetsenbord1_0_conduit_end_kd
-set_location_assignment PIN_AA14 -to toetsenbord1_0_conduit_end_sseg1[6]
-set_location_assignment PIN_AG18 -to toetsenbord1_0_conduit_end_sseg1[5]
-set_location_assignment PIN_AF17 -to toetsenbord1_0_conduit_end_sseg1[4]
-set_location_assignment PIN_AH17 -to toetsenbord1_0_conduit_end_sseg1[3]
-set_location_assignment PIN_AG17 -to toetsenbord1_0_conduit_end_sseg1[2]
-set_location_assignment PIN_AE17 -to toetsenbord1_0_conduit_end_sseg1[1]
-set_location_assignment PIN_AD17 -to toetsenbord1_0_conduit_end_sseg1[0]
-set_location_assignment PIN_AC17 -to toetsenbord1_0_conduit_end_sseg0[6]
-set_location_assignment PIN_AA15 -to toetsenbord1_0_conduit_end_sseg0[5]
-set_location_assignment PIN_AB15 -to toetsenbord1_0_conduit_end_sseg0[4]
-set_location_assignment PIN_AB17 -to toetsenbord1_0_conduit_end_sseg0[3]
-set_location_assignment PIN_AA16 -to toetsenbord1_0_conduit_end_sseg0[2]
-set_location_assignment PIN_AB16 -to toetsenbord1_0_conduit_end_sseg0[1]
-set_location_assignment PIN_AA17 -to toetsenbord1_0_conduit_end_sseg0[0]
 
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_Y19 -to mysegdisp2_0_user_interface_export[30]
@@ -329,3 +312,20 @@ set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
 set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
 set_global_assignment -name CUSP_FILE software/zuul1/main.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
+
+set_location_assignment PIN_AA14 -to toetsenbord1_0_conduit_end_0_sseg0[6]
+set_location_assignment PIN_AG18 -to toetsenbord1_0_conduit_end_0_sseg0[5]
+set_location_assignment PIN_AF17 -to toetsenbord1_0_conduit_end_0_sseg0[4]
+set_location_assignment PIN_AH17 -to toetsenbord1_0_conduit_end_0_sseg0[3]
+set_location_assignment PIN_AG17 -to toetsenbord1_0_conduit_end_0_sseg0[2]
+set_location_assignment PIN_AE17 -to toetsenbord1_0_conduit_end_0_sseg0[1]
+set_location_assignment PIN_AD17 -to toetsenbord1_0_conduit_end_0_sseg0[0]
+set_location_assignment PIN_AC17 -to toetsenbord1_0_conduit_end_0_sseg1[6]
+set_location_assignment PIN_AA15 -to toetsenbord1_0_conduit_end_0_sseg1[5]
+set_location_assignment PIN_AB15 -to toetsenbord1_0_conduit_end_0_sseg1[4]
+set_location_assignment PIN_AB17 -to toetsenbord1_0_conduit_end_0_sseg1[3]
+set_location_assignment PIN_AA16 -to toetsenbord1_0_conduit_end_0_sseg1[2]
+set_location_assignment PIN_AB16 -to toetsenbord1_0_conduit_end_0_sseg1[1]
+set_location_assignment PIN_AA17 -to toetsenbord1_0_conduit_end_0_sseg1[0]
+set_location_assignment PIN_G6 -to toetsenbord1_0_conduit_end_0_kc
+set_location_assignment PIN_H5 -to toetsenbord1_0_conduit_end_0_kd

@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 20, 2014 6:44:39 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400604279220</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 20, 2014 6:59:51 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400605191261</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -977,12 +977,6 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>quadrosegment</slaveDescriptor>
-                <addressRange>0x08003520 - 0x0800352F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>duosegmentrechts</slaveDescriptor>
                 <addressRange>0x08003530 - 0x0800353F</addressRange>
                 <addressSpan>16</addressSpan>
@@ -992,12 +986,6 @@
                 <slaveDescriptor>duosegmentlinks</slaveDescriptor>
                 <addressRange>0x08003540 - 0x0800354F</addressRange>
                 <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
-                <slaveDescriptor>ps2_0</slaveDescriptor>
-                <addressRange>0x08003550 - 0x08003557</addressRange>
-                <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
