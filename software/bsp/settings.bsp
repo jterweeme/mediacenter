@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 20, 2014 4:32:11 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400596331574</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 20, 2014 5:23:22 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400599402005</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -929,13 +929,13 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>ledr</slaveDescriptor>
+                <slaveDescriptor>ledg</slaveDescriptor>
                 <addressRange>0x080034A0 - 0x080034AF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>ledg</slaveDescriptor>
+                <slaveDescriptor>ledr</slaveDescriptor>
                 <addressRange>0x080034B0 - 0x080034BF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>

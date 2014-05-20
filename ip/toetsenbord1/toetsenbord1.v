@@ -6,7 +6,7 @@ module toetsenbord1(
     input s_read,
     output [7:0] s_readdata,
     input s_write,
-    input [7:0] s_writedata,
+    input [31:0] s_writedata,
     input kc,
     input kd,
     output [6:0] sseg0,

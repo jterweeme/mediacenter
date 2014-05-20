@@ -53,6 +53,15 @@ private:
     QuadroSegment *q;
 };
 
+class GreenLeds
+{
+private:
+    volatile uint8_t *base;
+public:
+    GreenLeds(volatile uint8_t *base) { this->base = base; }
+    void set(uint8_t value) { *base = value; }
+};
+
 class Observer
 {
 public:

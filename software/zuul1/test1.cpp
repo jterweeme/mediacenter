@@ -126,6 +126,7 @@ private:
     InfraRood *ir;
     Uart *uart;
     VGATerminal *vgaTerminal;
+    GreenLeds *gl;
 };
 
 int main()
@@ -151,14 +152,14 @@ void Test1::init()
     segmentRechts.write(0x9992);
     segmentRechts.setHex(0x3f);
     ir = InfraRood::getInstance();
-
-    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ,
-                        INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID);
-
+    int ctl = INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID;
+    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     vgaTerminal->puts("Opstarten\r\n");
+    gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
+    gl->set(0x01);
 }
 
 
