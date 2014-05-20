@@ -11,7 +11,7 @@ module toetsenbord1(
     input kd
 );
 
-reg [5:0] cnt;
+reg [3:0] cnt;
 
 always @(posedge clk or negedge reset_n) begin
     if (~reset_n)
@@ -24,15 +24,17 @@ end
 
 always @(posedge clk or negedge reset_n) begin
     if (~reset_n)
-        cnt <= 6'b0;
+        cnt <= 4'b0;
     else
-        cnt <= cnt + 1;
+        cnt <= cnt + 1'b1;
 end
 
 scancode scancode_inst(
     .pclk(cnt[3]),
     .rst(reset_n),
-    .s_readdata(s_readdata)
+    .s_readdata(s_readdata),
+    .kc(kc),
+    .kd(kd)
 );
 
 endmodule

@@ -15,7 +15,7 @@ architecture behavior of scancode is
     signal shiftRegSig2: std_logic_vector(10 downto 1);
 begin
     process (pclk, rst, kc, kd) begin
-        if rst = '1' then
+        if rst = '0' then
             dff1 <= '0';
             dff2 <= '0';
             kdi <= '0';
@@ -29,7 +29,7 @@ begin
     end process;
 
     process (kdi, kci, rst) begin
-        if rst = '1' then
+        if rst = '0' then
             ShiftRegSig1 <= (others => '0');
             ShiftRegSig2 <= (others => '0');
         elsif falling_edge(pclk) then
@@ -39,7 +39,7 @@ begin
     end process;
 
     process (ShiftRegSig1, ShiftRegSig2, rst, kci) begin
-        if rst = '1' then
+        if rst = '0' then
             s_readdata <= "10000000";
         elsif rising_edge(pclk) and ShiftRegSig2(8 downto 1) = "11110000" then
             s_readdata <= ShiftRegSig1(8 downto 1);
