@@ -23,12 +23,12 @@ module slave_template(
 	wire [(DATA_WIDTH/8)-1:0] internal_byteenable;
 	reg [(DATA_WIDTH/8)-1:0] internal_byteenable_d1;
 	wire [15:0] address_decode;
-	reg [15:0] address_decode_d1;         // used to select the first stage of mux pipelining (a, b, c, or d)
-	wire [3:0] address_bank_decode;       // used to select the second stage of mux pipelining (mux a, b, c, or d)
-	reg [3:0] address_bank_decode_d1;     // used to select the second stage of mux pipelining (mux a, b, c, or d)
-    reg slave_read_d1;                    // used to qualify the first stage of mux pipelining (a, b, c, or d)
-    reg slave_read_d2;                    // used to qualify the second stage of mux pipelining (slave_readdata)
-    reg slave_write_d1;                   // used by the option user_write signal
+	reg [15:0] address_decode_d1; 
+	wire [3:0] address_bank_decode;   
+	reg [3:0] address_bank_decode_d1;   
+    reg slave_read_d1;          
+    reg slave_read_d2;           
+    reg slave_write_d1;      
 	reg [DATA_WIDTH-1:0] mux_first_stage_a;
 	reg [DATA_WIDTH-1:0] mux_first_stage_b;
 	reg [DATA_WIDTH-1:0] mux_first_stage_c;
@@ -97,56 +97,27 @@ module slave_template(
 
 
 	register_with_bytelanes register_0 (clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
-		defparam register_0.DATA_WIDTH = DATA_WIDTH;
-/*
-	always @ (posedge clk or posedge reset)
-	begin
-		if (reset == 1)
-		begin
-			slave_readdata <= 0;
-		end
-		else
-		begin
-			if (slave_read_d2 == 1)
-			begin
-				case (address_bank_decode_d1[3:0])
-					4'b0001: slave_readdata <= mux_first_stage_a;
-					4'b0010: slave_readdata <= mux_first_stage_b;
-					4'b0100: slave_readdata <= mux_first_stage_c;
-					4'b1000: slave_readdata <= mux_first_stage_d;
-				endcase
-			end
-		end
-	end*/
+		//defparam register_0.DATA_WIDTH = DATA_WIDTH;
 	
-	
-	assign user_write = slave_write_d1;
-	assign user_read = slave_read;
-	assign user_chipselect = (slave_write_d1 == 1)? address_decode_d1 : address_decode;
-	assign user_byteenable = (slave_write_d1 == 1)? internal_byteenable_d1 : internal_byteenable;
+	//assign user_write = slave_write_d1;
+	//assign user_read = slave_read;
+	//assign user_chipselect = (slave_write_d1 == 1)? address_decode_d1 : address_decode;
+	//assign user_byteenable = (slave_write_d1 == 1)? internal_byteenable_d1 : internal_byteenable;
 	
 endmodule
 
 
-module register_with_bytelanes (
-	clk,
-	reset,
+module register_with_bytelanes(
+	input clk,
+	input reset,
 	
-	data_in,
-	write,
-	byte_enables,
-	data_out
+	input [31:0] data_in,
+	input write,
+	input [3:0] byte_enables,
+	output reg [31:0] data_out
 );
 
 	parameter DATA_WIDTH = 32;
-	
-	input clk;
-	input reset;
-	
-	input [DATA_WIDTH-1:0] data_in;
-	input write;
-	input [(DATA_WIDTH/8)-1:0] byte_enables;
-	output reg [DATA_WIDTH-1:0] data_out;
 	
 	generate
 	genvar LANE;
