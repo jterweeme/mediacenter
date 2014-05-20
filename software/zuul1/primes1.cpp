@@ -16,7 +16,7 @@ private:
 
 int PrimesTest1::run()
 {
-    seg = new QuadroSegment((volatile uint32_t *)QUADROSEGMENT_BASE);
+    seg = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
     uart = Uart::getInstance();
 
     int aantal = 0;

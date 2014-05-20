@@ -196,9 +196,6 @@ set_location_assignment PIN_B14 -to clk27_clk
 set_location_assignment PIN_M21 -to reset_reset_n
 set_location_assignment PIN_B7 -to snd_i2c_scl_external_connection_export
 set_location_assignment PIN_A8 -to snd_i2c_sda_external_connection_export
-set_location_assignment PIN_AF13 -to sd_dat_external_connection_export[1]
-set_location_assignment PIN_AB14 -to sd_dat_external_connection_export[2]
-set_location_assignment PIN_AF14 -to sd_wp_n_external_connection_export
 set_location_assignment PIN_M23 -to key_external_connection_export[0]
 set_location_assignment PIN_N21 -to key_external_connection_export[2]
 set_location_assignment PIN_R24 -to key_external_connection_export[1]
@@ -282,6 +279,7 @@ set_location_assignment PIN_Y26 -to mysegdisp2_0_user_interface_export[20]
 set_location_assignment PIN_W26 -to mysegdisp2_0_user_interface_export[19]
 set_location_assignment PIN_Y25 -to mysegdisp2_0_user_interface_export[18]
 set_location_assignment PIN_AA26 -to mysegdisp2_0_user_interface_export[17]
+set_location_assignment PIN_AA25 -to mysegdisp2_0_user_interface_export[16]
 set_location_assignment PIN_U24 -to mysegdisp2_0_user_interface_export[14]
 set_location_assignment PIN_U23 -to mysegdisp2_0_user_interface_export[13]
 set_location_assignment PIN_W25 -to mysegdisp2_0_user_interface_export[12]
