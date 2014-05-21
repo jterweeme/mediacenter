@@ -68,6 +68,14 @@ public:
     virtual void update() = 0;
 };
 
+class KeyBoard
+{
+private:
+    volatile uint8_t *base;
+public:
+    void init(volatile uint8_t *base) { this->base = base; }
+};
+
 class TerasicRemote
 {
 public:

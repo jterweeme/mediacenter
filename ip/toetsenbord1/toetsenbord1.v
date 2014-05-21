@@ -1,7 +1,7 @@
 module toetsenbord1(
     input csi_clk,
     input csi_reset_n,
-    //output reg ins_irq0_irq,
+    output reg ins_irq0_irq,
     //input avs_s1_cs_n,
     input avs_s1_read,
     output reg [7:0] avs_s1_readdata,
@@ -16,15 +16,15 @@ module toetsenbord1(
 reg [7:0] scancode_data;
 reg [31:0] cnt;
 
-/*
+
 always @(posedge csi_clk or negedge csi_reset_n) begin
     if (~csi_reset_n)
         ins_irq0_irq <= 1'b0;
-    else if (cnt == 26'b1)
+    else if (cnt == 32'b1)
         ins_irq0_irq <= 1'b1;
-    else if (~avs_s1_cs_n & avs_s1_write)
-        ins_irq0_irq <= 1'b0;
-end*/
+    //else if (~avs_s1_cs_n & avs_s1_write)
+        //ins_irq0_irq <= 1'b0;
+end
 
 always @(posedge csi_clk or negedge csi_reset_n) begin
     if (~csi_reset_n)
@@ -35,7 +35,7 @@ end
 
 always @(posedge csi_clk or negedge csi_reset_n) begin
     if (~csi_reset_n)
-        cnt <= 4'b0;
+        cnt <= 31'b0;
     else
         cnt <= cnt + 1'b1;
 end

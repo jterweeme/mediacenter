@@ -40,7 +40,7 @@ int WavPlay1::run()
     {
         if (sdCard->isFAT16())
         {
-            myFile = sdCard->openFile("ENIKDA~1.WAV");
+            myFile = sdCard->openFile("MARCOB~1.WAV");
             
             for (int i = 0; i < 44; i++)
                 myFile->read();      // skip header

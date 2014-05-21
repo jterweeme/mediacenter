@@ -126,3 +126,11 @@ add_interface_port conduit_end_0 coe_kd export Input 1
 add_interface_port conduit_end_0 coe_sseg0 export Output 7
 add_interface_port conduit_end_0 coe_sseg1 export Output 7
 
+add_interface interrupt_sender interrupt end
+set_interface_property interrupt_sender associatedAddressablePoint avalon_slave
+
+set_interface_property interrupt_sender ASSOCIATED_CLOCK clock
+set_interface_property interrupt_sender ENABLED true
+
+add_interface_port interrupt_sender ins_irq0_irq irq Output 1
+
