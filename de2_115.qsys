@@ -76,14 +76,6 @@
          type = "String";
       }
    }
-   element mytimer1_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "134231396";
-         type = "String";
-      }
-   }
    element infrared_0.avalon_slave
    {
       datum baseAddress
@@ -97,6 +89,14 @@
       datum baseAddress
       {
          value = "134231136";
+         type = "String";
+      }
+   }
+   element mytimer1_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134231396";
          type = "String";
       }
    }
@@ -254,19 +254,75 @@
          type = "String";
       }
    }
-   element snd_i2c_scl.s1
+   element ledg.s1
    {
       datum baseAddress
       {
-         value = "134231280";
+         value = "134231216";
          type = "String";
       }
    }
-   element duosegmentrechts.s1
+   element ledr.s1
    {
       datum baseAddress
       {
-         value = "134231344";
+         value = "134231232";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "134231104";
+         type = "String";
+      }
+   }
+   element sw.s1
+   {
+      datum baseAddress
+      {
+         value = "134231248";
+         type = "String";
+      }
+   }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "134231168";
+         type = "String";
+      }
+   }
+   element toetsenbord1_0.s1
+   {
+      datum baseAddress
+      {
+         value = "134231392";
+         type = "String";
+      }
+   }
+   element duosegmentlinks.s1
+   {
+      datum baseAddress
+      {
+         value = "134231360";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "134231296";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "134231328";
          type = "String";
       }
    }
@@ -286,62 +342,6 @@
          type = "String";
       }
    }
-   element toetsenbord1_0.s1
-   {
-      datum baseAddress
-      {
-         value = "134231392";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "134231232";
-         type = "String";
-      }
-   }
-   element duosegmentlinks.s1
-   {
-      datum baseAddress
-      {
-         value = "134231360";
-         type = "String";
-      }
-   }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "134231328";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "134231104";
-         type = "String";
-      }
-   }
-   element snd_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "134231296";
-         type = "String";
-      }
-   }
-   element sw.s1
-   {
-      datum baseAddress
-      {
-         value = "134231248";
-         type = "String";
-      }
-   }
    element new_sdram_controller_0.s1
    {
       datum _lockedAddress
@@ -355,19 +355,19 @@
          type = "String";
       }
    }
-   element uart.s1
+   element snd_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "134231168";
+         value = "134231280";
          type = "String";
       }
    }
-   element ledg.s1
+   element duosegmentrechts.s1
    {
       datum baseAddress
       {
-         value = "134231216";
+         value = "134231344";
          type = "String";
       }
    }
@@ -448,6 +448,14 @@
          type = "int";
       }
    }
+   element video_dual_clock_buffer_0
+   {
+      datum _sortIndex
+      {
+         value = "29";
+         type = "int";
+      }
+   }
    element video_pixel_buffer_dma_0
    {
       datum _sortIndex
@@ -487,7 +495,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1400704306741" />
+ <parameter name="timeStamp" value="1400775068040" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -926,7 +934,7 @@
   <parameter name="enable_transparency" value="false" />
   <parameter name="color_bits" value="1-bit" />
   <parameter name="resolution" value="80 x 60" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="25000000" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
  <module kind="clock_source" version="13.0" enabled="1" name="clk">
@@ -1044,7 +1052,7 @@
   <parameter name="image_width" value="640" />
   <parameter name="image_height" value="480" />
   <parameter name="color_space" value="16-bit RGB" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="25000000" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
  <module kind="altera_up_avalon_sram" version="13.0" enabled="1" name="sram_0">
@@ -1061,7 +1069,18 @@
   <parameter name="input_type" value="16-bit RGB" />
   <parameter name="output_type" value="30-bit RGB" />
   <parameter name="alpha" value="1023" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="25000000" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ </module>
+ <module
+   kind="altera_up_avalon_video_dual_clock_buffer"
+   version="13.0"
+   enabled="1"
+   name="video_dual_clock_buffer_0">
+  <parameter name="color_bits" value="10" />
+  <parameter name="color_planes" value="3" />
+  <parameter name="AUTO_CLOCK_STREAM_IN_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_CLOCK_STREAM_OUT_CLOCK_RATE" value="25000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
  <connection
@@ -1290,11 +1309,6 @@
    version="13.0"
    start="up_clocks_0.vga_clk"
    end="video_vga_controller_0.clock_reset" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.vga_clk"
-   end="video_character_buffer_with_dma_0.clock_reset" />
  <connection
    kind="clock"
    version="13.0"
@@ -1562,30 +1576,60 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.vga_clk"
-   end="video_pixel_buffer_dma_0.clock_reset" />
- <connection
    kind="reset"
    version="13.0"
    start="clk.clk_reset"
    end="video_rgb_resampler_0.clock_reset_reset" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="up_clocks_0.vga_clk"
-   end="video_rgb_resampler_0.clock_reset" />
  <connection
    kind="avalon_streaming"
    version="13.0"
    start="video_pixel_buffer_dma_0.avalon_pixel_source"
    end="video_rgb_resampler_0.avalon_rgb_sink" />
  <connection
+   kind="clock"
+   version="13.0"
+   start="up_clocks_0.sys_clk"
+   end="video_character_buffer_with_dma_0.clock_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="video_dual_clock_buffer_0.clock_stream_in_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="up_clocks_0.sys_clk"
+   end="video_dual_clock_buffer_0.clock_stream_in" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="video_dual_clock_buffer_0.clock_stream_out_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="up_clocks_0.vga_clk"
+   end="video_dual_clock_buffer_0.clock_stream_out" />
+ <connection
+   kind="avalon_streaming"
+   version="13.0"
+   start="video_dual_clock_buffer_0.avalon_dc_buffer_source"
+   end="video_vga_controller_0.avalon_vga_sink" />
+ <connection
    kind="avalon_streaming"
    version="13.0"
    start="video_rgb_resampler_0.avalon_rgb_source"
-   end="video_vga_controller_0.avalon_vga_sink" />
+   end="video_dual_clock_buffer_0.avalon_dc_buffer_sink" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="up_clocks_0.sys_clk"
+   end="video_rgb_resampler_0.clock_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="up_clocks_0.sys_clk"
+   end="video_pixel_buffer_dma_0.clock_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>
