@@ -19,7 +19,7 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 .PHONY: all
 
-all: sdcardtest1.hex test1.hex wavplay1.hex md5test1.elf kbtest2.hex
+all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex md5test1.elf kbtest2.hex
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
