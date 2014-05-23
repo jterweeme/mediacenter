@@ -125,7 +125,7 @@ private:
     QuadroSegment *segmentQuadro;
     InfraRood *ir;
     Uart *uart;
-    VGATerminal *vgaTerminal;
+    //VGATerminal *vgaTerminal;
     GreenLeds *gl;
 };
 
@@ -141,8 +141,8 @@ int main()
 
 void Test1::init()
 {
-    vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
-    vgaTerminal->clear();
+    //vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
+    //vgaTerminal->clear();
     segmentQuadro = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
     segmentQuadro->setInt(12345);
     segmentQuadro->setHex(0xabcd);
@@ -157,7 +157,7 @@ void Test1::init()
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
-    vgaTerminal->puts("Opstarten\r\n");
+    //vgaTerminal->puts("Opstarten\r\n");
     gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
     gl->set(0x01);
 }

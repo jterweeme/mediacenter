@@ -11,7 +11,6 @@ Alex Aalbertsberg
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <altera_up_avalon_video_character_buffer_with_dma.h>
 #include "sdcard.h"
 
 extern const uint8_t lut[];
@@ -203,6 +202,7 @@ public:
     EEProm(I2C *bus) { this->bus = bus; }
 };
 
+/*
 class VGA
 {
 private:
@@ -223,7 +223,7 @@ public:
     VGATerminal(const char *devName) : VGA(devName) { x = y = 0; }
     void putc(const char c);
     void puts(const char *s) { while (*s) putc(*s++); }
-};
+};*/
 
 #endif
 
