@@ -112,6 +112,6 @@ download: vgatest2.elf
 	nios2-download -g $<
 
 clean:
-	rm -Rvf *.o *.elf *.flash *.hex
+	rm -Rvf *.o *.elf *.flash *.hex *.png
 
 
