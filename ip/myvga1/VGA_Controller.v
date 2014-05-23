@@ -1,28 +1,26 @@
-module	VGA_Controller(	//	Host Side
-						iCursor_RGB_EN,
-						iCursor_X,
-						iCursor_Y,
-						iCursor_R,
-						iCursor_G,
-						iCursor_B,
-						iRed,
-						iGreen,
-						iBlue,
-						oAddress,
-						oCoord_X,
-						oCoord_Y,
-						//	VGA Side
-						oVGA_R,
-						oVGA_G,
-						oVGA_B,
-						oVGA_H_SYNC,
-						oVGA_V_SYNC,
-						oVGA_SYNC,
-						oVGA_BLANK,
-						oVGA_CLOCK,
-						//	Control Signal
-						iCLK_25,
-						iRST_N	);
+module VGA_Controller(
+    input [3:0] iCursor_RGB_EN,
+    input [9:0] iCursor_X,
+    input [9:0] iCursor_Y,
+    input [9:0] iCursor_R,
+    input [9:0] iCursor_G,
+    input [9:0] iCursor_B,
+    input [9:0] iRed,
+    input [9:0] iGreen,
+    input [9:0] iBlue,
+    output reg [19:0] oAddress,
+    output reg [9:0] oCoord_X,
+    output reg [9:0] oCoord_Y,
+    output [9:0] oVGA_R,
+    output [9:0] oVGA_G,
+    output [9:0] oVGA_B,
+    output reg oVGA_H_SYNC,
+    output reg oVGA_V_SYNC,
+    output oVGA_SYNC,
+    output oVGA_BLANK,
+    output oVGA_CLOCK,
+    input iCLK_25,
+    input iRST_N);
 
 
 parameter   H_SYNC_CYC  =   96;
@@ -30,44 +28,14 @@ parameter   H_SYNC_BACK =   45+3;
 parameter   H_SYNC_ACT  =   640;    //  646
 parameter   H_SYNC_FRONT=   13+3;
 parameter   H_SYNC_TOTAL=   800;
-//  Virtical Parameter      ( Line )
 parameter   V_SYNC_CYC  =   2;
 parameter   V_SYNC_BACK =   30+2;
 parameter   V_SYNC_ACT  =   480;    //  484
 parameter   V_SYNC_FRONT=   9+2;
 parameter   V_SYNC_TOTAL=   525;
-//  Start Offset
 parameter   X_START     =   H_SYNC_CYC+H_SYNC_BACK+4;
 parameter   Y_START     =   V_SYNC_CYC+V_SYNC_BACK;
 
-
-//	Host Side
-output	reg	[19:0]	oAddress;
-output	reg	[9:0]	oCoord_X;
-output	reg	[9:0]	oCoord_Y;
-input		[3:0]	iCursor_RGB_EN;
-input		[9:0]	iCursor_X;
-input		[9:0]	iCursor_Y;
-input		[9:0]	iCursor_R;
-input		[9:0]	iCursor_G;
-input		[9:0]	iCursor_B;
-input		[9:0]	iRed;
-input		[9:0]	iGreen;
-input		[9:0]	iBlue;
-//	VGA Side
-output		[9:0]	oVGA_R;
-output		[9:0]	oVGA_G;
-output		[9:0]	oVGA_B;
-output	reg			oVGA_H_SYNC;
-output	reg			oVGA_V_SYNC;
-output				oVGA_SYNC;
-output				oVGA_BLANK;
-output				oVGA_CLOCK;
-//	Control Signal
-input				iCLK_25;
-input				iRST_N;
-
-//	Internal Registers and Wires
 reg		[9:0]		H_Cont;
 reg		[9:0]		V_Cont;
 reg		[9:0]		Cur_Color_R;
@@ -88,13 +56,13 @@ assign	mGreen_EN	=	iCursor_RGB_EN[1];
 assign	mBlue_EN	=	iCursor_RGB_EN[0];
 assign	mCLK		=	iCLK_25;
 
-assign	oVGA_R	=	(	H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
+assign oVGA_R = (H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
 						V_Cont>=Y_START 	&& V_Cont<Y_START+V_SYNC_ACT )
 						?	(mRed_EN	?	Cur_Color_R	:	0)	:	0;
-assign	oVGA_G	=	(	H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
+assign oVGA_G = (H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
 						V_Cont>=Y_START 	&& V_Cont<Y_START+V_SYNC_ACT )
 						?	(mGreen_EN	?	Cur_Color_G	:	0)	:	0;
-assign	oVGA_B	=	(	H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
+assign oVGA_B = (H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
 						V_Cont>=Y_START 	&& V_Cont<Y_START+V_SYNC_ACT )
 						?	(mBlue_EN	?	Cur_Color_B	:	0)	:	0;
 
@@ -119,7 +87,6 @@ always@(posedge mCLK or negedge iRST_N)
             end
     end
 
-//	Cursor Generator	
 always@(posedge mCLK or negedge iRST_N)
     begin
         if(!iRST_N)

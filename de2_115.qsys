@@ -52,14 +52,6 @@
          type = "String";
       }
    }
-   element mytimer1_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "138417484";
-         type = "String";
-      }
-   }
    element infrared_0.avalon_slave
    {
       datum baseAddress
@@ -73,6 +65,14 @@
       datum baseAddress
       {
          value = "138417248";
+         type = "String";
+      }
+   }
+   element mytimer1_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "138417484";
          type = "String";
       }
    }
@@ -98,6 +98,11 @@
       {
          value = "0";
          type = "int";
+      }
+      datum sopceditor_expanded
+      {
+         value = "0";
+         type = "boolean";
       }
    }
    element cpu
@@ -230,35 +235,11 @@
          type = "String";
       }
    }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "138417408";
-         type = "String";
-      }
-   }
-   element toetsenbord1_0.s1
-   {
-      datum baseAddress
-      {
-         value = "138417480";
-         type = "String";
-      }
-   }
    element uart.s1
    {
       datum baseAddress
       {
          value = "138417280";
-         type = "String";
-      }
-   }
-   element snd_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "138417376";
          type = "String";
       }
    }
@@ -278,11 +259,19 @@
          type = "String";
       }
    }
-   element eep_i2c_scl.s1
+   element snd_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "138417424";
+         value = "138417376";
+         type = "String";
+      }
+   }
+   element vga.s1
+   {
+      datum baseAddress
+      {
+         value = "134217728";
          type = "String";
       }
    }
@@ -291,6 +280,54 @@
       datum baseAddress
       {
          value = "138417360";
+         type = "String";
+      }
+   }
+   element ledg.s1
+   {
+      datum baseAddress
+      {
+         value = "138417312";
+         type = "String";
+      }
+   }
+   element toetsenbord1_0.s1
+   {
+      datum baseAddress
+      {
+         value = "138417480";
+         type = "String";
+      }
+   }
+   element duosegmentrechts.s1
+   {
+      datum baseAddress
+      {
+         value = "138417440";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "138417216";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "138417424";
+         type = "String";
+      }
+   }
+   element sw.s1
+   {
+      datum baseAddress
+      {
+         value = "138417344";
          type = "String";
       }
    }
@@ -307,51 +344,19 @@
          type = "String";
       }
    }
-   element ledg.s1
-   {
-      datum baseAddress
-      {
-         value = "138417312";
-         type = "String";
-      }
-   }
-   element sw.s1
-   {
-      datum baseAddress
-      {
-         value = "138417344";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "138417216";
-         type = "String";
-      }
-   }
-   element vga.s1
-   {
-      datum baseAddress
-      {
-         value = "134217728";
-         type = "String";
-      }
-   }
-   element duosegmentrechts.s1
-   {
-      datum baseAddress
-      {
-         value = "138417440";
-         type = "String";
-      }
-   }
    element snd_i2c_sda.s1
    {
       datum baseAddress
       {
          value = "138417392";
+         type = "String";
+      }
+   }
+   element eep_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "138417408";
          type = "String";
       }
    }
@@ -447,7 +452,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1400845578829" />
+ <parameter name="timeStamp" value="1400849447843" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
