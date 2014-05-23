@@ -1,33 +1,30 @@
-module	VGA_NIOS_CTRL (	//	Host Side
-						avs_s1_writedata_iDATA,
-						avs_s1_readdata_oDATA,
-						avs_s1_address_iADDR,
-						avs_s1_write_iWR,
-						avs_s1_read_iRD,
-						avs_s1_chipselect_iCS,
-						avs_s1_reset_n_iRST_N,
-						avs_s1_clk_iCLK,		//	Host Clock
-						//	Export Side
-						avs_s1_export_VGA_R,
-						avs_s1_export_VGA_G,
-						avs_s1_export_VGA_B,
-						avs_s1_export_VGA_HS,
-						avs_s1_export_VGA_VS,
-						avs_s1_export_VGA_SYNC,
-						avs_s1_export_VGA_BLANK,
-						avs_s1_export_VGA_CLK,
-						avs_s1_export_iCLK_25	);
+module	VGA_NIOS_CTRL (
+avs_s1_writedata_iDATA,
+avs_s1_readdata_oDATA,
+avs_s1_address_iADDR,
+avs_s1_write_iWR,
+avs_s1_read_iRD,
+avs_s1_chipselect_iCS,
+avs_s1_reset_n_iRST_N,
+avs_s1_clk_iCLK,
+avs_s1_export_VGA_R,
+avs_s1_export_VGA_G,
+avs_s1_export_VGA_B,
+avs_s1_export_VGA_HS,
+avs_s1_export_VGA_VS,
+avs_s1_export_VGA_SYNC,
+avs_s1_export_VGA_BLANK,
+avs_s1_export_VGA_CLK,
+avs_s1_export_iCLK_25);
 
 parameter	RAM_SIZE	=	19'h4B000;
 
-//	Host Side
 output	[15:0]	avs_s1_readdata_oDATA;
 input	[15:0]	avs_s1_writedata_iDATA;	
 input	[18:0]	avs_s1_address_iADDR;
 input			avs_s1_write_iWR,avs_s1_read_iRD,avs_s1_chipselect_iCS;
 input			avs_s1_clk_iCLK,avs_s1_reset_n_iRST_N;
 reg		[15:0]	avs_s1_readdata_oDATA;
-//	Export Side
 output	[9:0]	avs_s1_export_VGA_R;
 output	[9:0]	avs_s1_export_VGA_G;
 output	[9:0]	avs_s1_export_VGA_B;
@@ -71,65 +68,57 @@ assign  mMouse_R = ( ( mVGA_R + {r_data,2'b00}) >= 1021 ) ? 10'b1111111111 : ( m
 assign  mMouse_G = ( ( mVGA_G + {g_data,2'b00}) >= 1021 ) ? 10'b1111111111 : ( mVGA_G + {g_data,2'b00});
 assign  mMouse_B = ( ( mVGA_B + {b_data,2'b00}) >= 1021 ) ? 10'b1111111111 : ( mVGA_B + {b_data,2'b00});
 
-always@(negedge avs_s1_clk_iCLK or negedge avs_s1_reset_n_iRST_N)
-    begin
-        if(!avs_s1_reset_n_iRST_N)
-            begin
-                mCursor_RGB_N	<=	0;
-                mCursor_X		<=	0;
-                mCursor_Y		<=	0;
-                mCursor_R		<=	0;
-                mCursor_G		<=	0;
-                mCursor_B		<=	0;
-                mON_R			<=	0;
-                mON_G			<=	0;
-                mON_B			<=	0;
-                mOFF_R			<=	0;
-                mOFF_G			<=	0;
-                mOFF_B			<=	0;
-                avs_s1_readdata_oDATA			<=	0;
+always@(negedge avs_s1_clk_iCLK or negedge avs_s1_reset_n_iRST_N) begin
+    if(!avs_s1_reset_n_iRST_N) begin
+        mCursor_RGB_N	<=	0;
+        mCursor_X		<=	0;
+        mCursor_Y		<=	0;
+        mCursor_R		<=	0;
+        mCursor_G		<=	0;
+        mCursor_B		<=	0;
+        mON_R			<=	0;
+        mON_G			<=	0;
+        mON_B			<=	0;
+        mOFF_R			<=	0;
+        mOFF_G			<=	0;
+        mOFF_B			<=	0;
+        avs_s1_readdata_oDATA			<=	0;
+    end else begin
+        if(avs_s1_chipselect_iCS) begin
+            if(avs_s1_write_iWR) begin
+                case(avs_s1_address_iADDR)
+                RAM_SIZE+0 :	mCursor_RGB_N	<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+1 :	mCursor_X		<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+2 :	mCursor_Y		<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+3 :	mCursor_R		<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+4 :	mCursor_G		<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+5 :	mCursor_B		<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+6 :	mON_R			<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+7 :	mON_G			<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+8 :	mON_B			<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+9 :	mOFF_R			<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+10:	mOFF_G			<=	avs_s1_writedata_iDATA;
+                RAM_SIZE+11:	mOFF_B			<=	avs_s1_writedata_iDATA;
+                endcase
+            end else if(avs_s1_read_iRD) begin
+                case(avs_s1_address_iADDR)
+                RAM_SIZE+0 :	avs_s1_readdata_oDATA	<=	mCursor_RGB_N	;
+                RAM_SIZE+1 :	avs_s1_readdata_oDATA	<=	mCursor_X		;
+                RAM_SIZE+2 :	avs_s1_readdata_oDATA	<=	mCursor_Y		;
+                RAM_SIZE+3 :	avs_s1_readdata_oDATA	<=	mCursor_R		;
+                RAM_SIZE+4 :	avs_s1_readdata_oDATA	<=	mCursor_G		;
+                RAM_SIZE+5 :	avs_s1_readdata_oDATA	<=	mCursor_B		;
+                RAM_SIZE+6 :	avs_s1_readdata_oDATA	<=	mON_R			;
+                RAM_SIZE+7 :	avs_s1_readdata_oDATA	<=	mON_G			;
+                RAM_SIZE+8 :	avs_s1_readdata_oDATA	<=	mON_B			;
+                RAM_SIZE+9 :	avs_s1_readdata_oDATA	<=	mOFF_R			;
+                RAM_SIZE+10:	avs_s1_readdata_oDATA	<=	mOFF_G			;
+                RAM_SIZE+11:	avs_s1_readdata_oDATA	<=	mOFF_B			;
+                endcase
             end
-        else
-            begin
-                if(avs_s1_chipselect_iCS)
-                    begin
-                        if(avs_s1_write_iWR)
-                            begin
-                                case(avs_s1_address_iADDR)
-                                RAM_SIZE+0 :	mCursor_RGB_N	<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+1 :	mCursor_X		<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+2 :	mCursor_Y		<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+3 :	mCursor_R		<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+4 :	mCursor_G		<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+5 :	mCursor_B		<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+6 :	mON_R			<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+7 :	mON_G			<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+8 :	mON_B			<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+9 :	mOFF_R			<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+10:	mOFF_G			<=	avs_s1_writedata_iDATA;
-                                RAM_SIZE+11:	mOFF_B			<=	avs_s1_writedata_iDATA;
-                                endcase
-                            end
-                        else if(avs_s1_read_iRD)
-                            begin
-                                case(avs_s1_address_iADDR)
-                                RAM_SIZE+0 :	avs_s1_readdata_oDATA	<=	mCursor_RGB_N	;
-                                RAM_SIZE+1 :	avs_s1_readdata_oDATA	<=	mCursor_X		;
-                                RAM_SIZE+2 :	avs_s1_readdata_oDATA	<=	mCursor_Y		;
-                                RAM_SIZE+3 :	avs_s1_readdata_oDATA	<=	mCursor_R		;
-                                RAM_SIZE+4 :	avs_s1_readdata_oDATA	<=	mCursor_G		;
-                                RAM_SIZE+5 :	avs_s1_readdata_oDATA	<=	mCursor_B		;
-                                RAM_SIZE+6 :	avs_s1_readdata_oDATA	<=	mON_R			;
-                                RAM_SIZE+7 :	avs_s1_readdata_oDATA	<=	mON_G			;
-                                RAM_SIZE+8 :	avs_s1_readdata_oDATA	<=	mON_B			;
-                                RAM_SIZE+9 :	avs_s1_readdata_oDATA	<=	mOFF_R			;
-                                RAM_SIZE+10:	avs_s1_readdata_oDATA	<=	mOFF_G			;
-                                RAM_SIZE+11:	avs_s1_readdata_oDATA	<=	mOFF_B			;
-                                endcase
-                            end
-                    end
-            end
+        end
     end
+end
 
 VGA_Controller		u0	(	//	Host Side
 								.iCursor_RGB_EN(mCursor_RGB_N),
@@ -176,29 +165,26 @@ VGA_OSD_RAM			u1	(	//	Read Out Side
 							//	Control Signals
 							.iRST_N(avs_s1_reset_n_iRST_N)	);
 
-//background pic read,based on color 256 lut
 assign NCLK_n = ~avs_s1_export_VGA_CLK;
-//color LUT index output
+
+
 img_data	img_data_inst (
 	.address ( mVGA_ADDR ),
 	.clock ( NCLK_n ),
 	.q ( index )
 	);
-//Color LUT output
+
 img_index	img_index_inst (
 	.address ( index ),
 	.clock ( avs_s1_export_VGA_CLK ),
 	.q ( bgr_data_raw)
-	);	
+	);
 
-//latch valid data at falling edge;
 always@(posedge NCLK_n) 
 	bgr_data <= bgr_data_raw;
-//red	
+
 assign b_data = bgr_data[23:16];
-//green
 assign g_data = bgr_data[15:8];
-//blue
 assign r_data = bgr_data[7:0];
 								
 endmodule

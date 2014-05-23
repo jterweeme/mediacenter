@@ -5,13 +5,13 @@ set_module_property VERSION 1.0
 set_module_property INTERNAL false
 set_module_property GROUP "Jalex"
 set_module_property DISPLAY_NAME infrarood
-set_module_property TOP_LEVEL_HDL_FILE main.v
+set_module_property TOP_LEVEL_HDL_FILE infraredtop.v
 set_module_property TOP_LEVEL_HDL_MODULE TERASIC_IRM
 set_module_property INSTANTIATE_IN_SYSTEM_MODULE true
 set_module_property EDITABLE true
 set_module_property ANALYZE_HDL TRUE
 
-add_file main.v {SYNTHESIS SIMULATION}
+add_file infraredtop.v {SYNTHESIS SIMULATION}
 add_file infrared.v {SYNTHESIS SIMULATION}
 
 add_interface avalon_slave avalon end

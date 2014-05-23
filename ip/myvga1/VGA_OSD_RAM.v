@@ -36,32 +36,26 @@ input	[9:0]	iON_B;
 input	[9:0]	iOFF_R;
 input	[9:0]	iOFF_G;
 input	[9:0]	iOFF_B;
-//	Control Signals
 input				iRST_N;
-//	Internal Registers/Wires
 reg		[2:0]		ADDR_d;
 reg		[2:0]		ADDR_dd;
 wire	[7:0]		ROM_DATA;
 
-always@(posedge iVGA_CLK or negedge iRST_N)
-    begin
-        if(!iRST_N)
-            begin
-                oRed	<=	0;
-                oGreen	<=	0;
-                oBlue	<=	0;
-                ADDR_d	<=	0;
-                ADDR_dd	<=	0;
-            end
-        else
-            begin
-                ADDR_d	<=	iVGA_ADDR[2:0];
-                ADDR_dd	<=	~ADDR_d;
-                oRed	<=	ROM_DATA[ADDR_dd]?	iON_R:iOFF_R;
-                oGreen	<=	ROM_DATA[ADDR_dd]?	iON_G:iOFF_G;
-                oBlue	<=	ROM_DATA[ADDR_dd]?	iON_B:iOFF_B;
-            end
+always@(posedge iVGA_CLK or negedge iRST_N) begin
+    if (!iRST_N) begin
+        oRed <= 0;
+        oGreen <= 0;
+        oBlue <= 0;
+        ADDR_d <= 0;
+        ADDR_dd <= 0;
+    end else begin
+        ADDR_d <= iVGA_ADDR[2:0];
+        ADDR_dd <= ~ADDR_d;
+        oRed <= ROM_DATA[ADDR_dd] ? iON_R:iOFF_R;
+        oGreen <= ROM_DATA[ADDR_dd] ? iON_G:iOFF_G;
+        oBlue <= ROM_DATA[ADDR_dd] ? iON_B:iOFF_B;
     end
+end
 
 Img_RAM 	u0	(	//	Write In Side
 					.data(iWR_DATA),

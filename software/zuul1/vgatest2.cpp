@@ -14,7 +14,7 @@ int main()
     vgaScreen.write_ctrl(vga_ctrl_set.Value);
     vgaScreen.clear();
 
-    vgaScreen.Set_Pixel_On_Color(512, 512, 512);
+    vgaScreen.Set_Pixel_On_Color(0, 0, 512);
     vgaScreen.Set_Pixel_Off_Color(0, 0, 0);
     vgaScreen.Set_Cursor_Color(0, 1023, 0);
 

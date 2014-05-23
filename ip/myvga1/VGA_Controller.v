@@ -66,17 +66,14 @@ assign oVGA_B = (H_Cont>=X_START+9 	&& H_Cont<X_START+H_SYNC_ACT+9 &&
 						V_Cont>=Y_START 	&& V_Cont<Y_START+V_SYNC_ACT )
 						?	(mBlue_EN	?	Cur_Color_B	:	0)	:	0;
 
-//	Pixel LUT Address Generator
-always@(posedge mCLK or negedge iRST_N)
-    begin
+always@(posedge mCLK or negedge iRST_N) begin
         if(!iRST_N)
             begin
                 oCoord_X	<=	0;
                 oCoord_Y	<=	0;
                 oAddress	<=	0;
             end
-        else
-            begin
+        else begin
                 if(	H_Cont>=X_START && H_Cont<X_START+H_SYNC_ACT &&
                     V_Cont>=Y_START && V_Cont<Y_START+V_SYNC_ACT )
                     begin
