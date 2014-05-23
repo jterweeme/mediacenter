@@ -1,20 +1,18 @@
-#include <altera_up_avalon_video_pixel_buffer_dma.h>
-#include <stdio.h>
+#include "vgascreen.h"
 
 int main()
 {
-    alt_up_pixel_buffer_dma_dev *pixel_buf_dev;
-
-    pixel_buf_dev = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
-
-    if (pixel_buf_dev == NULL)
-        ::printf("Could not open display\r\n");
-    else
-        ::printf("Display open successful\r\n");
-
-    //alt_up_pixel_buffer_dma_clear_screen(pixel_buf_dev, 0);
-    //alt_up_pixel_buffer_dma_clear_screen(pixel_buf_dev, 1);
-    alt_up_pixel_buffer_dma_draw_box(pixel_buf_dev, 0, 0, 319, 239, 0x001f, 0);
+    VGA_Ctrl_Reg vga_ctrl_set;
+    vga_ctrl_set.VGA_Ctrl_Flags.RED_ON = 1;
+    vga_ctrl_set.VGA_Ctrl_Flags.GREEN_ON = 0;
+    vga_ctrl_set.VGA_Ctrl_Flags.BLUE_ON = 1;
+    vga_ctrl_set.VGA_Ctrl_Flags.CURSOR_ON = 1;
+    VgaScreen vgaScreen(VPG_BASE);
+    vgaScreen.write_ctrl(vga_ctrl_set.Value);
+    vgaScreen.clear();
+    vgaScreen.Set_Pixel_On_Color(512, 512, 512);
+    vgaScreen.Set_Pixel_Off_Color(0, 0, 0);
+    vgaScreen.Set_Cursor_Color(0, 1023, 0);
     return 0;
 }
 

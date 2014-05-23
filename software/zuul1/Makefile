@@ -19,7 +19,7 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 .PHONY: all
 
-all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex md5test1.elf kbtest2.hex
+all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex md5test1.elf kbtest2.hex vgatest2.hex
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
@@ -67,7 +67,7 @@ primes1.elf: primes1.o misc.o sdcard.o
 sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
 test1.elf: test1.o misc.o sdcard.o
 vgatest1.elf: vgatest1.o misc.o
-vgatest2.elf: vgatest2.o
+vgatest2.elf: vgatest2.o vgascreen.o
 wavplay1.elf: wavplay1.o misc.o sdcard.o
 
 AUDIO.o: AUDIO.cpp AUDIO.h
@@ -99,6 +99,7 @@ sdcardtest1.o: sdcardtest1.cpp
 #sd_protocol.o: sd_protocol.cpp
 SEG7.o: SEG7.cpp
 test1.o: test1.cpp misc.h
+vgascreen.o: vgascreen.cpp
 vgatest1.o: vgatest1.cpp
 vgatest2.o: vgatest2.cpp
 WaveLib.o: WaveLib.cpp
@@ -107,7 +108,7 @@ wavplay1.o: wavplay1.cpp misc.h
 zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@
 
-download: wavplay1.elf
+download: vgatest2.elf
 	nios2-download -g $<
 
 clean:
