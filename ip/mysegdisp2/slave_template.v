@@ -1,14 +1,16 @@
+/*
+Jasper ter Weeme
+*/
+
 module slave_template(
 	input clk,
-	input reset,
-	
+	input reset,	
 	input [3:0] slave_address,
 	input slave_read,
 	input slave_write,
 	output reg [31:0] slave_readdata,
 	input [31:0] slave_writedata,
 	input [3:0] slave_byteenable,
-
 	output wire [31:0] user_dataout_0,
 	output wire [15:0] user_chipselect,
 	output wire [3:0] user_byteenable,
@@ -35,16 +37,12 @@ module slave_template(
 	reg [DATA_WIDTH-1:0] mux_first_stage_d;
 	
 	generate
-		if (DATA_WIDTH == 8)
-		begin
+		if (DATA_WIDTH == 8) begin
 			assign internal_byteenable = 1'b1;
-		end
-		else
-		begin
+		end else begin
 			assign internal_byteenable = slave_byteenable;
 		end
 	endgenerate
-
 
 	assign address_decode[0] = (slave_address == 4'b0000) & (slave_write | slave_read);
 	assign address_decode[1] = (slave_address == 4'b0001) & (slave_write | slave_read);
@@ -66,7 +64,6 @@ module slave_template(
 	assign address_bank_decode[1] = (address_decode_d1[7:4] != 0)? 1'b1 : 1'b0;
 	assign address_bank_decode[2] = (address_decode_d1[11:8] != 0)? 1'b1 : 1'b0;
 	assign address_bank_decode[3] = (address_decode_d1[15:12] != 0)? 1'b1 : 1'b0;
-		
 	
 	always @ (posedge clk or posedge reset) begin
 		if (reset == 1) begin
@@ -76,21 +73,17 @@ module slave_template(
 			address_decode_d1 <= 0;
 			address_bank_decode_d1 <= 0;
 			internal_byteenable_d1 <= 0;
-		end
-		else
-		begin
+		end else begin
 			slave_read_d1 <= slave_read;
 			slave_read_d2 <= slave_read_d1;
 			slave_write_d1 <= slave_write;
 			internal_byteenable_d1 <= internal_byteenable;
+            
 			if((slave_read == 1) | (slave_write == 1))
-			begin
 				address_decode_d1 <= address_decode;
-			end
+            
 			if(slave_read_d1 == 1)
-			begin
 				address_bank_decode_d1 <= address_bank_decode;
-			end
 		end
 	end
 	
@@ -106,35 +99,34 @@ module register_with_bytelanes(
 	input [3:0] byte_enables,
 	output reg [31:0] data_out
 );
-	
-	generate
-	genvar LANE;
-		for(LANE = 0; LANE < 4; LANE = LANE+1)
-		begin: register_bytelane_generation	
-			always @ (posedge clk or posedge reset) begin
-				if(reset == 1) begin
-					data_out[(LANE*8)+7:(LANE*8)] <= 0;
-				end else begin
-					if ((byte_enables[LANE] == 1) & (write == 1)) begin
-						data_out[(LANE*8)+7:(LANE*8)] <= data_in[(LANE*8)+7:(LANE*8)];
-					end
-				end
-			end
-		end
-	endgenerate
-/*
+
     always @(posedge clk or posedge reset) begin
         if (reset == 1)
-            data_out <= 32'b0;
-        else if ((byte_enables[0] == 1) & (write == 1))
+            data_out[7:0] <= 8'b0;
+        else if (byte_enables[0] & write)
             data_out[7:0] <= data_in[7:0];
-        else if ((byte_enables[1] == 1) & (write == 1))
+    end
+    
+    always @(posedge clk or posedge reset) begin
+        if (reset == 1)
+            data_out[15:8] <= 8'b0;
+        else if (byte_enables[1] & write)
             data_out[15:8] <= data_in[15:8];
-        else if ((byte_enables[2] == 1) & (write == 1))
+    end
+    
+    always @(posedge clk or posedge reset) begin
+        if (reset == 1)
+            data_out[23:16] <= 8'b0;
+        else if (byte_enables[2] & write)
             data_out[23:16] <= data_in[23:16];
-        else if ((byte_enables[3] == 1) & (write == 1))
+    end
+    
+    always @(posedge clk or posedge reset) begin
+        if (reset == 1)
+            data_out[31:24] <= 8'b0;
+        else if (byte_enables[3] & write)
             data_out[31:24] <= data_in[31:24];
-    end*/
+    end
 endmodule
 
 

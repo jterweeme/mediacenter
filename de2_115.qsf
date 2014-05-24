@@ -283,7 +283,6 @@ set_global_assignment -name CUSP_FILE software/zuul1/jtagtest1.cpp
 set_global_assignment -name CUSP_FILE software/zuul1/audiotest1.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
 set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
-set_global_assignment -name CUSP_FILE software/zuul1/main.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
 set_location_assignment PIN_D12 -to vga_export_VGA_B[7]
 set_location_assignment PIN_D11 -to vga_export_VGA_B[6]
