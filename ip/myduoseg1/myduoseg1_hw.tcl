@@ -17,7 +17,7 @@ set_module_property SIMULATION_MODEL_HAS_TULIPS false
 set_module_property SIMULATION_MODEL_IS_OBFUSCATED false
 set_module_property ELABORATION_CALLBACK    elaborate_me
 add_file myduoseg1.v {SYNTHESIS SIMULATION}
-add_parameter DATA_WIDTH int 32 "Width of each input or output"
+add_parameter DATA_WIDTH int 16 "Width of each input or output"
 set_parameter_property DATA_WIDTH DISPLAY_NAME "Word Size"
 set_parameter_property DATA_WIDTH GROUP "Register File Properties"
 set_parameter_property DATA_WIDTH AFFECTS_PORT_WIDTHS true
@@ -76,7 +76,7 @@ proc elaborate_me {}  {
   
   set_port_property slave_readdata WIDTH $the_data_width
   set_port_property slave_writedata WIDTH $the_data_width
-  set_port_property user_dataout_0 WIDTH 28
+  set_port_property user_dataout_0 WIDTH 14
   
   
   
