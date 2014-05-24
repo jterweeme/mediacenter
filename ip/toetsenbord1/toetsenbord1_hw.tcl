@@ -14,10 +14,6 @@
 # 
 package require -exact qsys 13.1
 
-
-# 
-# module toetsenbord1
-# 
 set_module_property DESCRIPTION ""
 set_module_property NAME toetsenbord1
 set_module_property VERSION 1.0
@@ -32,10 +28,6 @@ set_module_property ANALYZE_HDL AUTO
 set_module_property REPORT_TO_TALKBACK false
 set_module_property ALLOW_GREYBOX_GENERATION false
 
-
-# 
-# file sets
-# 
 add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL toetsenbord1
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
@@ -43,33 +35,15 @@ add_fileset_file toetsenbord1.vhd VHDL PATH toetsenbord1.vhd
 add_fileset_file toetsenbord1.v VERILOG PATH toetsenbord1.v TOP_LEVEL_FILE
 add_fileset_file display2.vhd VHDL PATH display2.vhd
 
-
-# 
-# parameters
-# 
-
-
-# 
-# display items
-# 
-
-
-# 
-# connection point clock
-# 
 add_interface clock clock end
 set_interface_property clock clockRate 0
 set_interface_property clock ENABLED true
 set_interface_property clock EXPORT_OF ""
 set_interface_property clock PORT_NAME_MAP ""
 set_interface_property clock SVD_ADDRESS_GROUP ""
-
 add_interface_port clock csi_clk clk Input 1
 
 
-# 
-# connection point clock_reset
-# 
 add_interface clock_reset reset end
 set_interface_property clock_reset associatedClock clock
 set_interface_property clock_reset synchronousEdges DEASSERT
@@ -80,10 +54,6 @@ set_interface_property clock_reset SVD_ADDRESS_GROUP ""
 
 add_interface_port clock_reset csi_reset_n reset_n Input 1
 
-
-# 
-# connection point s1
-# 
 add_interface s1 avalon end
 set_interface_property s1 addressAlignment NATIVE
 set_interface_property s1 associatedClock clock
@@ -109,22 +79,13 @@ set_interface_property s1 SVD_ADDRESS_GROUP ""
 add_interface_port s1 avs_s1_read read Input 1
 add_interface_port s1 avs_s1_readdata readdata Output 8
 
-
-# 
-# connection point conduit_end_0
-# 
 add_interface conduit_end_0 conduit end
 set_interface_property conduit_end_0 associatedClock clock
 set_interface_property conduit_end_0 associatedReset clock_reset
 set_interface_property conduit_end_0 ENABLED true
-set_interface_property conduit_end_0 EXPORT_OF ""
-set_interface_property conduit_end_0 PORT_NAME_MAP ""
-set_interface_property conduit_end_0 SVD_ADDRESS_GROUP ""
 
 add_interface_port conduit_end_0 coe_kc export Input 1
 add_interface_port conduit_end_0 coe_kd export Input 1
-add_interface_port conduit_end_0 coe_sseg0 export Output 7
-add_interface_port conduit_end_0 coe_sseg1 export Output 7
 
 add_interface interrupt_sender interrupt end
 set_interface_property interrupt_sender associatedAddressablePoint avalon_slave
@@ -133,4 +94,11 @@ set_interface_property interrupt_sender ASSOCIATED_CLOCK clock
 set_interface_property interrupt_sender ENABLED true
 
 add_interface_port interrupt_sender ins_irq0_irq irq Output 1
+
+add_interface conduit_debug conduit end
+set_interface_property conduit_debug associatedClock clock
+set_interface_property conduit_debug associatedReset clock_reset
+set_interface_property conduit_debug ENABLED true
+add_interface_port conduit_debug coe_sseg0 export Output 7
+add_interface_port conduit_debug coe_sseg1 export Output 7
 
