@@ -65,7 +65,7 @@ void InfraRood::init(volatile uint32_t *base, int irq, int ctl)
 {
     this->base = base;
     alt_ic_isr_register(ctl, irq, isrBridge, 0, 0);
-    IOWR(base, 0, 0);
+    base[0] = 0;
 }
 
 void InfraRood::isr(void *context)
@@ -74,7 +74,7 @@ void InfraRood::isr(void *context)
         observer->update();
 
     IOWR_ALTERA_AVALON_PIO_EDGE_CAP(base, 0);
-    IOWR(base, 0, 0);
+    base[0] = 0;    // reset interrupt
 }
 
 void InfraRood::setObserver(Observer *observer)
@@ -197,8 +197,8 @@ bool SoundCard::regWrite(uint8_t index, uint16_t data)
 
 void SoundCard::writeDacOut(uint16_t left, uint16_t right)
 {
-    IOWR(base, 0, left);
-    IOWR(base, 1, right);
+    base[0] = left;
+    base[1] = right;
 }
 
 void SoundCard::setSampleRate(uint8_t ssr)

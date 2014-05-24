@@ -106,16 +106,17 @@ public:
 
 class InfraRood
 {
-public:
-    static InfraRood *getInstance();
-    void setObserver(Observer *);
-    void init(volatile uint32_t *base, int irq, int ctl);
 private:
     InfraRood() { }
     Observer *observer;
     void isr(void *context);
     static void isrBridge(void *context);
     volatile uint32_t *base;
+public:
+    static InfraRood *getInstance();
+    void setObserver(Observer *);
+    void init(volatile uint32_t *base, int irq, int ctl);
+    uint32_t read() { return base[0]; }
 };
 
 class Uart
