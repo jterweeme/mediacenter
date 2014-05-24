@@ -84,13 +84,11 @@ always@(posedge mCLK or negedge iRST_N) begin
             end
     end
 
-always@(posedge mCLK or negedge iRST_N)
-    begin
-        if(!iRST_N)
-            begin
-                Cur_Color_R	<=	0;
-                Cur_Color_G	<=	0;
-                Cur_Color_B	<=	0;
+always@(posedge mCLK or negedge iRST_N) begin
+    if(!iRST_N) begin
+        Cur_Color_R <= 0;
+              Cur_Color_G <= 0;
+                Cur_Color_B <= 0;
             end
         else
             begin
@@ -125,9 +123,7 @@ always@(posedge mCLK or negedge iRST_N)
             end
     end
 
-//	H_Sync Generator, Ref. 25 MHz Clock
-always@(posedge mCLK or negedge iRST_N)
-    begin
+always@(posedge mCLK or negedge iRST_N) begin
         if(!iRST_N)
             begin
                 H_Cont		<=	0;

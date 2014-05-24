@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 23, 2014 9:49:03 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400874543864</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 24, 2014 4:40:34 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1400942434316</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -893,128 +893,134 @@
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>vga</slaveDescriptor>
+                <slaveDescriptor>mysram_0</slaveDescriptor>
                 <addressRange>0x08000000 - 0x081FFFFF</addressRange>
+                <addressSpan>2097152</addressSpan>
+                <attributes>memory</attributes>
+        </MemoryMap>
+        <MemoryMap>
+                <slaveDescriptor>vga</slaveDescriptor>
+                <addressRange>0x08200000 - 0x083FFFFF</addressRange>
                 <addressSpan>2097152</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>Altera_UP_SD_Card_Avalon_Interface_0</slaveDescriptor>
-                <addressRange>0x08201000 - 0x082013FF</addressRange>
+                <addressRange>0x08401000 - 0x084013FF</addressRange>
                 <addressSpan>1024</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mysegdisp2_0</slaveDescriptor>
-                <addressRange>0x08201400 - 0x0820143F</addressRange>
+                <addressRange>0x08401400 - 0x0840143F</addressRange>
                 <addressSpan>64</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>timer_0</slaveDescriptor>
-                <addressRange>0x08201440 - 0x0820145F</addressRange>
+                <addressRange>0x08401440 - 0x0840145F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>timer</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>AUDIO_IF_0</slaveDescriptor>
-                <addressRange>0x08201460 - 0x0820147F</addressRange>
+                <addressRange>0x08401460 - 0x0840147F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>uart</slaveDescriptor>
-                <addressRange>0x08201480 - 0x0820149F</addressRange>
+                <addressRange>0x08401480 - 0x0840149F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>ledg</slaveDescriptor>
-                <addressRange>0x082014A0 - 0x082014AF</addressRange>
+                <addressRange>0x084014A0 - 0x084014AF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>ledr</slaveDescriptor>
-                <addressRange>0x082014B0 - 0x082014BF</addressRange>
+                <addressRange>0x084014B0 - 0x084014BF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>sw</slaveDescriptor>
-                <addressRange>0x082014C0 - 0x082014CF</addressRange>
+                <addressRange>0x084014C0 - 0x084014CF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>key</slaveDescriptor>
-                <addressRange>0x082014D0 - 0x082014DF</addressRange>
+                <addressRange>0x084014D0 - 0x084014DF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>snd_i2c_scl</slaveDescriptor>
-                <addressRange>0x082014E0 - 0x082014EF</addressRange>
+                <addressRange>0x084014E0 - 0x084014EF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>snd_i2c_sda</slaveDescriptor>
-                <addressRange>0x082014F0 - 0x082014FF</addressRange>
+                <addressRange>0x084014F0 - 0x084014FF</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>eep_i2c_sda</slaveDescriptor>
-                <addressRange>0x08201500 - 0x0820150F</addressRange>
+                <addressRange>0x08401500 - 0x0840150F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>eep_i2c_scl</slaveDescriptor>
-                <addressRange>0x08201510 - 0x0820151F</addressRange>
+                <addressRange>0x08401510 - 0x0840151F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>duosegmentrechts</slaveDescriptor>
-                <addressRange>0x08201520 - 0x0820152F</addressRange>
+                <addressRange>0x08401520 - 0x0840152F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>duosegmentlinks</slaveDescriptor>
-                <addressRange>0x08201530 - 0x0820153F</addressRange>
+                <addressRange>0x08401530 - 0x0840153F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x08201540 - 0x08201547</addressRange>
+                <addressRange>0x08401540 - 0x08401547</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
-                <addressRange>0x08201548 - 0x0820154B</addressRange>
+                <addressRange>0x08401548 - 0x0840154B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mytimer1_0</slaveDescriptor>
-                <addressRange>0x0820154C - 0x0820154F</addressRange>
+                <addressRange>0x0840154C - 0x0840154F</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>infrared_0</slaveDescriptor>
-                <addressRange>0x08201550 - 0x08201553</addressRange>
+                <addressRange>0x08401550 - 0x08401553</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>character_lcd_0</slaveDescriptor>
-                <addressRange>0x08201554 - 0x08201555</addressRange>
+                <addressRange>0x08401554 - 0x08401555</addressRange>
                 <addressSpan>2</addressSpan>
                 <attributes/>
         </MemoryMap>

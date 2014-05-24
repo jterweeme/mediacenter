@@ -2,6 +2,7 @@
 
 #include <io.h>
 #include "vgascreen.h"
+#include <stdint.h>
 
 int main()
 {
@@ -18,9 +19,17 @@ int main()
     vgaScreen.Set_Pixel_Off_Color(0, 0, 0);
     vgaScreen.Set_Cursor_Color(0, 1023, 0);
 
+    IOWR(VPG_BASE, OSD_MEM_ADDR+1, 100);
+    IOWR(VPG_BASE, OSD_MEM_ADDR+2, 100);
+    volatile uint32_t *base = (volatile uint32_t *)VPG_BASE;
 
+    for (int i = 650; i < 7000; i++)
+        base[i] = 0x11111111;
+
+/*
     for (int i = 650; i < 15700; i++)
         IOWR(VPG_BASE, i, 1);
+*/
 
 
     return 0;

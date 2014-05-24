@@ -51,16 +51,13 @@ wire	[18:0]	mVGA_ADDR;
 wire	[9:0]	mVGA_R;
 wire	[9:0]	mVGA_G;
 wire	[9:0]	mVGA_B;
-//color lut
 wire NCLK_n;	
 wire [7:0] index;
 reg [23:0] bgr_data;
 wire [23:0] bgr_data_raw;
-
 wire [7:0] b_data; 
 wire [7:0] g_data;  
 wire [7:0] r_data;
-//2-value when set the pixel via mouse
 wire    [9:0]   mMouse_R;
 wire    [9:0]   mMouse_G;
 wire    [9:0]   mMouse_B;
@@ -120,19 +117,18 @@ always@(negedge avs_s1_clk_iCLK or negedge avs_s1_reset_n_iRST_N) begin
     end
 end
 
-VGA_Controller		u0	(	//	Host Side
-								.iCursor_RGB_EN(mCursor_RGB_N),
-								.iCursor_X(mCursor_X),
-								.iCursor_Y(mCursor_Y),
-								.iCursor_R(mCursor_R),
-								.iCursor_G(mCursor_G),
-								.iCursor_B(mCursor_B),							
-								.oAddress(mVGA_ADDR),
-								.iRed	(mMouse_R),
-								.iGreen	(mMouse_G),
-								.iBlue	(mMouse_B),
-								//	VGA Side
-								.oVGA_R(avs_s1_export_VGA_R ),
+VGA_Controller u0 (
+.iCursor_RGB_EN(mCursor_RGB_N),
+.iCursor_X(mCursor_X),
+.iCursor_Y(mCursor_Y),
+.iCursor_R(mCursor_R),
+.iCursor_G(mCursor_G),
+.iCursor_B(mCursor_B),							
+.oAddress(mVGA_ADDR),
+.iRed	(mMouse_R),
+.iGreen	(mMouse_G),
+.iBlue	(mMouse_B),
+.oVGA_R(avs_s1_export_VGA_R ),
 								.oVGA_G(avs_s1_export_VGA_G ),
 								.oVGA_B(avs_s1_export_VGA_B ),
 								.oVGA_H_SYNC(avs_s1_export_VGA_HS),
@@ -144,29 +140,25 @@ VGA_Controller		u0	(	//	Host Side
 								.iCLK_25(avs_s1_export_iCLK_25),
 								.iRST_N(avs_s1_reset_n_iRST_N)	);
 
-VGA_OSD_RAM			u1	(	//	Read Out Side
+VGA_OSD_RAM			u1	(
 							.oRed(mVGA_R),
 							.oGreen(mVGA_G),
 							.oBlue(mVGA_B),
 							.iVGA_ADDR(mVGA_ADDR),
 							.iVGA_CLK(avs_s1_export_VGA_CLK),
-							//	Write In Side
 							.iWR_DATA(avs_s1_writedata_iDATA),
 							.iWR_ADDR(avs_s1_address_iADDR),
-							.iWR_EN(avs_s1_write_iWR && (avs_s1_address_iADDR < RAM_SIZE) && avs_s1_chipselect_iCS),
-							.iWR_CLK(avs_s1_clk_iCLK),
-							//	CLUT
-							.iON_R(mON_R),
-							.iON_G(mON_G),
-							.iON_B(mON_B),
-							.iOFF_R(mOFF_R),
-							.iOFF_G(mOFF_G),
-							.iOFF_B(mOFF_B),
-							//	Control Signals
-							.iRST_N(avs_s1_reset_n_iRST_N)	);
+.iWR_EN(avs_s1_write_iWR && (avs_s1_address_iADDR < RAM_SIZE) && avs_s1_chipselect_iCS),
+.iWR_CLK(avs_s1_clk_iCLK),
+.iON_R(mON_R),
+.iON_G(mON_G),
+.iON_B(mON_B),
+.iOFF_R(mOFF_R),
+.iOFF_G(mOFF_G),
+.iOFF_B(mOFF_B),
+.iRST_N(avs_s1_reset_n_iRST_N)	);
 
 assign NCLK_n = ~avs_s1_export_VGA_CLK;
-
 
 img_data	img_data_inst (
 	.address ( mVGA_ADDR ),
