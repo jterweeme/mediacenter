@@ -21,7 +21,7 @@ add_parameter DATA_WIDTH int 32 "Width of each input or output"
 set_parameter_property DATA_WIDTH DISPLAY_NAME "Word Size"
 set_parameter_property DATA_WIDTH GROUP "Register File Properties"
 set_parameter_property DATA_WIDTH AFFECTS_PORT_WIDTHS true
-set_parameter_property DATA_WIDTH ALLOWED_RANGES {8 16 32 64 128 256 512 1024}
+#set_parameter_property DATA_WIDTH ALLOWED_RANGES {8 16 32 64 128 256 512 1024}
 add_parameter ENABLE_SYNC_SIGNALS int 0 "Output syncronization signals"
 set_parameter_property ENABLE_SYNC_SIGNALS DISPLAY_NAME "Syncronization signals"
 set_parameter_property ENABLE_SYNC_SIGNALS GROUP "Register File Properties"
@@ -76,7 +76,7 @@ proc elaborate_me {}  {
   
   set_port_property slave_readdata WIDTH $the_data_width
   set_port_property slave_writedata WIDTH $the_data_width
-  set_port_property user_dataout_0 WIDTH $the_data_width
+  set_port_property user_dataout_0 WIDTH 28
   
   
   

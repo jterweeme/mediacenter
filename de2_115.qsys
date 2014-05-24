@@ -52,19 +52,19 @@
          type = "String";
       }
    }
+   element mytimer1_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "138417484";
+         type = "String";
+      }
+   }
    element mysram_0.avalon_slave
    {
       datum baseAddress
       {
          value = "134217728";
-         type = "String";
-      }
-   }
-   element AUDIO_IF_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "138417248";
          type = "String";
       }
    }
@@ -76,11 +76,11 @@
          type = "String";
       }
    }
-   element mytimer1_0.avalon_slave
+   element AUDIO_IF_0.avalon_slave
    {
       datum baseAddress
       {
-         value = "138417484";
+         value = "138417248";
          type = "String";
       }
    }
@@ -186,7 +186,7 @@
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "21";
          type = "int";
       }
    }
@@ -207,7 +207,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "25";
          type = "int";
       }
    }
@@ -215,7 +215,7 @@
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "24";
          type = "int";
       }
    }
@@ -243,19 +243,19 @@
          type = "String";
       }
    }
-   element eep_i2c_scl.s1
+   element snd_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "138417424";
+         value = "138417376";
          type = "String";
       }
    }
-   element sw.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "138417344";
+         value = "138417408";
          type = "String";
       }
    }
@@ -264,6 +264,67 @@
       datum baseAddress
       {
          value = "136314880";
+         type = "String";
+      }
+   }
+   element toetsenbord1_0.s1
+   {
+      datum baseAddress
+      {
+         value = "138417480";
+         type = "String";
+      }
+   }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "138417280";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "138417392";
+         type = "String";
+      }
+   }
+   element key.s1
+   {
+      datum baseAddress
+      {
+         value = "138417360";
+         type = "String";
+      }
+   }
+   element ledr.s1
+   {
+      datum baseAddress
+      {
+         value = "138417328";
+         type = "String";
+      }
+   }
+   element new_sdram_controller_0.s1
+   {
+      datum _lockedAddress
+      {
+         value = "1";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "138417424";
          type = "String";
       }
    }
@@ -283,6 +344,14 @@
          type = "String";
       }
    }
+   element sw.s1
+   {
+      datum baseAddress
+      {
+         value = "138417344";
+         type = "String";
+      }
+   }
    element ledg.s1
    {
       datum baseAddress
@@ -291,80 +360,11 @@
          type = "String";
       }
    }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "138417408";
-         type = "String";
-      }
-   }
-   element snd_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "138417376";
-         type = "String";
-      }
-   }
    element duosegmentlinks.s1
    {
       datum baseAddress
       {
          value = "138417456";
-         type = "String";
-      }
-   }
-   element toetsenbord1_0.s1
-   {
-      datum baseAddress
-      {
-         value = "138417480";
-         type = "String";
-      }
-   }
-   element key.s1
-   {
-      datum baseAddress
-      {
-         value = "138417360";
-         type = "String";
-      }
-   }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "138417280";
-         type = "String";
-      }
-   }
-   element new_sdram_controller_0.s1
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element snd_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "138417392";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "138417328";
          type = "String";
       }
    }
@@ -409,7 +409,7 @@
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "22";
          type = "int";
       }
    }
@@ -433,7 +433,7 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "23";
          type = "int";
       }
    }
@@ -452,7 +452,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1400887449883" />
+ <parameter name="timeStamp" value="1400949305986" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -553,11 +553,6 @@
    type="conduit"
    dir="end" />
  <interface
-   name="mysegdisp2_0_user_interface"
-   internal="mysegdisp2_0.user_interface"
-   type="conduit"
-   dir="end" />
- <interface
    name="upclocks_vga"
    internal="upclocks.vga_clk"
    type="clock"
@@ -570,6 +565,11 @@
  <interface
    name="mysram_0_conduit_end"
    internal="mysram_0.conduit_end"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="mysegdisp2_0_user_interface"
+   internal="mysegdisp2_0.user_interface"
    type="conduit"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
@@ -973,19 +973,19 @@
  <module kind="toetsenbord1" version="1.0" enabled="1" name="toetsenbord1_0">
   <parameter name="AUTO_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
- <module kind="mysegdisp2" version="1.0" enabled="1" name="mysegdisp2_0">
-  <parameter name="DATA_WIDTH" value="32" />
-  <parameter name="ENABLE_SYNC_SIGNALS" value="0" />
-  <parameter name="MODE_0" value="0" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
- </module>
  <module kind="VGA_NIOS_CTRL" version="1.0" enabled="1" name="vga">
   <parameter name="RAM_SIZE" value="307200" />
   <parameter name="AUTO_S1_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <module kind="mysram" version="1.0" enabled="1" name="mysram_0">
   <parameter name="AUTO_CLOCK_CLOCK_RATE" value="50000000" />
+ </module>
+ <module kind="mysegdisp2" version="1.0" enabled="1" name="mysegdisp2_0">
+  <parameter name="DATA_WIDTH" value="32" />
+  <parameter name="ENABLE_SYNC_SIGNALS" value="0" />
+  <parameter name="MODE_0" value="2" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
  <connection
    kind="avalon"
@@ -1371,25 +1371,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="reset"
-   version="13.0"
-   start="clk.clk_reset"
-   end="mysegdisp2_0.clock_reset_reset" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="upclocks.sys_clk"
-   end="mysegdisp2_0.clock_reset" />
- <connection
-   kind="avalon"
-   version="13.0"
-   start="cpu.data_master"
-   end="mysegdisp2_0.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08401400" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
    kind="clock"
    version="13.0"
    start="upclocks.sys_clk"
@@ -1433,6 +1414,25 @@
    end="mysram_0.avalon_slave">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x08000000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="clock"
+   version="13.0"
+   start="upclocks.sys_clk"
+   end="mysegdisp2_0.clock_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="upclocks.sys_clk_reset"
+   end="mysegdisp2_0.clock_reset_reset" />
+ <connection
+   kind="avalon"
+   version="13.0"
+   start="cpu.data_master"
+   end="mysegdisp2_0.s0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08401400" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />

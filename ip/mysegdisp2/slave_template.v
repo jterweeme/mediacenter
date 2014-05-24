@@ -11,7 +11,7 @@ module slave_template(
 	output reg [31:0] slave_readdata,
 	input [31:0] slave_writedata,
 	input [3:0] slave_byteenable,
-	output wire [31:0] user_dataout_0,
+	output wire [27:0] user_dataout_0,
 	output wire [15:0] user_chipselect,
 	output wire [3:0] user_byteenable,
 	output wire user_write,
@@ -97,35 +97,35 @@ module register_with_bytelanes(
 	input [31:0] data_in,
 	input write,
 	input [3:0] byte_enables,
-	output reg [31:0] data_out
+	output reg [27:0] data_out
 );
 
     always @(posedge clk or posedge reset) begin
         if (reset == 1)
-            data_out[7:0] <= 8'b0;
+            data_out[6:0] <= 7'b0;
         else if (byte_enables[0] & write)
-            data_out[7:0] <= data_in[7:0];
+            data_out[6:0] <= data_in[6:0];
     end
     
     always @(posedge clk or posedge reset) begin
         if (reset == 1)
-            data_out[15:8] <= 8'b0;
+            data_out[13:7] <= 7'b0;
         else if (byte_enables[1] & write)
-            data_out[15:8] <= data_in[15:8];
+            data_out[13:7] <= data_in[14:8];
     end
     
     always @(posedge clk or posedge reset) begin
         if (reset == 1)
-            data_out[23:16] <= 8'b0;
+            data_out[20:14] <= 7'b0;
         else if (byte_enables[2] & write)
-            data_out[23:16] <= data_in[23:16];
+            data_out[20:14] <= data_in[22:16];
     end
     
     always @(posedge clk or posedge reset) begin
         if (reset == 1)
-            data_out[31:24] <= 8'b0;
+            data_out[27:21] <= 7'b0;
         else if (byte_enables[3] & write)
-            data_out[31:24] <= data_in[31:24];
+            data_out[27:21] <= data_in[30:24];
     end
 endmodule
 
