@@ -94,41 +94,47 @@ module slave_template(
 		end
 	end
 	
-	register_with_bytelanes register_0 (clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
+	register_with_bytelanes r0(clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
 endmodule
 
 
 module register_with_bytelanes(
 	input clk,
 	input reset,
-	
 	input [31:0] data_in,
 	input write,
 	input [3:0] byte_enables,
 	output reg [31:0] data_out
 );
-
-	parameter DATA_WIDTH = 32;
 	
 	generate
 	genvar LANE;
-		for(LANE = 0; LANE < (DATA_WIDTH/8); LANE = LANE+1)
+		for(LANE = 0; LANE < 4; LANE = LANE+1)
 		begin: register_bytelane_generation	
-			always @ (posedge clk or posedge reset)
-			begin
-				if(reset == 1)
-				begin
+			always @ (posedge clk or posedge reset) begin
+				if(reset == 1) begin
 					data_out[(LANE*8)+7:(LANE*8)] <= 0;
-				end
-				else
-				begin
-					if((byte_enables[LANE] == 1) & (write == 1))
-					begin
+				end else begin
+					if ((byte_enables[LANE] == 1) & (write == 1)) begin
 						data_out[(LANE*8)+7:(LANE*8)] <= data_in[(LANE*8)+7:(LANE*8)];
 					end
 				end
 			end
 		end
 	endgenerate
-	
+/*
+    always @(posedge clk or posedge reset) begin
+        if (reset == 1)
+            data_out <= 32'b0;
+        else if ((byte_enables[0] == 1) & (write == 1))
+            data_out[7:0] <= data_in[7:0];
+        else if ((byte_enables[1] == 1) & (write == 1))
+            data_out[15:8] <= data_in[15:8];
+        else if ((byte_enables[2] == 1) & (write == 1))
+            data_out[23:16] <= data_in[23:16];
+        else if ((byte_enables[3] == 1) & (write == 1))
+            data_out[31:24] <= data_in[31:24];
+    end*/
 endmodule
+
+

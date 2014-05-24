@@ -12,14 +12,6 @@ module TERASIC_IRM(
 wire data_ready;
 reg pre_data_ready;
 
-/*
-always @ (posedge clk or negedge reset_n) begin
-    if (~reset_n)
-        pre_data_ready <= 1'b0;
-    else
-        pre_data_ready <= data_ready;
-end*/
-
 always @(posedge clk or negedge reset_n)
     pre_data_ready <= ~reset_n ? 1'b0 : data_ready;
 
