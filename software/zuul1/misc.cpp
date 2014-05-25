@@ -108,7 +108,6 @@ void Uart::putc(const char c)
     base[1] = c;
 }
 
-/*
 VGA::VGA(const char *devName)
 {
     charBuffer = ::alt_up_char_buffer_open_dev(devName);
@@ -145,7 +144,7 @@ void VGATerminal::putc(const char c)
         x = 0;
         y++;
     }
-}*/
+}
 
 bool SoundCard::init()
 {

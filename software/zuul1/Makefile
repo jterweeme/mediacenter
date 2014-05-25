@@ -19,7 +19,8 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 
 .PHONY: all
 
-all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex md5test1.elf kbtest2.hex vgatest2.hex
+all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex \
+    md5test1.elf kbtest2.hex vgatest2.hex vgatest1.hex
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
@@ -108,7 +109,7 @@ wavplay1.o: wavplay1.cpp misc.h
 zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@
 
-download: test1.elf
+download: vgatest1.elf
 	nios2-download -g $<
 
 clean:

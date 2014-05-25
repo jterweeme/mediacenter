@@ -59,8 +59,6 @@ set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_RO
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_location_assignment PIN_Y2 -to clk_clk
-set_location_assignment PIN_G12 -to uart_0_external_connection_rxd
-set_location_assignment PIN_G9 -to uart_0_external_connection_txd
 
 
 set_global_assignment -name GENERATE_TTF_FILE ON
@@ -254,36 +252,6 @@ set_global_assignment -name CUSP_FILE software/zuul1/audiotest1.cpp
 set_global_assignment -name SOURCE_FILE software/zuul1/segment.h
 set_global_assignment -name SOURCE_FILE software/zuul1/misc.h
 set_global_assignment -name SOURCE_FILE software/zuul1/lcd.h
-set_location_assignment PIN_D12 -to vga_export_VGA_B[7]
-set_location_assignment PIN_D11 -to vga_export_VGA_B[6]
-set_location_assignment PIN_C12 -to vga_export_VGA_B[5]
-set_location_assignment PIN_A11 -to vga_export_VGA_B[4]
-set_location_assignment PIN_B11 -to vga_export_VGA_B[3]
-set_location_assignment PIN_C11 -to vga_export_VGA_B[2]
-set_location_assignment PIN_A10 -to vga_export_VGA_B[1]
-set_location_assignment PIN_B10 -to vga_export_VGA_B[0]
-set_location_assignment PIN_C9 -to vga_export_VGA_G[7]
-set_location_assignment PIN_F10 -to vga_export_VGA_G[6]
-set_location_assignment PIN_B8 -to vga_export_VGA_G[5]
-set_location_assignment PIN_C8 -to vga_export_VGA_G[4]
-set_location_assignment PIN_H12 -to vga_export_VGA_G[3]
-set_location_assignment PIN_F8 -to vga_export_VGA_G[2]
-set_location_assignment PIN_G11 -to vga_export_VGA_G[1]
-set_location_assignment PIN_G8 -to vga_export_VGA_G[0]
-set_location_assignment PIN_H10 -to vga_export_VGA_R[7]
-set_location_assignment PIN_H8 -to vga_export_VGA_R[6]
-set_location_assignment PIN_J12 -to vga_export_VGA_R[5]
-set_location_assignment PIN_G10 -to vga_export_VGA_R[4]
-set_location_assignment PIN_F12 -to vga_export_VGA_R[3]
-set_location_assignment PIN_D10 -to vga_export_VGA_R[2]
-set_location_assignment PIN_E11 -to vga_export_VGA_R[1]
-set_location_assignment PIN_E12 -to vga_export_VGA_R[0]
-set_location_assignment PIN_F11 -to vga_export_VGA_BLANK
-set_location_assignment PIN_A12 -to vga_export_VGA_CLK
-set_location_assignment PIN_G13 -to vga_export_VGA_HS
-set_location_assignment PIN_C10 -to vga_export_VGA_SYNC
-set_location_assignment PIN_C13 -to vga_export_VGA_VS
-set_location_assignment PIN_A14 -to vga_export_iCLK_25
 set_location_assignment PIN_T8 -to mysram_0_conduit_end_ADDR[19]
 set_location_assignment PIN_AB8 -to mysram_0_conduit_end_ADDR[18]
 set_location_assignment PIN_AB9 -to mysram_0_conduit_end_ADDR[17]
@@ -356,7 +324,6 @@ set_location_assignment PIN_AB18 -to duosegmentrechts_user_interface_export[2]
 set_location_assignment PIN_AC18 -to duosegmentrechts_user_interface_export[1]
 set_location_assignment PIN_AD18 -to duosegmentrechts_user_interface_export[0]
 set_location_assignment PIN_AD17 -to duosegmentlinks_external_connection_export[7]
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_location_assignment PIN_L6 -to lcd_ext_BLON
 set_location_assignment PIN_M5 -to lcd_ext_DATA[7]
 set_location_assignment PIN_M3 -to lcd_ext_DATA[6]
@@ -370,3 +337,35 @@ set_location_assignment PIN_L4 -to lcd_ext_EN
 set_location_assignment PIN_L5 -to lcd_ext_ON
 set_location_assignment PIN_M2 -to lcd_ext_RS
 set_location_assignment PIN_M1 -to lcd_ext_RW
+set_location_assignment PIN_D12 -to upvga_ext_B[7]
+set_location_assignment PIN_D11 -to upvga_ext_B[6]
+set_location_assignment PIN_C12 -to upvga_ext_B[5]
+set_location_assignment PIN_A11 -to upvga_ext_B[4]
+set_location_assignment PIN_B11 -to upvga_ext_B[3]
+set_location_assignment PIN_C11 -to upvga_ext_B[2]
+set_location_assignment PIN_A10 -to upvga_ext_B[1]
+set_location_assignment PIN_B10 -to upvga_ext_B[0]
+set_location_assignment PIN_C9 -to upvga_ext_G[7]
+set_location_assignment PIN_F10 -to upvga_ext_G[6]
+set_location_assignment PIN_B8 -to upvga_ext_G[5]
+set_location_assignment PIN_C8 -to upvga_ext_G[4]
+set_location_assignment PIN_H12 -to upvga_ext_G[3]
+set_location_assignment PIN_F8 -to upvga_ext_G[2]
+set_location_assignment PIN_G11 -to upvga_ext_G[1]
+set_location_assignment PIN_G8 -to upvga_ext_G[0]
+set_location_assignment PIN_H10 -to upvga_ext_R[7]
+set_location_assignment PIN_H8 -to upvga_ext_R[6]
+set_location_assignment PIN_J12 -to upvga_ext_R[5]
+set_location_assignment PIN_G10 -to upvga_ext_R[4]
+set_location_assignment PIN_F12 -to upvga_ext_R[3]
+set_location_assignment PIN_D10 -to upvga_ext_R[2]
+set_location_assignment PIN_E11 -to upvga_ext_R[1]
+set_location_assignment PIN_E12 -to upvga_ext_R[0]
+set_location_assignment PIN_C10 -to upvga_ext_SYNC
+set_location_assignment PIN_C13 -to upvga_ext_VS
+set_location_assignment PIN_F11 -to upvga_ext_BLANK
+set_location_assignment PIN_A12 -to upvga_ext_CLK
+set_location_assignment PIN_G13 -to upvga_ext_HS
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_location_assignment PIN_G12 -to uart_ext_rxd
+set_location_assignment PIN_G9 -to uart_ext_txd
