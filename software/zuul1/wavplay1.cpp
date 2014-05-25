@@ -1,7 +1,9 @@
-#define SYSTEM_BUS_WIDTH 32
+/*
+Alex Aalbertsberg
+Jasper ter Weeme
+*/
 
 #include <system.h>
-#include <io.h>
 #include "misc.h"
 
 class WavPlay1

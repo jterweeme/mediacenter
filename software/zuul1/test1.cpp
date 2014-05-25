@@ -156,6 +156,10 @@ void Test1::init()
     //vgaTerminal->puts("Opstarten\r\n");
     gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
     gl->set(0x01);
+
+    volatile uint32_t *sram = (volatile uint32_t *)MYSRAM_0_BASE;
+    sram[100] = 0x012345678;
+    segmentQuadro->setHex(sram[100]);
 }
 
 
