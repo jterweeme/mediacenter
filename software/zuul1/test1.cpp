@@ -149,7 +149,7 @@ void Test1::init()
     segmentLinks.setInt(12345);
     segmentRechts.write(0x9992);
     segmentRechts.setHex(0x3f);
-    ir = InfraRood::getInstance();
+    ir = ::InfraRood::getInstance();
     int ctl = IINFRARED_IRQ_INTERRUPT_CONTROLLER_ID;
     ir->init((volatile uint32_t *)IINFRARED_BASE, IINFRARED_IRQ, ctl);
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
@@ -162,9 +162,8 @@ void Test1::init()
     volatile uint32_t *sram = (volatile uint32_t *)MYSRAM_0_BASE;
     sram[100] = 0x012345678;
     segmentQuadro->setHex(sram[100]);
-    lcd = new LCD();
-    lcd->init(::open(LCD_NAME, O_WRONLY));
-    lcd->write("Hoera");
+    lcd = new LCD((volatile uint8_t *)LCD_BASE);
+    lcd->puts("Xargon");
 }
 
 

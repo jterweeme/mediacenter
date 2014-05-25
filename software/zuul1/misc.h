@@ -121,14 +121,14 @@ public:
 
 class Uart
 {
-public:
-    static Uart *getInstance();
-    void init(volatile uint32_t *base);
-    void putc(const char);
-    void puts(const char *);
 private:
     Uart() { }
     volatile uint32_t *base;
+public:
+    static Uart *getInstance();
+    void init(volatile uint32_t *base) { this->base = base; }
+    void putc(const char);
+    void puts(const char *s) { while (*s) putc(*s++); }
 };
 
 class JtagUart
@@ -143,19 +143,17 @@ public:
 class LCD
 {
 private:
-    int fd;
-public:
-    void init(int fd) { this->fd = fd; }
-    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
-};
-
-class LCD2
-{
-private:
     volatile uint8_t *base;
 public:
-    LCD2(volatile uint8_t *base) { this->base = base; }
-    //void putc(char c) { IOWR_ALT_UP_CHARACTER_LCD_DATA(base, c); }
+    LCD(volatile uint8_t *base) : base(base) { }
+    void putc(const char c) { base[1] = c; }
+    void puts(const char *s) { while (*s) putc(*s++); }
+    void cmd(uint8_t c) { base[0] = c; }
+
+    void setPos(uint8_t x, uint8_t y)
+    {
+        
+    }
 };
 
 class I2C

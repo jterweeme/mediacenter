@@ -99,11 +99,6 @@ Uart *Uart::getInstance()
     return &instance;
 }
 
-void Uart::init(volatile uint32_t *base)
-{
-    this->base = base;
-}
-
 void Uart::putc(const char c)
 {
     while ((base[2] & (1<<6)) == 0)
@@ -111,12 +106,6 @@ void Uart::putc(const char c)
     }
 
     base[1] = c;
-}
-
-void Uart::puts(const char *s)
-{
-    while (*s)
-        putc(*s++);
 }
 
 /*

@@ -21,7 +21,7 @@ int PrimesTest1::run()
 
     int aantal = 0;
     seg->setInt(0);
-    lcd = new LCD();
+    lcd = new LCD((volatile uint8_t *)LCD_BASE);
     //lcd->init(::open(ILCD_NAME, O_WRONLY));
     //lcd->write("Hoera");
 
