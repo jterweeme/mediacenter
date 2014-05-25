@@ -57,7 +57,7 @@ class GreenLeds
 private:
     volatile uint8_t *base;
 public:
-    GreenLeds(volatile uint8_t *base) { this->base = base; }
+    GreenLeds(volatile uint8_t *base) : base(base) { }
     void set(uint8_t value) { *base = value; }
 };
 
@@ -147,6 +147,15 @@ private:
 public:
     void init(int fd) { this->fd = fd; }
     void write(const char *s) { ::write(fd, s, ::strlen(s)); }
+};
+
+class LCD2
+{
+private:
+    volatile uint8_t *base;
+public:
+    LCD2(volatile uint8_t *base) { this->base = base; }
+    //void putc(char c) { IOWR_ALT_UP_CHARACTER_LCD_DATA(base, c); }
 };
 
 class I2C

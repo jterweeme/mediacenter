@@ -22,7 +22,7 @@ class Beam : public Observer
 private:
     CombinedSegment *cs;
 public:
-    Beam(CombinedSegment *cs) { this->cs = cs; }
+    Beam(CombinedSegment *cs) : cs(cs) { }
     void update();
 };
 
@@ -157,7 +157,7 @@ void Test1::init()
     uart->init((volatile uint32_t *)UART_BASE);
     //vgaTerminal->puts("Opstarten\r\n");
     gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
-    gl->set(0x01);
+    gl->set(0x03);
 
     volatile uint32_t *sram = (volatile uint32_t *)MYSRAM_0_BASE;
     sram[100] = 0x012345678;
