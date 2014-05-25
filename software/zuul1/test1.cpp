@@ -163,7 +163,7 @@ void Test1::init()
     sram[100] = 0x012345678;
     segmentQuadro->setHex(sram[100]);
     lcd = new LCD();
-    lcd->init(::open(ILCD_NAME, O_WRONLY));
+    lcd->init(::open(LCD_NAME, O_WRONLY));
     lcd->write("Hoera");
 }
 
