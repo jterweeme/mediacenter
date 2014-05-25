@@ -61,7 +61,7 @@ void QuadroSegment::setInt(unsigned int n)
     *base = lut[a] << 24 | lut[b] << 16 | lut[c] << 8 | lut[d];
 }
 
-void InfraRood::init(volatile uint32_t *base, int irq, int ctl)
+void InfraRood::init(volatile uint32_t * base, int irq, int ctl)
 {
     this->base = base;
     alt_ic_isr_register(ctl, irq, isrBridge, 0, 0);

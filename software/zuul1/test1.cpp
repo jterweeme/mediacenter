@@ -2,9 +2,10 @@
 #include <system.h>
 #include <stdint.h>
 #include <sys/alt_irq.h>
+#include <fcntl.h>
 #include "misc.h"
 
-class DuoSegmentLinks : public DuoSegment
+class DuoSegmentLinks : public ::DuoSegment
 {
 public:
     DuoSegmentLinks() : DuoSegment((volatile uint16_t *)DUOSEGMENTLINKS_BASE) { }
@@ -116,18 +117,19 @@ class Test1
 public:
     void init();
 private:
-    DuoSegmentLinks segmentLinks;
-    DuoSegmentRechts segmentRechts;
-    QuadroSegment *segmentQuadro;
-    InfraRood *ir;
-    Uart *uart;
+    ::DuoSegmentLinks segmentLinks;
+    ::DuoSegmentRechts segmentRechts;
+    ::QuadroSegment *segmentQuadro;
+    ::InfraRood *ir;
+    ::Uart *uart;
     //VGATerminal *vgaTerminal;
-    GreenLeds *gl;
+    ::GreenLeds *gl;
+    ::LCD *lcd;
 };
 
 int main()
 {
-    Test1 test1;
+    ::Test1 test1;
     test1.init();
 
     while (true) { }
@@ -148,8 +150,8 @@ void Test1::init()
     segmentRechts.write(0x9992);
     segmentRechts.setHex(0x3f);
     ir = InfraRood::getInstance();
-    int ctl = INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID;
-    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
+    int ctl = IINFRARED_IRQ_INTERRUPT_CONTROLLER_ID;
+    ir->init((volatile uint32_t *)IINFRARED_BASE, IINFRARED_IRQ, ctl);
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
@@ -160,6 +162,9 @@ void Test1::init()
     volatile uint32_t *sram = (volatile uint32_t *)MYSRAM_0_BASE;
     sram[100] = 0x012345678;
     segmentQuadro->setHex(sram[100]);
+    lcd = new LCD();
+    lcd->init(::open(ILCD_NAME, O_WRONLY));
+    lcd->write("Hoera");
 }
 
 

@@ -2,7 +2,7 @@
 #define _VGASCREEN_H_
 #include <system.h>
 
-#define VPG_BASE VGA_BASE
+#define VPG_BASE IVGA_BASE
 #define OSD_MEM_ADDR  640*480
 #define Vga_Cursor_X(base,value)            IOWR(base, OSD_MEM_ADDR+1 , value)        
 #define Vga_Cursor_Y(base,value)            IOWR(base, OSD_MEM_ADDR+2 , value)        

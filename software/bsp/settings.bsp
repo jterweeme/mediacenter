@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 25, 2014 12:08:09 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1400969289933</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 25, 2014 6:02:58 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1401033778063</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -899,7 +899,7 @@
                 <attributes>memory</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>vga</slaveDescriptor>
+                <slaveDescriptor>ivga</slaveDescriptor>
                 <addressRange>0x08200000 - 0x083FFFFF</addressRange>
                 <addressSpan>2097152</addressSpan>
                 <attributes/>
@@ -1001,7 +1001,7 @@
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>toetsenbord1_0</slaveDescriptor>
+                <slaveDescriptor>itoetsenbord</slaveDescriptor>
                 <addressRange>0x08401538 - 0x0840153B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
@@ -1013,13 +1013,13 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>infrared_0</slaveDescriptor>
+                <slaveDescriptor>iinfrared</slaveDescriptor>
                 <addressRange>0x08401540 - 0x08401543</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>character_lcd_0</slaveDescriptor>
+                <slaveDescriptor>ilcd</slaveDescriptor>
                 <addressRange>0x08401544 - 0x08401545</addressRange>
                 <addressSpan>2</addressSpan>
                 <attributes/>

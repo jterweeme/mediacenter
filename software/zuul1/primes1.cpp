@@ -22,7 +22,7 @@ int PrimesTest1::run()
     int aantal = 0;
     seg->setInt(0);
     lcd = new LCD();
-    lcd->init(::open(CHARACTER_LCD_0_NAME, O_WRONLY));
+    lcd->init(::open(ILCD_NAME, O_WRONLY));
     lcd->write("Hoera");
 
     for (int i = 2; i < 0xffff; i++)

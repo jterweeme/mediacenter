@@ -108,7 +108,7 @@ wavplay1.o: wavplay1.cpp misc.h
 zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@
 
-download: test1.elf
+download: vgatest2.elf
 	nios2-download -g $<
 
 clean:

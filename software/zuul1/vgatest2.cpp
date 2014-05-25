@@ -11,7 +11,7 @@ int main()
     vga_ctrl_set.VGA_Ctrl_Flags.GREEN_ON = 1;
     vga_ctrl_set.VGA_Ctrl_Flags.BLUE_ON = 1;
     vga_ctrl_set.VGA_Ctrl_Flags.CURSOR_ON = 1;
-    VgaScreen vgaScreen(VPG_BASE);
+    VgaScreen vgaScreen(IVGA_BASE);
     vgaScreen.write_ctrl(vga_ctrl_set.Value);
     vgaScreen.clear();
 
@@ -19,9 +19,9 @@ int main()
     vgaScreen.Set_Pixel_Off_Color(0, 0, 0);
     vgaScreen.Set_Cursor_Color(0, 1023, 0);
 
-    IOWR(VPG_BASE, OSD_MEM_ADDR+1, 100);
-    IOWR(VPG_BASE, OSD_MEM_ADDR+2, 100);
-    volatile uint32_t *base = (volatile uint32_t *)VPG_BASE;
+    IOWR(IVGA_BASE, OSD_MEM_ADDR+1, 100);
+    IOWR(IVGA_BASE, OSD_MEM_ADDR+2, 100);
+    volatile uint32_t *base = (volatile uint32_t *)IVGA_BASE;
 
     for (int i = 650; i < 7000; i++)
         base[i] = 0x11111111;

@@ -111,11 +111,11 @@ private:
     Observer *observer;
     void isr(void *context);
     static void isrBridge(void *context);
-    volatile uint32_t *base;
+    volatile uint32_t * base;
 public:
     static InfraRood *getInstance();
     void setObserver(Observer *);
-    void init(volatile uint32_t *base, int irq, int ctl);
+    void init(volatile uint32_t * const base, int irq, int ctl);
     uint32_t read() { return base[0]; }
 };
 
