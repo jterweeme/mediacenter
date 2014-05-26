@@ -20,11 +20,12 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 .PHONY: all
 
 all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex \
-    md5test1.elf kbtest2.hex vgatest1.hex
+    md5test1.elf kbtest2.hex vgatest1.hex karaoke1.hex
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
 jtagtest1.hex: jtagtest1.flash
+karaoke1.hex: karaoke1.flash
 kbtest1.hex: kbtest1.flash
 kbtest2.hex: kbtest2.flash
 md5test1.hex: md5test1.flash
@@ -41,6 +42,7 @@ wavplay1.hex: wavplay1.flash
 audiotest1.flash: audiotest1.elf
 eepromtest1.flash: eepromtest1.elf
 jtagtest1.flash: jtagtest1.elf
+karaoke1.flash: karaoke1.elf
 kbtest1.flash: kbtest1.elf
 kbtest2.flash: kbtest2.elf
 md5test1.flash: md5test1.elf
@@ -57,6 +59,7 @@ wavplay1.flash: wavplay1.elf
 audiotest1.elf: audiotest1.o misc.o
 eepromtest1.elf: eepromtest1.o misc.o
 jtagtest1.elf: jtagtest1.o
+karaoke1.elf: karaoke1.o misc.o sdcard.o
 kbtest1.elf: kbtest1.o misc.o
 kbtest2.elf: kbtest2.o misc.o
 md5test1.elf: md5test1.o misc.o sdcard.o md5.o
@@ -80,6 +83,7 @@ eepromtest1.o: eepromtest1.cpp
 FatFileSystem.o: FatFileSystem.cpp
 FatInternal.o: FatInternal.cpp
 jtagtest1.o: jtagtest1.cpp
+karaoke1.o: karaoke1.cpp
 kbtest1.o: kbtest1.cpp
 kbtest2.o: kbtest2.cpp
 LCD.o: LCD.cpp LCD.h
@@ -109,7 +113,7 @@ wavplay1.o: wavplay1.cpp misc.h
 zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@
 
-download: vgatest1.elf
+download: karaoke1.elf
 	nios2-download -g $<
 
 clean:

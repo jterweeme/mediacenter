@@ -12,6 +12,7 @@ Alex Aalbertsberg
 #include <string.h>
 #include <unistd.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
+#include <priv/alt_file.h>
 #include "sdcard.h"
 
 extern const uint8_t lut[];
@@ -211,15 +212,32 @@ public:
     EEProm(I2C *bus) { this->bus = bus; }
 };
 
+class MyFile;
+
+class KarFile
+{
+private:
+    MyFile *myFile;
+public:
+    //KarFile(MyFile myFile) : myFile(myFile) { }
+    const char *getText();
+};
+
 class VGA
 {
 private:
     alt_up_char_buffer_dev *charBuffer;
+    alt_up_char_buffer_dev *openDev(const char *name)
+    {
+        alt_up_char_buffer_dev *dev = (alt_up_char_buffer_dev *)alt_find_dev(name, &alt_dev_list);
+        return dev;
+    }
 public:
     VGA(const char *devName);
     int clear() { ::alt_up_char_buffer_clear(charBuffer); }
     int draw(const char, const int, const int);
     int draw(const char *, const int, const int);
+    void shiftLeft(int n);
 };
 
 class VGATerminal : public VGA

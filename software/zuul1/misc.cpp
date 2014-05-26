@@ -110,7 +110,8 @@ void Uart::putc(const char c)
 
 VGA::VGA(const char *devName)
 {
-    charBuffer = ::alt_up_char_buffer_open_dev(devName);
+    //charBuffer = ::alt_up_char_buffer_open_dev(devName);
+    charBuffer = openDev(devName);
 }
 
 int VGA::draw(const char c, const int x, const int y)
@@ -173,6 +174,10 @@ void SoundCard::setOutputVolume(int vol)
     }
 }
 
+const char *KarFile::getText()
+{
+}
+
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
 {
     uint8_t foo = data & 0xff;
@@ -202,6 +207,11 @@ void SoundCard::setSampleRate(uint8_t ssr)
 
     control |= 0x02;
     regWrite(8, control);
+}
+
+void VGA::shiftLeft(int n)
+{
+    
 }
 
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
