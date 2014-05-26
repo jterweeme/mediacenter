@@ -46,6 +46,7 @@ bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
         do {
             reg_state = (short int) IORD_16DIRECT(aux_status_register,0);
         } while ((reg_state & 0x04)!=0);
+
         if ((reg_state & 0x10) == 0)
         {
             result = true;
@@ -77,12 +78,9 @@ bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 		short int reg_state = 0xff;
         
         if (current_sector_modified)
-        {
             if (Write_Sector_Data(current_sector_index, 0) == false)
-            {
                 return false;
-            }
-        }
+
         IOWR_32DIRECT(command_argument_register, 0, (sector_index + partition_offset)*512);
         IOWR_16DIRECT(command_register, 0, CMD_READ_BLOCK);
 		do {
@@ -122,13 +120,9 @@ bool SDCard::mark_cluster(unsigned int cluster_index, short int flag, bool first
     unsigned int sector_index = (cluster_index / 256) +  fat_partition_offset_in_512_byte_sectors;
     
     if (first_fat)
-    {
         sector_index  = sector_index + boot_sector_data.first_fat_sector_offset;
-    }
     else
-    {
         sector_index  = sector_index + boot_sector_data.second_fat_sector_offset;
-    }
      
     if (sector_index != current_sector_index)
     {
@@ -267,7 +261,7 @@ bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
 		{
 			boot_sector_data.OEM_name[counter] = (char) IORD_8DIRECT(device_pointer->base, 3+counter);
 		}
-		boot_sector_data.sector_size_in_bytes = (((unsigned char) IORD_8DIRECT(device_pointer->base, 12)) << 8 ) | ((char) IORD_8DIRECT(device_pointer->base, 11));
+		boot_sector_data.sector_size_in_bytes = (((unsigned char)IORD_8DIRECT(device_pointer->base, 12)) << 8 ) | ((char) IORD_8DIRECT(device_pointer->base, 11));
 		boot_sector_data.sectors_per_cluster = ((unsigned char) IORD_8DIRECT(device_pointer->base, 13));
 		boot_sector_data.reserved_sectors = ((unsigned short int) IORD_16DIRECT(device_pointer->base, 14));
 		boot_sector_data.number_of_FATs = ((unsigned char) IORD_8DIRECT(device_pointer->base, 16));
@@ -488,7 +482,6 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
     int location, index;
     int start_location = 0;
     
-    /* Get Next Directory. */
     location = get_dir_divider_location( file_name );
     while (location > 0)
     {
@@ -1645,15 +1638,12 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 					}
 					else
 					{
-						/* Read the next sector in the cluster and modify it. We only need to change the data_sector value. The actual read happens a few lines below. */
 						active_files[file_handle].current_sector_in_cluster = active_files[file_handle].current_byte_position / boot_sector_data.sector_size_in_bytes;
 					}
 					data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].current_cluster_index - 2)*boot_sector_data.sectors_per_cluster +
                           active_files[file_handle].current_sector_in_cluster;
 				}
 			}
-            // Reading a data sector into the buffer. Note that changes to the most recently modified sector will be saved before
-			// a new sector is read from the SD Card.
             if (current_sector_index != data_sector + fat_partition_offset_in_512_byte_sectors)
             {
                 if (!Read_Sector_Data(data_sector, fat_partition_offset_in_512_byte_sectors))
@@ -1661,11 +1651,9 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 					return false;
                 }
             }
-            // Write a byte of data to the buffer.
 			IOWR_8DIRECT(buffer_memory, buffer_offset, byte_of_data);
 			active_files[file_handle].current_byte_position = active_files[file_handle].current_byte_position + 1;
 
-			// Modify the file record only when necessary.
 			if (active_files[file_handle].current_byte_position >= active_files[file_handle].file_size_in_bytes)
 			{
 				active_files[file_handle].file_size_in_bytes = active_files[file_handle].file_size_in_bytes + 1;

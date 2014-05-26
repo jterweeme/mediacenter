@@ -7,7 +7,7 @@ public:
     void init();
 private:
     Uart *uart;
-    SDCard *sdCard;
+    SDCardEx *sdCard;
 };
 
 void MD5Test1::init()
@@ -15,7 +15,7 @@ void MD5Test1::init()
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Initialize MD5Test1\r\n");
-    sdCard = new SDCard();
+    sdCard = new SDCardEx();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
     uint8_t buf[5120000];
     MyFile *myFile;

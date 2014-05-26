@@ -7,7 +7,7 @@ private:
     VGATerminal *vgaTerminal;
     Uart *uart;
     QuadroSegment *qs;
-    SDCard *sdCard;
+    SDCardEx *sdCard;
     MyFile *myFile;
     KarFile *karFile;
 public:
@@ -23,7 +23,7 @@ void Karaoke1::init()
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Uart\r\n");
-    sdCard = new SDCard();
+    sdCard = new SDCardEx();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
     
     if (sdCard->isPresent() && sdCard->isFAT16())

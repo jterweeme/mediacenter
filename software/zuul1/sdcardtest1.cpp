@@ -8,7 +8,7 @@ public:
     int run();
     void init();
 private:
-    SDCard *sdCard;
+    SDCardEx *sdCard;
     int bestand;
     Uart *uart;
 };
@@ -17,7 +17,7 @@ char buffer[512] = "WELCOME TO THE INTERFACE!!\r\n\0";
 
 void SDCardTest::init()
 {
-    sdCard = new SDCard();
+    sdCard = new SDCardEx();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);

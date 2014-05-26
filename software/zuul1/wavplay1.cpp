@@ -14,7 +14,7 @@ public:
 private:
     I2C *i2c;
     SoundCard *soundCard;
-    SDCard *sdCard;
+    SDCardEx *sdCard;
     Uart *uart;
     MyFile *myFile;
     CombinedSegment *cs;
@@ -30,12 +30,13 @@ void WavPlay1::init()
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     i2c = new I2C((volatile uint32_t *)SND_I2C_SCL_BASE, (volatile uint32_t *)SND_I2C_SDA_BASE);
-    sdCard = new SDCard();
+    sdCard = new SDCardEx();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
     soundCard = new SoundCard(i2c, (volatile uint32_t *)AUDIO_IF_0_BASE);
     soundCard->init();
-    soundCard->setOutputVolume(100);
-    soundCard->setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);
+    soundCard->setOutputVolume(120);
+    //soundCard->setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);
+    //soundCard->setSampleRate(3);
 }
 
 uint8_t buf[5120000];
@@ -68,9 +69,19 @@ int WavPlay1::run()
                 sample_r = 0;
                 sample += buf[i++];
                 sample += buf[i++] << 8;
-                usleep(10);
+                //usleep(10);
                 //sample_r += buf[i++];
                 //sample_r += buf[i++] << 8;
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
+                soundCard->writeDacOut(sample, sample);
                 soundCard->writeDacOut(sample, sample);
             }
             

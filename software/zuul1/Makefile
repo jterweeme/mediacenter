@@ -21,7 +21,7 @@ DOWNLOAD := karaoke1.elf
 .PHONY: all
 
 all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex \
-    md5test1.elf kbtest2.hex vgatest1.hex karaoke1.hex
+    md5test1.elf kbtest2.hex vgatest1.hex karaoke1.hex ofm1.hex
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash

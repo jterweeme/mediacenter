@@ -68,19 +68,19 @@
          type = "String";
       }
    }
-   element mytimer1_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "136328516";
-         type = "String";
-      }
-   }
    element mysram_0.avalon_slave
    {
       datum baseAddress
       {
          value = "134217728";
+         type = "String";
+      }
+   }
+   element mytimer1_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "136328516";
          type = "String";
       }
    }
@@ -259,19 +259,19 @@
          type = "int";
       }
    }
-   element duosegmentrechts.s0
-   {
-      datum baseAddress
-      {
-         value = "136328496";
-         type = "String";
-      }
-   }
    element mysegdisp2_0.s0
    {
       datum baseAddress
       {
          value = "136328192";
+         type = "String";
+      }
+   }
+   element duosegmentrechts.s0
+   {
+      datum baseAddress
+      {
+         value = "136328496";
          type = "String";
       }
    }
@@ -283,11 +283,11 @@
          type = "String";
       }
    }
-   element key.s1
+   element itoetsenbord.s1
    {
       datum baseAddress
       {
-         value = "136328400";
+         value = "136328512";
          type = "String";
       }
    }
@@ -299,11 +299,19 @@
          type = "String";
       }
    }
-   element ledg.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "136328352";
+         value = "136328448";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328464";
          type = "String";
       }
    }
@@ -312,6 +320,22 @@
       datum baseAddress
       {
          value = "136328256";
+         type = "String";
+      }
+   }
+   element snd_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328416";
+         type = "String";
+      }
+   }
+   element ledg.s1
+   {
+      datum baseAddress
+      {
+         value = "136328352";
          type = "String";
       }
    }
@@ -336,51 +360,27 @@
          type = "String";
       }
    }
-   element snd_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "136328432";
-         type = "String";
-      }
-   }
-   element itoetsenbord.s1
-   {
-      datum baseAddress
-      {
-         value = "136328512";
-         type = "String";
-      }
-   }
-   element snd_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328416";
-         type = "String";
-      }
-   }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328464";
-         type = "String";
-      }
-   }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "136328448";
-         type = "String";
-      }
-   }
    element sw.s1
    {
       datum baseAddress
       {
          value = "136328384";
+         type = "String";
+      }
+   }
+   element key.s1
+   {
+      datum baseAddress
+      {
+         value = "136328400";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "136328432";
          type = "String";
       }
    }
@@ -476,7 +476,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1401098262145" />
+ <parameter name="timeStamp" value="1401141124091" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -755,7 +755,7 @@
   <parameter name="sdram_clk" value="true" />
   <parameter name="vga_clk" value="true" />
   <parameter name="audio_clk" value="true" />
-  <parameter name="audio_clk_freq" value="18.432" />
+  <parameter name="audio_clk_freq" value="11.2896" />
   <parameter name="AUTO_CLK_IN_PRIMARY_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
