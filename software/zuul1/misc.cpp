@@ -1,18 +1,15 @@
-#define SYSTEM_BUS_WIDTH 32
-
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
-#include <altera_avalon_pio_regs.h>
 #include <sys/alt_irq.h>
-#include <io.h>
 #include "misc.h"
 #include <fcntl.h>
 
 // 0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f
-const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8, 0x00, 0x10, 0x08, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
+const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8,
+                0x00, 0x10, 0x08, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
 
 void DuoSegment::setInt(unsigned int n)
 {
@@ -168,6 +165,19 @@ void SoundCard::setOutputVolume(int vol)
 
 const char *KarFile::getText()
 {
+    uint8_t c;
+    char returnString[100] = {0};
+    
+    int i = 0;
+    
+    do
+    {
+        c = myFile->read();
+        returnString[i++] = c;
+    }
+    while (c > 10);
+
+    return returnString;
 }
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
@@ -236,11 +246,11 @@ void I2C::start()
 
 void I2C::stop()
 {
-    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 1);
-    IOWR_ALTERA_AVALON_PIO_DATA(sda, 0);
-    IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+    sda[DIRECTION] = 1;
+    sda[DATA] = 0;
+    scl[DATA] = 1;
     ::usleep(1);
-    IOWR_ALTERA_AVALON_PIO_DATA(sda, 1);
+    sda[DATA] = 1;
     ::usleep(1);
 }
 
@@ -251,17 +261,12 @@ bool I2C::private_write(uint8_t data)
 
     for (int i = 0; i < 8; i++)
     {
-        IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
-        
-        if (data & mask)
-            IOWR_ALTERA_AVALON_PIO_DATA(sda, 1);
-        else
-            IOWR_ALTERA_AVALON_PIO_DATA(sda, 0);
-
+        scl[DATA] = 0;
+        sda[DATA] = (data & mask) ? 1 : 0;
         mask >>= 1;
-        IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+        scl[DATA] = 1;
         ::usleep(1);
-        IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+        scl[DATA] = 0;
         ::usleep(1);
     }
     

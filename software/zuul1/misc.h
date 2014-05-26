@@ -230,7 +230,7 @@ class KarFile
 private:
     MyFile *myFile;
 public:
-    //KarFile(MyFile myFile) : myFile(myFile) { }
+    KarFile(MyFile *myFile) : myFile(myFile) { }
     const char *getText();
 };
 

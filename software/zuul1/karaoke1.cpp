@@ -29,16 +29,8 @@ void Karaoke1::init()
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
         myFile = sdCard->openFile("LUCKY.TXT");
-        vgaTerminal->puts("Onzin");
-        uint8_t c = 'd';
-        vgaTerminal->putc((char)c);
-    
-        do
-        {
-            c = myFile->read();
-            vgaTerminal->putc(c);
-        }
-        while (c > 0);
+        karFile = new KarFile(myFile);
+        vgaTerminal->puts(karFile->getText());
     }
     else
     {

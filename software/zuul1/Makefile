@@ -57,22 +57,22 @@ vgatest1.flash: vgatest1.elf
 vgatest2.flash: vgatest2.elf
 wavplay1.flash: wavplay1.elf
 
-audiotest1.elf: audiotest1.o misc.o
-eepromtest1.elf: eepromtest1.o misc.o
-jtagtest1.elf: jtagtest1.o
+audiotest1.elf: audiotest1.o misc.o sdcard.o
+eepromtest1.elf: eepromtest1.o misc.o sdcard.o
+jtagtest1.elf: jtagtest1.o sdcard.o
 karaoke1.elf: karaoke1.o misc.o sdcard.o
-kbtest1.elf: kbtest1.o misc.o
-kbtest2.elf: kbtest2.o misc.o
+kbtest1.elf: kbtest1.o misc.o sdcard.o
+kbtest2.elf: kbtest2.o misc.o sdcard.o
 md5test1.elf: md5test1.o misc.o sdcard.o md5.o
-mytest1.elf: mytest1.o misc.o
+mytest1.elf: mytest1.o misc.o sdcard.o
 ofm1.elf: ofm1.o misc.o sdcard.o
 piano1.elf: piano1.o misc.o sdcard.o
 primes1.elf: primes1.o misc.o sdcard.o
 #sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
 test1.elf: test1.o misc.o sdcard.o
-vgatest1.elf: vgatest1.o misc.o
-vgatest2.elf: vgatest2.o vgascreen.o
+vgatest1.elf: vgatest1.o misc.o sdcard.o
+vgatest2.elf: vgatest2.o vgascreen.o sdcard.o
 wavplay1.elf: wavplay1.o misc.o sdcard.o
 
 AUDIO.o: AUDIO.cpp AUDIO.h
