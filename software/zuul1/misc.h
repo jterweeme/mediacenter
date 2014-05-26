@@ -44,14 +44,23 @@ public:
 
 class CombinedSegment
 {
-public:
-    CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q);
-    void setInt(unsigned int n);
-    void setHex(uint32_t n);
 private:
     DuoSegment *l;
     DuoSegment *r;
     QuadroSegment *q;
+public:
+    CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q)
+        : l(l), r(r), q(q)
+    { }
+
+#ifdef CPP11
+    CombinedSegment(volatile uint16_t *l, volatile uint16_t *r, volatile uint32_t *q)
+        : CombinedSegment(new DuoSegment(l), new DuoSegment(r), new QuadroSegment(q))
+    { }
+#endif
+
+    void setInt(unsigned int n);
+    void setHex(uint32_t n);
 };
 
 class GreenLeds
@@ -167,6 +176,8 @@ private:
     void stop();
     bool private_write(uint8_t data);
     void private_read(uint8_t *data, bool ack);
+    static const uint8_t DATA = 0;
+    static const uint8_t DIRECTION = 1;
 public:
     void init(volatile uint32_t *scl, volatile uint32_t *sda);
     I2C() { }

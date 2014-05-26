@@ -26,22 +26,19 @@ void Karaoke1::init()
     sdCard = new SDCard();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
     
-    if (sdCard->isPresent())
-    {
-    if (sdCard->isFAT16())
+    if (sdCard->isPresent() && sdCard->isFAT16())
     {
         myFile = sdCard->openFile("LUCKY.TXT");
-vgaTerminal->puts("Onzin");
-    uint8_t c = 'd';
-    vgaTerminal->putc((char)c);
+        vgaTerminal->puts("Onzin");
+        uint8_t c = 'd';
+        vgaTerminal->putc((char)c);
     
-    do
-    {
-        c = myFile->read();
-        vgaTerminal->putc(c);
-    }
-    while (c > 0);
-    }
+        do
+        {
+            c = myFile->read();
+            vgaTerminal->putc(c);
+        }
+        while (c > 0);
     }
     else
     {

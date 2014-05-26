@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>May 26, 2014 12:05:36 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1401098736558</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>May 26, 2014 8:21:57 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1401128517396</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>

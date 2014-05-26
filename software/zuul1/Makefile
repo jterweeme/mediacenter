@@ -4,6 +4,7 @@
 MACHINE := -msys-crt0='../bsp//obj/HAL/src/crt0.o' -msys-lib=hal_bsp
 INCLUDES := -I../bsp -I../bsp/drivers/inc -I../bsp/HAL/inc
 LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
+DOWNLOAD := karaoke1.elf
 
 %.o:
 	nios2-elf-g++ $(INCLUDES) -O0 -g -c -o $@ $<
@@ -113,7 +114,7 @@ wavplay1.o: wavplay1.cpp misc.h
 zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@
 
-download: karaoke1.elf
+download: $(DOWNLOAD)
 	nios2-download -g $<
 
 clean:

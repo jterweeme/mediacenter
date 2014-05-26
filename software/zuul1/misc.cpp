@@ -31,13 +31,6 @@ void QuadroSegment::setHex(uint16_t n)
     *base = lut[n >> 12] << 24 | lut[(n >> 8) % 16] << 16 | lut[(n >> 4) % 16] << 8 | lut[n % 16];
 }
 
-CombinedSegment::CombinedSegment(DuoSegment *l, DuoSegment *r, QuadroSegment *q)
-{
-    this->l = l;
-    this->r = r;
-    this->q = q;
-}
-
 void CombinedSegment::setHex(uint32_t n)
 {
     l->setHex(n >> 24);
@@ -73,7 +66,7 @@ void InfraRood::isr(void *context)
     if (observer != 0)
         observer->update();
 
-    IOWR_ALTERA_AVALON_PIO_EDGE_CAP(base, 0);
+    base[3] = 0;
     base[0] = 0;    // reset interrupt
 }
 
@@ -110,7 +103,6 @@ void Uart::putc(const char c)
 
 VGA::VGA(const char *devName)
 {
-    //charBuffer = ::alt_up_char_buffer_open_dev(devName);
     charBuffer = openDev(devName);
 }
 
@@ -232,13 +224,13 @@ void I2C::write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData)
 
 void I2C::start()
 {
-    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 1);
-    IOWR_ALTERA_AVALON_PIO_DATA(sda, 1);
-    IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+    sda[DIRECTION] = 1;
+    sda[DATA] = 1;
+    scl[DATA] = 1;
     ::usleep(1);
-    IOWR_ALTERA_AVALON_PIO_DATA(sda, 0);
+    sda[DATA] = 0;
     ::usleep(1);
-    IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+    scl[DATA] = 0;
     ::usleep(1);
 }
 
@@ -255,7 +247,7 @@ void I2C::stop()
 bool I2C::private_write(uint8_t data)
 {
     uint8_t mask = 0x80;
-    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 1);
+    sda[DIRECTION] = 1;
 
     for (int i = 0; i < 8; i++)
     {
@@ -273,10 +265,10 @@ bool I2C::private_write(uint8_t data)
         ::usleep(1);
     }
     
-    IOWR_ALTERA_AVALON_PIO_DIRECTION(sda, 0);
-    IOWR_ALTERA_AVALON_PIO_DATA(scl, 1);
+    sda[DIRECTION] = 0;
+    scl[DATA] = 1;
     ::usleep(1);
-    IOWR_ALTERA_AVALON_PIO_DATA(scl, 0);
+    scl[DATA] = 0;
     ::usleep(1);
     return 0;
 }
