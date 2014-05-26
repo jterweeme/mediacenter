@@ -17,10 +17,13 @@ private:
     SDCard *sdCard;
     Uart *uart;
     MyFile *myFile;
+    QuadroSegment *quadroSegment;
 };
 
 void WavPlay1::init()
 {
+    quadroSegment = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
+    quadroSegment->setInt(0);
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     i2c = new I2C((volatile uint32_t *)SND_I2C_SCL_BASE, (volatile uint32_t *)SND_I2C_SDA_BASE);
@@ -42,7 +45,7 @@ int WavPlay1::run()
     {
         if (sdCard->isFAT16())
         {
-            myFile = sdCard->openFile("MARCOB~1.WAV");
+            myFile = sdCard->openFile("TEST.WAV");
             
             for (int i = 0; i < 44; i++)
                 myFile->read();      // skip header

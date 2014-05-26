@@ -11,8 +11,9 @@ private:
 
 int VGATest::run()
 {
-    vga = new VGATerminal("/dev/video_character_buffer_with_dma_0");
+    vga = new VGATerminal("/dev/upchar_avalon_char_control_slave");
     vga->clear();
+/*
     vga->puts("The Court consists of a chief justice and eight associate ");
     vga->puts("justices who are nominated by the President and confirmed by ");
     vga->puts("the Senate. Once appointed, justices have life ");
@@ -31,7 +32,7 @@ int VGATest::run()
     vga->puts("are removed after impeachment (though none has ever been ");
     vga->puts("\r\nNieuwe regel");
     vga->puts("\r\nNieuwe regel");
-
+*/
 }
 
 int main()
