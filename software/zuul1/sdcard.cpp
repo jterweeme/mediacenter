@@ -1610,12 +1610,12 @@ short int MyFile::read()
     sd->readFile(fd);
 }
 
-bool SDCard::write(int sd_fileh, char c)
+bool SDCardEx::write(int sd_fileh, char c)
 {
     return this->alt_up_sd_card_write(sd_fileh, c);
 }
 
-bool SDCard::fclose(int sd_fileh)
+bool SDCardEx::fclose(int sd_fileh)
 {
     return alt_up_sd_card_fclose(sd_fileh);
 }

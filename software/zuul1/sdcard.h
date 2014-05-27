@@ -178,14 +178,6 @@ protected:
     bool Read_File_Record_At_Offset(int offset, t_file_record *record,
         unsigned int cluster_index, unsigned int sector_in_cluster);
 public:
-    void init(const char *name) { sd_card_dev = this->alt_up_sd_card_open_dev(name); }
-    bool isPresent() { this->alt_up_sd_card_is_Present(); }
-    bool isFAT16() { this->alt_up_sd_card_is_FAT16(); }
-    bool write(int, char);
-    bool fclose(int);
-    short int readFile(int fd) { this->alt_up_sd_card_read(fd); }
-    short int findNext(char *fn) { this->alt_up_sd_card_find_next(fn); }
-    short int findNext(char *fn, t_file_record *fr) { this->alt_up_sd_card_find_next(fn, fr); }
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
 };
 
@@ -194,6 +186,15 @@ class SDCardEx : public SDCard
 public:
     int fopen(char *fn) { this->alt_up_sd_card_fopen(fn, false); }
     MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
+    void init(const char *name) { sd_card_dev = this->alt_up_sd_card_open_dev(name); }
+    bool isPresent() { this->alt_up_sd_card_is_Present(); }
+    bool isFAT16() { this->alt_up_sd_card_is_FAT16(); }
+    bool write(int, char);
+    bool fclose(int);
+    short int readFile(int fd) { this->alt_up_sd_card_read(fd); }
+    short int findNext(char *fn) { this->alt_up_sd_card_find_next(fn); }
+    short int findNext(char *fn, t_file_record *fr) { this->alt_up_sd_card_find_next(fn, fr); }
+    
 };
 
 #endif
