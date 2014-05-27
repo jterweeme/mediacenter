@@ -12,7 +12,7 @@
 # 
 # request TCL package from ACDS 13.1
 # 
-package require -exact qsys 13.1
+package require -exact qsys 13.0
 
 
 # 

@@ -75,7 +75,7 @@ bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 		short int reg_state = 0xff;
         
         if (current_sector_modified)
-            if (Write_Sector_Data(current_sector_index, 0) == false)
+            if (!Write_Sector_Data(current_sector_index, 0))
                 return false;
 
         IOWR_32DIRECT(command_argument_register, 0, (sector_index + partition_offset)*512);
