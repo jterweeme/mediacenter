@@ -27,7 +27,7 @@ public:
 private:
     VGA *vga;
     Box *box;
-    SDCard *sdCard;
+    SDCardEx *sdCard;
     Uart *uart;
     QuadroSegment *quadroSegment;
 };
@@ -38,7 +38,7 @@ void OrthodoxFileManager1::init()
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("StartUp OFM1...\r\n");
     quadroSegment = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
-    sdCard = new SDCard();
+    sdCard = new SDCardEx();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
     vga = new VGA("/dev/video_character_buffer_with_dma_0");
     box = new Box(vga);

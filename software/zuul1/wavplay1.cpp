@@ -16,6 +16,7 @@ private:
     SoundCard *soundCard;
     SDCardEx *sdCard;
     Uart *uart;
+    LCD *lcd;
     MyFile *myFile;
     CombinedSegment *cs;
 };
@@ -37,56 +38,60 @@ void WavPlay1::init()
     soundCard->setOutputVolume(120);
     //soundCard->setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);
     //soundCard->setSampleRate(3);
+    lcd = new LCD((volatile uint8_t *)LCD_BASE);
+    lcd->clear();
+    //lcd->home();
+    lcd->puts("CROCKETS.WAV");
 }
 
-uint8_t buf[5120000];
-uint16_t sample;
-uint16_t sample_r;
+
 
 int WavPlay1::run()
 {
+    uint8_t buf[2120000];
+    uint16_t sample, sample_r;
+
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
-            myFile = sdCard->openFile("CROCKETS.WAV");
-            
-            if (myFile <= 0)
-                return 0;
-            
-            for (int i = 0; i < 44; i++)
-                myFile->read();      // skip header
+        myFile = sdCard->openFile("CROCKETS.WAV");
+        
+        if (myFile <= 0)
+            return 0;
+        
+        for (int i = 0; i < 44; i++)
+            myFile->read();      // skip header
 
 
-            for (int i = 0; i < sizeof(buf); i++)
-            {
-                buf[i] = myFile->read();
-            }
+        for (int i = 0; i < sizeof(buf); i++)
+        {
+            buf[i] = myFile->read();
+        }
 
-            uart->puts("Muziek begint\r\n");
+        uart->puts("Muziek begint\r\n");
 
-            for (int i = 0; i < sizeof(buf);)
-            {
-                sample = 0;
-                sample_r = 0;
-                sample += buf[i++];
-                sample += buf[i++] << 8;
-                //usleep(10);
-                //sample_r += buf[i++];
-                //sample_r += buf[i++] << 8;
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-                soundCard->writeDacOut(sample, sample);
-            }
-            
-
-            uart->puts("done\r\n");
+        for (int i = 0; i < sizeof(buf);)
+        {
+            sample = 0;
+            sample_r = 0;
+            sample += buf[i++];
+            sample += buf[i++] << 8;
+            //usleep(10);
+            //sample_r += buf[i++];
+            //sample_r += buf[i++] << 8;
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+            soundCard->writeDacOut(sample, sample);
+        }
+        
+        uart->puts("done\r\n");
     }
     return 0;
 }

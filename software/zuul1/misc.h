@@ -155,11 +155,17 @@ class LCD
 {
 private:
     volatile uint8_t *base;
+    static const uint8_t COMMAND_REG = 0;
+    static const uint8_t DATA_REG = 1;
+    static const uint8_t CMDCLEAR = 1;
+    static const uint8_t CMDHOME = 2;
 public:
     LCD(volatile uint8_t *base) : base(base) { }
-    void putc(const char c) { base[1] = c; }
-    void puts(const char *s) { while (*s) putc(*s++); }
-    void cmd(uint8_t c) { base[0] = c; }
+    inline void putc(const char c) { base[DATA_REG] = c; }
+    inline void puts(const char *s) { while (*s) putc(*s++); }
+    inline void cmd(uint8_t c) { base[COMMAND_REG] = c; }
+    inline void clear() { cmd(CMDCLEAR); }
+    inline void home() { cmd(CMDHOME); }
 
     void setPos(uint8_t x, uint8_t y)
     {
