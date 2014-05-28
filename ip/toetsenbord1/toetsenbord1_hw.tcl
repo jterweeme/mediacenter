@@ -12,7 +12,7 @@
 # 
 # request TCL package from ACDS 13.1
 # 
-package require -exact qsys 13.1
+package require -exact qsys 13.0
 
 set_module_property DESCRIPTION ""
 set_module_property NAME toetsenbord1
@@ -32,7 +32,7 @@ add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL toetsenbord1
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 add_fileset_file toetsenbord1.vhd VHDL PATH toetsenbord1.vhd
-add_fileset_file toetsenbord1.v VERILOG PATH toetsenbord1.v TOP_LEVEL_FILE
+add_fileset_file kbtoplevel.v VERILOG PATH kbtoplevel.v TOP_LEVEL_FILE
 add_fileset_file display2.vhd VHDL PATH display2.vhd
 
 add_interface clock clock end
@@ -88,7 +88,7 @@ add_interface_port conduit_end_0 coe_kc export Input 1
 add_interface_port conduit_end_0 coe_kd export Input 1
 
 add_interface interrupt_sender interrupt end
-set_interface_property interrupt_sender associatedAddressablePoint avalon_slave
+set_interface_property interrupt_sender associatedAddressablePoint s1
 
 set_interface_property interrupt_sender ASSOCIATED_CLOCK clock
 set_interface_property interrupt_sender ENABLED true

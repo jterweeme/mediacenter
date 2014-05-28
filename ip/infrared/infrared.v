@@ -78,24 +78,18 @@ end
 always @( negedge iRST_n or posedge iCLK) begin
     if (!iRST_n)
         state_count_flag <= 1'b0;
-    else begin
-        if((state == GUIDANCE) &&(iIRDA))
-            state_count_flag <= 1'b1;
-        else
-            state_count_flag <= 1'b0;
-    end
+    else if((state == GUIDANCE) &&(iIRDA))
+        state_count_flag <= 1'b1;
+    else
+        state_count_flag <= 1'b0;
 end
 
 always @(negedge iRST_n or posedge iCLK) begin
     if(!iRST_n)
         state <= IDLE;
-    else
-
-          begin
-                if ((state == IDLE) &&(idle_count > GUIDE_LOW_DUR))
-                   state <= GUIDANCE;
-                else if ( state == GUIDANCE )
-                       begin
+    else begin if ((state == IDLE) && (idle_count > GUIDE_LOW_DUR))
+        state <= GUIDANCE;
+    else if (state == GUIDANCE) begin
                          if( state_count > GUIDE_HIGH_DUR )
                              state <= DATAREAD;
                        end
@@ -109,22 +103,16 @@ always @(negedge iRST_n or posedge iCLK) begin
           end
 end
 
-always @(negedge iRST_n or  posedge iCLK)
-   begin
-      if(!iRST_n)
-         data_count <= 1'b0;
-      else
+always @(negedge iRST_n or  posedge iCLK) begin
+    if(!iRST_n)
+        data_count <= 1'b0;
+    else if(data_count_flag)
+        data_count <= data_count + 1'b1;
+    else
+        data_count <= 1'b0;
+end
 
-         begin
-            if(data_count_flag)
-                data_count <= data_count + 1'b1;
-            else
-                data_count <= 1'b0;
-         end
-   end
-
-always @(negedge iRST_n  or posedge iCLK  )
-    begin
+always @(negedge iRST_n  or posedge iCLK) begin
        if(!iRST_n)
             data_count_flag <= 0;
        else
@@ -142,11 +130,10 @@ always @(negedge iRST_n  or posedge iCLK  )
          end
     end
 
-always @(negedge iRST_n or posedge iCLK )
-    begin
-        if( (!iRST_n) )
-            DATA <= 0;      //rst
-        else
+always @(negedge iRST_n or posedge iCLK) begin
+    if( (!iRST_n) )
+            DATA <= 0;
+    else
 
             begin
              if (state == DATAREAD )

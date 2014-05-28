@@ -26,9 +26,9 @@ void KeyBoardTest2::isrBridge(void *context)
 void KeyBoardTest2::init()
 {
     ::printf("Init\r\n");
-    segLinks = new DuoSegment((volatile uint16_t *)DUOSEGMENTRECHTS_BASE);
+    segLinks = new DuoSegment((volatile uint16_t *)DUOSEGMENTLINKS_BASE);
     segLinks->setHex(0);
-    alt_ic_isr_register(ITOETSENBORD_IRQ_INTERRUPT_CONTROLLER_ID, ITOETSENBORD_IRQ, isrBridge, 0, 0); 
+    //alt_ic_isr_register(ITOETSENBORD_IRQ_INTERRUPT_CONTROLLER_ID, ITOETSENBORD_IRQ, isrBridge, 0, 0); 
 }
 
 int KeyBoardTest2::run()

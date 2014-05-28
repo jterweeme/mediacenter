@@ -4,13 +4,11 @@ set_module_property VERSION 13.0
 set_module_property GROUP "Jalex"
 set_module_property AUTHOR "Altera University Program"
 set_module_property DISPLAY_NAME mylcd1
-#set_module_property INSTANTIATE_IN_SYSTEM_MODULE true
-#set_module_property EDITABLE false
 set_module_property ANALYZE_HDL false
 set_module_property GENERATION_CALLBACK generate
 
-add_file "hdl/altera_up_character_lcd_communication.v" {SYNTHESIS SIMULATION}
-add_file "hdl/altera_up_character_lcd_initialization.v" {SYNTHESIS SIMULATION}
+add_file "altera_up_character_lcd_communication.v" {SYNTHESIS SIMULATION}
+add_file "altera_up_character_lcd_initialization.v" {SYNTHESIS SIMULATION}
 
 add_parameter cursor string Normal
 set_parameter_property cursor DISPLAY_NAME "Display Cursor"
@@ -53,12 +51,7 @@ add_interface_port avalon_lcd_slave write write Input 1
 add_interface_port avalon_lcd_slave writedata writedata Input 8
 add_interface_port avalon_lcd_slave readdata readdata Output 8
 add_interface_port avalon_lcd_slave waitrequest waitrequest Output 1
-# | 
-# +-----------------------------------
 
-# +-----------------------------------
-# | connection point external_interface
-# | 
 add_interface external_interface conduit end 
 
 add_interface_port external_interface LCD_DATA export Bidir 8
@@ -67,16 +60,10 @@ add_interface_port external_interface LCD_BLON export Output 1
 add_interface_port external_interface LCD_EN export Output 1
 add_interface_port external_interface LCD_RS export Output 1
 add_interface_port external_interface LCD_RW export Output 1
-# | 
-# +-----------------------------------
 
-# +-----------------------------------
-# | Generation function
-# | 
 proc generate {} {
 	send_message info "Starting Generation of Character LCD"
 
-	# get parameter values
 	set cursor [ get_parameter_value "cursor" ]
 
 	if { $cursor == "Normal" } {
@@ -93,9 +80,6 @@ proc generate {} {
 		set blinking  "BLINKING_ON:1'b0"
 	}
 
-	# set section values
-
-	# set arguments
 	set params "$cursor_on;$blinking"
 	set sections ""
 
@@ -109,12 +93,9 @@ proc generate {} {
 	}
 
 	add_file "$dest_dir$dest_name.$file_ending" {SYNTHESIS SIMULATION}
-	# add_file "$dest_dir/altera_up_character_lcd_communication.$file_ending" SYNTHESIS
-	# add_file "$dest_dir/altera_up_character_lcd_initialization.$file_ending" SYNTHESIS
 
-	# Generate HDL
 	source "up_ip_generator.tcl"
-	alt_up_generate "$dest_dir$dest_name.$file_ending" "hdl/altera_up_avalon_character_lcd.$file_ending" "altera_up_avalon_character_lcd" $dest_name $params $sections
+	alt_up_generate "$dest_dir$dest_name.$file_ending" "altera_up_avalon_character_lcd.$file_ending" "altera_up_avalon_character_lcd" $dest_name $params $sections
 
 }
 

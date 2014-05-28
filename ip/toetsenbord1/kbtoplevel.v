@@ -2,11 +2,11 @@ module toetsenbord1(
     input csi_clk,
     input csi_reset_n,
     output reg ins_irq0_irq,
-    //input avs_s1_cs_n,
+    input avs_s1_cs_n,
     input avs_s1_read,
     output reg [7:0] avs_s1_readdata,
-    //input avs_s1_write,
-    //input [7:0] avs_s1_writedata,
+    input avs_s1_write,
+    input [7:0] avs_s1_writedata,
     input coe_kc,
     input coe_kd,
     output [6:0] coe_sseg0,
@@ -22,8 +22,8 @@ always @(posedge csi_clk or negedge csi_reset_n) begin
         ins_irq0_irq <= 1'b0;
     else if (cnt == 32'b1)
         ins_irq0_irq <= 1'b1;
-    //else if (~avs_s1_cs_n & avs_s1_write)
-        //ins_irq0_irq <= 1'b0;
+    else if (~avs_s1_cs_n & avs_s1_write)
+        ins_irq0_irq <= 1'b0;
 end
 
 always @(posedge csi_clk or negedge csi_reset_n) begin
