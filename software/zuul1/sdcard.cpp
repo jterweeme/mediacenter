@@ -34,7 +34,7 @@ bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
 {
     bool result = false;
     
-    if (alt_up_sd_card_is_Present())
+    //if (alt_up_sd_card_is_Present())
     {
         short int reg_state = 0xff;
 
@@ -70,7 +70,7 @@ bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 {
 	bool result = false;
     
-	if (alt_up_sd_card_is_Present())
+	//if (alt_up_sd_card_is_Present())
 	{
 		short int reg_state = 0xff;
         
@@ -135,7 +135,7 @@ bool SDCard::Check_for_Master_Boot_Record(void)
 
 	if (Read_Sector_Data(0, 0))
 	{
-		end =  (short int) IORD_16DIRECT(device_pointer->base,0x1fe);
+        end = (short int)IORD_16DIRECT(device_pointer->base,0x1fe);
 
 		if ((end & 0x0000ffff) == 0x0000aa55)
 		{
@@ -170,7 +170,9 @@ bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
         unsigned int cluster_index, unsigned int sector_in_cluster)
 {
 	bool result = false;
-	if (((offset & 0x01f) == 0) && (alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+
+    //if (((offset & 0x01f) == 0) && (alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+    if ((offset & 0x01f) == 0)
 	{
 		int counter;
 
@@ -200,7 +202,8 @@ bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
 bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
 {
     bool result = false;
-    if (((offset & 0x01f) == 0) && (alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+    //if (((offset & 0x01f) == 0) && (alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+    if ((offset & 0x01f) == 0)
     {
         int counter;
 
@@ -288,7 +291,7 @@ bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
 			boot_sector_data.volume_label[counter] = ((char) IORD_8DIRECT(device_pointer->base, 43+counter));
 
 		for (counter = 0; counter < 8; counter++)
-			boot_sector_data.file_system_type[counter] = ((char) IORD_8DIRECT(device_pointer->base, 54+counter));
+            boot_sector_data.file_system_type[counter] = ((char)IORD_8DIRECT(device_pointer->base, 54+counter));
 
 		for (counter = 0; counter < MAX_FILES_OPENED; counter++)
 			active_files[counter].in_use = false;
@@ -307,7 +310,7 @@ bool SDCard::Look_for_FAT16()
 {
 	bool result = false;
 
-	if (alt_up_sd_card_is_Present())
+	//if (alt_up_sd_card_is_Present())
 	{
 		short int csd_file_format = *CSD_register_w0;
         
@@ -392,17 +395,11 @@ int SDCard::get_dir_divider_location(char *name)
     int length = strlen(name);
     
     for(index = 0; index < length; index++)
-    {
         if ((name[index] == '\\') || (name[index] == '/'))
-        {
             break;
-        }
-    }
     
     if (index == length)
-    {
         index = -1;
-    }
     
     return index;
 }
@@ -554,9 +551,8 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
 					if (get_cluster_flag(new_cluster, &next_cluster))
 					{
 						if ((next_cluster & 0x0000fff8) == 0x0000fff8)
-						{
 							return false;
-						}
+
 						new_cluster = (next_cluster & 0x0000fff8);
 					}
 					else
@@ -1071,7 +1067,7 @@ bool SDCard::alt_up_sd_card_is_FAT16(void)
 short int SDCard::alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name)
 {
 	short int result = 2;
-	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+	//if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
 	{
 		int home_directory_cluster;
 		t_file_record file_record;
@@ -1096,7 +1092,7 @@ short int SDCard::alt_up_sd_card_find_first(char *directory_to_search_through, c
 short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 {
 	short int result = 2;
-	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+	//if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
 	{
 		if (search_data.valid)
 		{
@@ -1207,7 +1203,7 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 short int SDCard::alt_up_sd_card_find_next(char *file_name)
 {
 	short int result = 2;
-	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+	//if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
 	{
 		if (search_data.valid)
 		{
@@ -1319,7 +1315,7 @@ short int SDCard::alt_up_sd_card_fopen(char *name, bool create)
     uart->puts("alt_up_sdcard_fopen\r\n");
 	short int file_record_index = -1;
 
-	if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+	//if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
 	{
         unsigned int home_directory_cluster = 0;
         t_file_record home_dir;
@@ -1573,7 +1569,7 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 bool SDCard::alt_up_sd_card_fclose(short int file_handle)
 {
     bool result = false;
-    if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
+    //if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
     {
         if (active_files[file_handle].in_use) 
         {

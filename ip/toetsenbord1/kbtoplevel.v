@@ -18,12 +18,17 @@ reg [31:0] cnt;
 
 
 always @(posedge csi_clk or negedge csi_reset_n) begin
-    if (~csi_reset_n)
+    if (~csi_reset_n) begin
         ins_irq0_irq <= 1'b0;
-    else if (cnt == 32'b1)
-        ins_irq0_irq <= 1'b1;
-    else if (~avs_s1_cs_n & avs_s1_write)
-        ins_irq0_irq <= 1'b0;
+        cnt <= 32'b0;
+    end else begin
+        cnt <= cnt + 1'b1;
+
+        if (cnt == 32'b1)
+            ins_irq0_irq <= 1'b1;
+        else if (~avs_s1_cs_n & avs_s1_write)
+            ins_irq0_irq <= 1'b0;
+    end
 end
 
 always @(posedge csi_clk or negedge csi_reset_n) begin
@@ -31,13 +36,6 @@ always @(posedge csi_clk or negedge csi_reset_n) begin
         avs_s1_readdata = 8'b0;
     else if (avs_s1_read)
         avs_s1_readdata[7:0] <= scancode_data[7:0];
-end
-
-always @(posedge csi_clk or negedge csi_reset_n) begin
-    if (~csi_reset_n)
-        cnt <= 31'b0;
-    else
-        cnt <= cnt + 1'b1;
 end
 
 display2 display_inst1(

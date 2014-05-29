@@ -230,7 +230,6 @@ set_global_assignment -name VHDL_FILE ip/mytimer1/main.vhd
 set_global_assignment -name TCL_SCRIPT_FILE ip/mytimer1/mytimer1_hw.tcl
 set_global_assignment -name VERILOG_FILE ip/mytimer1/main.v
 set_global_assignment -name TCL_SCRIPT_FILE ip/toetsenbord1/toetsenbord1_hw.tcl
-set_global_assignment -name VERILOG_FILE ip/toetsenbord1/toetsenbord1.v
 set_global_assignment -name VHDL_FILE ip/toetsenbord1/toetsenbord1.vhd
 set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/AUDIO_IF.v
 set_global_assignment -name VERILOG_FILE ip/TERASIC_AUDIO/audio_fifo.v

@@ -61,52 +61,26 @@ int OrthodoxFileManager1::run()
 {
     box->draw();
 
-    if (sdCard->isPresent())
+    if (sdCard->isPresent() && sdCard->isFAT16())
     {
-        if (sdCard->isFAT16())
+        char fn[13] = {0};
+        t_file_record fr;
+        int foo = sdCard->alt_up_sd_card_find_first("/.", fn);
+        char dinges[255];
+
+        while ((foo = sdCard->findNext(fn, &fr)) >= 0)
         {
-            char fn[13];
-            t_file_record fr;
-            int foo = sdCard->alt_up_sd_card_find_first("/.", fn);
-
-            while ((foo = sdCard->findNext(fn, &fr)) >= 0)
-            {
-                //uart->puts(fn);
-                char dinges[255];
-                ::sprintf(dinges, "%s %u\r\n", (const char *)fr.name, fr.file_size_in_bytes);
-                //uart->puts((const char *)fr.name);
-                uart->puts(dinges);
-                uart->puts("\r\n");
-            }
-
-/*
-            while ((foo = sdCard->findNext(fn)) >= 0)
-            {
-                //uart->puts((const char *)fr.name);
-                uart->puts(fn);
-                uart->puts("\r\n");
-            }
-*/
-            //MyFile *file = sdCard->openFile(fn);
-/*
-            int fd = sdCard->fopen(fn);
-            quadroSegment->setHex(fd);
-            int bar = ::alt_up_sd_card_read(fd);
-            quadroSegment->setHex(bar);
-            uart->puts("Test\r\n");
-
-
-            short int bijt;
-            //bijt = file->read();
-
-            uart->puts("Onzin\r\n");
-*/
-
+            uart->puts(fn);
+            uart->puts("\r\n");
+            ::memset(dinges, 0, sizeof(dinges));
+            ::sprintf(dinges, "%s %u\r\n", (const char *)fr.name, fr.file_size_in_bytes);
+            uart->puts(dinges);
+            //uart->puts("\r\n");
         }
-        else
-        {
-            uart->puts("Geen FAT16\r\n");
-        }
+    }
+    else
+    {
+        uart->puts("Geen FAT16\r\n");
     }
 
     return 0;

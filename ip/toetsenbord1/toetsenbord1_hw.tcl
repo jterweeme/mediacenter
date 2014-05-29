@@ -76,8 +76,12 @@ set_interface_property s1 EXPORT_OF ""
 set_interface_property s1 PORT_NAME_MAP ""
 set_interface_property s1 SVD_ADDRESS_GROUP ""
 
+
 add_interface_port s1 avs_s1_read read Input 1
+add_interface_port s1 avs_s1_cs_n chipselect_n Input 1
 add_interface_port s1 avs_s1_readdata readdata Output 8
+add_interface_port s1 avs_s1_write write Input 1
+add_interface_port s1 avs_s1_writedata writedata Input 8
 
 add_interface conduit_end_0 conduit end
 set_interface_property conduit_end_0 associatedClock clock
