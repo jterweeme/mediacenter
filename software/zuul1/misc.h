@@ -253,19 +253,30 @@ class SDCard2
 public:
     volatile void *base;
     volatile uint16_t *aux_status;
-    volatile uint16_t *command;
+    volatile uint16_t *command_reg;
+    volatile uint32_t *argument_reg;
     volatile uint8_t *data;
 public:
     SDCard2(volatile void *base)
         :
             base(base),
-            aux_status((volatile uint16_t *)((uint8_t *)base + 0x234))
+            aux_status((volatile uint16_t *)((uint8_t *)base + 0x234)),
+            command_reg((volatile uint16_t *)((uint8_t *)base + 0x230)),
+            argument_reg((volatile uint32_t *)((uint8_t *)base + 0x22c)),
+            data((volatile uint8_t *)((uint8_t *)base))
     { }
 
-    void waitForInsert()
+    inline void waitForInsert() { while (!(*aux_status & 0x02)) { } }
+
+    void command(uint16_t cmd, uint32_t arg1)
     {
-        while ((*aux_status & 0x02) == 0) { }
+        *argument_reg = arg1;
+        *command_reg = cmd;
+        while (*aux_status & 0x04) { }  // wait until complete
     }
+
+    static const uint8_t READ_BLOCK = 17;
+    void read(uint32_t offset) { command(READ_BLOCK, offset); }
 };
 
 class VGA
