@@ -22,7 +22,9 @@ DOWNLOAD := ofm1.elf
 
 all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex \
     md5test1.elf kbtest2.hex vgatest1.hex \
-    karaoke1.hex ofm1.hex mytest1.hex
+    karaoke1.hex ofm1.hex mytest1.hex eepromtest1.hex \
+    sdcardtest2.hex sdcardtest3.hex
+
 
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
@@ -37,6 +39,8 @@ piano1.hex: piano1.flash
 primes1.hex: primes1.flash
 #sdaudio2.hex: sdaudio2.flash
 sdcardtest1.hex: sdcardtest1.flash
+sdcardtest2.hex: sdcardtest2.flash
+sdcardtest3.hex: sdcardtest3.flash
 test1.hex: test1.flash
 vgatest1.hex: vgatest1.flash
 vgatest2.hex: vgatest2.flash
@@ -55,6 +59,8 @@ piano1.flash: piano1.elf
 primes1.flash: primes1.elf
 #sdaudio2.flash: sdaudio2.elf
 sdcardtest1.flash: sdcardtest1.elf
+sdcardtest2.flash: sdcardtest2.elf
+sdcardtest3.flash: sdcardtest3.elf
 test1.flash: test1.elf
 vgatest1.flash: vgatest1.elf
 vgatest2.flash: vgatest2.elf
@@ -73,6 +79,8 @@ piano1.elf: piano1.o misc.o sdcard.o
 primes1.elf: primes1.o misc.o sdcard.o
 #sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
+sdcardtest2.elf: sdcardtest2.o misc.o
+sdcardtest3.elf: sdcardtest3.o misc.o
 test1.elf: test1.o misc.o sdcard.o
 vgatest1.elf: vgatest1.o misc.o sdcard.o
 vgatest2.elf: vgatest2.o vgascreen.o sdcard.o
@@ -103,6 +111,8 @@ ps2.o: ps2.cpp
 sdaudio2.o: sdaudio2.cpp misc.h LED.h AUDIO.h AUDIO_REG.h
 sdcard.o: sdcard.cpp sdcard.h
 sdcardtest1.o: sdcardtest1.cpp
+sdcardtest2.o: sdcardtest2.cpp
+sdcardtest3.o: sdcardtest3.cpp
 #sd_hal.o: sd_hal.cpp
 #sd_lib.o: sd_lib.cpp
 #sd_protocol.o: sd_protocol.cpp

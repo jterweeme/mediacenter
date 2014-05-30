@@ -178,12 +178,16 @@ class I2C
 private:
     volatile uint32_t *scl;
     volatile uint32_t *sda;
+public:
     void start();
     void stop();
     bool private_write(uint8_t data);
     void private_read(uint8_t *data, bool ack);
+private:
     static const uint8_t DATA = 0;
     static const uint8_t DIRECTION = 1;
+    static const uint8_t PIO_INPUT = 0;
+    static const uint8_t PIO_OUTPUT = 1;
 public:
     void init(volatile uint32_t *scl, volatile uint32_t *sda);
     I2C() { }
@@ -204,7 +208,8 @@ public:
     void writeDacOut(uint16_t left, uint16_t right);
     void setOutputVolume(int vol);
     void setSampleRate(uint8_t sr);
-    static const uint8_t ADDR = 0x34;
+    static const uint8_t I2C_ADDR = 0x34;
+    static const uint8_t ADDR = I2C_ADDR;
     static const uint16_t DATA_RESET = 0;
     static const uint16_t DATA_INACTIVE_INTERFACE = 0;
     static const uint16_t DATA_LEFT_LINE_IN_VOLUME = 0x0017;
@@ -227,6 +232,9 @@ private:
     I2C *bus;
 public:
     EEProm(I2C *bus) { this->bus = bus; }
+    uint8_t read();
+    void write(uint8_t);
+    static const uint8_t I2C_ADDR = 0x50;
 };
 
 class MyFile;
@@ -237,7 +245,27 @@ private:
     MyFile *myFile;
 public:
     KarFile(MyFile *myFile) : myFile(myFile) { }
-    const char *getText();
+    //const char *getText();
+};
+
+class SDCard2
+{
+public:
+    volatile void *base;
+    volatile uint16_t *aux_status;
+    volatile uint16_t *command;
+    volatile uint8_t *data;
+public:
+    SDCard2(volatile void *base)
+        :
+            base(base),
+            aux_status((volatile uint16_t *)((uint8_t *)base + 0x234))
+    { }
+
+    void waitForInsert()
+    {
+        while ((*aux_status & 0x02) == 0) { }
+    }
 };
 
 class VGA

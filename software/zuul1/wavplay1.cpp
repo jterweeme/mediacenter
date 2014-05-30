@@ -6,6 +6,30 @@ Jasper ter Weeme
 #include <system.h>
 #include "misc.h"
 
+int delay = 10;
+
+class Beam : public Observer
+{
+private:
+public:
+    void update();
+};
+
+void Beam::update()
+{
+    uint32_t button = InfraRood::getInstance()->read();
+    
+    switch (button >> 16)
+    {
+    case ::TerasicRemote::LEFT:
+        ::delay++;
+        break;
+    case ::TerasicRemote::RIGHT:
+        ::delay--;
+        break;
+    }
+}
+
 class WavPlay1
 {
 public:
@@ -19,6 +43,7 @@ private:
     LCD *lcd;
     MyFile *myFile;
     CombinedSegment *cs;
+    InfraRood *ir;
 };
 
 void WavPlay1::init()
@@ -42,6 +67,10 @@ void WavPlay1::init()
     lcd->clear();
     //lcd->home();
     lcd->puts("CROCKETS.WAV");
+    ir = InfraRood::getInstance();
+    int ctl = IINFRARED_IRQ_INTERRUPT_CONTROLLER_ID;
+    ir->init((volatile uint32_t *)IINFRARED_BASE, IINFRARED_IRQ, ctl);
+    ir->setObserver(new Beam());
 }
 
 
@@ -78,17 +107,9 @@ int WavPlay1::run()
             //usleep(10);
             //sample_r += buf[i++];
             //sample_r += buf[i++] << 8;
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
-            soundCard->writeDacOut(sample, sample);
+
+            for (int j = 0; j < ::delay; j++)
+                soundCard->writeDacOut(sample, sample);
         }
         
         uart->puts("done\r\n");

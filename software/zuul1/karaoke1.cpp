@@ -30,7 +30,7 @@ void Karaoke1::init()
     {
         myFile = sdCard->openFile("LUCKY.TXT");
         karFile = new KarFile(myFile);
-        vgaTerminal->puts(karFile->getText());
+        
     }
     else
     {

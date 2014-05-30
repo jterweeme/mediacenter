@@ -136,7 +136,7 @@ void MD5Test1::init()
     uart->puts("Initialize MD5Test1\r\n");
     sdCard = new SDCardEx();
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
-    size_t fileSize = 41044;
+    size_t fileSize = 9365708;
     uint8_t buf[fileSize];
     MyFile *myFile;
     uint8_t result[16];
@@ -144,7 +144,7 @@ void MD5Test1::init()
 
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
-        myFile = sdCard->openFile("VOGUE.KAR");
+        myFile = sdCard->openFile("CROCKETS.WAV");
 
         for (int i = 0; i < fileSize && myFile != NULL; i++)
             buf[i] = myFile->read();

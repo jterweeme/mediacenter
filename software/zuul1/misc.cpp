@@ -163,10 +163,11 @@ void SoundCard::setOutputVolume(int vol)
     }
 }
 
+/*
 const char *KarFile::getText()
 {
     uint8_t c;
-    char returnString[100] = {0};
+    static char returnString[100] = {0};
     
     int i = 0;
     
@@ -178,14 +179,14 @@ const char *KarFile::getText()
     while (c > 10);
 
     return returnString;
-}
+}*/
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
 {
     uint8_t foo = data & 0xff;
     uint8_t control = (index << 1) & 0xfe;
     control |= ((foo >> 8) & 0x01);
-    i2cBus->write(0x34, control, data);
+    i2cBus->write(I2C_ADDR, control, data);
     ::usleep(50 * 1000);
     return true;
 }
@@ -216,6 +217,26 @@ void VGA::shiftLeft(int n)
     
 }
 
+void EEProm::write(uint8_t c)
+{
+    bus->start();
+    bus->private_write(I2C_ADDR);
+    bus->private_write('E');
+    bus->stop();
+    ::usleep(7*1000);
+    //bus.write(I2C_ADDR, 
+}
+
+uint8_t EEProm::read()
+{
+    uint8_t value;
+    bus->start();
+    bus->private_write(I2C_ADDR);
+    bus->private_read(&value, false);
+    bus->stop();
+    return value;
+}
+
 void I2C::init(volatile uint32_t *scl, volatile uint32_t *sda)
 {
     this->scl = scl;
@@ -234,7 +255,7 @@ void I2C::write(uint8_t devAddr, uint8_t ctlAddr, uint8_t ctlData)
 
 void I2C::start()
 {
-    sda[DIRECTION] = 1;
+    sda[DIRECTION] = PIO_OUTPUT;
     sda[DATA] = 1;
     scl[DATA] = 1;
     ::usleep(1);
@@ -246,7 +267,7 @@ void I2C::start()
 
 void I2C::stop()
 {
-    sda[DIRECTION] = 1;
+    sda[DIRECTION] = PIO_OUTPUT;
     sda[DATA] = 0;
     scl[DATA] = 1;
     ::usleep(1);
@@ -254,10 +275,41 @@ void I2C::stop()
     ::usleep(1);
 }
 
+void I2C::private_read(uint8_t *data, bool ack)
+{
+    uint8_t foo = 0;
+    sda[DIRECTION] = PIO_INPUT;
+    scl[DATA] = 0;
+    ::usleep(1);
+    
+    for (int i = 0; i < 8; i++)
+    {
+        foo <<= 1;
+        ::usleep(1);
+        
+        if (sda[DATA])
+            foo |= 1;
+
+        scl[DATA] = 0;
+        ::usleep(1);
+    }
+
+    scl[DATA] = 0;
+    sda[DIRECTION] = PIO_OUTPUT;
+    sda[DATA] = ack ? 0 : 1;
+    scl[DATA] = 1;
+    ::usleep(1);
+    scl[DATA] = 0;
+    ::usleep(1);
+    sda[DATA] = 0;
+    ::usleep(1);
+    *data = foo;
+}
+
 bool I2C::private_write(uint8_t data)
 {
     uint8_t mask = 0x80;
-    sda[DIRECTION] = 1;
+    sda[DIRECTION] = PIO_OUTPUT;
 
     for (int i = 0; i < 8; i++)
     {
@@ -270,7 +322,7 @@ bool I2C::private_write(uint8_t data)
         ::usleep(1);
     }
     
-    sda[DIRECTION] = 0;
+    sda[DIRECTION] = PIO_INPUT;
     scl[DATA] = 1;
     ::usleep(1);
     scl[DATA] = 0;

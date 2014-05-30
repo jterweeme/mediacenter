@@ -11,7 +11,7 @@ public:
     DuoSegmentLinks() : DuoSegment((volatile uint16_t *)DUOSEGMENTLINKS_BASE) { }
 };
 
-class DuoSegmentRechts : public DuoSegment
+class DuoSegmentRechts : public ::DuoSegment
 {
 public:
     DuoSegmentRechts() : DuoSegment((volatile uint16_t *)DUOSEGMENTRECHTS_BASE) { }
@@ -34,7 +34,7 @@ void Beam::update()
 
     switch (button >> 16)
     {
-    case TerasicRemote::A:
+    case ::TerasicRemote::A:
         uart->puts("A\r\n");
         break;
     case TerasicRemote::B:
@@ -122,9 +122,11 @@ private:
     ::QuadroSegment *segmentQuadro;
     ::InfraRood *ir;
     ::Uart *uart;
-    //VGATerminal *vgaTerminal;
+    ::VGATerminal *vgaTerminal;
     ::GreenLeds *gl;
     ::LCD *lcd;
+    ::EEProm *eeprom;
+    ::I2C *i2cBus1;
 };
 
 int main()
@@ -139,8 +141,8 @@ int main()
 
 void Test1::init()
 {
-    //vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
-    //vgaTerminal->clear();
+    vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
+    vgaTerminal->clear();
     segmentQuadro = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
     segmentQuadro->setInt(12345);
     segmentQuadro->setHex(0xabcd);
@@ -155,10 +157,9 @@ void Test1::init()
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
-    //vgaTerminal->puts("Opstarten\r\n");
+    vgaTerminal->puts("Opstarten\r\n");
     gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
     gl->set(0x03);
-
     volatile uint32_t *sram = (volatile uint32_t *)MYSRAM_0_BASE;
     sram[100] = 0x012345678;
     segmentQuadro->setHex(sram[100]);
