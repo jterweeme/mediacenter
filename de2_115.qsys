@@ -16,7 +16,7 @@
    {
       datum _sortIndex
       {
-         value = "8";
+         value = "7";
          type = "int";
       }
    }
@@ -24,7 +24,7 @@
    {
       datum _sortIndex
       {
-         value = "7";
+         value = "27";
          type = "int";
       }
    }
@@ -68,19 +68,19 @@
          type = "String";
       }
    }
+   element iinfrared.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "136328520";
+         type = "String";
+      }
+   }
    element mysram_0.avalon_slave
    {
       datum baseAddress
       {
          value = "134217728";
-         type = "String";
-      }
-   }
-   element mytimer1_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "136328516";
          type = "String";
       }
    }
@@ -92,11 +92,11 @@
          type = "String";
       }
    }
-   element iinfrared.avalon_slave
+   element mytimer1_0.avalon_slave
    {
       datum baseAddress
       {
-         value = "136328520";
+         value = "136328516";
          type = "String";
       }
    }
@@ -109,7 +109,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -125,7 +125,7 @@
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "22";
          type = "int";
       }
    }
@@ -133,7 +133,7 @@
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "21";
          type = "int";
       }
    }
@@ -141,7 +141,7 @@
    {
       datum _sortIndex
       {
-         value = "10";
+         value = "9";
          type = "int";
       }
    }
@@ -149,7 +149,7 @@
    {
       datum _sortIndex
       {
-         value = "11";
+         value = "10";
          type = "int";
       }
    }
@@ -165,7 +165,7 @@
    {
       datum _sortIndex
       {
-         value = "19";
+         value = "18";
          type = "int";
       }
    }
@@ -189,7 +189,7 @@
    {
       datum _sortIndex
       {
-         value = "14";
+         value = "13";
          type = "int";
       }
       datum sopceditor_expanded
@@ -202,7 +202,7 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "23";
          type = "int";
       }
    }
@@ -210,7 +210,7 @@
    {
       datum _sortIndex
       {
-         value = "18";
+         value = "17";
          type = "int";
       }
    }
@@ -218,7 +218,7 @@
    {
       datum _sortIndex
       {
-         value = "16";
+         value = "15";
          type = "int";
       }
       datum sopceditor_expanded
@@ -231,7 +231,7 @@
    {
       datum _sortIndex
       {
-         value = "21";
+         value = "20";
          type = "int";
       }
    }
@@ -239,7 +239,7 @@
    {
       datum _sortIndex
       {
-         value = "20";
+         value = "19";
          type = "int";
       }
    }
@@ -247,7 +247,7 @@
    {
       datum _sortIndex
       {
-         value = "17";
+         value = "16";
          type = "int";
       }
    }
@@ -267,14 +267,6 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s0
-   {
-      datum baseAddress
-      {
-         value = "136328496";
-         type = "String";
-      }
-   }
    element duosegmentlinks.s0
    {
       datum baseAddress
@@ -283,11 +275,11 @@
          type = "String";
       }
    }
-   element itoetsenbord.s1
+   element duosegmentrechts.s0
    {
       datum baseAddress
       {
-         value = "136328512";
+         value = "136328496";
          type = "String";
       }
    }
@@ -296,46 +288,6 @@
       datum baseAddress
       {
          value = "136328320";
-         type = "String";
-      }
-   }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "136328448";
-         type = "String";
-      }
-   }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328464";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "136328256";
-         type = "String";
-      }
-   }
-   element snd_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328416";
-         type = "String";
-      }
-   }
-   element ledg.s1
-   {
-      datum baseAddress
-      {
-         value = "136328352";
          type = "String";
       }
    }
@@ -352,11 +304,19 @@
          type = "String";
       }
    }
-   element ledr.s1
+   element ledg.s1
    {
       datum baseAddress
       {
-         value = "136328368";
+         value = "136328352";
+         type = "String";
+      }
+   }
+   element key.s1
+   {
+      datum baseAddress
+      {
+         value = "136328400";
          type = "String";
       }
    }
@@ -368,11 +328,51 @@
          type = "String";
       }
    }
-   element key.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "136328400";
+         value = "136328448";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "136328256";
+         type = "String";
+      }
+   }
+   element itoetsenbord.s1
+   {
+      datum baseAddress
+      {
+         value = "136328512";
+         type = "String";
+      }
+   }
+   element snd_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328416";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328464";
+         type = "String";
+      }
+   }
+   element ledr.s1
+   {
+      datum baseAddress
+      {
+         value = "136328368";
          type = "String";
       }
    }
@@ -388,7 +388,7 @@
    {
       datum _sortIndex
       {
-         value = "12";
+         value = "11";
          type = "int";
       }
    }
@@ -396,7 +396,7 @@
    {
       datum _sortIndex
       {
-         value = "13";
+         value = "12";
          type = "int";
       }
    }
@@ -404,7 +404,7 @@
    {
       datum _sortIndex
       {
-         value = "15";
+         value = "14";
          type = "int";
       }
       datum sopceditor_expanded
@@ -417,7 +417,7 @@
    {
       datum _sortIndex
       {
-         value = "9";
+         value = "8";
          type = "int";
       }
    }
@@ -441,7 +441,7 @@
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "24";
          type = "int";
       }
    }
@@ -449,7 +449,7 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "25";
          type = "int";
       }
    }
@@ -457,7 +457,7 @@
    {
       datum _sortIndex
       {
-         value = "27";
+         value = "26";
          type = "int";
       }
    }
@@ -476,7 +476,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1401141124091" />
+ <parameter name="timeStamp" value="1401492669274" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -499,11 +499,6 @@
    internal="upclocks.sdram_clk"
    type="clock"
    dir="start" />
- <interface
-   name="altera_up_sd_card_avalon_interface_0_conduit_end"
-   internal="Altera_UP_SD_Card_Avalon_Interface_0.conduit_end"
-   type="conduit"
-   dir="end" />
  <interface
    name="audio_if_0_conduit_end"
    internal="AUDIO_IF_0.conduit_end"
@@ -589,6 +584,11 @@
  <interface
    name="upvga_ext"
    internal="upvga.external_interface"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="altera_up_sd_card_avalon_interface_0_conduit_end"
+   internal="Altera_UP_SD_Card_Avalon_Interface_0.conduit_end"
    type="conduit"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
@@ -787,14 +787,6 @@
   <parameter name="registerDataIn" value="true" />
   <parameter name="clockRate" value="50000000" />
   <parameter name="componentName">$${FILENAME}_new_sdram_controller_0</parameter>
- </module>
- <module
-   kind="Altera_UP_SD_Card_Avalon_Interface"
-   version="13.0"
-   enabled="1"
-   name="Altera_UP_SD_Card_Avalon_Interface_0">
-  <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
  <module kind="AUDIO_IF" version="1.0" enabled="1" name="AUDIO_IF_0">
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="12880000" />
@@ -1010,6 +1002,14 @@
   <parameter name="AUTO_CLOCK_STREAM_OUT_CLOCK_RATE" value="25000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
+ <module
+   kind="Altera_UP_SD_Card_Avalon_Interface"
+   version="13.0"
+   enabled="1"
+   name="Altera_UP_SD_Card_Avalon_Interface_0">
+  <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ </module>
  <connection
    kind="avalon"
    version="13.0"
@@ -1104,20 +1104,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="clock"
-   version="13.0"
-   start="upclocks.sys_clk"
-   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink" />
- <connection
-   kind="avalon"
-   version="13.0"
-   start="cpu.data_master"
-   end="Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08203000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
    kind="avalon"
    version="13.0"
    start="cpu.data_master"
@@ -1199,11 +1185,6 @@
    version="13.0"
    start="clk.clk_reset"
    end="new_sdram_controller_0.reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="clk.clk_reset"
-   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink_reset" />
  <connection
    kind="reset"
    version="13.0"
@@ -1511,6 +1492,25 @@
    version="13.0"
    start="upclocks.sys_clk"
    end="video_character_buffer_with_dma_0.clock_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="upclocks.sys_clk"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.clock_sink" />
+ <connection
+   kind="avalon"
+   version="13.0"
+   start="cpu.data_master"
+   end="Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x08203000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

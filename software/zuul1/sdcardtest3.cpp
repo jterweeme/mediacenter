@@ -25,7 +25,9 @@ void SDCardTest3::init()
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Init SDCardTest3\r\n");
     sd->waitForInsert();
-    sd->read(0);
+
+    for (int i = 0; i < 28800; i++)
+        sd->read(i);
     
     char x[3] = {0};
     for (int i = 0; i < 512; i++)
