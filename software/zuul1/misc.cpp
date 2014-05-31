@@ -7,6 +7,14 @@
 #include "misc.h"
 #include <fcntl.h>
 
+void Utility::toHex(uint8_t input, char *output)
+{
+    uint8_t foo = input & 0x0f;
+    uint8_t bar = input >> 4;
+    output[0] = bar < 10 ? (char)(bar + 48) : (char)(bar + 55);
+    output[1] = foo < 10 ? (char)(foo + 48) : (char)(foo + 55);
+}
+
 // 0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f
 const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8,
                 0x00, 0x10, 0x08, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
@@ -49,6 +57,24 @@ void QuadroSegment::setInt(unsigned int n)
     unsigned int c = n / 10 % 10;
     unsigned int d = n % 10;
     *base = lut[a] << 24 | lut[b] << 16 | lut[c] << 8 | lut[d];
+}
+
+void LCD::setPos(uint8_t x, uint8_t y)
+{
+}
+
+alt_up_char_buffer_dev *VGA::openDev(const char *name)
+{
+    alt_up_char_buffer_dev *dev = (alt_up_char_buffer_dev *)alt_find_dev(name, &alt_dev_list);
+    return dev;
+}
+
+void SDCard2::command(uint16_t cmd, uint32_t arg1)
+{
+    *argument_reg = arg1;
+    *command_reg = cmd;
+    while (*aux_status & 0x04) { }  // wait until complete
+
 }
 
 void InfraRood::init(volatile uint32_t * base, int irq, int ctl)
@@ -161,6 +187,13 @@ void SoundCard::setOutputVolume(int vol)
         regWrite(2, vol);
         regWrite(3, vol);
     }
+}
+
+void KarFile::readToBuf()
+{
+    buf = new uint8_t[256*1024];    // zodat de grootste erin past
+    
+    //for (int i = 0; 
 }
 
 /*

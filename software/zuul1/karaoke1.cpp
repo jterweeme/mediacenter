@@ -29,7 +29,10 @@ void Karaoke1::init()
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
         myFile = sdCard->openFile("LUCKY.TXT");
-        karFile = new KarFile(myFile);
+        
+        for (int i = 0; i < 100; i++);
+            
+        //karFile = new KarFile(myFile);
         
     }
     else

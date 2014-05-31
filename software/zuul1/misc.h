@@ -15,6 +15,12 @@ Alex Aalbertsberg
 #include <priv/alt_file.h>
 #include "sdcard.h"
 
+class Utility
+{
+public:
+    static void toHex(uint8_t input, char *output);
+};
+
 extern const uint8_t lut[];
 
 template <class T> class Segment
@@ -166,11 +172,7 @@ public:
     inline void cmd(uint8_t c) { base[COMMAND_REG] = c; }
     inline void clear() { cmd(CMDCLEAR); }
     inline void home() { cmd(CMDHOME); }
-
-    void setPos(uint8_t x, uint8_t y)
-    {
-        
-    }
+    void setPos(uint8_t x, uint8_t y);
 };
 
 class I2C
@@ -243,8 +245,10 @@ class KarFile
 {
 private:
     MyFile *myFile;
+    uint8_t *buf;
 public:
     KarFile(MyFile *myFile) : myFile(myFile) { }
+    void readToBuf();
     //const char *getText();
 };
 
@@ -267,27 +271,21 @@ public:
     { }
 
     inline void waitForInsert() { while (!(*aux_status & 0x02)) { } }
-
-    void command(uint16_t cmd, uint32_t arg1)
-    {
-        *argument_reg = arg1;
-        *command_reg = cmd;
-        while (*aux_status & 0x04) { }  // wait until complete
-    }
-
+    void command(uint16_t cmd, uint32_t arg1);
     static const uint8_t READ_BLOCK = 17;
     void read(uint32_t offset) { command(READ_BLOCK, offset); }
+};
+
+class Obese
+{
+public:
 };
 
 class VGA
 {
 private:
     alt_up_char_buffer_dev *charBuffer;
-    alt_up_char_buffer_dev *openDev(const char *name)
-    {
-        alt_up_char_buffer_dev *dev = (alt_up_char_buffer_dev *)alt_find_dev(name, &alt_dev_list);
-        return dev;
-    }
+    alt_up_char_buffer_dev *openDev(const char *name);
 public:
     VGA(const char *devName);
     int clear() { ::alt_up_char_buffer_clear(charBuffer); }
