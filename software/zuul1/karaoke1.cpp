@@ -29,7 +29,7 @@ void Karaoke1::init()
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
         myFile = sdCard->openFile("LUCKY.TXT");
-        uart->printf("He%llo%%%%% Wo%rld%%\r\n");
+        uart->printf("He%ulo Wo%rld\r\n");
 /*
         for (int i = 0; i < 100; i++)
         {
@@ -46,7 +46,7 @@ void Karaoke1::init()
         vgaTerminal->puts("\r\nGeen SD Kaart aanwezig!");
     }
     
-    
+    uart->printf("Hello %s\r\n", "World");
 }
 
 int Karaoke1::run()

@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdarg.h>
 #include <unistd.h>
 #include <sys/alt_irq.h>
 #include "misc.h"
@@ -117,19 +118,35 @@ Uart *Uart::getInstance()
 
 void Uart::printf(const char *format, ...)
 {
+    va_list argp;
+    va_start(argp, format);
+
     for (const char *p = format; *p != '\0'; p++)
     {
         if (*p != '%')
+        {
             putc(*p);
+            continue;
+        }
+
+        switch (*++p)
+        {
+        case 'u':   // unsigned int
+            putc('9');
+            break;
+        case 's':   // string
+            const char *s = va_arg(argp, const char *);
+            this->puts(s);
+            break;
+        }
     }
+
+    va_end(argp);
 }
 
 void Uart::putc(const char c)
 {
-    while ((base[2] & (1<<6)) == 0)
-    {
-    }
-
+    while ((base[2] & (1<<6)) == 0) { }
     base[1] = c;
 }
 
