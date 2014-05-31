@@ -7,13 +7,7 @@
 #include <string.h>
 #include "sdcard.h"
 
-
-#define CMD_READ_BLOCK					17
-#define CMD_WRITE_BLOCK					24
-#define MAX_FILES_OPENED				20
-
-
-bool initialized = false;
+//bool initialized = false;
 bool is_sd_card_formated_as_FAT16 = false;
 volatile short int *aux_status_register = NULL;
 volatile int *status_register = NULL;
@@ -25,7 +19,7 @@ int fat_partition_offset_in_512_byte_sectors = 0;
 int fat_partition_size_in_512_byte_sectors = 0;
 t_FAT_12_16_boot_sector boot_sector_data;
 alt_up_sd_card_dev	*device_pointer = NULL;
-t_file_record active_files[MAX_FILES_OPENED];
+//t_file_record active_files[SDCard::MAX_FILES_OPENED];
 bool current_sector_modified = false;
 unsigned int current_sector_index = 0;
 t_find_data search_data;
@@ -1053,39 +1047,37 @@ bool SDCard::alt_up_sd_card_is_FAT16(void)
 short int SDCard::alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name)
 {
 	short int result = 2;
-	//if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
-	{
-		int home_directory_cluster;
-		t_file_record file_record;
+    int home_directory_cluster;
+    t_file_record file_record;
 
-		if (get_home_directory_cluster_for_file(directory_to_search_through, &home_directory_cluster, &file_record))
-		{
-			search_data.directory_root_cluster = home_directory_cluster;
-			search_data.current_cluster_index = home_directory_cluster;
-			search_data.current_sector_in_cluster = 0;
-			search_data.file_index_in_sector = -1;
-			search_data.valid = true;
-			result = alt_up_sd_card_find_next(file_name);
-		}
-		else
-		{
-			result = 1;
-		}
+    if (get_home_directory_cluster_for_file(directory_to_search_through,
+                &home_directory_cluster, &file_record))
+    {
+        search_data.directory_root_cluster = home_directory_cluster;
+        search_data.current_cluster_index = home_directory_cluster;
+		search_data.current_sector_in_cluster = 0;
+		search_data.file_index_in_sector = -1;
+		search_data.valid = true;
+		result = alt_up_sd_card_find_next(file_name);
 	}
+    else
+    {
+        result = 1;
+    }
 	return result;
 }
 
 short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 {
-	short int result = 2;
+    short int result = 2;
 
-		if (search_data.valid)
-		{
-			t_file_record file_record;
-			int cluster = search_data.current_cluster_index;
+    if (search_data.valid)
+    {
+        t_file_record file_record;
+        int cluster = search_data.current_cluster_index;
 
-			if (cluster == 0)
-			{
+        if (cluster == 0)
+        {
 				int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
                         boot_sector_data.sector_size_in_bytes);
 
@@ -1173,7 +1165,8 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 							result = -1;
 						}
                 }              
-            } while (cluster < 0x0000fff8);
+            }
+            while (cluster < 0x0000fff8);
         }
     }
     else

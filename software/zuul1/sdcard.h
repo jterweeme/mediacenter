@@ -124,7 +124,7 @@ public:
 
 class MyFile
 {
-private:
+public:
     int fd;
     SDCardEx *sd;
 public:
@@ -180,6 +180,12 @@ protected:
     volatile void *base;
 public:
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
+    static const uint8_t CMD_READ_BLOCK = 17;
+    static const uint8_t CMD_WRITE_BLOCK = 24;
+    static const uint8_t MAX_FILES_OPENED = 20;
+
+    bool initialized;
+    t_file_record active_files[MAX_FILES_OPENED];
 };
 
 class SDCardEx : public SDCard
@@ -191,6 +197,7 @@ public:
 
     void init(const char *name, volatile void *base)
     {
+        initialized = false;
         sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
     }
 

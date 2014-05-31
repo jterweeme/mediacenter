@@ -10,6 +10,7 @@ public:
 private:
     Uart *uart;
     SDCardEx *sdCard;
+    CombinedSegment *cs;
 };
 
 void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
@@ -111,6 +112,8 @@ void MD5Test1::init()
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
         myFile = sdCard->openFile("CROCKETS.WAV");
+        t_file_record testRecord = sdCard->active_files[myFile->fd];
+        unsigned int fileSize = testRecord.file_size_in_bytes;
         myFile2 = sdCard->openFile("VOGUE.KAR");
 
         for (int i = 0; i < fileSize && myFile != NULL; i++)
