@@ -139,10 +139,9 @@ class SDCard
 protected:
     alt_up_sd_card_dev *sd_card_dev;
     bool alt_up_sd_card_fclose(short int file_handle);
-    short int alt_up_sd_card_fopen(char *name, bool create);
     short int alt_up_sd_card_find_next(char *file_name);
     short int alt_up_sd_card_find_next(char *file_name, t_file_record *fr);
-    alt_up_sd_card_dev *alt_up_sd_card_open_dev(const char *name);
+    alt_up_sd_card_dev *alt_up_sd_card_open_dev(const char *name, volatile void *base);
     bool alt_up_sd_card_is_Present();
     bool alt_up_sd_card_is_FAT16();
     bool Write_Sector_Data(int sector_index, int partition_offset);
@@ -177,6 +176,8 @@ protected:
 
     bool Read_File_Record_At_Offset(int offset, t_file_record *record,
         unsigned int cluster_index, unsigned int sector_in_cluster);
+    
+    volatile void *base;
 public:
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
 };
@@ -184,9 +185,15 @@ public:
 class SDCardEx : public SDCard
 {
 public:
-    int fopen(char *fn) { this->alt_up_sd_card_fopen(fn, false); }
+    uint16_t fopen(char *fn, bool create = false);
+public:
     MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
-    void init(const char *name) { sd_card_dev = this->alt_up_sd_card_open_dev(name); }
+
+    void init(const char *name, volatile void *base)
+    {
+        sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
+    }
+
     bool isPresent() { this->alt_up_sd_card_is_Present(); }
     bool isFAT16() { this->alt_up_sd_card_is_FAT16(); }
     bool write(int, char);

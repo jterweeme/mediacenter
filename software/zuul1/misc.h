@@ -19,6 +19,8 @@ class Utility
 {
 public:
     static void toHex(uint8_t input, char *output);
+    static void to_bytes(uint32_t val, uint8_t *bytes);
+    static uint32_t to_int32(const uint8_t *bytes);
 };
 
 extern const uint8_t lut[];

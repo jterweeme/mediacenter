@@ -39,7 +39,10 @@ void OrthodoxFileManager1::init()
     uart->puts("StartUp OFM1...\r\n");
     quadroSegment = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
     sdCard = new SDCardEx();
-    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
+
+    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
+            (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
+
     vga = new VGA("/dev/video_character_buffer_with_dma_0");
     box = new Box(vga);
     vga->clear();

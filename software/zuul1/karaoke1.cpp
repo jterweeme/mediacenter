@@ -24,7 +24,9 @@ void Karaoke1::init()
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Uart\r\n");
     sdCard = new SDCardEx();
-    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
+
+    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
+            (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
     
     if (sdCard->isPresent() && sdCard->isFAT16())
     {

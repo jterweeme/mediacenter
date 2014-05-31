@@ -57,7 +57,10 @@ void WavPlay1::init()
     uart->init((volatile uint32_t *)UART_BASE);
     i2c = new I2C((volatile uint32_t *)SND_I2C_SCL_BASE, (volatile uint32_t *)SND_I2C_SDA_BASE);
     sdCard = new SDCardEx();
-    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME);
+
+    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
+            (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
+
     soundCard = new SoundCard(i2c, (volatile uint32_t *)AUDIO_IF_0_BASE);
     soundCard->init();
     soundCard->setOutputVolume(120);

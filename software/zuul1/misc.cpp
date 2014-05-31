@@ -16,6 +16,22 @@ void Utility::toHex(uint8_t input, char *output)
     output[1] = foo < 10 ? (char)(foo + 48) : (char)(foo + 55);
 }
 
+void Utility::to_bytes(uint32_t val, uint8_t *bytes)
+{
+    bytes[0] = (uint8_t) val;
+    bytes[1] = (uint8_t) (val >> 8);
+    bytes[2] = (uint8_t) (val >> 16);
+    bytes[3] = (uint8_t) (val >> 24);
+}
+
+uint32_t Utility::to_int32(const uint8_t *bytes)
+{
+    return (uint32_t) bytes[0]
+        | ((uint32_t) bytes[1] << 8)
+        | ((uint32_t) bytes[2] << 16)
+        | ((uint32_t) bytes[3] << 24);
+}
+
 // 0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f
 const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8,
                 0x00, 0x10, 0x08, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
@@ -120,6 +136,7 @@ void Uart::printf(const char *format, ...)
 {
     va_list argp;
     va_start(argp, format);
+    char *s;
 
     for (const char *p = format; *p != '\0'; p++)
     {
@@ -135,8 +152,11 @@ void Uart::printf(const char *format, ...)
             putc('9');
             break;
         case 's':   // string
-            const char *s = va_arg(argp, const char *);
+            s = va_arg(argp, char *);
             this->puts(s);
+            break;
+        case 'x':
+            char c[3] = {0};
             break;
         }
     }
