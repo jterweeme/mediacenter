@@ -146,6 +146,7 @@ public:
     void init(volatile uint32_t *base) { this->base = base; }
     void putc(const char);
     void puts(const char *s) { while (*s) putc(*s++); }
+    void printf(const char *format, ...);
 };
 
 class JtagUart

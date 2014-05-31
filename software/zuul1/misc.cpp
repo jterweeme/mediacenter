@@ -115,6 +115,15 @@ Uart *Uart::getInstance()
     return &instance;
 }
 
+void Uart::printf(const char *format, ...)
+{
+    for (const char *p = format; *p != '\0'; p++)
+    {
+        if (*p != '%')
+            putc(*p);
+    }
+}
+
 void Uart::putc(const char c)
 {
     while ((base[2] & (1<<6)) == 0)

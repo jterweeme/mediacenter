@@ -29,8 +29,14 @@ void Karaoke1::init()
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
         myFile = sdCard->openFile("LUCKY.TXT");
-        
-        for (int i = 0; i < 100; i++);
+        uart->printf("He%llo%%%%% Wo%rld%%\r\n");
+/*
+        for (int i = 0; i < 100; i++)
+        {
+            uint16_t foo;
+            foo = myFile->read();
+            
+        }*/
             
         //karFile = new KarFile(myFile);
         
