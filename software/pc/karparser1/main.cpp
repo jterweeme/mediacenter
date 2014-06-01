@@ -21,6 +21,13 @@ struct Track
     uint8_t data[];
 };
 
+class Utility
+{
+public:
+	static inline uint16_t byteswap16(uint16_t x);
+	static inline uint32_t byteswap32(uint32_t x);
+};
+
 class CHeader
 {
 private:
@@ -52,6 +59,17 @@ public:
     int run();
 };
 
+uint16_t Utility::byteswap16(uint16_t x)
+{
+	return (x & 0x00ff) << 8 | (x & 0xff00) >> 8;
+}
+
+uint32_t Utility::byteswap32(uint32_t x)
+{
+	x = (x & 0x0000FFFF) << 16 | (x & 0xFFFF0000) >> 16;
+	return (x & 0x00FF00FF) << 8 | (x & 0xFF00FF00) >> 8;
+}
+
 std::string CHeader::toString()
 {
     std::stringstream ss;
@@ -61,14 +79,10 @@ std::string CHeader::toString()
         ss << header.chunkID[i];
 
     ss << std::endl;
-	ss << "Chunk Size: " << _byteswap_ulong(header.chunkSize) << std::endl;
-	ss << "Format Type: " << _byteswap_ushort(header.formatType) << std::endl;
-	ss << "Tracks: " << _byteswap_ushort(header.tracks) << std::endl;
-	ss << "Time Division: " << _byteswap_ushort(header.timeDivision);
-    //ss << "Chunk Size: " << __builtin_bswap32(header.chunkSize) << std::endl;
-    //ss << "Format Type: " << __builtin_bswap16(header.formatType) << std::endl;
-    //ss << "Tracks: " << __builtin_bswap16(header.tracks) << std::endl;
-    //ss << "Time Division: " << __builtin_bswap16(header.timeDivision);
+	ss << "Chunk Size: " << ::Utility::byteswap32(header.chunkSize) << std::endl;
+	ss << "Format Type: " << ::Utility::byteswap16(header.formatType) << std::endl;
+	ss << "Tracks: " << ::Utility::byteswap16(header.tracks) << std::endl;
+	ss << "Time Division: " << ::Utility::byteswap16(header.timeDivision);
     return ss.str();
 }
 
