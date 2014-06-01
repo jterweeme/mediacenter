@@ -14,7 +14,6 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{69427292-55F3-45AB-AFEE-E0B265964BB6}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>ConsoleApplication2</RootNamespace>
   </PropertyGroup>
