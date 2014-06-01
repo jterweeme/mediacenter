@@ -7,7 +7,6 @@
 #include <string.h>
 #include "sdcard.h"
 
-//bool initialized = false;
 bool is_sd_card_formated_as_FAT16 = false;
 volatile short int *aux_status_register = NULL;
 volatile int *status_register = NULL;
@@ -19,7 +18,6 @@ int fat_partition_offset_in_512_byte_sectors = 0;
 int fat_partition_size_in_512_byte_sectors = 0;
 t_FAT_12_16_boot_sector boot_sector_data;
 alt_up_sd_card_dev	*device_pointer = NULL;
-//t_file_record active_files[SDCard::MAX_FILES_OPENED];
 bool current_sector_modified = false;
 unsigned int current_sector_index = 0;
 t_find_data search_data;
@@ -1571,6 +1569,11 @@ bool SDCard::alt_up_sd_card_fclose(short int file_handle)
 short int MyFile::read()
 {
     sd->readFile(fd);
+}
+
+unsigned int MyFile::getSize()
+{
+    return sd->active_files[this->fd].file_size_in_bytes;
 }
 
 bool SDCardEx::write(int sd_fileh, char c)

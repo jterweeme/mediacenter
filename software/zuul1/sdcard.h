@@ -130,6 +130,7 @@ public:
 public:
     MyFile(int fd, SDCardEx *sd) { this->fd = fd; this->sd = sd; }
     short int read();
+    unsigned int getSize();
 };
 
 

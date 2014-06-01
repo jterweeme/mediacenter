@@ -23,7 +23,7 @@ DOWNLOAD := ofm1.elf
 all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex \
     md5test1.elf kbtest2.hex vgatest1.hex \
     karaoke1.hex ofm1.hex mytest1.hex eepromtest1.hex \
-    sdcardtest2.hex sdcardtest3.hex
+    sdcardtest3.hex
 
 
 audiotest1.hex: audiotest1.flash
@@ -79,8 +79,8 @@ piano1.elf: piano1.o misc.o sdcard.o
 primes1.elf: primes1.o misc.o sdcard.o
 #sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
-sdcardtest2.elf: sdcardtest2.o misc.o
-sdcardtest3.elf: sdcardtest3.o misc.o
+sdcardtest2.elf: sdcardtest2.o misc.o sdcard.o
+sdcardtest3.elf: sdcardtest3.o misc.o sdcard.o
 test1.elf: test1.o misc.o sdcard.o
 vgatest1.elf: vgatest1.o misc.o sdcard.o
 vgatest2.elf: vgatest2.o vgascreen.o sdcard.o

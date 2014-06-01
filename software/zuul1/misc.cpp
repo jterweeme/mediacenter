@@ -237,9 +237,13 @@ void SoundCard::setOutputVolume(int vol)
 
 void KarFile::readToBuf()
 {
-    buf = new uint8_t[256*1024];    // zodat de grootste erin past
+    unsigned int size = myFile->getSize();
+    buf = new uint8_t[size];    // zodat de grootste erin past
     
-    //for (int i = 0; 
+    for (int i = 0; i < size; i++)
+        buf[i] = myFile->read();
+
+    
 }
 
 /*
