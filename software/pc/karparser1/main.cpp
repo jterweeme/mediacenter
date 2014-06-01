@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <endian.h>
 
 struct Header
 {
@@ -12,13 +13,6 @@ struct Header
     uint16_t formatType;
     uint16_t tracks;
     uint16_t timeDivision;
-};
-
-struct Track
-{
-    char chunkID[4];
-    uint32_t chunkSize;
-    uint8_t data[];
 };
 
 class Utility
@@ -42,7 +36,12 @@ public:
 
 class CTrack
 {
+private:
+    uint32_t chunkID;
+    uint32_t chunkSize;
+    uint8_t *data;
 public:
+    void read(FILE *file);
 };
 
 class KarFile
@@ -59,6 +58,14 @@ public:
     int run();
 };
 
+void CTrack::read(FILE *file)
+{
+    ::fread(&chunkID, sizeof(chunkID), 1, file);
+    ::fread(&chunkSize, sizeof(chunkSize), 1, file);
+    ::fread(data, ::Utility::byteswap32(chunkSize), 1, file);
+}
+
+// wanneer niks gedefinieerd: little endian
 uint16_t Utility::byteswap16(uint16_t x)
 {
 	return (x & 0x00ff) << 8 | (x & 0xff00) >> 8;
@@ -66,6 +73,7 @@ uint16_t Utility::byteswap16(uint16_t x)
 
 uint32_t Utility::byteswap32(uint32_t x)
 {
+    return be32toh(x);
 	x = (x & 0x0000FFFF) << 16 | (x & 0xFFFF0000) >> 16;
 	return (x & 0x00FF00FF) << 8 | (x & 0xFF00FF00) >> 8;
 }
