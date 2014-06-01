@@ -1,6 +1,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include <iostream>
 #include <sstream>
 
@@ -60,10 +61,14 @@ std::string CHeader::toString()
         ss << header.chunkID[i];
 
     ss << std::endl;
-    ss << "Chunk Size: " << __builtin_bswap32(header.chunkSize) << std::endl;
-    ss << "Format Type: " << __builtin_bswap16(header.formatType) << std::endl;
-    ss << "Tracks: " << __builtin_bswap16(header.tracks) << std::endl;
-    ss << "Time Division: " << __builtin_bswap16(header.timeDivision);
+	ss << "Chunk Size: " << _byteswap_ulong(header.chunkSize) << std::endl;
+	ss << "Format Type: " << _byteswap_ushort(header.formatType) << std::endl;
+	ss << "Tracks: " << _byteswap_ushort(header.tracks) << std::endl;
+	ss << "Time Division: " << _byteswap_ushort(header.timeDivision);
+    //ss << "Chunk Size: " << __builtin_bswap32(header.chunkSize) << std::endl;
+    //ss << "Format Type: " << __builtin_bswap16(header.formatType) << std::endl;
+    //ss << "Tracks: " << __builtin_bswap16(header.tracks) << std::endl;
+    //ss << "Time Division: " << __builtin_bswap16(header.timeDivision);
     return ss.str();
 }
 
