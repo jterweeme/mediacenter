@@ -2,6 +2,23 @@
 #include <fstream>
 #include <stdint.h>
 
+struct RIFFHeader
+{
+    uint32_t chunkID_BE;
+    uint32_t chunkSize_LE;
+    uint32_t format_BE;
+    uint32_t subChunk1ID_BE;
+    uint32_t subChunk1Size_LE;
+    uint16_t audioFormat_LE;
+    uint16_t numChannels_LE;
+    uint32_t sampleRate_LE;
+    uint32_t byteRate_LE;
+    uint16_t blockAlign_LE;
+    uint16_t bitsPerSample_LE;
+    uint32_t subChunk2ID_BE;
+    uint32_t subChunk2Size_LE;
+};
+
 class WavMixerMain
 {
 public:
@@ -14,7 +31,6 @@ public:
 void WavMixerMain::combine(std::ifstream &wav1, std::ifstream &wav2)
 {
     uint16_t buf, sample;
-    size_t f1read, f2read;
 
     do
     {
@@ -23,7 +39,7 @@ void WavMixerMain::combine(std::ifstream &wav1, std::ifstream &wav2)
         sample += buf;
         wav2.read((char *)&buf, sizeof(uint16_t));
         sample += buf;
-        ::fwrite(&sample, sizeof(uint16_t), 1, stdout);
+        std::cout.write((const char *)&sample, sizeof(sample));
     }
     while (wav1 && wav2);
 }
@@ -32,6 +48,12 @@ int WavMixerMain::run(int argc, char **argv)
 {
     wav1.open(argv[1]);
     wav2.open(argv[2]);
+    RIFFHeader wav1header;
+    RIFFHeader wav2header;
+    wav1.read((char *)&wav1header, sizeof(RIFFHeader));
+    wav2.read((char *)&wav2header, sizeof(RIFFHeader));
+    std::cout.write((const char *)&wav1header, sizeof(wav1header));
+    std::cerr << wav2header.sampleRate_LE << std::endl;
     combine(wav1, wav2);
     return 0;
 }
