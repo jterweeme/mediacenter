@@ -1,11 +1,17 @@
+/*
+Jasper ter Weeme
+*/
+
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <vector>
 #include <iterator>
+#include <iomanip>
 
 #ifdef __GNUC__
 #include <endian.h>
@@ -25,6 +31,7 @@ class Utility
 public:
     static inline uint32_t be_32_toh(uint32_t x);
     static inline uint16_t be_16_toh(uint16_t x);
+    static void hex(uint8_t *data, size_t len);
 };
 
 class CHeader
@@ -34,8 +41,8 @@ private:
 public:
     CHeader() { }
     CHeader(Header header) { this->header = header; }
-    CHeader(FILE *file) { this->read(file); }
-    void read(FILE *file) { ::fread((Header *)&header, 14, 1, file); }
+    CHeader(std::istream iStream) { this->read(iStream); }
+    void read(std::istream &inFile);
     int getTrackCount() { return ::Utility::be_16_toh(header.tracks); }
     std::string toString();
 };
@@ -47,17 +54,21 @@ private:
     uint32_t chunkSizeBE;
     uint8_t *data;
 public:
-    void read(FILE *file);
+    void read(std::istream &iStream);
     std::string toString();
+    size_t getChunkSize() { return ::Utility::be_32_toh(chunkSizeBE); }
+    uint8_t *getRawData() { return data; }
 };
 
 class KarFile
 {
-public:
-    void read(FILE *file);
+private:
     CHeader header;
     std::vector<CTrack> tracks;
+ public:
+    void read(std::istream &iStream);
     void dump();
+    CTrack getTrack(int n) { return tracks[n]; }
 };
 
 class KarParser1
@@ -66,17 +77,18 @@ public:
     int run();
 };
 
-void CHeader::read(FILE *file)
+void CHeader::read(std::istream &inFile)
 {
+    inFile.read((char *)&header, 14);   // moet 14 zijn!
 }
 
-void CTrack::read(FILE *file)
+void CTrack::read(std::istream &iStream)
 {
-    ::fread(&chunkIDBE, 4, 1, file);
-    ::fread(&chunkSizeBE, sizeof(chunkSizeBE), 1, file);
+    iStream.read((char *)&chunkIDBE, sizeof(chunkIDBE));
+    iStream.read((char *)&chunkSizeBE, sizeof(chunkSizeBE));
     size_t chunkSize = ::Utility::be_32_toh(chunkSizeBE);
     data = new uint8_t[chunkSize];
-    ::fread(data, chunkSize, 1, file);
+    iStream.read((char *)data, chunkSize);
 }
 
 uint16_t Utility::be_16_toh(uint16_t x)
@@ -117,35 +129,54 @@ std::string CHeader::toString()
     return ss.str();
 }
 
-void KarFile::read(FILE *file)
+void KarFile::read(std::istream &iStream)
 {
-    header.read(file);
+    header.read(iStream);
 
     // read all tracks
     for (int i = 0; i < header.getTrackCount(); i++)
     {
         CTrack currentTrack;
-        currentTrack.read(file);
+        currentTrack.read(iStream);
         tracks.push_back(currentTrack);
     }
 }
 
 void KarFile::dump()
 {
-    std::cout << header.toString() << std::endl;
+    std::cout << header.toString() << std::endl << std::endl;
 
     for (std::vector<CTrack>::iterator it = tracks.begin(); it != tracks.end(); ++it)
         std::cout << it->toString() << std::endl << std::endl;
 }
 
+void Utility::hex(uint8_t *data, size_t len)
+{
+    std::cout << std::hex;
+
+    for (int i = 0, column = 0; i < len; i++)
+    {
+        std::cout << std::setw(2) << std::setfill('0') << (int)data[i];
+
+        if (++column >= 16)
+        {
+            std::cout << std::endl;
+            column = 0;
+        }
+    }
+}
+
 int KarParser1::run()
 {
     KarFile karFile;
-    karFile.read(stdin);
+    karFile.read(std::cin);
     karFile.dump();
-    //std::cout << karFile.header.toString() << std::endl << std::endl;
-    //std::cout << karFile.tracks.size() << std::endl;
-    //std::cout << karFile.track.toString() << std::endl;
+
+    CTrack track4 = karFile.getTrack(1);
+    std::cout << track4.toString() << std::endl;
+    uint8_t *track4data = track4.getRawData();
+    Utility::hex(track4data, track4.getChunkSize());
+    std::cout << std::endl;
     return 0;
 }
 
