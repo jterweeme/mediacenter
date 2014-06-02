@@ -66,6 +66,10 @@ public:
     int run();
 };
 
+void CHeader::read(FILE *file)
+{
+}
+
 void CTrack::read(FILE *file)
 {
     ::fread(&chunkIDBE, 4, 1, file);
