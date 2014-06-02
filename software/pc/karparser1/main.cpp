@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <iterator>
 
 #ifdef __GNUC__
 #include <endian.h>
@@ -62,8 +63,9 @@ class KarFile
 public:
     void read(FILE *file);
     CHeader header;
-    CTrack track;
+    //CTrack track;
     std::vector<CTrack *> tracks;
+    void dump();
 };
 
 class KarParser1
@@ -131,6 +133,20 @@ void KarFile::read(FILE *file)
         CTrack *currentTrack = new CTrack();
         currentTrack->read(file);
         std::cout << currentTrack->toString() << std::endl;
+        tracks.push_back(currentTrack);
+    }
+}
+
+void KarFile::dump()
+{
+    std::cout << header.toString() << std::endl;
+    std::vector<CTrack *>::iterator it;
+
+    for (std::vector<CTrack *>::iterator it = tracks.begin(); it != tracks.end(); ++it)
+    {
+        CTrack *currentTrack = (CTrack *)&it;
+        std::cout << currentTrack->toString() << std::endl;
+        //std::cout << (CTrack *)it->toString();
     }
 }
 
@@ -138,8 +154,10 @@ int KarParser1::run()
 {
     KarFile karFile;
     karFile.read(stdin);
-    std::cout << karFile.header.toString() << std::endl << std::endl;
-    std::cout << karFile.track.toString() << std::endl;
+    karFile.dump();
+    //std::cout << karFile.header.toString() << std::endl << std::endl;
+    //std::cout << karFile.tracks.size() << std::endl;
+    //std::cout << karFile.track.toString() << std::endl;
     return 0;
 }
 
