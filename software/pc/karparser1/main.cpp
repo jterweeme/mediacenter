@@ -56,7 +56,6 @@ class KarFile
 public:
     void read(FILE *file);
     CHeader header;
-    //CTrack track;
     std::vector<CTrack> tracks;
     void dump();
 };
@@ -130,10 +129,9 @@ void KarFile::read(FILE *file)
 void KarFile::dump()
 {
     std::cout << header.toString() << std::endl;
-    std::vector<CTrack>::iterator it;
 
     for (std::vector<CTrack>::iterator it = tracks.begin(); it != tracks.end(); ++it)
-        std::cout << it->toString() << std::endl;
+        std::cout << it->toString() << std::endl << std::endl;
 }
 
 int KarParser1::run()
