@@ -1,6 +1,15 @@
+/*
+Jasper ter Weeme
+*/
+
 #include <iostream>
 #include <fstream>
 #include <stdint.h>
+
+#ifdef _WIN32
+#include <io.h>
+#include <fcntl.h>
+#endif
 
 struct RIFFHeader
 {
@@ -46,8 +55,8 @@ void WavMixerMain::combine(std::ifstream &wav1, std::ifstream &wav2)
 
 int WavMixerMain::run(int argc, char **argv)
 {
-    wav1.open(argv[1]);
-    wav2.open(argv[2]);
+    wav1.open(argv[1], std::ios::binary);
+    wav2.open(argv[2], std::ios::binary);
     RIFFHeader wav1header;
     RIFFHeader wav2header;
     wav1.read((char *)&wav1header, sizeof(RIFFHeader));
@@ -60,6 +69,10 @@ int WavMixerMain::run(int argc, char **argv)
 
 int main(int argc, char **argv)
 {
+#ifdef _WIN32
+	_setmode(_fileno(stdout), O_BINARY);
+	_setmode(_fileno(stdin), O_BINARY);
+#endif
     WavMixerMain wmm;
     return wmm.run(argc, argv);
 }
