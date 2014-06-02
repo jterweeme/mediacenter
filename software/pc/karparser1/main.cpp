@@ -20,12 +20,6 @@ struct Header
     uint16_t timeDivision;
 };
 
-struct STrack1
-{
-    uint32_t chunkIDBE;
-    uint32_t chunkSizeBE;
-};
-
 class Utility
 {
 public:
@@ -52,7 +46,6 @@ private:
     uint32_t chunkIDBE;
     uint32_t chunkSizeBE;
     uint8_t *data;
-    STrack1 track;
 public:
     void read(FILE *file);
     std::string toString();
@@ -64,7 +57,7 @@ public:
     void read(FILE *file);
     CHeader header;
     //CTrack track;
-    std::vector<CTrack *> tracks;
+    std::vector<CTrack> tracks;
     void dump();
 };
 
@@ -78,8 +71,6 @@ void CTrack::read(FILE *file)
 {
     ::fread(&chunkIDBE, 4, 1, file);
     ::fread(&chunkSizeBE, sizeof(chunkSizeBE), 1, file);
-
-    //::fread((STrack1 *)&track, sizeof(STrack1), 1, file);
     size_t chunkSize = ::Utility::be_32_toh(chunkSizeBE);
     data = new uint8_t[chunkSize];
     ::fread(data, chunkSize, 1, file);
@@ -126,13 +117,12 @@ std::string CHeader::toString()
 void KarFile::read(FILE *file)
 {
     header.read(file);
-    //std::cout << header.getTrackCount();
 
+    // read all tracks
     for (int i = 0; i < header.getTrackCount(); i++)
     {
-        CTrack *currentTrack = new CTrack();
-        currentTrack->read(file);
-        std::cout << currentTrack->toString() << std::endl;
+        CTrack currentTrack;
+        currentTrack.read(file);
         tracks.push_back(currentTrack);
     }
 }
@@ -140,14 +130,10 @@ void KarFile::read(FILE *file)
 void KarFile::dump()
 {
     std::cout << header.toString() << std::endl;
-    std::vector<CTrack *>::iterator it;
+    std::vector<CTrack>::iterator it;
 
-    for (std::vector<CTrack *>::iterator it = tracks.begin(); it != tracks.end(); ++it)
-    {
-        CTrack *currentTrack = (CTrack *)&it;
-        std::cout << currentTrack->toString() << std::endl;
-        //std::cout << (CTrack *)it->toString();
-    }
+    for (std::vector<CTrack>::iterator it = tracks.begin(); it != tracks.end(); ++it)
+        std::cout << it->toString() << std::endl;
 }
 
 int KarParser1::run()
