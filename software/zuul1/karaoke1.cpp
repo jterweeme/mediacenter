@@ -17,6 +17,8 @@ public:
 
 void Karaoke1::init()
 {
+    qs = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
+    qs->setInt(0);
     vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
     vgaTerminal->clear();
     vgaTerminal->puts("Karaoke 1");
@@ -30,8 +32,11 @@ void Karaoke1::init()
     
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
-        myFile = sdCard->openFile("LUCKY.TXT");
-        uart->printf("He%ulo Wo%rld\r\n");
+        myFile = sdCard->openFile("VOGUE.KAR");
+        karFile = new KarFile(myFile);
+        karFile->read();
+        qs->setInt(::Utility::be_32_toh(karFile->header.header.chunkSizeBE));
+        //uart->printf("He%ulo Wo%rld\r\n");
 /*
         for (int i = 0; i < 100; i++)
         {

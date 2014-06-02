@@ -94,6 +94,17 @@ void SDCard2::command(uint16_t cmd, uint32_t arg1)
 
 }
 
+uint16_t Utility::be_16_toh(uint16_t x)
+{
+    return (x & 0x00ff) << 8 | (x & 0xff00) >> 8;
+}
+
+uint32_t Utility::be_32_toh(uint32_t x)
+{
+    x = (x & 0x0000ffff) << 16 | (x & 0xffff0000) >> 16;
+    return (x & 0x00ff00ff) << 8 | (x & 0xff00ff00) >> 8;
+}
+
 void InfraRood::init(volatile uint32_t * base, int irq, int ctl)
 {
     this->base = base;
@@ -170,6 +181,11 @@ void Uart::putc(const char c)
     base[1] = c;
 }
 
+void KarFile::read()
+{
+    header.read(myFile);
+}
+
 VGA::VGA(const char *devName)
 {
     charBuffer = openDev(devName);
@@ -235,6 +251,11 @@ void SoundCard::setOutputVolume(int vol)
     }
 }
 
+void CKarHeader::read(MyFile *file)
+{
+    file->fread((SKarHeader *)&header, sizeof(SKarHeader), 1);
+}
+
 void KarFile::readToBuf()
 {
     unsigned int size = myFile->getSize();
@@ -242,8 +263,6 @@ void KarFile::readToBuf()
     
     for (int i = 0; i < size; i++)
         buf[i] = myFile->read();
-
-    
 }
 
 /*

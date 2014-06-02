@@ -21,6 +21,12 @@ public:
     static void toHex(uint8_t input, char *output);
     static void to_bytes(uint32_t val, uint8_t *bytes);
     static uint32_t to_int32(const uint8_t *bytes);
+    static uint16_t be_16_toh(uint16_t x);
+    static uint32_t be_32_toh(uint32_t x);
+};
+
+class MyString
+{
 };
 
 extern const uint8_t lut[];
@@ -244,13 +250,32 @@ public:
 
 class MyFile;
 
+struct SKarHeader
+{
+    uint32_t chunkIDBE;
+    uint32_t chunkSizeBE;
+    uint16_t formatTypeBE;
+    uint16_t tracksBE;
+    uint16_t timeDivisionBE;
+};
+
+class CKarHeader
+{
+public:
+    CKarHeader() { }
+    void read(MyFile *file);
+    SKarHeader header;
+};
+
 class KarFile
 {
-private:
+public:
     MyFile *myFile;
     uint8_t *buf;
+    CKarHeader header;
 public:
     KarFile(MyFile *myFile) : myFile(myFile) { }
+    void read();
     void readToBuf();
     //const char *getText();
 };

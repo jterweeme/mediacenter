@@ -129,7 +129,8 @@ public:
     SDCardEx *sd;
 public:
     MyFile(int fd, SDCardEx *sd) { this->fd = fd; this->sd = sd; }
-    short int read();
+    short int read();   // readByte
+    size_t fread(void *ptr, size_t size, size_t nmemb);
     unsigned int getSize();
 };
 

@@ -1571,6 +1571,12 @@ short int MyFile::read()
     sd->readFile(fd);
 }
 
+size_t MyFile::fread(void *ptr, size_t size, size_t nmemb)
+{
+    for (int i = 0; i < size * nmemb; i++)
+        *((uint8_t *)ptr + i) = (uint8_t)this->read();
+}
+
 unsigned int MyFile::getSize()
 {
     return sd->active_files[this->fd].file_size_in_bytes;

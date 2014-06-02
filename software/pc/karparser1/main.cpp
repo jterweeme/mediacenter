@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <sstream>
+#include <vector>
 
 #ifdef __GNUC__
 #include <endian.h>
@@ -16,6 +17,12 @@ struct Header
     uint16_t formatType;
     uint16_t tracks;
     uint16_t timeDivision;
+};
+
+struct STrack1
+{
+    uint32_t chunkIDBE;
+    uint32_t chunkSizeBE;
 };
 
 class Utility
@@ -33,7 +40,8 @@ public:
     CHeader() { }
     CHeader(Header header) { this->header = header; }
     CHeader(FILE *file) { this->read(file); }
-    void read(FILE *file) { ::fread((Header *)&header, sizeof(Header), 1, file); }
+    void read(FILE *file) { ::fread((Header *)&header, 14, 1, file); }
+    int getTrackCount() { return ::Utility::be_16_toh(header.tracks); }
     std::string toString();
 };
 
@@ -43,6 +51,7 @@ private:
     uint32_t chunkIDBE;
     uint32_t chunkSizeBE;
     uint8_t *data;
+    STrack1 track;
 public:
     void read(FILE *file);
     std::string toString();
@@ -54,6 +63,7 @@ public:
     void read(FILE *file);
     CHeader header;
     CTrack track;
+    std::vector<CTrack *> tracks;
 };
 
 class KarParser1
@@ -66,9 +76,11 @@ void CTrack::read(FILE *file)
 {
     ::fread(&chunkIDBE, 4, 1, file);
     ::fread(&chunkSizeBE, sizeof(chunkSizeBE), 1, file);
+
+    //::fread((STrack1 *)&track, sizeof(STrack1), 1, file);
     size_t chunkSize = ::Utility::be_32_toh(chunkSizeBE);
     data = new uint8_t[chunkSize];
-    ::fread(data, ::Utility::be_32_toh(chunkSize), 1, file);
+    ::fread(data, chunkSize, 1, file);
 }
 
 uint16_t Utility::be_16_toh(uint16_t x)
@@ -93,7 +105,7 @@ std::string CTrack::toString()
     std::stringstream ss;
     ss << "[Track]" << std::endl;
     ss << "Signature: 0x" << std::hex << Utility::be_32_toh(chunkIDBE) << std::endl;
-    ss << "Chunk Size: " << std::dec << Utility::be_16_toh(chunkSizeBE);
+    ss << "Chunk Size: " << std::dec << Utility::be_32_toh(chunkSizeBE);
     return ss.str();
 }
 
@@ -112,7 +124,14 @@ std::string CHeader::toString()
 void KarFile::read(FILE *file)
 {
     header.read(file);
-    track.read(file);
+    //std::cout << header.getTrackCount();
+
+    for (int i = 0; i < header.getTrackCount(); i++)
+    {
+        CTrack *currentTrack = new CTrack();
+        currentTrack->read(file);
+        std::cout << currentTrack->toString() << std::endl;
+    }
 }
 
 int KarParser1::run()
