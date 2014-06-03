@@ -1,0 +1,5 @@
+int WINAPI WinMain()
+{
+}
+
+
