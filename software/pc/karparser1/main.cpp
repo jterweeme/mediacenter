@@ -177,6 +177,7 @@ void Utility::hex(uint8_t *data, size_t len)
 {
     std::cout << std::hex;
 
+/*
     for (int i = 0, column = 0; i < len; i++)
     {
         std::cout << std::setw(2) << std::setfill('0') << (int)data[i];
@@ -186,6 +187,26 @@ void Utility::hex(uint8_t *data, size_t len)
             std::cout << std::endl;
             column = 0;
         }
+    }
+*/
+
+    for (int i = 0; i < len; i++)
+    {
+        std::cout << std::hex;
+
+        for (int j = i; (j < (i + 16)) && (j < len); ++j)
+            std::cout << std::setw(2) << std::setfill('0') << (int)data[j] << " ";
+
+        for (int j = i; (j < i + 16) && j < len; ++j)
+        {
+            if (data[j] > 0x20)
+                std::cout << data[j];
+            else
+                std::cout << ".";
+        }
+
+        std::cout << std::endl;
+        i += 16;
     }
 }
 
