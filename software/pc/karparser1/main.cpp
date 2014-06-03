@@ -53,11 +53,16 @@ private:
     uint32_t chunkIDBE;
     uint32_t chunkSizeBE;
     uint8_t *data;
+
+    static const uint8_t META_TAG = 0xff;
+    static const uint8_t TIME_SIGNATURE = 0x58;
+    
 public:
     void read(std::istream &iStream);
     std::string toString();
     size_t getChunkSize() { return ::Utility::be_32_toh(chunkSizeBE); }
     uint8_t *getRawData() { return data; }
+    void parse();
 };
 
 class KarFile
@@ -76,6 +81,24 @@ class KarParser1
 public:
     int run();
 };
+
+void CTrack::parse()
+{
+    uint8_t timeSignature;
+    uint8_t chunkSize;
+
+    for (int i = 0; i < getChunkSize(); i++)
+    {
+        if (data[i] == META_TAG)
+        {
+            timeSignature = data[++i];
+            //std::cout << "Time Signature: " << (int)timeSignature << std::endl;
+            chunkSize = data[++i];
+            //std::cout << "Chunk Size: " << (int)chunkSize << std::endl;
+        }
+
+    }
+}
 
 void CHeader::read(std::istream &inFile)
 {
@@ -172,11 +195,13 @@ int KarParser1::run()
     karFile.read(std::cin);
     karFile.dump();
 
-    CTrack track4 = karFile.getTrack(1);
+    CTrack track4 = karFile.getTrack(2);
+    track4.parse();
     std::cout << track4.toString() << std::endl;
     uint8_t *track4data = track4.getRawData();
     Utility::hex(track4data, track4.getChunkSize());
     std::cout << std::endl;
+
     return 0;
 }
 
