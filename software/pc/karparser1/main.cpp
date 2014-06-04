@@ -87,7 +87,7 @@ void CTrack::parse()
     uint8_t timeSignature;
     uint8_t chunkSize;
 
-    for (int i = 0; i < getChunkSize(); i++)
+    for (size_t i = 0; i < getChunkSize(); i++)
     {
         if (data[i] == META_TAG)
         {
@@ -190,19 +190,20 @@ void Utility::hex(uint8_t *data, size_t len)
     }
 */
 
-    for (int i = 0; i < len; i++)
+    for (size_t i = 0; i < len; i++)
     {
         std::cout << std::hex;
 
-        for (int j = i; (j < (i + 16)) && (j < len); ++j)
+        for (size_t j = i; (j < (i + 16)) && (j < len); ++j)
             std::cout << std::setw(2) << std::setfill('0') << (int)data[j] << " ";
 
-        for (int j = i; (j < i + 16) && j < len; ++j)
+        for (size_t j = i; (j < i + 16) && j < len; ++j)
         {
-            if (data[j] > 0x20)
-                std::cout << data[j];
+			if (data[j] < 0x20 || data[j] == 0xff)
+				std::cout << ".";
             else
-                std::cout << ".";
+				std::cout << data[j];
+                
         }
 
         std::cout << std::endl;
