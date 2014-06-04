@@ -24,7 +24,7 @@
    {
       datum _sortIndex
       {
-         value = "27";
+         value = "24";
          type = "int";
       }
    }
@@ -68,6 +68,22 @@
          type = "String";
       }
    }
+   element mytimer1_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "136328516";
+         type = "String";
+      }
+   }
+   element AUDIO_IF_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "136328288";
+         type = "String";
+      }
+   }
    element iinfrared.avalon_slave
    {
       datum baseAddress
@@ -81,22 +97,6 @@
       datum baseAddress
       {
          value = "134217728";
-         type = "String";
-      }
-   }
-   element AUDIO_IF_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "136328288";
-         type = "String";
-      }
-   }
-   element mytimer1_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "136328516";
          type = "String";
       }
    }
@@ -267,6 +267,14 @@
          type = "String";
       }
    }
+   element duosegmentrechts.s0
+   {
+      datum baseAddress
+      {
+         value = "136328496";
+         type = "String";
+      }
+   }
    element duosegmentlinks.s0
    {
       datum baseAddress
@@ -275,11 +283,83 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s0
+   element eep_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "136328496";
+         value = "136328464";
+         type = "String";
+      }
+   }
+   element sw.s1
+   {
+      datum baseAddress
+      {
+         value = "136328384";
+         type = "String";
+      }
+   }
+   element snd_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328416";
+         type = "String";
+      }
+   }
+   element itoetsenbord.s1
+   {
+      datum baseAddress
+      {
+         value = "136328512";
+         type = "String";
+      }
+   }
+   element ledr.s1
+   {
+      datum baseAddress
+      {
+         value = "136328368";
+         type = "String";
+      }
+   }
+   element ledg.s1
+   {
+      datum baseAddress
+      {
+         value = "136328352";
+         type = "String";
+      }
+   }
+   element eep_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "136328448";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "136328432";
+         type = "String";
+      }
+   }
+   element key.s1
+   {
+      datum baseAddress
+      {
+         value = "136328400";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "136328256";
          type = "String";
       }
    }
@@ -304,86 +384,6 @@
          type = "String";
       }
    }
-   element ledg.s1
-   {
-      datum baseAddress
-      {
-         value = "136328352";
-         type = "String";
-      }
-   }
-   element key.s1
-   {
-      datum baseAddress
-      {
-         value = "136328400";
-         type = "String";
-      }
-   }
-   element sw.s1
-   {
-      datum baseAddress
-      {
-         value = "136328384";
-         type = "String";
-      }
-   }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "136328448";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "136328256";
-         type = "String";
-      }
-   }
-   element itoetsenbord.s1
-   {
-      datum baseAddress
-      {
-         value = "136328512";
-         type = "String";
-      }
-   }
-   element snd_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328416";
-         type = "String";
-      }
-   }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328464";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "136328368";
-         type = "String";
-      }
-   }
-   element snd_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "136328432";
-         type = "String";
-      }
-   }
    element snd_i2c_scl
    {
       datum _sortIndex
@@ -397,6 +397,14 @@
       datum _sortIndex
       {
          value = "12";
+         type = "int";
+      }
+   }
+   element sram_0
+   {
+      datum _sortIndex
+      {
+         value = "30";
          type = "int";
       }
    }
@@ -441,7 +449,15 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "25";
+         type = "int";
+      }
+   }
+   element video_alpha_blender_0
+   {
+      datum _sortIndex
+      {
+         value = "29";
          type = "int";
       }
    }
@@ -449,7 +465,7 @@
    {
       datum _sortIndex
       {
-         value = "25";
+         value = "26";
          type = "int";
       }
    }
@@ -457,7 +473,15 @@
    {
       datum _sortIndex
       {
-         value = "26";
+         value = "27";
+         type = "int";
+      }
+   }
+   element video_pixel_buffer_dma_0
+   {
+      datum _sortIndex
+      {
+         value = "28";
          type = "int";
       }
    }
@@ -476,7 +500,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1401492669274" />
+ <parameter name="timeStamp" value="1401868486445" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -589,6 +613,11 @@
  <interface
    name="altera_up_sd_card_avalon_interface_0_conduit_end"
    internal="Altera_UP_SD_Card_Avalon_Interface_0.conduit_end"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="sram_0_external_interface"
+   internal="sram_0.external_interface"
    type="conduit"
    dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
@@ -1010,6 +1039,35 @@
   <parameter name="AUTO_CLOCK_SINK_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
+ <module
+   kind="altera_up_avalon_video_pixel_buffer_dma"
+   version="13.0"
+   enabled="1"
+   name="video_pixel_buffer_dma_0">
+  <parameter name="addr_mode" value="X-Y" />
+  <parameter name="start_address" value="0" />
+  <parameter name="back_start_address" value="0" />
+  <parameter name="image_width" value="640" />
+  <parameter name="image_height" value="480" />
+  <parameter name="color_space" value="16-bit RGB" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ </module>
+ <module
+   kind="altera_up_avalon_video_alpha_blender"
+   version="13.0"
+   enabled="1"
+   name="video_alpha_blender_0">
+  <parameter name="mode" value="Simple" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ </module>
+ <module kind="altera_up_avalon_sram" version="13.0" enabled="1" name="sram_0">
+  <parameter name="board" value="DE2-115" />
+  <parameter name="pixel_buffer" value="true" />
+  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
+  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
+ </module>
  <connection
    kind="avalon"
    version="13.0"
@@ -1428,11 +1486,6 @@
    kind="reset"
    version="13.0"
    start="upclocks.sys_clk_reset"
-   end="upvga.clock_reset_reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="upclocks.sys_clk_reset"
    end="video_character_buffer_with_dma_0.clock_reset_reset" />
  <connection
    kind="avalon"
@@ -1458,20 +1511,10 @@
    start="upclocks.sys_clk"
    end="video_dual_clock_buffer_0.clock_stream_in" />
  <connection
-   kind="reset"
-   version="13.0"
-   start="upclocks.sys_clk_reset"
-   end="video_dual_clock_buffer_0.clock_stream_in_reset" />
- <connection
    kind="clock"
    version="13.0"
    start="upclocks.vga_clk"
    end="upvga.clock_reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="upclocks.sys_clk_reset"
-   end="video_dual_clock_buffer_0.clock_stream_out_reset" />
  <connection
    kind="clock"
    version="13.0"
@@ -1511,6 +1554,51 @@
   <parameter name="baseAddress" value="0x08203000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="video_alpha_blender_0.clock_reset_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="video_pixel_buffer_dma_0.clock_reset_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="video_dual_clock_buffer_0.clock_stream_in_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="video_dual_clock_buffer_0.clock_stream_out_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="upvga.clock_reset_reset" />
+ <connection
+   kind="reset"
+   version="13.0"
+   start="clk.clk_reset"
+   end="sram_0.clock_reset_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="upclocks.sys_clk"
+   end="sram_0.clock_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="upclocks.sys_clk"
+   end="video_pixel_buffer_dma_0.clock_reset" />
+ <connection
+   kind="clock"
+   version="13.0"
+   start="upclocks.sys_clk"
+   end="video_alpha_blender_0.clock_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>
