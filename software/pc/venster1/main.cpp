@@ -51,12 +51,22 @@ public:
 	MainWindow(WinClass *wclass) : GenericWindow(wclass) { }
 };
 
+class FileBrowser
+{
+private:
+	OPENFILENAME ofn;
+public:
+	FileBrowser();
+	void browse();
+};
+
 class MainClass
 {
 private:
 	MainClass(HINSTANCE h, int m);
 	static MainClass *instance;
 	static LRESULT CALLBACK WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l);
+	FileBrowser *fb;
 public:
 	int mainLoop();
 	static MainClass *getInstance(HINSTANCE h, int m);
@@ -67,6 +77,7 @@ public:
 class MyMenuBar : public MenuBar
 {
 public:
+	static const uint16_t FILE_OPEN = ID_FILE_OPEN;
 	static const uint16_t FILE_EXIT = ID_FILE_EXIT;
 };
 
@@ -153,6 +164,23 @@ int MainClass::mainLoop()
 	return msg.wParam;
 }
 
+FileBrowser::FileBrowser()
+{
+	::ZeroMemory(&ofn, sizeof(ofn));
+	/*
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = hwnd;
+	ofn.lpstrFilter = "Text Files (*.txt)\0*.txt\0All Files (*.*)\0*.*\0\0";
+	ofn.lpstrFile = szFileName;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.lpstrDefExt = "txt";*/
+}
+
+void FileBrowser::browse()
+{
+	::GetOpenFileName(&ofn);
+}
+
 LRESULT CALLBACK MainClass::control(HWND h, unsigned int msg, WPARAM w, LPARAM l)
 {
 	switch (msg)
@@ -160,6 +188,9 @@ LRESULT CALLBACK MainClass::control(HWND h, unsigned int msg, WPARAM w, LPARAM l
 	case Message::COMMAND:
 		switch (w)
 		{
+		case MyMenuBar::FILE_OPEN:
+			fb->browse();
+			break;
 		case MyMenuBar::FILE_EXIT:
 			::SendMessage(h, Message::CLOSE, 0, 0);
 			break;
