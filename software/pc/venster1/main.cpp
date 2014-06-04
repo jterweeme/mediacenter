@@ -53,12 +53,48 @@ public:
 
 class MainClass
 {
-public:
-	MainClass(HINSTANCE h, HINSTANCE p, char *c, int m);
-	int mainLoop();
 private:
+	MainClass(HINSTANCE h, int m);
+	static MainClass *instance;
 	static LRESULT CALLBACK WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l);
+public:
+	int mainLoop();
+	static MainClass *getInstance(HINSTANCE h, int m);
+	static MainClass *getInstance();
+	LRESULT CALLBACK control(HWND h, unsigned int msg, WPARAM w, LPARAM l);
 };
+
+class MyMenuBar : public MenuBar
+{
+public:
+	static const uint16_t FILE_EXIT = ID_FILE_EXIT;
+};
+
+class Message
+{
+public:
+	static const uint16_t CLOSE = WM_CLOSE;
+	static const uint16_t COMMAND = WM_COMMAND;
+	static const uint16_t DESTROY = WM_DESTROY;
+};
+
+MainClass *MainClass::getInstance(HINSTANCE h, int m)
+{
+	if (!instance)
+		instance = new MainClass(h, m);
+
+	return instance;
+}
+
+MainClass *MainClass::getInstance()
+{
+	if (instance)
+		return instance;
+
+	return NULL;
+}
+
+MainClass *MainClass::instance = NULL;
 
 GenericWindow::GenericWindow(WinClass *wclass)
 {
@@ -87,7 +123,7 @@ WinClass::WinClass(WNDPROC wp, const wchar_t *className, HINSTANCE hinst)
 	wclass.lpszMenuName = 0;
 }
 
-MainClass::MainClass(HINSTANCE h, HINSTANCE, char *c, int m)
+MainClass::MainClass(HINSTANCE h, int m)
 {
 	MyWinClass wclass(WindowProcedure, h);
 	wclass.registerClass();
@@ -117,21 +153,37 @@ int MainClass::mainLoop()
 	return msg.wParam;
 }
 
-int WINAPI 
-WinMain(HINSTANCE h, HINSTANCE p, char *c, int m)
-{
-	MainClass mc(h, p, c, m);
-	return mc.mainLoop();
-}
-
-LRESULT CALLBACK 
-MainClass::WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l)
+LRESULT CALLBACK MainClass::control(HWND h, unsigned int msg, WPARAM w, LPARAM l)
 {
 	switch (msg)
 	{
-	case WM_DESTROY:
+	case Message::COMMAND:
+		switch (w)
+		{
+		case MyMenuBar::FILE_EXIT:
+			::SendMessage(h, Message::CLOSE, 0, 0);
+			break;
+		}
+		break;
+	case Message::DESTROY:
 		::PostQuitMessage(0);
 		return 0;
 	}
+
 	return ::DefWindowProc(h, msg, w, l);
 }
+
+LRESULT CALLBACK
+MainClass::WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l)
+{
+	return getInstance()->control(h, msg, w, l);
+}
+
+int WINAPI 
+WinMain(HINSTANCE h, HINSTANCE p, char *c, int m)
+{
+	MainClass *mc = MainClass::getInstance(h, m);
+	return mc->mainLoop();
+}
+
+
