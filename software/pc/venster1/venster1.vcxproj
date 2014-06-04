@@ -12,8 +12,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="misc.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="misc.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
