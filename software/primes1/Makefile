@@ -8,7 +8,7 @@ all:
 	nios2-elf-objcopy -I srec -O ihex main.flash main.hex
 
 clean:
-	rm -Rvf *.o *.elf *.hex
+	rm -Rvf *.o *.elf *.hex *.flash
 
 download:
 	nios2-download -g main.elf

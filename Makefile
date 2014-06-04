@@ -23,5 +23,5 @@ clean:
 	make -C software clean
 	rm -Rvf db incremental_db *.rpt *.summary *.smsg *.sof *.pof
 	rm -Rvf *.sopcinfo *.pin *.svf *.done *.jam *.qws *.qdf *.jdi *.flash
-	rm -Rvf *.ttf *.rbf *.jbc
+	rm -Rvf *.ttf *.rbf *.jbc *.map
 
