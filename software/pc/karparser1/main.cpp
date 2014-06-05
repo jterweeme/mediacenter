@@ -181,10 +181,10 @@ void Utility::hex(uint8_t *data, size_t len)
     {
         std::cout << std::hex;
 
-        for (size_t j = i; (j < (i + 16)) && (j < len); ++j)
+        for (size_t j = i; (j < (i + 15)) && (j < len); ++j)
             std::cout << std::setw(2) << std::setfill('0') << (int)data[j] << " ";
 
-        for (size_t j = i; (j < i + 16) && j < len; ++j)
+        for (size_t j = i; (j < i + 15) && j < len; ++j)
         {
 			if (data[j] < 0x20 || data[j] == 0xff)
 				std::cout << ".";
