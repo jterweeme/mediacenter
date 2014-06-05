@@ -2,7 +2,7 @@
 Jasper ter Weeme
 */
 
-module slave_template(
+module myduosegx(
 	input clk,
 	input reset,	
 	input [1:0] slave_address,
@@ -10,7 +10,7 @@ module slave_template(
 	input slave_write,
 	output reg [15:0] slave_readdata,
 	input [15:0] slave_writedata,
-	input [3:0] slave_byteenable,
+	input [1:0] slave_byteenable,
 	output wire [13:0] user_dataout_0
 );
 	wire [15:0] internal_byteenable;
@@ -70,11 +70,11 @@ module slave_template(
 		end
 	end
 	
-	register_with_bytelanes r0(clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
+	rwbytelanes r0(clk,reset,slave_writedata,slave_write&address_decode[0],internal_byteenable,user_dataout_0);
 endmodule
 
 
-module register_with_bytelanes(
+module rwbytelanes(
 	input clk,
 	input reset,
 	input [15:0] data_in,
