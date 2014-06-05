@@ -62,31 +62,22 @@ add_interface_port s0 slave_readdata readdata Output -1
 add_interface_port s0 slave_writedata writedata Input -1
 add_interface user_interface conduit end
 set_interface_property user_interface ASSOCIATED_CLOCK clock_reset
-add_interface_port user_interface user_dataout_0 export Output -1
-add_interface_port user_interface user_write export Output 1
-add_interface_port user_interface user_read export Output 1
-add_interface_port user_interface user_chipselect export Output 4
+add_interface_port user_interface user_dataout_0 export Output 14
+#add_interface_port user_interface user_write export Output 1
+#add_interface_port user_interface user_read export Output 1
+#add_interface_port user_interface user_chipselect export Output 4
 
-proc elaborate_me {}  {
+proc elaborate_me {} {
   set the_data_width [get_parameter_value DATA_WIDTH]
   set the_enable_sync_signals [get_parameter_value ENABLE_SYNC_SIGNALS]
-  set the_mode_0 [get_parameter_value MODE_0]
-  
-  
-  
+  set the_mode_0 [get_parameter_value MODE_0] 
   set_port_property slave_readdata WIDTH $the_data_width
   set_port_property slave_writedata WIDTH $the_data_width
-  set_port_property user_dataout_0 WIDTH 14
-  
-  
-  
-  expr { (($the_mode_0 == 1) || ($the_mode_0 == 4)) ? [set_port_property user_dataout_0 TERMINATION true] : [set_port_property user_dataout_0 TERMINATION false] };
-  
-  expr { ($the_enable_sync_signals == 1) ? [set_port_property user_chipselect TERMINATION false] : [set_port_property user_chipselect TERMINATION true] }
-  expr { ($the_enable_sync_signals == 1) ? [set_port_property user_read TERMINATION false] : [set_port_property user_read TERMINATION true] }
-  expr { ($the_enable_sync_signals == 1) ? [set_port_property user_write TERMINATION false] : [set_port_property user_write TERMINATION true] }
-  ## ---------------------------- end of sync signal enables ----------------------------------------------------  
-  
+  #set_port_property user_dataout_0 WIDTH 14
+  #expr { (($the_mode_0 == 1) || ($the_mode_0 == 4)) ? [set_port_property user_dataout_0 TERMINATION true] : [set_port_property user_dataout_0 TERMINATION false] };
+  #expr { ($the_enable_sync_signals == 1) ? [set_port_property user_chipselect TERMINATION false] : [set_port_property user_chipselect TERMINATION true] }
+  #expr { ($the_enable_sync_signals == 1) ? [set_port_property user_read TERMINATION false] : [set_port_property user_read TERMINATION true] }
+  #expr { ($the_enable_sync_signals == 1) ? [set_port_property user_write TERMINATION false] : [set_port_property user_write TERMINATION true] }
   
   if { $the_data_width != 8 } {
     add_interface_port s0 slave_byteenable byteenable Input [expr {$the_data_width / 8} ]
@@ -95,3 +86,5 @@ proc elaborate_me {}  {
 	}
   }
 }
+
+

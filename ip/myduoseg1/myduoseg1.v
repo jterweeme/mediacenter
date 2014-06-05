@@ -11,11 +11,11 @@ module slave_template(
 	output reg [15:0] slave_readdata,
 	input [15:0] slave_writedata,
 	input [3:0] slave_byteenable,
-	output wire [13:0] user_dataout_0,
-	output wire [15:0] user_chipselect,
-	output wire [1:0] user_byteenable,
-	output wire user_write,
-	output wire user_read
+	output wire [13:0] user_dataout_0
+	//output wire [15:0] user_chipselect,
+	//output wire [1:0] user_byteenable,
+	//output wire user_write,
+	//output wire user_read
 );
 	wire [15:0] internal_byteenable;
 	reg [1:0] internal_byteenable_d1;
