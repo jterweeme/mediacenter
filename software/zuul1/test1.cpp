@@ -8,13 +8,13 @@
 class DuoSegmentLinks : public ::DuoSegment
 {
 public:
-    DuoSegmentLinks() : DuoSegment((volatile uint16_t *)DUOSEGMENTLINKS_BASE) { }
+    DuoSegmentLinks() : DuoSegment((volatile uint16_t *)VA1_0_S1_BASE) { }
 };
 
 class DuoSegmentRechts : public ::DuoSegment
 {
 public:
-    DuoSegmentRechts() : DuoSegment((volatile uint16_t *)DUOSEGMENTRECHTS_BASE) { }
+    DuoSegmentRechts() : DuoSegment((volatile uint16_t *)VA1_0_S2_BASE) { }
 };
 
 class Beam : public Observer
