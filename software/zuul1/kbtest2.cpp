@@ -31,7 +31,7 @@ void KeyBoardTest2::init()
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Init KBTest2\r\n");
     ::printf("Init\r\n");
-    segLinks = new DuoSegment((volatile uint16_t *)DUOSEGMENTLINKS_BASE);
+    segLinks = new DuoSegment((volatile uint16_t *)VA_S1_BASE);
     segLinks->setHex(0);
     alt_ic_isr_register(ITOETSENBORD_IRQ_INTERRUPT_CONTROLLER_ID, ITOETSENBORD_IRQ, isrBridge, 0, 0); 
 }

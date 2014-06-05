@@ -48,8 +48,8 @@ private:
 
 void WavPlay1::init()
 {
-    volatile uint16_t *l = (volatile uint16_t *)DUOSEGMENTLINKS_BASE;
-    volatile uint16_t *r = (volatile uint16_t *)DUOSEGMENTRECHTS_BASE;
+    volatile uint16_t *l = (volatile uint16_t *)VA_S1_BASE;
+    volatile uint16_t *r = (volatile uint16_t *)VA_S2_BASE;
     volatile uint32_t *q = (volatile uint32_t *)MYSEGDISP2_0_BASE;
     cs = new CombinedSegment(new DuoSegment(l), new DuoSegment(r), new QuadroSegment(q));
     cs->setInt(0);

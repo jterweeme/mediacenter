@@ -24,7 +24,7 @@
    {
       datum _sortIndex
       {
-         value = "23";
+         value = "21";
          type = "int";
       }
    }
@@ -76,14 +76,6 @@
          type = "String";
       }
    }
-   element AUDIO_IF_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "134231136";
-         type = "String";
-      }
-   }
    element iinfrared.avalon_slave
    {
       datum baseAddress
@@ -97,6 +89,14 @@
       datum baseAddress
       {
          value = "134231396";
+         type = "String";
+      }
+   }
+   element AUDIO_IF_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134231136";
          type = "String";
       }
    }
@@ -126,22 +126,6 @@
       datum _sortIndex
       {
          value = "2";
-         type = "int";
-      }
-   }
-   element duosegmentlinks
-   {
-      datum _sortIndex
-      {
-         value = "21";
-         type = "int";
-      }
-   }
-   element duosegmentrechts
-   {
-      datum _sortIndex
-      {
-         value = "20";
          type = "int";
       }
    }
@@ -210,7 +194,7 @@
    {
       datum _sortIndex
       {
-         value = "22";
+         value = "20";
          type = "int";
       }
    }
@@ -259,22 +243,6 @@
          type = "int";
       }
    }
-   element duosegmentrechts.s0
-   {
-      datum baseAddress
-      {
-         value = "134231376";
-         type = "String";
-      }
-   }
-   element duosegmentlinks.s0
-   {
-      datum baseAddress
-      {
-         value = "134231368";
-         type = "String";
-      }
-   }
    element mysegdisp2_0.s0
    {
       datum baseAddress
@@ -283,19 +251,19 @@
          type = "String";
       }
    }
-   element ledg.s1
+   element va.s1
    {
       datum baseAddress
       {
-         value = "134231216";
+         value = "134231344";
          type = "String";
       }
    }
-   element snd_i2c_sda.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "134231296";
+         value = "134231312";
          type = "String";
       }
    }
@@ -307,19 +275,11 @@
          type = "String";
       }
    }
-   element itoetsenbord.s1
+   element eep_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "134231392";
-         type = "String";
-      }
-   }
-   element uart.s1
-   {
-      datum baseAddress
-      {
-         value = "134231168";
+         value = "134231328";
          type = "String";
       }
    }
@@ -336,14 +296,6 @@
          type = "String";
       }
    }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "134231328";
-         type = "String";
-      }
-   }
    element timer_0.s1
    {
       datum baseAddress
@@ -352,11 +304,19 @@
          type = "String";
       }
    }
-   element key.s1
+   element snd_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "134231264";
+         value = "134231296";
+         type = "String";
+      }
+   }
+   element itoetsenbord.s1
+   {
+      datum baseAddress
+      {
+         value = "134231392";
          type = "String";
       }
    }
@@ -368,6 +328,22 @@
          type = "String";
       }
    }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "134231168";
+         type = "String";
+      }
+   }
+   element ledg.s1
+   {
+      datum baseAddress
+      {
+         value = "134231216";
+         type = "String";
+      }
+   }
    element ledr.s1
    {
       datum baseAddress
@@ -376,23 +352,15 @@
          type = "String";
       }
    }
-   element va1_0.s1
+   element key.s1
    {
       datum baseAddress
       {
-         value = "134231344";
+         value = "134231264";
          type = "String";
       }
    }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "134231312";
-         type = "String";
-      }
-   }
-   element va1_0.s2
+   element va.s2
    {
       datum baseAddress
       {
@@ -420,7 +388,7 @@
    {
       datum _sortIndex
       {
-         value = "29";
+         value = "27";
          type = "int";
       }
    }
@@ -465,51 +433,11 @@
    {
       datum _sortIndex
       {
-         value = "24";
+         value = "22";
          type = "int";
       }
    }
-   element va1_0
-   {
-      datum _sortIndex
-      {
-         value = "32";
-         type = "int";
-      }
-   }
-   element video_alpha_blender_0
-   {
-      datum _sortIndex
-      {
-         value = "28";
-         type = "int";
-      }
-   }
-   element video_character_buffer_with_dma_0
-   {
-      datum _sortIndex
-      {
-         value = "25";
-         type = "int";
-      }
-   }
-   element video_dual_clock_buffer_0
-   {
-      datum _sortIndex
-      {
-         value = "26";
-         type = "int";
-      }
-   }
-   element video_pixel_buffer_dma_0
-   {
-      datum _sortIndex
-      {
-         value = "27";
-         type = "int";
-      }
-   }
-   element video_rgb_resampler_0
+   element va
    {
       datum _sortIndex
       {
@@ -517,11 +445,51 @@
          type = "int";
       }
    }
+   element video_alpha_blender_0
+   {
+      datum _sortIndex
+      {
+         value = "26";
+         type = "int";
+      }
+   }
+   element video_character_buffer_with_dma_0
+   {
+      datum _sortIndex
+      {
+         value = "23";
+         type = "int";
+      }
+   }
+   element video_dual_clock_buffer_0
+   {
+      datum _sortIndex
+      {
+         value = "24";
+         type = "int";
+      }
+   }
+   element video_pixel_buffer_dma_0
+   {
+      datum _sortIndex
+      {
+         value = "25";
+         type = "int";
+      }
+   }
+   element video_rgb_resampler_0
+   {
+      datum _sortIndex
+      {
+         value = "28";
+         type = "int";
+      }
+   }
    element video_scaler_0
    {
       datum _sortIndex
       {
-         value = "31";
+         value = "29";
          type = "int";
       }
    }
@@ -540,7 +508,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1401982269088" />
+ <parameter name="timeStamp" value="1401983846663" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -626,16 +594,6 @@
    type="conduit"
    dir="end" />
  <interface
-   name="duosegmentrechts_user_interface"
-   internal="duosegmentrechts.user_interface"
-   type="conduit"
-   dir="end" />
- <interface
-   name="duosegmentlinks_external_connection"
-   internal="duosegmentlinks.user_interface"
-   type="conduit"
-   dir="end" />
- <interface
    name="lcd_ext"
    internal="lcd.external_interface"
    type="conduit"
@@ -655,16 +613,8 @@
    internal="sram_0.external_interface"
    type="conduit"
    dir="end" />
- <interface
-   name="va1_0_conduit_end_0"
-   internal="va1_0.conduit_end_0"
-   type="conduit"
-   dir="end" />
- <interface
-   name="va1_0_conduit_end_1"
-   internal="va1_0.conduit_end_1"
-   type="conduit"
-   dir="end" />
+ <interface name="va0_ext" internal="va.conduit_end_0" type="conduit" dir="end" />
+ <interface name="va1_ext" internal="va.conduit_end_1" type="conduit" dir="end" />
  <module kind="altera_nios2_qsys" version="13.0" enabled="1" name="cpu">
   <parameter name="setting_showUnpublishedSettings" value="false" />
   <parameter name="setting_showInternalSettings" value="false" />
@@ -767,7 +717,7 @@
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
   <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='cpu.jtag_debug_module' start='0x8002800' end='0x8003000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='video_character_buffer_with_dma_0.avalon_char_buffer_slave' start='0x8000000' end='0x8002000' /><slave name='cpu.jtag_debug_module' start='0x8002800' end='0x8003000' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x8003000' end='0x8003400' /><slave name='mysegdisp2_0.s0' start='0x8003400' end='0x8003440' /><slave name='timer_0.s1' start='0x8003440' end='0x8003460' /><slave name='AUDIO_IF_0.avalon_slave' start='0x8003460' end='0x8003480' /><slave name='uart.s1' start='0x8003480' end='0x80034A0' /><slave name='video_pixel_buffer_dma_0.avalon_control_slave' start='0x80034A0' end='0x80034B0' /><slave name='ledg.s1' start='0x80034B0' end='0x80034C0' /><slave name='ledr.s1' start='0x80034C0' end='0x80034D0' /><slave name='sw.s1' start='0x80034D0' end='0x80034E0' /><slave name='key.s1' start='0x80034E0' end='0x80034F0' /><slave name='snd_i2c_scl.s1' start='0x80034F0' end='0x8003500' /><slave name='snd_i2c_sda.s1' start='0x8003500' end='0x8003510' /><slave name='eep_i2c_sda.s1' start='0x8003510' end='0x8003520' /><slave name='eep_i2c_scl.s1' start='0x8003520' end='0x8003530' /><slave name='va1_0.s1' start='0x8003530' end='0x8003538' /><slave name='va1_0.s2' start='0x8003538' end='0x8003540' /><slave name='video_character_buffer_with_dma_0.avalon_char_control_slave' start='0x8003540' end='0x8003548' /><slave name='duosegmentlinks.s0' start='0x8003548' end='0x8003550' /><slave name='duosegmentrechts.s0' start='0x8003550' end='0x8003558' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x8003558' end='0x8003560' /><slave name='itoetsenbord.s1' start='0x8003560' end='0x8003564' /><slave name='mytimer1_0.avalon_slave' start='0x8003564' end='0x8003568' /><slave name='iinfrared.avalon_slave' start='0x8003568' end='0x800356C' /><slave name='lcd.avalon_lcd_slave' start='0x800356C' end='0x800356E' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='new_sdram_controller_0.s1' start='0x0' end='0x8000000' /><slave name='video_character_buffer_with_dma_0.avalon_char_buffer_slave' start='0x8000000' end='0x8002000' /><slave name='cpu.jtag_debug_module' start='0x8002800' end='0x8003000' /><slave name='Altera_UP_SD_Card_Avalon_Interface_0.avalon_sdcard_slave' start='0x8003000' end='0x8003400' /><slave name='mysegdisp2_0.s0' start='0x8003400' end='0x8003440' /><slave name='timer_0.s1' start='0x8003440' end='0x8003460' /><slave name='AUDIO_IF_0.avalon_slave' start='0x8003460' end='0x8003480' /><slave name='uart.s1' start='0x8003480' end='0x80034A0' /><slave name='video_pixel_buffer_dma_0.avalon_control_slave' start='0x80034A0' end='0x80034B0' /><slave name='ledg.s1' start='0x80034B0' end='0x80034C0' /><slave name='ledr.s1' start='0x80034C0' end='0x80034D0' /><slave name='sw.s1' start='0x80034D0' end='0x80034E0' /><slave name='key.s1' start='0x80034E0' end='0x80034F0' /><slave name='snd_i2c_scl.s1' start='0x80034F0' end='0x8003500' /><slave name='snd_i2c_sda.s1' start='0x8003500' end='0x8003510' /><slave name='eep_i2c_sda.s1' start='0x8003510' end='0x8003520' /><slave name='eep_i2c_scl.s1' start='0x8003520' end='0x8003530' /><slave name='va.s1' start='0x8003530' end='0x8003538' /><slave name='va.s2' start='0x8003538' end='0x8003540' /><slave name='video_character_buffer_with_dma_0.avalon_char_control_slave' start='0x8003540' end='0x8003548' /><slave name='jtag_uart_0.avalon_jtag_slave' start='0x8003558' end='0x8003560' /><slave name='itoetsenbord.s1' start='0x8003560' end='0x8003564' /><slave name='mytimer1_0.avalon_slave' start='0x8003564' end='0x8003568' /><slave name='iinfrared.avalon_slave' start='0x8003568' end='0x800356C' /><slave name='lcd.avalon_lcd_slave' start='0x800356C' end='0x800356E' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="deviceFamilyName" value="Cyclone IV E" />
   <parameter name="internalIrqMaskSystemInfo" value="255" />
@@ -1020,20 +970,6 @@
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
- <module kind="myduoseg1" version="1.0" enabled="1" name="duosegmentrechts">
-  <parameter name="DATA_WIDTH" value="16" />
-  <parameter name="ENABLE_SYNC_SIGNALS" value="0" />
-  <parameter name="MODE_0" value="2" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
- </module>
- <module kind="myduoseg1" version="1.0" enabled="1" name="duosegmentlinks">
-  <parameter name="DATA_WIDTH" value="16" />
-  <parameter name="ENABLE_SYNC_SIGNALS" value="0" />
-  <parameter name="MODE_0" value="2" />
-  <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
-  <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
- </module>
  <module kind="mylcd1" version="13.0" enabled="1" name="lcd">
   <parameter name="cursor" value="Normal" />
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
@@ -1135,7 +1071,7 @@
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />
   <parameter name="AUTO_DEVICE_FAMILY" value="Cyclone IV E" />
  </module>
- <module kind="va1" version="1.0" enabled="1" name="va1_0">
+ <module kind="va1" version="1.0" enabled="1" name="va">
   <parameter name="AUTO_CLOCK_CLOCK_RATE" value="50000000" />
  </module>
  <connection
@@ -1477,44 +1413,6 @@
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
-   kind="avalon"
-   version="13.0"
-   start="cpu.data_master"
-   end="duosegmentrechts.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08003550" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="reset"
-   version="13.0"
-   start="upclocks.sys_clk_reset"
-   end="duosegmentrechts.clock_reset_reset" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="upclocks.sys_clk"
-   end="duosegmentrechts.clock_reset" />
- <connection
-   kind="clock"
-   version="13.0"
-   start="upclocks.sys_clk"
-   end="duosegmentlinks.clock_reset" />
- <connection
-   kind="reset"
-   version="13.0"
-   start="upclocks.sys_clk_reset"
-   end="duosegmentlinks.clock_reset_reset" />
- <connection
-   kind="avalon"
-   version="13.0"
-   start="cpu.data_master"
-   end="duosegmentlinks.s0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x08003548" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
    kind="clock"
    version="13.0"
    start="upclocks.sys_clk"
@@ -1708,26 +1606,22 @@
   <parameter name="baseAddress" value="0x080034a0" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="13.0" start="cpu.data_master" end="va1_0.s2">
+ <connection kind="avalon" version="13.0" start="cpu.data_master" end="va.s2">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x08003538" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="13.0" start="cpu.data_master" end="va1_0.s1">
+ <connection kind="avalon" version="13.0" start="cpu.data_master" end="va.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x08003530" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection
-   kind="clock"
-   version="13.0"
-   start="upclocks.sys_clk"
-   end="va1_0.clock" />
+ <connection kind="clock" version="13.0" start="upclocks.sys_clk" end="va.clock" />
  <connection
    kind="reset"
    version="13.0"
    start="clk.clk_reset"
-   end="va1_0.clock_reset" />
+   end="va.clock_reset" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>
