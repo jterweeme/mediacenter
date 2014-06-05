@@ -267,14 +267,6 @@
          type = "String";
       }
    }
-   element duosegmentrechts.s0
-   {
-      datum baseAddress
-      {
-         value = "134231360";
-         type = "String";
-      }
-   }
    element mysegdisp2_0.s0
    {
       datum baseAddress
@@ -283,35 +275,11 @@
          type = "String";
       }
    }
-   element sw.s1
+   element duosegmentrechts.s0
    {
       datum baseAddress
       {
-         value = "134231248";
-         type = "String";
-      }
-   }
-   element snd_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "134231280";
-         type = "String";
-      }
-   }
-   element itoetsenbord.s1
-   {
-      datum baseAddress
-      {
-         value = "134231376";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "134231232";
+         value = "134231360";
          type = "String";
       }
    }
@@ -323,48 +291,19 @@
          type = "String";
       }
    }
-   element uart.s1
+   element ledr.s1
    {
       datum baseAddress
       {
-         value = "134231168";
+         value = "134231232";
          type = "String";
       }
    }
-   element new_sdram_controller_0.s1
-   {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
-      datum baseAddress
-      {
-         value = "0";
-         type = "String";
-      }
-   }
-   element key.s1
+   element itoetsenbord.s1
    {
       datum baseAddress
       {
-         value = "134231264";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "134231104";
-         type = "String";
-      }
-   }
-   element snd_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "134231296";
+         value = "134231376";
          type = "String";
       }
    }
@@ -381,6 +320,67 @@
       datum baseAddress
       {
          value = "134231328";
+         type = "String";
+      }
+   }
+   element key.s1
+   {
+      datum baseAddress
+      {
+         value = "134231264";
+         type = "String";
+      }
+   }
+   element snd_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "134231280";
+         type = "String";
+      }
+   }
+   element uart.s1
+   {
+      datum baseAddress
+      {
+         value = "134231168";
+         type = "String";
+      }
+   }
+   element sw.s1
+   {
+      datum baseAddress
+      {
+         value = "134231248";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "134231296";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "134231104";
+         type = "String";
+      }
+   }
+   element new_sdram_controller_0.s1
+   {
+      datum _lockedAddress
+      {
+         value = "1";
+         type = "boolean";
+      }
+      datum baseAddress
+      {
+         value = "0";
          type = "String";
       }
    }
@@ -516,7 +516,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1401877949697" />
+ <parameter name="timeStamp" value="1401882678462" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -1094,8 +1094,8 @@
    name="video_scaler_0">
   <parameter name="width_scaling" value="0.5" />
   <parameter name="height_scaling" value="1" />
-  <parameter name="width_in" value="320" />
-  <parameter name="height_in" value="240" />
+  <parameter name="width_in" value="640" />
+  <parameter name="height_in" value="480" />
   <parameter name="color_bits" value="10" />
   <parameter name="color_planes" value="3" />
   <parameter name="AUTO_CLOCK_RESET_CLOCK_RATE" value="50000000" />

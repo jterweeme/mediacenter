@@ -1,4 +1,5 @@
 #include <system.h>
+#include <altera_up_avalon_video_pixel_buffer_dma.h>
 #include "misc.h"
 
 class VGATest
@@ -40,6 +41,8 @@ int VGATest::run()
 
 int main()
 {
+    alt_up_pixel_buffer_dma_dev *pixel_buf_dev = ::alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
+    alt_up_pixel_buffer_dma_clear_screen(pixel_buf_dev, 0);
     VGATest vt;
     return vt.run();
 }
