@@ -16,7 +16,15 @@ module va1(
     output wire  [15:0] avs_s2_readdata,
     input wire [15:0] avs_s2_writedata,
     input wire [1:0] avs_s2_byteenable,
-    output wire [13:0] coe_rechts
+    output wire [13:0] coe_rechts,
+
+    output wire avs_s3_irq,
+    input wire avs_s3_cs_n,
+    input wire avs_s3_read,
+    output wire [31:0] avs_s3_readdata,
+    input wire avs_s3_write,
+    input wire [31:0] avs_s3_writedata,
+    input wire coe_ir
 );
 
     myduosegx links(
@@ -41,6 +49,15 @@ module va1(
         .slave_byteenable(avs_s2_byteenable),
         .user_dataout_0(coe_rechts));
 
-
+    infrared1top ir1(
+        .clk(csi_clk),
+        .reset_n(~csi_reset),
+        .irq(avs_s3_irq),
+        .s_cs_n(avs_s3_cs_n),
+        .s_read(avs_s3_read),
+        .s_readdata(avs_s3_readdata),
+        .s_write(avs_s3_write),
+        .s_writedata(avs_s3_writedata),
+        .ir(coe_ir));
 endmodule
 

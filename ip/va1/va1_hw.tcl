@@ -40,6 +40,8 @@ add_fileset QUARTUS_SYNTH QUARTUS_SYNTH "" ""
 set_fileset_property QUARTUS_SYNTH TOP_LEVEL va1
 set_fileset_property QUARTUS_SYNTH ENABLE_RELATIVE_INCLUDE_PATHS false
 add_fileset_file myduosegx.v VERILOG PATH myduosegx.v
+add_fileset_file infrared1.v VERILOG PATH infrared1.v
+add_fileset_file infrared1top.v VERILOG PATH infrared1top.v
 add_fileset_file va1.v VERILOG PATH va1.v TOP_LEVEL_FILE
 
 
@@ -83,91 +85,122 @@ add_interface_port clock_reset csi_reset reset Input 1
 # 
 # connection point s1
 # 
-add_interface s1 avalon end
-set_interface_property s1 addressUnits WORDS
-set_interface_property s1 associatedClock clock
-set_interface_property s1 associatedReset clock_reset
-set_interface_property s1 bitsPerSymbol 8
-set_interface_property s1 burstOnBurstBoundariesOnly false
-set_interface_property s1 burstcountUnits WORDS
-set_interface_property s1 explicitAddressSpan 0
-set_interface_property s1 holdTime 0
-set_interface_property s1 linewrapBursts false
-set_interface_property s1 maximumPendingReadTransactions 0
-set_interface_property s1 readLatency 0
-set_interface_property s1 readWaitTime 1
-set_interface_property s1 setupTime 0
-set_interface_property s1 timingUnits Cycles
-set_interface_property s1 writeWaitTime 0
-set_interface_property s1 ENABLED true
-set_interface_property s1 EXPORT_OF ""
-set_interface_property s1 PORT_NAME_MAP ""
-set_interface_property s1 SVD_ADDRESS_GROUP ""
-
-add_interface_port s1 avs_s1_address address Input 2
-add_interface_port s1 avs_s1_read read Input 1
-add_interface_port s1 avs_s1_write write Input 1
-add_interface_port s1 avs_s1_readdata readdata Output 16
-add_interface_port s1 avs_s1_writedata writedata Input 16
-add_interface_port s1 avs_s1_byteenable byteenable Input 2
+add_interface            s1 avalon end
+set_interface_property   s1 addressUnits WORDS
+set_interface_property   s1 associatedClock clock
+set_interface_property   s1 associatedReset clock_reset
+set_interface_property   s1 bitsPerSymbol 8
+set_interface_property   s1 burstOnBurstBoundariesOnly false
+set_interface_property   s1 burstcountUnits WORDS
+set_interface_property   s1 explicitAddressSpan 0
+set_interface_property   s1 holdTime 0
+set_interface_property   s1 linewrapBursts false
+set_interface_property   s1 maximumPendingReadTransactions 0
+set_interface_property   s1 readLatency 0
+set_interface_property   s1 readWaitTime 1
+set_interface_property   s1 setupTime 0
+set_interface_property   s1 timingUnits Cycles
+set_interface_property   s1 writeWaitTime 0
+set_interface_property   s1 ENABLED true
+set_interface_property   s1 EXPORT_OF ""
+set_interface_property   s1 PORT_NAME_MAP ""
+set_interface_property   s1 SVD_ADDRESS_GROUP ""
+add_interface_port       s1 avs_s1_address address Input 2
+add_interface_port       s1 avs_s1_read read Input 1
+add_interface_port       s1 avs_s1_write write Input 1
+add_interface_port       s1 avs_s1_readdata readdata Output 16
+add_interface_port       s1 avs_s1_writedata writedata Input 16
+add_interface_port       s1 avs_s1_byteenable byteenable Input 2
 set_interface_assignment s1 embeddedsw.configuration.isFlash 0
 set_interface_assignment s1 embeddedsw.configuration.isMemoryDevice 0
 set_interface_assignment s1 embeddedsw.configuration.isNonVolatileStorage 0
 set_interface_assignment s1 embeddedsw.configuration.isPrintableDevice 0
 
+add_interface           conduit_end_0 conduit end
+set_interface_property  conduit_end_0 associatedClock clock
+set_interface_property  conduit_end_0 associatedReset clock_reset
+set_interface_property  conduit_end_0 ENABLED true
+set_interface_property  conduit_end_0 EXPORT_OF ""
+set_interface_property  conduit_end_0 PORT_NAME_MAP ""
+set_interface_property  conduit_end_0 SVD_ADDRESS_GROUP ""
+add_interface_port      conduit_end_0 coe_links export Output 14
 
-# 
-# connection point conduit_end_0
-# 
-add_interface conduit_end_0 conduit end
-set_interface_property conduit_end_0 associatedClock clock
-set_interface_property conduit_end_0 associatedReset clock_reset
-set_interface_property conduit_end_0 ENABLED true
-set_interface_property conduit_end_0 EXPORT_OF ""
-set_interface_property conduit_end_0 PORT_NAME_MAP ""
-set_interface_property conduit_end_0 SVD_ADDRESS_GROUP ""
-add_interface_port conduit_end_0 coe_links export Output 14
-
-add_interface conduit_end_1 conduit end
-set_interface_property conduit_end_1 associatedClock clock
-set_interface_property conduit_end_1 associatedReset clock_reset
-set_interface_property conduit_end_1 ENABLED true
-set_interface_property conduit_end_1 EXPORT_OF ""
-set_interface_property conduit_end_1 PORT_NAME_MAP ""
-set_interface_property conduit_end_1 SVD_ADDRESS_GROUP ""
-add_interface_port conduit_end_1 coe_rechts export Output 14
-# 
-# connection point s2
-# 
-add_interface s2 avalon end
-set_interface_property s2 addressUnits WORDS
-set_interface_property s2 associatedClock clock
-set_interface_property s2 associatedReset clock_reset
-set_interface_property s2 bitsPerSymbol 8
-set_interface_property s2 burstOnBurstBoundariesOnly false
-set_interface_property s2 burstcountUnits WORDS
-set_interface_property s2 explicitAddressSpan 0
-set_interface_property s2 holdTime 0
-set_interface_property s2 linewrapBursts false
-set_interface_property s2 maximumPendingReadTransactions 0
-set_interface_property s2 readLatency 0
-set_interface_property s2 readWaitTime 1
-set_interface_property s2 setupTime 0
-set_interface_property s2 timingUnits Cycles
-set_interface_property s2 writeWaitTime 0
-set_interface_property s2 ENABLED true
-set_interface_property s2 EXPORT_OF ""
-set_interface_property s2 PORT_NAME_MAP ""
-set_interface_property s2 SVD_ADDRESS_GROUP ""
-
-add_interface_port s2 avs_s2_address address Input 2
-add_interface_port s2 avs_s2_read read Input 1
-add_interface_port s2 avs_s2_write write Input 1
-add_interface_port s2 avs_s2_readdata readdata Output 16
-add_interface_port s2 avs_s2_writedata writedata Input 16
-add_interface_port s2 avs_s2_byteenable byteenable Input 2
+add_interface            s2 avalon end
+set_interface_property   s2 addressUnits WORDS
+set_interface_property   s2 associatedClock clock
+set_interface_property   s2 associatedReset clock_reset
+set_interface_property   s2 bitsPerSymbol 8
+set_interface_property   s2 burstOnBurstBoundariesOnly false
+set_interface_property   s2 burstcountUnits WORDS
+set_interface_property   s2 explicitAddressSpan 0
+set_interface_property   s2 holdTime 0
+set_interface_property   s2 linewrapBursts false
+set_interface_property   s2 maximumPendingReadTransactions 0
+set_interface_property   s2 readLatency 0
+set_interface_property   s2 readWaitTime 1
+set_interface_property   s2 setupTime 0
+set_interface_property   s2 timingUnits Cycles
+set_interface_property   s2 writeWaitTime 0
+set_interface_property   s2 ENABLED true
+set_interface_property   s2 EXPORT_OF ""
+set_interface_property   s2 PORT_NAME_MAP ""
+set_interface_property   s2 SVD_ADDRESS_GROUP ""
+add_interface_port       s2 avs_s2_address address Input 2
+add_interface_port       s2 avs_s2_read read Input 1
+add_interface_port       s2 avs_s2_write write Input 1
+add_interface_port       s2 avs_s2_readdata readdata Output 16
+add_interface_port       s2 avs_s2_writedata writedata Input 16
+add_interface_port       s2 avs_s2_byteenable byteenable Input 2
 set_interface_assignment s2 embeddedsw.configuration.isFlash 0
 set_interface_assignment s2 embeddedsw.configuration.isMemoryDevice 0
 set_interface_assignment s2 embeddedsw.configuration.isNonVolatileStorage 0
 set_interface_assignment s2 embeddedsw.configuration.isPrintableDevice 0
+
+add_interface           conduit_end_1 conduit end
+set_interface_property  conduit_end_1 associatedClock clock
+set_interface_property  conduit_end_1 associatedReset clock_reset
+set_interface_property  conduit_end_1 ENABLED true
+set_interface_property  conduit_end_1 EXPORT_OF ""
+set_interface_property  conduit_end_1 PORT_NAME_MAP ""
+set_interface_property  conduit_end_1 SVD_ADDRESS_GROUP ""
+add_interface_port      conduit_end_1 coe_rechts export Output 14
+
+add_interface            s3 avalon end
+set_interface_property   s3 addressUnits WORDS
+set_interface_property   s3 associatedClock clock
+set_interface_property   s3 associatedReset clock_reset
+set_interface_property   s3 bitsPerSymbol 8
+set_interface_property   s3 burstOnBurstBoundariesOnly false
+set_interface_property   s3 burstcountUnits WORDS
+set_interface_property   s3 explicitAddressSpan 0
+set_interface_property   s3 holdTime 0
+set_interface_property   s3 linewrapBursts false
+set_interface_property   s3 maximumPendingReadTransactions 0
+set_interface_property   s3 readLatency 0
+set_interface_property   s3 readWaitTime 1
+set_interface_property   s3 setupTime 0
+set_interface_property   s3 timingUnits Cycles
+set_interface_property   s3 writeWaitTime 0
+set_interface_property   s3 ENABLED true
+set_interface_property   s3 EXPORT_OF ""
+set_interface_property   s3 PORT_NAME_MAP ""
+set_interface_property   s3 SVD_ADDRESS_GROUP ""
+add_interface_port       s3 avs_s3_read read Input 1
+add_interface_port       s3 avs_s3_write write Input 1
+add_interface_port       s3 avs_s3_readdata readdata Output 16
+add_interface_port       s3 avs_s3_writedata writedata Input 16
+set_interface_assignment s3 embeddedsw.configuration.isFlash 0
+set_interface_assignment s3 embeddedsw.configuration.isMemoryDevice 0
+set_interface_assignment s3 embeddedsw.configuration.isNonVolatileStorage 0
+set_interface_assignment s3 embeddedsw.configuration.isPrintableDevice 0
+
+add_interface conduit_end_3 conduit end
+set_interface_property conduit_end_3 associatedClock clock
+set_interface_property conduit_end_3 associatedReset clock_reset
+set_interface_property conduit_end_3 ENABLED true
+set_interface_property conduit_end_3 EXPORT_OF ""
+set_interface_property conduit_end_3 PORT_NAME_MAP ""
+set_interface_property conduit_end_3 SVD_ADDRESS_GROUP ""
+add_interface_port conduit_end_3 coe_ir export Input 1
+
 
