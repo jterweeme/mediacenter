@@ -71,8 +71,8 @@ void WavPlay1::init()
     //lcd->home();
     lcd->puts("CROCKETS.WAV");
     ir = InfraRood::getInstance();
-    int ctl = IINFRARED_IRQ_INTERRUPT_CONTROLLER_ID;
-    ir->init((volatile uint32_t *)IINFRARED_BASE, IINFRARED_IRQ, ctl);
+    int ctl = VA_S3_IRQ_INTERRUPT_CONTROLLER_ID;
+    ir->init((volatile uint32_t *)VA_S3_BASE, VA_S3_IRQ, ctl);
     ir->setObserver(new Beam());
 }
 

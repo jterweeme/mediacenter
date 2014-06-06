@@ -177,7 +177,8 @@ set_interface_property   s3 holdTime 0
 set_interface_property   s3 linewrapBursts false
 set_interface_property   s3 maximumPendingReadTransactions 0
 set_interface_property   s3 readLatency 0
-set_interface_property   s3 readWaitTime 1
+set_interface_property   s3 readWaitStates 2
+set_interface_property   s3 readWaitTime 2
 set_interface_property   s3 setupTime 0
 set_interface_property   s3 timingUnits Cycles
 set_interface_property   s3 writeWaitTime 0
@@ -194,13 +195,19 @@ set_interface_assignment s3 embeddedsw.configuration.isMemoryDevice 0
 set_interface_assignment s3 embeddedsw.configuration.isNonVolatileStorage 0
 set_interface_assignment s3 embeddedsw.configuration.isPrintableDevice 0
 
-add_interface conduit_end_3 conduit end
-set_interface_property conduit_end_3 associatedClock clock
-set_interface_property conduit_end_3 associatedReset clock_reset
-set_interface_property conduit_end_3 ENABLED true
-set_interface_property conduit_end_3 EXPORT_OF ""
-set_interface_property conduit_end_3 PORT_NAME_MAP ""
-set_interface_property conduit_end_3 SVD_ADDRESS_GROUP ""
-add_interface_port conduit_end_3 coe_ir export Input 1
+add_interface           interrupt_sender interrupt end
+set_interface_property  interrupt_sender associatedAddressablePoint s3
+set_interface_property  interrupt_sender ASSOCIATED_CLOCK clock
+set_interface_property  interrupt_sender ENABLED true
+add_interface_port      interrupt_sender avs_s3_irq irq Output 1
+
+add_interface           conduit_end_3 conduit end
+set_interface_property  conduit_end_3 associatedClock clock
+set_interface_property  conduit_end_3 associatedReset clock_reset
+set_interface_property  conduit_end_3 ENABLED true
+set_interface_property  conduit_end_3 EXPORT_OF ""
+set_interface_property  conduit_end_3 PORT_NAME_MAP ""
+set_interface_property  conduit_end_3 SVD_ADDRESS_GROUP ""
+add_interface_port      conduit_end_3 coe_ir export Input 1
 
 

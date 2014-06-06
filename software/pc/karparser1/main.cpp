@@ -24,7 +24,7 @@ struct Header
     uint16_t formatType;
     uint16_t tracks;
     uint16_t timeDivision;
-};
+} __attribute__ ((packed));
 
 class Utility
 {
@@ -102,7 +102,7 @@ void CTrack::parse()
 
 void CHeader::read(std::istream &inFile)
 {
-    inFile.read((char *)&header, 14);   // moet 14 zijn!
+    inFile.read((char *)&header, sizeof(header));   // moet 14 zijn!
 }
 
 void CTrack::read(std::istream &iStream)
