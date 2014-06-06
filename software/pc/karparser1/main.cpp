@@ -15,6 +15,9 @@ Jasper ter Weeme
 
 #ifdef __GNUC__
 #include <endian.h>
+#define PACKED __attribute__ ((packed))
+#else
+#define PACKED
 #endif
 
 struct Header
@@ -24,7 +27,7 @@ struct Header
     uint16_t formatType;
     uint16_t tracks;
     uint16_t timeDivision;
-} __attribute__ ((packed));
+} PACKED;
 
 class Utility
 {
@@ -102,7 +105,7 @@ void CTrack::parse()
 
 void CHeader::read(std::istream &inFile)
 {
-    inFile.read((char *)&header, sizeof(header));   // moet 14 zijn!
+    inFile.read((char *)&header, 14);   // moet 14 zijn!
 }
 
 void CTrack::read(std::istream &iStream)
