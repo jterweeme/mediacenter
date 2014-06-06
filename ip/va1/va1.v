@@ -57,7 +57,7 @@ module va1(
         .s_read(avs_s3_read),
         .s_readdata(avs_s3_readdata),
         .s_write(avs_s3_write),
-        .s_writedata(avs_s3_writedata),
+        //.s_writedata(avs_s3_writedata),
         .ir(coe_ir));
 endmodule
 

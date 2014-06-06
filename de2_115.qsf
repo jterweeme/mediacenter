@@ -368,5 +368,7 @@ set_location_assignment PIN_AH21 -to va1_ext_export[3]
 set_location_assignment PIN_AG21 -to va1_ext_export[2]
 set_location_assignment PIN_AA19 -to va1_ext_export[1]
 set_location_assignment PIN_AB19 -to va1_ext_export[0]
+set_location_assignment PIN_G14 -to uart_ext_cts_n
+set_location_assignment PIN_J13 -to uart_ext_rts_n
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
-set_location_assignment PIN_Y15 -to va3_export
+set_location_assignment PIN_Y15 -to infrared_0_conduit_end_export

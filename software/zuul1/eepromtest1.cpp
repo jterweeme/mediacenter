@@ -9,6 +9,7 @@ private:
     I2C *eep_i2c_bus;
     EEProm *eep;
     VGATerminal *vga;
+    Uart *uart;
 };
 
 int EEPromTest1::run()
@@ -22,6 +23,18 @@ int EEPromTest1::run()
     eep->write('E');
     char c = eep->read();
     vga->putc(c);
+
+    uart = Uart::getInstance();
+    uart->init((volatile uint32_t *)UART_BASE);
+    vga->clear();
+    while (true)
+    {
+    uart->puts(0x00);
+    //uart->putc(0x90);
+    //uart->putc(0x1e);
+    //uart->putc(0x45);
+    }
+
     return 0;
 }
 

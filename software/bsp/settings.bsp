@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jun 6, 2014 1:29:12 AM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1402010952334</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jun 6, 2014 11:33:53 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1402090433292</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -983,50 +983,56 @@
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
-                <slaveDescriptor>va_s3</slaveDescriptor>
-                <addressRange>0x08003530 - 0x08003531</addressRange>
-                <addressSpan>2</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>va_s1</slaveDescriptor>
-                <addressRange>0x08003538 - 0x0800353F</addressRange>
+                <addressRange>0x08003530 - 0x08003537</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>va_s2</slaveDescriptor>
-                <addressRange>0x08003540 - 0x08003547</addressRange>
+                <addressRange>0x08003538 - 0x0800353F</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>video_character_buffer_with_dma_0_avalon_char_control_slave</slaveDescriptor>
-                <addressRange>0x08003548 - 0x0800354F</addressRange>
+                <addressRange>0x08003540 - 0x08003547</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart_0</slaveDescriptor>
-                <addressRange>0x08003550 - 0x08003557</addressRange>
+                <addressRange>0x08003548 - 0x0800354F</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>infrared_0</slaveDescriptor>
+                <addressRange>0x08003550 - 0x08003553</addressRange>
+                <addressSpan>4</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>itoetsenbord</slaveDescriptor>
-                <addressRange>0x08003558 - 0x0800355B</addressRange>
+                <addressRange>0x08003554 - 0x08003557</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>mytimer1_0</slaveDescriptor>
-                <addressRange>0x0800355C - 0x0800355F</addressRange>
+                <addressRange>0x08003558 - 0x0800355B</addressRange>
                 <addressSpan>4</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>va_s3</slaveDescriptor>
+                <addressRange>0x0800355C - 0x0800355D</addressRange>
+                <addressSpan>2</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>lcd</slaveDescriptor>
-                <addressRange>0x08003564 - 0x08003565</addressRange>
+                <addressRange>0x0800355E - 0x0800355F</addressRange>
                 <addressSpan>2</addressSpan>
                 <attributes/>
         </MemoryMap>

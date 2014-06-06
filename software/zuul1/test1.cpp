@@ -152,8 +152,8 @@ void Test1::init()
     segmentRechts.write(0x9992);
     segmentRechts.setHex(0x3f);
     ir = ::InfraRood::getInstance();
-    int ctl = VA_S3_IRQ_INTERRUPT_CONTROLLER_ID;
-    ir->init((volatile uint32_t *)VA_S3_BASE, VA_S3_IRQ, ctl);
+    int ctl = INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID;
+    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
