@@ -28,15 +28,16 @@ int EEPromTest1::run()
 
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
-    const char a[] = {0, 0xd0, 0x61, 0, 0, 0x61, 0x00};
-    //uart->putc((char)0x62);
 
-    for (size_t i = 0; i < sizeof(a); i++)
-    {
-        ::usleep(10);
+    const char a[] = {0x1c, 0xfc, 0x1c, 0, 0xfc, 0, 0x1c, 0, 0, 0xe0, 0xfc, 0x1c, 0x7c, 0xfc, 0};
+
+    for (size_t i; i < sizeof(a); i++)
         uart->putc(a[i]);
-    }
 
+    
+    //uart->putc((char)0);
+//    uart->putc((char)0xfc);   
+//    uart->putc((char)0);
 /*
     uart->puts("Abcdef123456");
     ::usleep(9*100);

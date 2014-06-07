@@ -76,19 +76,19 @@
          type = "String";
       }
    }
-   element infrared_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "134231376";
-         type = "String";
-      }
-   }
    element AUDIO_IF_0.avalon_slave
    {
       datum baseAddress
       {
          value = "134231136";
+         type = "String";
+      }
+   }
+   element infrared_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "134231376";
          type = "String";
       }
    }
@@ -251,35 +251,11 @@
          type = "String";
       }
    }
-   element key.s1
+   element uart.s1
    {
       datum baseAddress
       {
-         value = "134231264";
-         type = "String";
-      }
-   }
-   element sw.s1
-   {
-      datum baseAddress
-      {
-         value = "134231248";
-         type = "String";
-      }
-   }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "134231312";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "134231232";
+         value = "134231168";
          type = "String";
       }
    }
@@ -291,6 +267,14 @@
          type = "String";
       }
    }
+   element va.s1
+   {
+      datum baseAddress
+      {
+         value = "134231344";
+         type = "String";
+      }
+   }
    element itoetsenbord.s1
    {
       datum baseAddress
@@ -299,11 +283,19 @@
          type = "String";
       }
    }
-   element uart.s1
+   element sw.s1
    {
       datum baseAddress
       {
-         value = "134231168";
+         value = "134231248";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "134231328";
          type = "String";
       }
    }
@@ -315,19 +307,19 @@
          type = "String";
       }
    }
-   element snd_i2c_sda.s1
+   element key.s1
    {
       datum baseAddress
       {
-         value = "134231296";
+         value = "134231264";
          type = "String";
       }
    }
-   element va.s1
+   element ledr.s1
    {
       datum baseAddress
       {
-         value = "134231344";
+         value = "134231232";
          type = "String";
       }
    }
@@ -352,11 +344,19 @@
          type = "String";
       }
    }
-   element eep_i2c_scl.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "134231328";
+         value = "134231312";
+         type = "String";
+      }
+   }
+   element snd_i2c_sda.s1
+   {
+      datum baseAddress
+      {
+         value = "134231296";
          type = "String";
       }
    }
@@ -516,7 +516,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1402088005074" />
+ <parameter name="timeStamp" value="1402180549053" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -1549,11 +1549,6 @@
  <connection
    kind="avalon_streaming"
    version="13.0"
-   start="video_rgb_resampler_0.avalon_rgb_source"
-   end="video_scaler_0.avalon_scaler_sink" />
- <connection
-   kind="avalon_streaming"
-   version="13.0"
    start="video_pixel_buffer_dma_0.avalon_pixel_source"
    end="video_rgb_resampler_0.avalon_rgb_sink" />
  <connection
@@ -1566,11 +1561,6 @@
    version="13.0"
    start="upclocks.sys_clk"
    end="video_scaler_0.clock_reset" />
- <connection
-   kind="avalon_streaming"
-   version="13.0"
-   start="video_scaler_0.avalon_scaler_source"
-   end="video_alpha_blender_0.avalon_background_sink" />
  <connection
    kind="avalon"
    version="13.0"
@@ -1643,6 +1633,11 @@
    end="infrared_0.interrupt_sender">
   <parameter name="irqNumber" value="2" />
  </connection>
+ <connection
+   kind="avalon_streaming"
+   version="13.0"
+   start="video_rgb_resampler_0.avalon_rgb_source"
+   end="video_alpha_blender_0.avalon_background_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>
