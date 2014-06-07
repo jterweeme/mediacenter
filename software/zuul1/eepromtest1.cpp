@@ -14,6 +14,7 @@ private:
 
 int EEPromTest1::run()
 {
+/*
     vga = new VGATerminal("/dev/video_character_buffer_with_dma_0");
     vga->clear();
     vga->puts("EEPromTest1\r\n");
@@ -23,17 +24,35 @@ int EEPromTest1::run()
     eep->write('E');
     char c = eep->read();
     vga->putc(c);
+*/
 
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
-    vga->clear();
-    while (true)
+    const char a[] = {0, 0xd0, 0x61, 0, 0, 0x61, 0x00};
+    //uart->putc((char)0x62);
+
+    for (size_t i = 0; i < sizeof(a); i++)
     {
-    uart->puts(0x00);
-    //uart->putc(0x90);
-    //uart->putc(0x1e);
-    //uart->putc(0x45);
+        ::usleep(10);
+        uart->putc(a[i]);
     }
+
+/*
+    uart->puts("Abcdef123456");
+    ::usleep(9*100);
+    uart->puts("3A456");
+    uart->puts("bcdef123456");
+    ::usleep(9*100);
+    uart->puts("34A56");
+    uart->puts("bcdef123456");
+    ::usleep(9*100);
+    uart->puts("34A56");
+    uart->puts("bcdAef123456");
+    ::usleep(9*100);
+    uart->puts("3456");
+    uart->puts("bcdeAf123456");
+    ::usleep(9*100);
+    uart->puts("34A56");*/
 
     return 0;
 }
