@@ -53,6 +53,17 @@ void Karaoke1::init()
         vgaTerminal->puts("\r\nGeen SD Kaart aanwezig!");
     }
     
+    mstd::vector<int> vector1(100);
+    vector1.push_back(1);
+    vector1.push_back(5);
+    vector1.push_back(4);
+    vector1.push_back(6);
+    int dinges = 0;
+
+    for (mstd::vector<int>::iterator it = vector1.begin(); it != vector1.end(); ++it)
+        dinges += *it;
+
+    qs->setInt(dinges);
     uart->printf("Hello %s\r\n", "World");
 }
 

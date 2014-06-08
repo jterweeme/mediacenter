@@ -29,6 +29,29 @@ class MyString
 {
 };
 
+namespace mstd
+{
+/*
+    class iterator
+    {
+    };*/
+
+    template <class T> class vector
+    {
+    private:
+        size_t size;
+        size_t capacity;
+        T *buffer;
+    public:
+        typedef T *iterator;
+        size_t getSize() const { return size; }
+        vector(size_t capacity) : capacity(capacity), size(0) { buffer = new T[capacity]; }
+        void push_back(const T &value) { buffer[size++] = value; }
+        iterator begin() { return buffer; }
+        iterator end() { return buffer + getSize(); }
+    };
+};
+
 extern const uint8_t lut[];
 
 template <class T> class Segment
@@ -250,6 +273,13 @@ public:
 
 class MyFile;
 
+class KarTrack
+{
+public:
+    uint32_t chunkIDBE;
+    
+};
+
 struct SKarHeader
 {
     uint32_t chunkIDBE;
@@ -261,10 +291,14 @@ struct SKarHeader
 
 class CKarHeader
 {
+
 public:
-    CKarHeader() { }
-    void read(MyFile *file);
     SKarHeader header;
+    CKarHeader() { }
+    CKarHeader(SKarHeader header) : header(header) { }
+    void read(MyFile *file);
+    int getTrackCount() { return ::Utility::be_16_toh(header.tracksBE); }
+    const char *toString();
 };
 
 class KarFile

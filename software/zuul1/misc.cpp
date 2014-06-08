@@ -8,15 +8,15 @@
 #include "misc.h"
 #include <fcntl.h>
 
-void Utility::toHex(uint8_t input, char *output)
+void Utility::toHex(const uint8_t input, char *output)
 {
-    uint8_t foo = input & 0x0f;
-    uint8_t bar = input >> 4;
+    const uint8_t foo = input & 0x0f;
+    const uint8_t bar = input >> 4;
     output[0] = bar < 10 ? (char)(bar + 48) : (char)(bar + 55);
     output[1] = foo < 10 ? (char)(foo + 48) : (char)(foo + 55);
 }
 
-void Utility::to_bytes(uint32_t val, uint8_t *bytes)
+void Utility::to_bytes(const uint32_t val, uint8_t *bytes)
 {
     bytes[0] = (uint8_t) val;
     bytes[1] = (uint8_t) (val >> 8);
@@ -36,24 +36,24 @@ uint32_t Utility::to_int32(const uint8_t *bytes)
 const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8,
                 0x00, 0x10, 0x08, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
 
-void DuoSegment::setInt(unsigned int n)
+void DuoSegment::setInt(const unsigned int n)
 {
     unsigned int a = n / 10 % 10;
     unsigned int b = n % 10;
     *base = lut[a] << 8 | lut[b];
 }
 
-void DuoSegment::setHex(uint8_t n)
+void DuoSegment::setHex(const uint8_t n)
 {
     *base = lut[n >> 4] << 8 | lut[n % 16];
 }
 
-void QuadroSegment::setHex(uint16_t n)
+void QuadroSegment::setHex(const uint16_t n)
 {
     *base = lut[n >> 12] << 24 | lut[(n >> 8) % 16] << 16 | lut[(n >> 4) % 16] << 8 | lut[n % 16];
 }
 
-void CombinedSegment::setHex(uint32_t n)
+void CombinedSegment::setHex(const uint32_t n)
 {
     l->setHex(n >> 24);
     r->setHex(n >> 16);
