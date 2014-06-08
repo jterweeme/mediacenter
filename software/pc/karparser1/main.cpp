@@ -60,9 +60,17 @@ public:
 class TextEvent : public Event
 {
 public:
-    static const uint8_t ID = 1;
-    TextEvent() { }
     size_t length;
+    static const uint8_t ID = 1;
+    char *text;
+    TextEvent() { }
+
+    TextEvent(size_t length) : length(length)
+    {
+        text = new char[length + 1];
+        
+    }
+
     std::string toString();
 };
 
@@ -125,7 +133,7 @@ std::string Event::toString()
 std::string TextEvent::toString()
 {
     std::stringstream ss;
-    ss << "Text Event";
+    ss << "Text Event: " << text;
     return ss.str();
 }
 
@@ -147,8 +155,13 @@ void CTrack::parse()
             {
             case TextEvent::ID:
             {
-                TextEvent *e = new TextEvent();
-                e->length = data[++i];
+                
+                size_t length = data[++i];
+                TextEvent *e = new TextEvent(length);
+                
+                for (size_t j = 0; j < length; j++)
+                    e->text[j] = data[++i];
+                    
                 events.push_back(e);
             }
                 break;
