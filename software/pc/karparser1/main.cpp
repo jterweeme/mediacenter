@@ -4,7 +4,7 @@ Jasper ter Weeme
 
 #include <stdint.h>
 #include <stdio.h>
-#include <string.h>
+#include <string>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>
@@ -40,8 +40,9 @@ public:
 class Event
 {
 public:
-    Event() { }
     uint8_t id;
+    Event() { }
+    Event(uint8_t id) : id(id) { }
     virtual std::string toString();
 };
 
@@ -49,8 +50,6 @@ class Meta
 {
 public:
     static const uint8_t SEQUENCE_NUMBER = 0;
-    static const uint8_t TEXT_EVENT = 1;
-    static const uint8_t COPYRIGHT_NOTICE = 2;
     static const uint8_t TRACK_NAME = 3;
     static const uint8_t TIME_SIGNATURE = 0x58;
     static const uint8_t KEY_SIGNATURE = 0x59;
@@ -64,14 +63,29 @@ public:
     static const uint8_t ID = 1;
     char *text;
     TextEvent() { }
-
-    TextEvent(size_t length) : length(length)
-    {
-        text = new char[length + 1];
-        
-    }
-
+    TextEvent(size_t length) : Event(ID), length(length) { text = new char[length + 1]; }
     std::string toString();
+};
+
+class CopyrightNoticeEvent : public Event
+{
+public:
+    static const uint8_t ID = 2;
+    std::string toString() { return "Copyright Notice"; }
+};
+
+class TimeSignature : public Event
+{
+public:
+    static const uint8_t ID = 0x58;
+    std::string toString() { return "Time Signature"; }
+};
+
+class KeySignature : public Event
+{
+public:
+    static const uint8_t ID = 0x59;
+    std::string toString() { return "Key Signature"; }
 };
 
 class CHeader
@@ -120,7 +134,7 @@ private:
 class KarParser1
 {
 public:
-    int run();
+    int run(int argc, char **argv);
 };
 
 std::string Event::toString()
@@ -139,8 +153,6 @@ std::string TextEvent::toString()
 
 void CTrack::parse()
 {
-    uint8_t timeSignature;
-    uint8_t chunkSize;
     uint8_t *buffer = new uint8_t[getChunkSize()];
     uint8_t bufferSize = 0;
 
@@ -151,11 +163,12 @@ void CTrack::parse()
 
         if (data[i] == META_TAG)
         {
-            switch (data[++i])
+            uint8_t metaID = data[++i];
+
+            switch (metaID)
             {
             case TextEvent::ID:
             {
-                
                 size_t length = data[++i];
                 TextEvent *e = new TextEvent(length);
                 
@@ -165,11 +178,18 @@ void CTrack::parse()
                 events.push_back(e);
             }
                 break;
-            case Meta::COPYRIGHT_NOTICE:
+            case CopyrightNoticeEvent::ID:
+                events.push_back(new CopyrightNoticeEvent());
                 break;
-            case Meta::TIME_SIGNATURE:
+            case TimeSignature::ID:
+                events.push_back(new TimeSignature());
                 break;
-            case Meta::KEY_SIGNATURE:
+            case KeySignature::ID:
+                events.push_back(new KeySignature());
+                break;
+            default:
+                Event *e = new Event(metaID);
+                events.push_back(e);
                 break;
             }
         }
@@ -280,13 +300,14 @@ void Utility::hex(uint8_t *data, size_t len)
     }
 }
 
-int KarParser1::run()
+int KarParser1::run(int argc, char **argv)
 {
     KarFile karFile;
     karFile.read(std::cin);
     //karFile.dump();
 
-    CTrack track4 = karFile.getTrack(1);
+    std::string argv1 = std::string(argv[1]);
+    CTrack track4 = karFile.getTrack(atoi(argv[1]));
     track4.parse();
     //std::cout << track4.toString() << std::endl;
     uint8_t *track4data = track4.getRawData();
@@ -296,10 +317,10 @@ int KarParser1::run()
     return 0;
 }
 
-int main()
+int main(int argc, char **argv)
 {
     KarParser1 kp1;
-    return kp1.run();
+    return kp1.run(argc, argv);
 }
 
 
