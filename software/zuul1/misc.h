@@ -31,10 +31,6 @@ class MyString
 
 namespace mstd
 {
-/*
-    class iterator
-    {
-    };*/
 
     template <class T> class vector
     {
@@ -51,6 +47,8 @@ namespace mstd
         iterator end() { return buffer + getSize(); }
     };
 };
+
+using namespace mstd;
 
 extern const uint8_t lut[];
 
@@ -269,49 +267,6 @@ public:
     uint8_t read();
     void write(uint8_t);
     static const uint8_t I2C_ADDR = 0x50;
-};
-
-class MyFile;
-
-class KarTrack
-{
-public:
-    uint32_t chunkIDBE;
-    
-};
-
-struct SKarHeader
-{
-    uint32_t chunkIDBE;
-    uint32_t chunkSizeBE;
-    uint16_t formatTypeBE;
-    uint16_t tracksBE;
-    uint16_t timeDivisionBE;
-};
-
-class CKarHeader
-{
-
-public:
-    SKarHeader header;
-    CKarHeader() { }
-    CKarHeader(SKarHeader header) : header(header) { }
-    void read(MyFile *file);
-    int getTrackCount() { return ::Utility::be_16_toh(header.tracksBE); }
-    const char *toString();
-};
-
-class KarFile
-{
-public:
-    MyFile *myFile;
-    uint8_t *buf;
-    CKarHeader header;
-public:
-    KarFile(MyFile *myFile) : myFile(myFile) { }
-    void read();
-    void readToBuf();
-    //const char *getText();
 };
 
 class SDCard2

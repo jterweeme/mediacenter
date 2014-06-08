@@ -1,5 +1,6 @@
 #include <system.h>
 #include "misc.h"
+#include "mymidi.h"
 
 class Karaoke1
 {
@@ -21,7 +22,7 @@ void Karaoke1::init()
     qs->setInt(0);
     vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
     vgaTerminal->clear();
-    vgaTerminal->puts("Karaoke 1");
+    vgaTerminal->puts("Karaoke 1\r\n");
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Uart\r\n");
@@ -35,7 +36,21 @@ void Karaoke1::init()
         myFile = sdCard->openFile("VOGUE.KAR");
         karFile = new KarFile(myFile);
         karFile->read();
-        qs->setInt(::Utility::be_32_toh(karFile->header.header.chunkSizeBE));
+        //qs->setHex(::Utility::be_32_toh(karFile->tracks[0]->chunkSizeBE));
+        
+        for (vector<KarTrack>::iterator it = karFile->tracks.begin();
+                it != karFile->tracks.end(); ++it)
+        {
+            //KarTrack track = *it;
+            uint32_t chunkSize = ::Utility::be_32_toh(it->chunkSizeBE);
+            qs->setHex(chunkSize);
+            vgaTerminal->puts(it->toString());
+            vgaTerminal->puts("\r\n");
+            break;
+        }
+
+        vgaTerminal->puts(karFile->toString());
+        vgaTerminal->puts("\r\n");
         //uart->printf("He%ulo Wo%rld\r\n");
 /*
         for (int i = 0; i < 100; i++)
@@ -63,7 +78,6 @@ void Karaoke1::init()
     for (mstd::vector<int>::iterator it = vector1.begin(); it != vector1.end(); ++it)
         dinges += *it;
 
-    qs->setInt(dinges);
     uart->printf("Hello %s\r\n", "World");
 }
 

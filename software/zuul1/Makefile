@@ -69,7 +69,7 @@ wavplay1.flash: wavplay1.elf
 audiotest1.elf: audiotest1.o misc.o sdcard.o
 eepromtest1.elf: eepromtest1.o misc.o sdcard.o
 jtagtest1.elf: jtagtest1.o sdcard.o
-karaoke1.elf: karaoke1.o misc.o sdcard.o
+karaoke1.elf: karaoke1.o misc.o sdcard.o mymidi.o
 kbtest1.elf: kbtest1.o misc.o sdcard.o
 kbtest2.elf: kbtest2.o misc.o sdcard.o
 md5test1.elf: md5test1.o misc.o sdcard.o
@@ -95,14 +95,15 @@ eepromtest1.o: eepromtest1.cpp
 FatFileSystem.o: FatFileSystem.cpp
 FatInternal.o: FatInternal.cpp
 jtagtest1.o: jtagtest1.cpp
-karaoke1.o: karaoke1.cpp
-kbtest1.o: kbtest1.cpp
+karaoke1.o: karaoke1.cpp mymidi.h misc.h sdcard.h
+kbtest1.o: kbtest1.cpp misc.h
 kbtest2.o: kbtest2.cpp
 LCD.o: LCD.cpp LCD.h
 LED.o: LED.cpp
 md5.o: md5.cpp
 md5test1.o: md5test1.cpp
 misc.o: misc.cpp misc.h
+mymidi.o: mymidi.cpp mymidi.h misc.h
 mytest1.o: mytest1.cpp misc.h
 ofm1.o: ofm1.cpp
 piano1.o: piano1.cpp

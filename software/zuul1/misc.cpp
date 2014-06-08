@@ -181,11 +181,6 @@ void Uart::putc(const char c)
     base[1] = c;
 }
 
-void KarFile::read()
-{
-    header.read(myFile);
-}
-
 VGA::VGA(const char *devName)
 {
     charBuffer = openDev(devName);
@@ -250,38 +245,6 @@ void SoundCard::setOutputVolume(int vol)
         regWrite(3, vol);
     }
 }
-
-void CKarHeader::read(MyFile *file)
-{
-    file->fread((SKarHeader *)&header, sizeof(SKarHeader), 1);
-}
-
-void KarFile::readToBuf()
-{
-    unsigned int size = myFile->getSize();
-    buf = new uint8_t[size];    // zodat de grootste erin past
-    
-    for (int i = 0; i < size; i++)
-        buf[i] = myFile->read();
-}
-
-/*
-const char *KarFile::getText()
-{
-    uint8_t c;
-    static char returnString[100] = {0};
-    
-    int i = 0;
-    
-    do
-    {
-        c = myFile->read();
-        returnString[i++] = c;
-    }
-    while (c > 10);
-
-    return returnString;
-}*/
 
 bool SoundCard::regWrite(uint8_t index, uint16_t data)
 {
