@@ -29,31 +29,33 @@ int EEPromTest1::run()
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
 
+/*
     const char a[] = {0x1c, 0xfc, 0x1c, 0, 0xfc, 0, 0x1c, 0, 0, 0xe0, 0xfc, 0x1c, 0x7c, 0xfc, 0};
 
     for (size_t i; i < sizeof(a); i++)
         uart->putc(a[i]);
+*/
 
     
     //uart->putc((char)0);
 //    uart->putc((char)0xfc);   
 //    uart->putc((char)0);
+    uart->puts("+++))))AAA][0sdf");
+    //::usleep(9*100);
 /*
-    uart->puts("Abcdef123456");
-    ::usleep(9*100);
-    uart->puts("3A456");
+    uart->puts("3Asdf@#%456");
     uart->puts("bcdef123456");
     ::usleep(9*100);
     uart->puts("34A56");
-    uart->puts("bcdef123456");
+    uart->puts("bc235@#%def123456");
     ::usleep(9*100);
-    uart->puts("34A56");
-    uart->puts("bcdAef123456");
+    uart->puts("34A5#$5%6");
+    uart->puts("bcdAef$5345123456");
     ::usleep(9*100);
-    uart->puts("3456");
-    uart->puts("bcdeAf123456");
+    uart->puts("345&(*&(&^6");
+    uart->puts("bcde^(*Af123456");
     ::usleep(9*100);
-    uart->puts("34A56");*/
+    uart->puts("absadf34A56");*/
 
     return 0;
 }
