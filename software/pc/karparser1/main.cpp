@@ -43,17 +43,13 @@ public:
     uint8_t id;
     Event() { }
     Event(uint8_t id) : id(id) { }
-    virtual std::string toString();
+    virtual std::string toString() { return "Event"; }
 };
 
-class Meta
+class EventVector : public std::vector<Event *>
 {
 public:
-    static const uint8_t SEQUENCE_NUMBER = 0;
-    static const uint8_t TRACK_NAME = 3;
-    static const uint8_t TIME_SIGNATURE = 0x58;
-    static const uint8_t KEY_SIGNATURE = 0x59;
-    
+    std::string toString();
 };
 
 class TextEvent : public Event
@@ -88,6 +84,13 @@ public:
     std::string toString() { return "Key Signature"; }
 };
 
+class SetTempo : public Event
+{
+public:
+    static const uint8_t ID = 0x51;
+    std::string toString() { return "Set Tempo"; }
+};
+
 class CHeader
 {
 private:
@@ -107,11 +110,8 @@ private:
     uint32_t chunkIDBE;
     uint32_t chunkSizeBE;
     uint8_t *data;
-    std::vector<Event *> events;
-
+    EventVector events;
     static const uint8_t META_TAG = 0xff;
-    
-    
 public:
     void read(std::istream &iStream);
     std::string toString();
@@ -137,17 +137,21 @@ public:
     int run(int argc, char **argv);
 };
 
-std::string Event::toString()
-{
-    std::stringstream ss;
-    ss << "Event";
-    return ss.str();
-}
-
 std::string TextEvent::toString()
 {
     std::stringstream ss;
     ss << "Text Event: " << text;
+    return ss.str();
+}
+
+std::string EventVector::toString()
+{
+    std::stringstream ss;
+    ss << "Aantal: " << size() << std::endl;
+    
+    for (std::vector<Event *>::iterator it = begin(); it != end(); ++it)
+        ss << (*it)->toString() << std::endl;
+
     return ss.str();
 }
 
@@ -187,19 +191,16 @@ void CTrack::parse()
             case KeySignature::ID:
                 events.push_back(new KeySignature());
                 break;
+            case SetTempo::ID:
+                events.push_back(new SetTempo());
+                break;
             default:
                 Event *e = new Event(metaID);
                 events.push_back(e);
                 break;
             }
         }
-
     }
-
-    for (std::vector<Event *>::iterator it = events.begin(); it != events.end(); ++it)
-        std::cout << (*it)->toString() << std::endl;
-
-    std::cout << "events: "<< events.size() << std::endl;
 }
 
 void CHeader::read(std::istream &inFile)
@@ -238,7 +239,8 @@ std::string CTrack::toString()
     std::stringstream ss;
     ss << "[Track]" << std::endl;
     ss << "Signature: 0x" << std::hex << Utility::be_32_toh(chunkIDBE) << std::endl;
-    ss << "Chunk Size: " << std::dec << Utility::be_32_toh(chunkSizeBE);
+    ss << "Chunk Size: " << std::dec << Utility::be_32_toh(chunkSizeBE) << std::endl << std::endl;
+    ss << events.toString();
     return ss.str();
 }
 
@@ -309,8 +311,8 @@ int KarParser1::run(int argc, char **argv)
     std::string argv1 = std::string(argv[1]);
     CTrack track4 = karFile.getTrack(atoi(argv[1]));
     track4.parse();
-    //std::cout << track4.toString() << std::endl;
-    uint8_t *track4data = track4.getRawData();
+    std::cout << track4.toString() << std::endl;
+    //uint8_t *track4data = track4.getRawData();
     //Utility::hex(track4data, track4.getChunkSize());
     //std::cout << std::endl;
 
