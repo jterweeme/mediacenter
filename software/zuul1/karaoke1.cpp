@@ -1,6 +1,7 @@
 #include <system.h>
 #include "misc.h"
 #include "mymidi.h"
+#include <altera_up_avalon_video_pixel_buffer_dma.h>
 
 class Karaoke1
 {
@@ -92,6 +93,18 @@ void Karaoke1::init()
         dinges += *it;
 
     uart->printf("Hello %s\r\n", "World");
+    //vgaTerminal->clear();
+
+    //alt_up_pixel_buffer_dma_dev *pbd;
+    //pbd = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
+    
+    //if (pbd)
+    //    vgaTerminal->puts("OK\r\n");
+    
+    volatile uint32_t *pixels = (volatile uint32_t *)VIDEO_PIXEL_BUFFER_DMA_0_BASE;
+    pixels[0] = 0;
+    pixels[1] = 700;
+    
 }
 
 int Karaoke1::run()
