@@ -147,7 +147,7 @@ std::string TextEvent::toString()
 
 std::string EventVector::toString()
 {
-    std::stringstream ss;
+    std::ostringstream ss;
     ss << "Aantal: " << size() << std::endl;
     
     for (std::vector<Event *>::iterator it = begin(); it != end(); ++it)
@@ -325,8 +325,8 @@ int KarParser1::run(int argc, char **argv)
     std::string argv1 = std::string(argv[1]);
     CTrack track = karFile.getTrack(atoi(argv[1]));
     track.parse();
-    std::cout << track.lyrics() << std::endl;
-    //std::cout << track4.toString() << std::endl;
+    //std::cout << track.lyrics() << std::endl;
+    std::cout << track.toString() << std::endl;
     //uint8_t *track4data = track4.getRawData();
     //Utility::hex(track4data, track4.getChunkSize());
     //std::cout << std::endl;

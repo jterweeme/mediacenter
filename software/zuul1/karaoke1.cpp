@@ -41,12 +41,25 @@ void Karaoke1::init()
         for (vector<KarTrack>::iterator it = karFile->tracks.begin();
                 it != karFile->tracks.end(); ++it)
         {
-            //KarTrack track = *it;
-            uint32_t chunkSize = ::Utility::be_32_toh(it->chunkSizeBE);
+            KarTrack track = *it;
+            track.parse();
+
+            for (MIDIEventVector::iterator it = track.events.begin();
+                    it != track.events.end(); ++it)
+            {
+                vgaTerminal->puts((*it)->toString());
+                vgaTerminal->puts("\r\n");
+                //TextEvent *te = dynamic_cast<TextEvent *>(*it);
+                
+                //if (te)
+                //    vgaTerminal->puts("TextEvent");
+            }
+
+            uint32_t chunkSize = ::Utility::be_32_toh(track.chunkSizeBE);
             qs->setHex(chunkSize);
             vgaTerminal->puts(it->toString());
             vgaTerminal->puts("\r\n");
-            break;
+            //break;
         }
 
         vgaTerminal->puts(karFile->toString());

@@ -25,12 +25,14 @@ public:
     static uint32_t be_32_toh(uint32_t x);
 };
 
-class MyString
-{
-};
-
 namespace mstd
 {
+    class string
+    {
+    public:
+        string() { }
+        //string(const char *input) { }
+    };
 
     template <class T> class vector
     {
