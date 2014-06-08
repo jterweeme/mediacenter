@@ -118,6 +118,7 @@ public:
     size_t getChunkSize() { return ::Utility::be_32_toh(chunkSizeBE); }
     uint8_t *getRawData() { return data; }
     void parse();
+    std::string lyrics();
 };
 
 class KarFile
@@ -302,20 +303,33 @@ void Utility::hex(uint8_t *data, size_t len)
     }
 }
 
+std::string CTrack::lyrics()
+{
+    std::stringstream ss;
+
+    for (EventVector::iterator it = events.begin(); it != events.end(); ++it)
+    {
+        TextEvent *te = dynamic_cast<TextEvent *>(*it);
+        
+        if (te)
+            ss << te->text;
+    }
+    return ss.str();
+}
+
 int KarParser1::run(int argc, char **argv)
 {
     KarFile karFile;
     karFile.read(std::cin);
     //karFile.dump();
-
     std::string argv1 = std::string(argv[1]);
-    CTrack track4 = karFile.getTrack(atoi(argv[1]));
-    track4.parse();
-    std::cout << track4.toString() << std::endl;
+    CTrack track = karFile.getTrack(atoi(argv[1]));
+    track.parse();
+    std::cout << track.lyrics() << std::endl;
+    //std::cout << track4.toString() << std::endl;
     //uint8_t *track4data = track4.getRawData();
     //Utility::hex(track4data, track4.getChunkSize());
     //std::cout << std::endl;
-
     return 0;
 }
 
