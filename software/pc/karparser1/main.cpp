@@ -81,8 +81,10 @@ class MetaEvent : public Event
 {
 public:
     uint8_t metaTypeID;
+    size_t length;
     MetaEvent() { }
     MetaEvent(uint8_t id) : metaTypeID(id) { }
+    MetaEvent(uint8_t id, size_t length) : metaTypeID(id), length(length) { }
     static const uint8_t ID = 0xff;
 
     virtual std::string toString()
@@ -103,11 +105,9 @@ public:
 class TextEvent : public MetaEvent
 {
 public:
-    size_t length;
     static const uint8_t ID = 1;
     char *text;
-    TextEvent() { }
-    TextEvent(size_t length) : MetaEvent(ID), length(length) { text = new char[length + 1]; }
+    TextEvent(size_t length) : MetaEvent(ID, length) { text = new char[length + 1]; }
     std::string toString();
 };
 
@@ -137,6 +137,7 @@ class MarkerEvent : public MetaEvent
 public:
     static const uint8_t ID = 6;
     std::string toString() { return "Marker Event"; }
+    MarkerEvent(size_t length) : MetaEvent(ID, length) { }
 };
 
 class KeySignature : public MetaEvent
@@ -144,6 +145,7 @@ class KeySignature : public MetaEvent
 public:
     static const uint8_t ID = 0x59;
     std::string toString() { return "Key Signature"; }
+    KeySignature(size_t length) : MetaEvent(ID, length) { }
 };
 
 class SetTempo : public MetaEvent
@@ -283,15 +285,22 @@ void CTrack::parse()
                 i += 5;
                 break;
             case KeySignature::ID:
-                events.push_back(new KeySignature());
-                i += 3;
+            {
+                size_t length = data[++i];
+                events.push_back(new KeySignature(length));
+                i += length;
+            }
                 break;
             case SetTempo::ID:
                 events.push_back(new SetTempo());
                 i += 4;
                 break;
             case MarkerEvent::ID:
-                events.push_back(new MarkerEvent());
+            {
+                size_t length = data[++i];
+                events.push_back(new MarkerEvent(length));
+                i += length;
+            }
                 break;
             case LyricsEvent::ID:
                 events.push_back(new LyricsEvent());
