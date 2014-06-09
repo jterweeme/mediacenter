@@ -29,6 +29,16 @@ struct Header
     uint16_t timeDivision;
 } PACKED;
 
+class MyException
+{
+private:
+    const char *msg;
+public:
+    MyException() { }
+    MyException(const char *msg) : msg(msg) { }
+    const char *toString() { return msg; }
+};
+
 class Utility
 {
 public:
@@ -129,13 +139,26 @@ private:
  public:
     void read(std::istream &iStream);
     void dump();
-    CTrack getTrack(int n) { return tracks[n]; }
+
+    CTrack getTrack(unsigned int n)
+    {
+        if (n >= tracks.size())
+            throw new MyException("Track is er niet!");
+
+        return tracks[n];
+    }
 };
 
 class KarParser1
 {
 public:
     int run(int argc, char **argv);
+};
+
+class Options
+{
+public:
+    Options() { }
 };
 
 std::string TextEvent::toString()
@@ -323,10 +346,24 @@ int KarParser1::run(int argc, char **argv)
     karFile.read(std::cin);
     //karFile.dump();
     std::string argv1 = std::string(argv[1]);
-    CTrack track = karFile.getTrack(atoi(argv[1]));
-    track.parse();
+
+    try
+    {
+        CTrack track = karFile.getTrack(atoi(argv[1]));
+        track.parse();
+        std::cout << track.toString() << std::endl;
+    }
+    catch (MyException *e)
+    {
+        std::cerr << e->toString() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unkown error" << std::endl;
+    }
+
     //std::cout << track.lyrics() << std::endl;
-    std::cout << track.toString() << std::endl;
+    
     //uint8_t *track4data = track4.getRawData();
     //Utility::hex(track4data, track4.getChunkSize());
     //std::cout << std::endl;
