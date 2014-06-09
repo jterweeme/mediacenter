@@ -50,10 +50,18 @@ public:
 class Event
 {
 public:
-    uint8_t id;
     Event() { }
-    Event(uint8_t id) : id(id) { }
-    virtual std::string toString() { return "Event"; }
+    virtual std::string toString() { return "Unknown Event"; }
+};
+
+class MetaEvent : public Event
+{
+public:
+    uint8_t id;
+    MetaEvent() { }
+    MetaEvent(uint8_t id) : id(id) { }
+    static const uint8_t ID = 0xff;
+    virtual std::string toString() { return "Unknown MetaEvent"; }
 };
 
 class EventVector : public std::vector<Event *>
@@ -62,39 +70,39 @@ public:
     std::string toString();
 };
 
-class TextEvent : public Event
+class TextEvent : public MetaEvent
 {
 public:
     size_t length;
     static const uint8_t ID = 1;
     char *text;
     TextEvent() { }
-    TextEvent(size_t length) : Event(ID), length(length) { text = new char[length + 1]; }
+    TextEvent(size_t length) : MetaEvent(ID), length(length) { text = new char[length + 1]; }
     std::string toString();
 };
 
-class CopyrightNoticeEvent : public Event
+class CopyrightNoticeEvent : public MetaEvent
 {
 public:
     static const uint8_t ID = 2;
     std::string toString() { return "Copyright Notice"; }
 };
 
-class TimeSignature : public Event
+class TimeSignature : public MetaEvent
 {
 public:
     static const uint8_t ID = 0x58;
     std::string toString() { return "Time Signature"; }
 };
 
-class KeySignature : public Event
+class KeySignature : public MetaEvent
 {
 public:
     static const uint8_t ID = 0x59;
     std::string toString() { return "Key Signature"; }
 };
 
-class SetTempo : public Event
+class SetTempo : public MetaEvent
 {
 public:
     static const uint8_t ID = 0x51;
@@ -207,7 +215,7 @@ void CTrack::parse()
         buffer[i] = data[i];
         bufferSize++;
 
-        if (data[i] == META_TAG)
+        if (data[i] == MetaEvent::ID)
         {
             uint8_t metaID = data[++i];
 
@@ -237,7 +245,7 @@ void CTrack::parse()
                 events.push_back(new SetTempo());
                 break;
             default:
-                Event *e = new Event(metaID);
+                Event *e = new MetaEvent(metaID);
                 events.push_back(e);
                 break;
             }
