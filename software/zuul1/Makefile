@@ -20,72 +20,75 @@ DOWNLOAD := ofm1.elf
 
 .PHONY: all
 
-all: primes1.hex sdcardtest1.hex test1.hex wavplay1.hex \
+all: primes1.hex sdcardtest1.hex app_test1.hex wavplay1.hex \
     md5test1.elf kbtest2.hex vgatest1.hex \
-    karaoke1.hex ofm1.hex mytest1.hex eepromtest1.hex \
-    sdcardtest3.hex
+    app_karaoke1.hex app_ofm1.hex mytest1.hex eepromtest1.hex \
+    sdcardtest3.hex app_graph1.hex
 
-
+app_graph1.hex: app_graph1.flash
 audiotest1.hex: audiotest1.flash
 eepromtest1.hex: eepromtest1.flash
 jtagtest1.hex: jtagtest1.flash
-karaoke1.hex: karaoke1.flash
+app_karaoke1.hex: app_karaoke1.flash
 kbtest1.hex: kbtest1.flash
 kbtest2.hex: kbtest2.flash
 md5test1.hex: md5test1.flash
 mytest1.hex: mytest1.flash
-ofm1.hex: ofm1.flash
+app_ofm1.hex: app_ofm1.flash
 piano1.hex: piano1.flash
 primes1.hex: primes1.flash
 #sdaudio2.hex: sdaudio2.flash
 sdcardtest1.hex: sdcardtest1.flash
 sdcardtest2.hex: sdcardtest2.flash
 sdcardtest3.hex: sdcardtest3.flash
-test1.hex: test1.flash
+app_test1.hex: app_test1.flash
 vgatest1.hex: vgatest1.flash
 vgatest2.hex: vgatest2.flash
 wavplay1.hex: wavplay1.flash
 
+app_graph1.flash: app_graph1.elf
 audiotest1.flash: audiotest1.elf
 eepromtest1.flash: eepromtest1.elf
 jtagtest1.flash: jtagtest1.elf
-karaoke1.flash: karaoke1.elf
+app_karaoke1.flash: app_karaoke1.elf
 kbtest1.flash: kbtest1.elf
 kbtest2.flash: kbtest2.elf
 md5test1.flash: md5test1.elf
 mytest1.flash: mytest1.elf
-ofm1.flash: ofm1.elf
+app_ofm1.flash: app_ofm1.elf
 piano1.flash: piano1.elf
 primes1.flash: primes1.elf
 #sdaudio2.flash: sdaudio2.elf
 sdcardtest1.flash: sdcardtest1.elf
 sdcardtest2.flash: sdcardtest2.elf
 sdcardtest3.flash: sdcardtest3.elf
-test1.flash: test1.elf
+app_test1.flash: app_test1.elf
 vgatest1.flash: vgatest1.elf
 vgatest2.flash: vgatest2.elf
 wavplay1.flash: wavplay1.elf
 
+app_graph1.elf: app_graph1.o
 audiotest1.elf: audiotest1.o misc.o sdcard.o
 eepromtest1.elf: eepromtest1.o misc.o sdcard.o
 jtagtest1.elf: jtagtest1.o sdcard.o
-karaoke1.elf: karaoke1.o misc.o sdcard.o mymidi.o
+app_karaoke1.elf: app_karaoke1.o misc.o sdcard.o mymidi.o
 kbtest1.elf: kbtest1.o misc.o sdcard.o
 kbtest2.elf: kbtest2.o misc.o sdcard.o
 md5test1.elf: md5test1.o misc.o sdcard.o
 mytest1.elf: mytest1.o misc.o sdcard.o
-ofm1.elf: ofm1.o misc.o sdcard.o
+app_ofm1.elf: app_ofm1.o misc.o sdcard.o
 piano1.elf: piano1.o misc.o sdcard.o
 primes1.elf: primes1.o misc.o sdcard.o
 #sdaudio2.elf: sdaudio2.o AUDIO.o LCD.o WaveLib.o misc.o LED.o debug.o sd_lib.o sd_hal.o sd_protocol.o crc7.o crc16.o
 sdcardtest1.elf: sdcardtest1.o misc.o sdcard.o
 sdcardtest2.elf: sdcardtest2.o misc.o sdcard.o
 sdcardtest3.elf: sdcardtest3.o misc.o sdcard.o
-test1.elf: test1.o misc.o sdcard.o
+app_test1.elf: app_test1.o misc.o sdcard.o
 vgatest1.elf: vgatest1.o misc.o sdcard.o
 vgatest2.elf: vgatest2.o vgascreen.o sdcard.o
 wavplay1.elf: wavplay1.o misc.o sdcard.o
 
+app_graph1.o: app_graph1.cpp
 AUDIO.o: AUDIO.cpp AUDIO.h
 audiotest1.o: audiotest1.cpp
 crc16.o: crc16.cpp
@@ -95,7 +98,7 @@ eepromtest1.o: eepromtest1.cpp
 FatFileSystem.o: FatFileSystem.cpp
 FatInternal.o: FatInternal.cpp
 jtagtest1.o: jtagtest1.cpp
-karaoke1.o: karaoke1.cpp mymidi.h misc.h sdcard.h
+app_karaoke1.o: app_karaoke1.cpp mymidi.h misc.h sdcard.h
 kbtest1.o: kbtest1.cpp misc.h
 kbtest2.o: kbtest2.cpp
 LCD.o: LCD.cpp LCD.h
@@ -105,7 +108,7 @@ md5test1.o: md5test1.cpp
 misc.o: misc.cpp misc.h
 mymidi.o: mymidi.cpp mymidi.h misc.h
 mytest1.o: mytest1.cpp misc.h
-ofm1.o: ofm1.cpp
+app_ofm1.o: app_ofm1.cpp
 piano1.o: piano1.cpp
 primes1.o: primes1.cpp
 ps2.o: ps2.cpp
@@ -118,7 +121,7 @@ sdcardtest3.o: sdcardtest3.cpp
 #sd_lib.o: sd_lib.cpp
 #sd_protocol.o: sd_protocol.cpp
 SEG7.o: SEG7.cpp
-test1.o: test1.cpp misc.h
+app_test1.o: app_test1.cpp misc.h
 vgascreen.o: vgascreen.cpp
 vgatest1.o: vgatest1.cpp
 vgatest2.o: vgatest2.cpp

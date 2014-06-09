@@ -300,6 +300,11 @@ class Obese
 public:
 };
 
+class PixelBuffer
+{
+public:
+};
+
 class VGA
 {
 private:
