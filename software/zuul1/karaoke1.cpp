@@ -100,10 +100,11 @@ void Karaoke1::init()
     
     //if (pbd)
     //    vgaTerminal->puts("OK\r\n");
-    
-    volatile uint32_t *pixels = (volatile uint32_t *)VIDEO_PIXEL_BUFFER_DMA_0_BASE;
-    pixels[0] = 0;
-    pixels[1] = 700;
+ 
+    volatile uint32_t * const pixels = (volatile uint32_t * const)SRAM_BASE;
+
+    for (int i = 0; i < 10000; i++)
+        pixels[i] = 0;
     
 }
 
