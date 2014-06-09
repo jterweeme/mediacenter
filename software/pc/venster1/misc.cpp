@@ -1,7 +1,7 @@
 #include <Windows.h>
 #include "misc.h"
 
-WinClass::WinClass(WNDPROC wp, const wchar_t *className, HINSTANCE hinst)
+WinClassEx::WinClassEx(WNDPROC wp, const wchar_t *className, HINSTANCE hinst)
 {
 	this->className = className;
 	this->hinst = hinst;
@@ -11,20 +11,22 @@ WinClass::WinClass(WNDPROC wp, const wchar_t *className, HINSTANCE hinst)
 	wclass.cbWndExtra = 0;
 	wclass.hInstance = hinst;
 	wclass.hIcon = 0;
+    wclass.hIconSm = 0;
+    wclass.cbSize = sizeof(wclass);
 	wclass.hCursor = ::LoadCursor(0, IDC_ARROW);
 	wclass.lpszClassName = className;
 	wclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wclass.lpszMenuName = 0;
 }
 
-GenericWindow::GenericWindow(WinClass *wclass)
+GenericWindow::GenericWindow(WinClassEx *wclass, const wchar_t *caption)
 {
 	this->wclass = wclass;
 
-	hwnd = ::CreateWindow(
+    handle = ::CreateWindowEx(WS_EX_APPWINDOW,
 		wclass->getClassName(),
-		L"Generic Window",
-		WS_OVERLAPPEDWINDOW,
+		caption,
+		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
 		CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, 0, 0, wclass->getHinst(), 0);
 }
 
@@ -46,8 +48,8 @@ void FileBrowser::browse()
 
 void GenericWindow::Show(int cmdShow)
 {
-	::ShowWindow(hwnd, cmdShow);
-	::UpdateWindow(hwnd);
+	::ShowWindow(handle, cmdShow);
+	::UpdateWindow(handle);
 }
 
 

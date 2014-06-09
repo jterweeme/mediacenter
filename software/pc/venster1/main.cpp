@@ -1,22 +1,46 @@
 #include <Windows.h>
 #include <stdint.h>
 #include <iostream>
+#include <CommCtrl.h>
 #include "resource.h"
 #include "misc.h"
 
-class MyWinClass : public WinClass
+HINSTANCE g_hInst; // tijdelijke oplossing
+
+class MyWinClass : public WinClassEx
 {
 public:
-	MyWinClass(WNDPROC wp, HINSTANCE hinst) : WinClass(wp, L"dinges", hinst)
+	MyWinClass(WNDPROC wp, HINSTANCE hinst) : WinClassEx(wp, L"dinges", hinst)
 	{
 		wclass.lpszMenuName = MAKEINTRESOURCE(IDR_MENU1);
 	}
 };
 
+class MDIClientWinClass : public WinClassEx
+{
+public:
+    MDIClientWinClass(WNDPROC wp, HINSTANCE hinst) : WinClassEx(wp, L"MDI", hinst) { }
+};
+
 class MainWindow : public GenericWindow
 {
 public:
-	MainWindow(WinClass *wclass) : GenericWindow(wclass) { }
+	MainWindow(WinClassEx *wclass) : GenericWindow(wclass, L"Venster1") { }
+};
+
+class StatusBar : public WindowHandle
+{
+public:
+    StatusBar(HWND parent)
+    {
+        handle = ::CreateWindowEx(0, STATUSCLASSNAME, 0, CHILD | VIS | SBARS_SIZEGRIP, 0, 0, 0, 0, parent, 0, g_hInst, 0);
+    }
+};
+
+class ToolBar
+{
+public:
+    ToolBar() { }
 };
 
 class MainClass
@@ -26,6 +50,8 @@ private:
 	static MainClass *instance;
 	static LRESULT CALLBACK WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l);
 	FileBrowser *fb;
+    StatusBar *sb;
+    MDIClient *mdic;
 public:
 	int mainLoop();
 	static MainClass *getInstance(HINSTANCE h, int m);
@@ -38,6 +64,7 @@ class MyMenuBar : public MenuBar
 public:
 	static const uint16_t FILE_OPEN = ID_FILE_OPEN;
 	static const uint16_t FILE_EXIT = ID_FILE_EXIT;
+    static const uint16_t HELP_ABOUT = ID_HELP_ABOUT;
 };
 
 MainClass *MainClass::getInstance(HINSTANCE h, int m)
@@ -87,6 +114,11 @@ LRESULT CALLBACK MainClass::control(HWND h, unsigned int msg, WPARAM w, LPARAM l
 {
 	switch (msg)
 	{
+    case Message::CREATE:
+        mdic = new MDIClient(new MDIClientWinClass(0, g_hInst), h);
+        mdic->show();
+        sb = new StatusBar(h);
+        break;
 	case Message::COMMAND:
 		switch (w)
 		{
@@ -96,8 +128,14 @@ LRESULT CALLBACK MainClass::control(HWND h, unsigned int msg, WPARAM w, LPARAM l
 		case MyMenuBar::FILE_EXIT:
 			::SendMessage(h, Message::CLOSE, 0, 0);
 			break;
+        case MyMenuBar::HELP_ABOUT:
+            ::MessageBox(h, L"Venster1\ndoorJasper ter Weeme", L"About", 0);
+            break;
 		}
 		break;
+    case Message::SIZE:
+        ::SendMessage(sb->getHandle(), Message::SIZE, 0, 0);
+        break;
 	case Message::DESTROY:
 		::PostQuitMessage(0);
 		return 0;
@@ -115,6 +153,8 @@ MainClass::WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l)
 int WINAPI 
 WinMain(HINSTANCE h, HINSTANCE p, char *c, int m)
 {
+    g_hInst = h;
+    ::InitCommonControls();
 	MainClass *mc = MainClass::getInstance(h, m);
 	return mc->mainLoop();
 }

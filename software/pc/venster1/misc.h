@@ -8,18 +8,31 @@ class Message
 public:
 	static const uint16_t CLOSE = WM_CLOSE;
 	static const uint16_t COMMAND = WM_COMMAND;
+    static const uint16_t CREATE = WM_CREATE;
 	static const uint16_t DESTROY = WM_DESTROY;
+    static const uint16_t SIZE = WM_SIZE;
 };
 
-class WinClass
+class WindowHandle
 {
 protected:
-	WNDCLASS wclass;
+    HWND handle;
+public:
+    HWND getHandle() { return handle; }
+
+    static const uint32_t VIS = WS_VISIBLE;
+    static const uint32_t CHILD = WS_CHILD;
+};
+
+class WinClassEx
+{
+protected:
+	WNDCLASSEX wclass;
 	const wchar_t *className;
 	HINSTANCE hinst;
 public:
-	WinClass(WNDPROC wp, const wchar_t *className, HINSTANCE hinst);
-	void registerClass() { ::RegisterClass(&wclass); }
+	WinClassEx(WNDPROC wp, const wchar_t *className, HINSTANCE hinst);
+	void registerClass() { ::RegisterClassEx(&wclass); }
 	const wchar_t *getClassName() { return className; }
 	HINSTANCE getHinst() { return hinst; }
 };
@@ -33,16 +46,29 @@ public:
 	void setMenu(HWND hwnd) { ::SetMenu(hwnd, menu); }
 };
 
-class GenericWindow
+class GenericWindow : public WindowHandle
 {
 protected:
-	HWND hwnd;
-	WinClass *wclass;
+	WinClassEx *wclass;
 public:
-	GenericWindow(WinClass *wclass);
+    GenericWindow(WinClassEx *wclass, const wchar_t *caption);
+    GenericWindow(WinClassEx *wclass) : GenericWindow(wclass, L"Generic Window") { }
 	void Show(int cmdShow);
-	void setMenuBar(MenuBar &menuBar) { menuBar.setMenu(hwnd); }
-	HWND getHandle() { return hwnd; }
+	void setMenuBar(MenuBar &menuBar) { menuBar.setMenu(handle); }
+};
+
+class MDIClient : public WindowHandle
+{
+public:
+    MDIClient(WinClassEx *wclass, HWND parent)
+    {
+        handle = ::CreateWindowEx(WS_EX_CLIENTEDGE, wclass->getClassName(),
+            NULL, CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL,
+            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+            parent, 0, wclass->getHinst(), NULL);
+    }
+
+    void show() { ::ShowWindow(handle, SW_SHOW); }
 };
 
 class FileBrowser
