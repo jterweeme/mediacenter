@@ -50,18 +50,48 @@ public:
 class Event
 {
 public:
+    uint8_t eventID;
     Event() { }
-    virtual std::string toString() { return "Unknown Event"; }
+    Event(uint8_t id) : eventID(id) { }
+
+    virtual std::string toString()
+    {
+        std::ostringstream ss;
+        ss << "Unknown Event (0x" << std::hex << std::setw(2);
+        ss << std::setfill('0') << (int)eventID << ")";
+        return ss.str();
+    }
+};
+
+class ProgramChange : public Event
+{
+public:
+    static const uint8_t ID = 0x12;
+    std::string toString() { return "ProgramChange Event"; }
+};
+
+class ChannelAftertouch : public Event
+{
+public:
+    static const uint8_t ID = 0x13;
+    std::string toString() { return "ChannelAftertouch"; }
 };
 
 class MetaEvent : public Event
 {
 public:
-    uint8_t id;
+    uint8_t metaTypeID;
     MetaEvent() { }
-    MetaEvent(uint8_t id) : id(id) { }
+    MetaEvent(uint8_t id) : metaTypeID(id) { }
     static const uint8_t ID = 0xff;
-    virtual std::string toString() { return "Unknown MetaEvent"; }
+
+    virtual std::string toString()
+    {
+        std::ostringstream ss;
+        ss << "Unknown MetaEvent (0x" << std::hex;
+        ss << std::setw(2) << std::setfill('0') << (int)metaTypeID << ")";
+        return ss.str();
+    }
 };
 
 class EventVector : public std::vector<Event *>
@@ -93,6 +123,20 @@ class TimeSignature : public MetaEvent
 public:
     static const uint8_t ID = 0x58;
     std::string toString() { return "Time Signature"; }
+};
+
+class LyricsEvent : public MetaEvent
+{
+public:
+    static const uint8_t ID = 5;
+    std::string toString() { return "Lyrics Event"; }
+};
+
+class MarkerEvent : public MetaEvent
+{
+public:
+    static const uint8_t ID = 6;
+    std::string toString() { return "Marker Event"; }
 };
 
 class KeySignature : public MetaEvent
@@ -207,19 +251,18 @@ std::string EventVector::toString()
 
 void CTrack::parse()
 {
-    uint8_t *buffer = new uint8_t[getChunkSize()];
-    uint8_t bufferSize = 0;
-
     for (size_t i = 0; i < getChunkSize(); i++)
     {
-        buffer[i] = data[i];
-        bufferSize++;
-
-        if (data[i] == MetaEvent::ID)
+        switch (uint8_t eventID = data[i])
         {
-            uint8_t metaID = data[++i];
-
-            switch (metaID)
+        case 0:
+            continue;
+        case ProgramChange::ID:
+            events.push_back(new ProgramChange());
+            break;
+        case MetaEvent::ID:
+        {
+            switch (uint8_t metaID = data[++i])
             {
             case TextEvent::ID:
             {
@@ -237,18 +280,32 @@ void CTrack::parse()
                 break;
             case TimeSignature::ID:
                 events.push_back(new TimeSignature());
+                i += 5;
                 break;
             case KeySignature::ID:
                 events.push_back(new KeySignature());
+                i += 3;
                 break;
             case SetTempo::ID:
                 events.push_back(new SetTempo());
+                i += 4;
+                break;
+            case MarkerEvent::ID:
+                events.push_back(new MarkerEvent());
+                break;
+            case LyricsEvent::ID:
+                events.push_back(new LyricsEvent());
                 break;
             default:
                 Event *e = new MetaEvent(metaID);
                 events.push_back(e);
                 break;
             }
+        }
+            break;
+        default:
+            events.push_back(new Event(eventID));
+            break;
         }
     }
 }
