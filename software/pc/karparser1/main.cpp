@@ -157,8 +157,12 @@ public:
 
 class Options
 {
+private:
+    int track;
 public:
     Options() { }
+    int getTrack() { return track; }
+    int parse(int argc, char **argv);
 };
 
 std::string TextEvent::toString()
@@ -340,8 +344,16 @@ std::string CTrack::lyrics()
     return ss.str();
 }
 
+int Options::parse(int argc, char **argv)
+{
+    
+    return 0;
+}
+
 int KarParser1::run(int argc, char **argv)
 {
+    Options options;
+    options.parse(argc, argv);
     KarFile karFile;
     karFile.read(std::cin);
     //karFile.dump();
