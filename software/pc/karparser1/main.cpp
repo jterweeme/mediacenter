@@ -120,9 +120,12 @@ private:
     uint32_t chunkIDBE;
     uint32_t chunkSizeBE;
     uint8_t *data;
+    unsigned int trackNumber;
     EventVector events;
     static const uint8_t META_TAG = 0xff;
 public:
+    CTrack() : trackNumber(0xffff) { }
+    CTrack(unsigned int n) : trackNumber(n) { }
     void read(std::istream &iStream);
     std::string toString();
     size_t getChunkSize() { return ::Utility::be_32_toh(chunkSizeBE); }
@@ -139,6 +142,7 @@ private:
  public:
     void read(std::istream &iStream);
     void dump();
+    CHeader *getHeader() { return &header; }
 
     CTrack getTrack(unsigned int n)
     {
@@ -159,9 +163,13 @@ class Options
 {
 private:
     int track;
+    bool help;
+    bool header;
 public:
-    Options() { }
+    Options() : track(0), help(false), header(false) { }
     int getTrack() { return track; }
+    bool getHelp() { return help; }
+    bool getHeader() { return header; }
     int parse(int argc, char **argv);
 };
 
@@ -175,10 +183,11 @@ std::string TextEvent::toString()
 std::string EventVector::toString()
 {
     std::ostringstream ss;
-    ss << "Aantal: " << size() << std::endl;
+    ss << "Events: " << size() << std::endl;
+    int i = 0;
     
     for (std::vector<Event *>::iterator it = begin(); it != end(); ++it)
-        ss << (*it)->toString() << std::endl;
+        ss << ++i << ": " << (*it)->toString() << std::endl;
 
     return ss.str();
 }
@@ -264,8 +273,8 @@ uint32_t Utility::be_32_toh(uint32_t x)
 
 std::string CTrack::toString()
 {
-    std::stringstream ss;
-    ss << "[Track]" << std::endl;
+    std::ostringstream ss;
+    ss << "[Track " << trackNumber << "]" << std::endl;
     ss << "Signature: 0x" << std::hex << Utility::be_32_toh(chunkIDBE) << std::endl;
     ss << "Chunk Size: " << std::dec << Utility::be_32_toh(chunkSizeBE) << std::endl << std::endl;
     ss << events.toString();
@@ -291,7 +300,7 @@ void KarFile::read(std::istream &iStream)
     // read all tracks
     for (int i = 0; i < header.getTrackCount(); i++)
     {
-        CTrack currentTrack;
+        CTrack currentTrack(i);
         currentTrack.read(iStream);
         tracks.push_back(currentTrack);
     }
@@ -346,7 +355,28 @@ std::string CTrack::lyrics()
 
 int Options::parse(int argc, char **argv)
 {
-    
+    for (int i = 0; i < argc; i++)
+    {
+        char *opt = argv[i];
+        
+        if (opt[0] == '-')
+        {
+            switch (opt[1])
+            {
+            case 'h':
+            case '?':
+                help = true;
+                break;
+            case 't':
+                track = atoi(argv[++i]);
+                break;
+            case 'H':
+                header = true;
+                break;
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -354,14 +384,22 @@ int KarParser1::run(int argc, char **argv)
 {
     Options options;
     options.parse(argc, argv);
+
+    if (options.getHelp())
+    {
+        std::cerr << "Usage: " << std::endl;
+        return 0;
+    }
+
     KarFile karFile;
     karFile.read(std::cin);
-    //karFile.dump();
-    std::string argv1 = std::string(argv[1]);
+
+    if (options.getHeader())
+        std::cout << karFile.getHeader()->toString() << std::endl << std::endl;
 
     try
     {
-        CTrack track = karFile.getTrack(atoi(argv[1]));
+        CTrack track = karFile.getTrack(options.getTrack());
         track.parse();
         std::cout << track.toString() << std::endl;
     }
