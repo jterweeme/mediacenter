@@ -157,6 +157,7 @@ class KarParser1
 {
 public:
     int run(int argc, char **argv);
+    std::string help();
 };
 
 class Options
@@ -165,11 +166,15 @@ private:
     int track;
     bool help;
     bool header;
+    bool lyrics;
+    bool events;
 public:
-    Options() : track(0), help(false), header(false) { }
+    Options() : track(0), help(false), header(false), lyrics(false), events(false) { }
     int getTrack() { return track; }
     bool getHelp() { return help; }
     bool getHeader() { return header; }
+    bool getLyrics() { return lyrics; }
+    bool getEvents() { return events; }
     int parse(int argc, char **argv);
 };
 
@@ -348,13 +353,56 @@ std::string CTrack::lyrics()
         TextEvent *te = dynamic_cast<TextEvent *>(*it);
         
         if (te)
-            ss << te->text;
+        {
+            for (size_t i = 0; i < te->length; i++)
+            {
+                char c = te->text[i];
+                
+                switch (c)
+                {
+                case '@':   // sla dit over voor nu
+                    i = te->length;
+                    break;
+                case '/':   // line break
+                    ss << std::endl;
+                    break;
+                case '\\':  // paragraph break
+                    ss << std::endl << std::endl;
+                    break;
+                default:
+                    ss << te->text[i];
+                    break;
+                }
+            }
+        }
     }
     return ss.str();
 }
 
+std::string KarParser1::help()
+{
+    std::string s;
+    s += "Usage: karparser [OPTIONS]\r\n";
+    s += "\r\n";
+    s += "Example: ";
+    s += "  karparser -t 2 -l < song.kar\r\n";
+    s += "\r\n";
+    s += "  -t          Select track\r\n";
+    s += "  -l          Show lyrics\r\n";
+    s += "  -e          List events\r\n";
+    s += "  -h, -?      This help\r\n";
+    s += "  -H          Show header\r\n";
+    return s;
+}
+
 int Options::parse(int argc, char **argv)
 {
+    if (argc <= 1)
+    {
+        help = true;
+        return -1;
+    }
+
     for (int i = 0; i < argc; i++)
     {
         char *opt = argv[i];
@@ -366,13 +414,22 @@ int Options::parse(int argc, char **argv)
             case 'h':
             case '?':
                 help = true;
-                break;
+                return 1;       // rest van opties maken nu niet meer uit
             case 't':
                 track = atoi(argv[++i]);
                 break;
             case 'H':
                 header = true;
                 break;
+            case 'l':
+                lyrics = true;
+                break;
+            case 'e':
+                events = true;
+                break;
+            default:
+                help = true;    // rest van opties maken nu niet meer uit
+                return -1;
             }
         }
     }
@@ -387,7 +444,7 @@ int KarParser1::run(int argc, char **argv)
 
     if (options.getHelp())
     {
-        std::cerr << "Usage: " << std::endl;
+        std::cerr << help() << std::endl;
         return 0;
     }
 
@@ -401,7 +458,12 @@ int KarParser1::run(int argc, char **argv)
     {
         CTrack track = karFile.getTrack(options.getTrack());
         track.parse();
-        std::cout << track.toString() << std::endl;
+
+        if (options.getEvents())
+            std::cout << track.toString() << std::endl;
+
+        if (options.getLyrics())
+            std::cout << track.lyrics() << std::endl;
     }
     catch (MyException *e)
     {
@@ -412,11 +474,8 @@ int KarParser1::run(int argc, char **argv)
         std::cerr << "Unkown error" << std::endl;
     }
 
-    //std::cout << track.lyrics() << std::endl;
-    
     //uint8_t *track4data = track4.getRawData();
     //Utility::hex(track4data, track4.getChunkSize());
-    //std::cout << std::endl;
     return 0;
 }
 
