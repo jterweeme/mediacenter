@@ -1,6 +1,7 @@
 #include <system.h>
 #include "misc.h"
 #include "mymidi.h"
+#include <math.h>
 #include <altera_up_avalon_video_pixel_buffer_dma.h>
 
 class Karaoke1
@@ -102,9 +103,22 @@ void Karaoke1::init()
     //    vgaTerminal->puts("OK\r\n");
  
     volatile uint32_t * const pixels = (volatile uint32_t * const)SRAM_BASE;
+    volatile uint8_t * const pixels8 = (volatile uint8_t * const)SRAM_BASE;
 
-    for (int i = 0; i < 10000; i++)
-        pixels[i] = 0;
+//    for (int i = 0; i < 239000; i++)
+//        pixels[i] = 0;
+
+    vgaTerminal->clear();
+
+    for (int i = 0; i < 1280*768; i++)
+        pixels8[i] = 0x30;
+
+    for (int x = 0; x < 680; x++)
+    {
+        const int offset = 1270; //500*1279; //= 500*1280;
+        pixels8[offset + x] = 0xff;
+    }
+    int x = sin(100);
     
 }
 

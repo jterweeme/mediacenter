@@ -29,6 +29,16 @@ struct Header
     uint16_t timeDivision;
 } PACKED;
 
+class MyException
+{
+private:
+    const char *msg;
+public:
+    MyException() { }
+    MyException(const char *msg) : msg(msg) { }
+    const char *toString() { return msg; }
+};
+
 class Utility
 {
 public:
@@ -40,10 +50,50 @@ public:
 class Event
 {
 public:
-    uint8_t id;
+    uint8_t eventID;
     Event() { }
-    Event(uint8_t id) : id(id) { }
-    virtual std::string toString() { return "Event"; }
+    Event(uint8_t id) : eventID(id) { }
+
+    virtual std::string toString()
+    {
+        std::ostringstream ss;
+        ss << "Unknown Event (0x" << std::hex << std::setw(2);
+        ss << std::setfill('0') << (int)eventID << ")";
+        return ss.str();
+    }
+};
+
+class ProgramChange : public Event
+{
+public:
+    static const uint8_t ID = 0x12;
+    std::string toString() { return "ProgramChange Event"; }
+};
+
+class ChannelAftertouch : public Event
+{
+public:
+    static const uint8_t ID = 0x13;
+    std::string toString() { return "ChannelAftertouch"; }
+};
+
+class MetaEvent : public Event
+{
+public:
+    uint8_t metaTypeID;
+    size_t length;
+    MetaEvent() { }
+    MetaEvent(uint8_t id) : metaTypeID(id) { }
+    MetaEvent(uint8_t id, size_t length) : metaTypeID(id), length(length) { }
+    static const uint8_t ID = 0xff;
+
+    virtual std::string toString()
+    {
+        std::ostringstream ss;
+        ss << "Unknown MetaEvent (0x" << std::hex;
+        ss << std::setw(2) << std::setfill('0') << (int)metaTypeID << ")";
+        return ss.str();
+    }
 };
 
 class EventVector : public std::vector<Event *>
@@ -52,39 +102,53 @@ public:
     std::string toString();
 };
 
-class TextEvent : public Event
+class TextEvent : public MetaEvent
 {
 public:
-    size_t length;
     static const uint8_t ID = 1;
     char *text;
-    TextEvent() { }
-    TextEvent(size_t length) : Event(ID), length(length) { text = new char[length + 1]; }
+    TextEvent(size_t length) : MetaEvent(ID, length) { text = new char[length + 1]; }
     std::string toString();
 };
 
-class CopyrightNoticeEvent : public Event
+class CopyrightNoticeEvent : public MetaEvent
 {
 public:
     static const uint8_t ID = 2;
     std::string toString() { return "Copyright Notice"; }
 };
 
-class TimeSignature : public Event
+class TimeSignature : public MetaEvent
 {
 public:
     static const uint8_t ID = 0x58;
     std::string toString() { return "Time Signature"; }
 };
 
-class KeySignature : public Event
+class LyricsEvent : public MetaEvent
+{
+public:
+    static const uint8_t ID = 5;
+    std::string toString() { return "Lyrics Event"; }
+};
+
+class MarkerEvent : public MetaEvent
+{
+public:
+    static const uint8_t ID = 6;
+    std::string toString() { return "Marker Event"; }
+    MarkerEvent(size_t length) : MetaEvent(ID, length) { }
+};
+
+class KeySignature : public MetaEvent
 {
 public:
     static const uint8_t ID = 0x59;
     std::string toString() { return "Key Signature"; }
+    KeySignature(size_t length) : MetaEvent(ID, length) { }
 };
 
-class SetTempo : public Event
+class SetTempo : public MetaEvent
 {
 public:
     static const uint8_t ID = 0x51;
@@ -110,9 +174,12 @@ private:
     uint32_t chunkIDBE;
     uint32_t chunkSizeBE;
     uint8_t *data;
+    unsigned int trackNumber;
     EventVector events;
     static const uint8_t META_TAG = 0xff;
 public:
+    CTrack() : trackNumber(0xffff) { }
+    CTrack(unsigned int n) : trackNumber(n) { }
     void read(std::istream &iStream);
     std::string toString();
     size_t getChunkSize() { return ::Utility::be_32_toh(chunkSizeBE); }
@@ -129,13 +196,40 @@ private:
  public:
     void read(std::istream &iStream);
     void dump();
-    CTrack getTrack(int n) { return tracks[n]; }
+    CHeader *getHeader() { return &header; }
+
+    CTrack getTrack(unsigned int n)
+    {
+        if (n >= tracks.size())
+            throw new MyException("Track is er niet!");
+
+        return tracks[n];
+    }
 };
 
 class KarParser1
 {
 public:
     int run(int argc, char **argv);
+    std::string help();
+};
+
+class Options
+{
+private:
+    int track;
+    bool help;
+    bool header;
+    bool lyrics;
+    bool events;
+public:
+    Options() : track(0), help(false), header(false), lyrics(false), events(false) { }
+    int getTrack() { return track; }
+    bool getHelp() { return help; }
+    bool getHeader() { return header; }
+    bool getLyrics() { return lyrics; }
+    bool getEvents() { return events; }
+    int parse(int argc, char **argv);
 };
 
 std::string TextEvent::toString()
@@ -148,29 +242,29 @@ std::string TextEvent::toString()
 std::string EventVector::toString()
 {
     std::ostringstream ss;
-    ss << "Aantal: " << size() << std::endl;
+    ss << "Events: " << size() << std::endl;
+    int i = 0;
     
     for (std::vector<Event *>::iterator it = begin(); it != end(); ++it)
-        ss << (*it)->toString() << std::endl;
+        ss << ++i << ": " << (*it)->toString() << std::endl;
 
     return ss.str();
 }
 
 void CTrack::parse()
 {
-    uint8_t *buffer = new uint8_t[getChunkSize()];
-    uint8_t bufferSize = 0;
-
     for (size_t i = 0; i < getChunkSize(); i++)
     {
-        buffer[i] = data[i];
-        bufferSize++;
-
-        if (data[i] == META_TAG)
+        switch (uint8_t eventID = data[i])
         {
-            uint8_t metaID = data[++i];
-
-            switch (metaID)
+        case 0:
+            continue;
+        case ProgramChange::ID:
+            events.push_back(new ProgramChange());
+            break;
+        case MetaEvent::ID:
+        {
+            switch (uint8_t metaID = data[++i])
             {
             case TextEvent::ID:
             {
@@ -188,18 +282,39 @@ void CTrack::parse()
                 break;
             case TimeSignature::ID:
                 events.push_back(new TimeSignature());
+                i += 5;
                 break;
             case KeySignature::ID:
-                events.push_back(new KeySignature());
+            {
+                size_t length = data[++i];
+                events.push_back(new KeySignature(length));
+                i += length;
+            }
                 break;
             case SetTempo::ID:
                 events.push_back(new SetTempo());
+                i += 4;
+                break;
+            case MarkerEvent::ID:
+            {
+                size_t length = data[++i];
+                events.push_back(new MarkerEvent(length));
+                i += length;
+            }
+                break;
+            case LyricsEvent::ID:
+                events.push_back(new LyricsEvent());
                 break;
             default:
-                Event *e = new Event(metaID);
+                Event *e = new MetaEvent(metaID);
                 events.push_back(e);
                 break;
             }
+        }
+            break;
+        default:
+            events.push_back(new Event(eventID));
+            break;
         }
     }
 }
@@ -237,8 +352,8 @@ uint32_t Utility::be_32_toh(uint32_t x)
 
 std::string CTrack::toString()
 {
-    std::stringstream ss;
-    ss << "[Track]" << std::endl;
+    std::ostringstream ss;
+    ss << "[Track " << trackNumber << "]" << std::endl;
     ss << "Signature: 0x" << std::hex << Utility::be_32_toh(chunkIDBE) << std::endl;
     ss << "Chunk Size: " << std::dec << Utility::be_32_toh(chunkSizeBE) << std::endl << std::endl;
     ss << events.toString();
@@ -264,7 +379,7 @@ void KarFile::read(std::istream &iStream)
     // read all tracks
     for (int i = 0; i < header.getTrackCount(); i++)
     {
-        CTrack currentTrack;
+        CTrack currentTrack(i);
         currentTrack.read(iStream);
         tracks.push_back(currentTrack);
     }
@@ -312,24 +427,129 @@ std::string CTrack::lyrics()
         TextEvent *te = dynamic_cast<TextEvent *>(*it);
         
         if (te)
-            ss << te->text;
+        {
+            for (size_t i = 0; i < te->length; i++)
+            {
+                char c = te->text[i];
+                
+                switch (c)
+                {
+                case '@':   // sla dit over voor nu
+                    i = te->length;
+                    break;
+                case '/':   // line break
+                    ss << std::endl;
+                    break;
+                case '\\':  // paragraph break
+                    ss << std::endl << std::endl;
+                    break;
+                default:
+                    ss << te->text[i];
+                    break;
+                }
+            }
+        }
     }
     return ss.str();
 }
 
+std::string KarParser1::help()
+{
+    std::string s;
+    s += "Usage: karparser [OPTIONS]\r\n";
+    s += "\r\n";
+    s += "Example: ";
+    s += "  karparser -t 2 -l < song.kar\r\n";
+    s += "\r\n";
+    s += "  -t          Select track\r\n";
+    s += "  -l          Show lyrics\r\n";
+    s += "  -e          List events\r\n";
+    s += "  -h, -?      This help\r\n";
+    s += "  -H          Show header\r\n";
+    return s;
+}
+
+int Options::parse(int argc, char **argv)
+{
+    if (argc <= 1)
+    {
+        help = true;
+        return -1;
+    }
+
+    for (int i = 0; i < argc; i++)
+    {
+        char *opt = argv[i];
+        
+        if (opt[0] == '-')
+        {
+            switch (opt[1])
+            {
+            case 'h':
+            case '?':
+                help = true;
+                return 1;       // rest van opties maken nu niet meer uit
+            case 't':
+                track = atoi(argv[++i]);
+                break;
+            case 'H':
+                header = true;
+                break;
+            case 'l':
+                lyrics = true;
+                break;
+            case 'e':
+                events = true;
+                break;
+            default:
+                help = true;    // rest van opties maken nu niet meer uit
+                return -1;
+            }
+        }
+    }
+
+    return 0;
+}
+
 int KarParser1::run(int argc, char **argv)
 {
+    Options options;
+    options.parse(argc, argv);
+
+    if (options.getHelp())
+    {
+        std::cerr << help() << std::endl;
+        return 0;
+    }
+
     KarFile karFile;
     karFile.read(std::cin);
-    //karFile.dump();
-    std::string argv1 = std::string(argv[1]);
-    CTrack track = karFile.getTrack(atoi(argv[1]));
-    track.parse();
-    //std::cout << track.lyrics() << std::endl;
-    std::cout << track.toString() << std::endl;
+
+    if (options.getHeader())
+        std::cout << karFile.getHeader()->toString() << std::endl << std::endl;
+
+    try
+    {
+        CTrack track = karFile.getTrack(options.getTrack());
+        track.parse();
+
+        if (options.getEvents())
+            std::cout << track.toString() << std::endl;
+
+        if (options.getLyrics())
+            std::cout << track.lyrics() << std::endl;
+    }
+    catch (MyException *e)
+    {
+        std::cerr << e->toString() << std::endl;
+    }
+    catch (...)
+    {
+        std::cerr << "Unkown error" << std::endl;
+    }
+
     //uint8_t *track4data = track4.getRawData();
     //Utility::hex(track4data, track4.getChunkSize());
-    //std::cout << std::endl;
     return 0;
 }
 
