@@ -5,7 +5,7 @@ WinClassEx::WinClassEx(WNDPROC wp, const wchar_t *className, HINSTANCE hinst)
 {
 	this->className = className;
 	this->hinst = hinst;
-	wclass.style = 0;
+	wclass.style = CS_HREDRAW | CS_VREDRAW;
 	wclass.lpfnWndProc = wp;
 	wclass.cbClsExtra = 0;
 	wclass.cbWndExtra = 0;
@@ -15,7 +15,7 @@ WinClassEx::WinClassEx(WNDPROC wp, const wchar_t *className, HINSTANCE hinst)
     wclass.cbSize = sizeof(wclass);
 	wclass.hCursor = ::LoadCursor(0, IDC_ARROW);
 	wclass.lpszClassName = className;
-	wclass.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+    wclass.hbrBackground = (HBRUSH)(COLOR_3DSHADOW + 1);
 	wclass.lpszMenuName = 0;
 }
 
