@@ -191,7 +191,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -256,27 +256,27 @@
          type = "String";
       }
    }
-   element itoetsenbord.s1
+   element ledr.s1
    {
       datum baseAddress
       {
-         value = "136328532";
+         value = "136328384";
          type = "String";
       }
    }
-   element timer_0.s1
+   element sw.s1
    {
       datum baseAddress
       {
-         value = "136328256";
+         value = "136328400";
          type = "String";
       }
    }
-   element snd_i2c_sda.s1
+   element eep_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "136328448";
+         value = "136328464";
          type = "String";
       }
    }
@@ -290,46 +290,6 @@
       datum baseAddress
       {
          value = "0";
-         type = "String";
-      }
-   }
-   element va.s1
-   {
-      datum baseAddress
-      {
-         value = "136328496";
-         type = "String";
-      }
-   }
-   element sw.s1
-   {
-      datum baseAddress
-      {
-         value = "136328400";
-         type = "String";
-      }
-   }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328480";
-         type = "String";
-      }
-   }
-   element eep_i2c_sda.s1
-   {
-      datum baseAddress
-      {
-         value = "136328464";
-         type = "String";
-      }
-   }
-   element ledr.s1
-   {
-      datum baseAddress
-      {
-         value = "136328384";
          type = "String";
       }
    }
@@ -349,11 +309,11 @@
          type = "String";
       }
    }
-   element snd_i2c_scl.s1
+   element snd_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "136328432";
+         value = "136328448";
          type = "String";
       }
    }
@@ -362,6 +322,46 @@
       datum baseAddress
       {
          value = "136328320";
+         type = "String";
+      }
+   }
+   element va.s1
+   {
+      datum baseAddress
+      {
+         value = "136328496";
+         type = "String";
+      }
+   }
+   element timer_0.s1
+   {
+      datum baseAddress
+      {
+         value = "136328256";
+         type = "String";
+      }
+   }
+   element itoetsenbord.s1
+   {
+      datum baseAddress
+      {
+         value = "136328532";
+         type = "String";
+      }
+   }
+   element snd_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328432";
+         type = "String";
+      }
+   }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328480";
          type = "String";
       }
    }
@@ -414,7 +414,7 @@
       }
       datum sopceditor_expanded
       {
-         value = "0";
+         value = "1";
          type = "boolean";
       }
    }
@@ -521,7 +521,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1402272231444" />
+ <parameter name="timeStamp" value="1402443663949" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -1136,7 +1136,6 @@
    version="13.0"
    start="upclocks.sys_clk"
    end="jtag_uart_0.clk" />
- <connection kind="clock" version="13.0" start="upclocks.sys_clk" end="uart.clk" />
  <connection
    kind="avalon"
    version="13.0"
@@ -1652,6 +1651,7 @@
   <parameter name="baseAddress" value="0x08000000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection kind="clock" version="13.0" start="upclocks.sys_clk" end="uart.clk" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.maxAdditionalLatency" value="1" />
 </system>

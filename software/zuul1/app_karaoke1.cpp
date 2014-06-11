@@ -105,15 +105,18 @@ void Karaoke1::init()
     volatile uint32_t * const pixels = (volatile uint32_t * const)SRAM_BASE;
     volatile uint8_t * const pixels8 = (volatile uint8_t * const)SRAM_BASE;
 
-//    for (int i = 0; i < 239000; i++)
-//        pixels[i] = 0;
+    alt_up_pixel_buffer_dma_dev *pb;
+    pb = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
+ 
+    if (!pb)
+        throw "Dinges";
 
-    vgaTerminal->clear();
+    vgaTerminal->puts("Onzin");
 
     for (int i = 0; i < 1280*768; i++)
-        pixels8[i] = 0x30;
+        pixels8[i] = 0x40;
 
-    for (int x = 0; x < 680; x++)
+    for (int x = 0; x < 680*2; x++)
     {
         const int offset = 1270; //500*1279; //= 500*1280;
         pixels8[offset + x] = 0xff;

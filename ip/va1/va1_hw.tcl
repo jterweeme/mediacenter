@@ -14,10 +14,9 @@
 # 
 package require -exact qsys 13.1
 
+namespace eval Stack {set n 0}
 
-# 
-# module new_component
-# 
+
 set_module_property DESCRIPTION "va1"
 set_module_property NAME va1
 set_module_property GROUP "Jalex"
