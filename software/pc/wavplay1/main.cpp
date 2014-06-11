@@ -5,7 +5,14 @@
 #include <stdio.h>
 #include <stdint.h>
 #include <fstream>
+#include <iostream>
 #include <alsa/asoundlib.h>
+
+class MyStringBuilder
+{
+public:
+    std::string build(const char *, ...);
+};
 
 class SoundCard
 {
@@ -50,6 +57,12 @@ SoundCard::~SoundCard()
     ::snd_pcm_close(playback_handle);
 }
 
+std::string MyStringBuilder::build(const char *s, ...)
+{
+    // argumenten moeten nog geimplementeerd worden
+    return std::string(s);
+}
+
 MyFile::MyFile(FILE *fp)
 {
     this->fp = fp;
@@ -73,10 +86,11 @@ MyFile *MyFile::open(const char *fn, const int mode)
 void SoundCard::play(int *buf, size_t nread)
 {
     int err;
+    MyStringBuilder msb;
 
     if ((err = ::snd_pcm_writei(playback_handle, buf, nread)) != nread)
     {
-        ::fprintf(stderr, "write to audio interface failed (%s)\n", snd_strerror(err));
+        throw msb.build("write to audio interface failed (%s)", snd_strerror(err));
         ::snd_pcm_prepare(playback_handle);
     }
 }
@@ -85,26 +99,18 @@ void SoundCard::init(const char *card)
 {
     int err;
     unsigned int rate = 44100;
+    MyStringBuilder msb;
 
     if ((err = snd_pcm_open(&playback_handle, card, SND_PCM_STREAM_PLAYBACK, 0)) < 0)
-    {
-        ::fprintf(stderr, "cannot open audio device %s (%s)\n", card, snd_strerror (err));
-        ::exit(1);
-    }
+        throw msb.build("cannot open audio device %s (%s)\n", card, snd_strerror(err));
            
     if ((err = snd_pcm_hw_params_malloc(&hw_params)) < 0)
-    {
-        ::fprintf(stderr, "cannot allocate hardware parameter structure (%s)\n", snd_strerror(err));
-        ::exit(1);
-    }
+        throw msb.build("cannot allocate hardware parameter structure (%s)\n", snd_strerror(err));
                  
     if ((err = snd_pcm_hw_params_any (playback_handle, hw_params)) < 0)
-    {
-        ::fprintf(stderr, "cannot initialize hardware parameter structure (%s)\n", snd_strerror(err));
-        ::exit(1);
-    }
+        throw msb.build("cannot initialize hardware parameter structure (%s)\n", snd_strerror(err));
     
-    if ((err = snd_pcm_hw_params_set_access (playback_handle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0)
+    if ((err = snd_pcm_hw_params_set_access(playback_handle, hw_params, SND_PCM_ACCESS_RW_INTERLEAVED)) < 0)
     {
         ::fprintf(stderr, "cannot set access type (%s)\n", snd_strerror(err));
         ::exit(1);
