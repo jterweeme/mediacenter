@@ -53,19 +53,20 @@ protected:
 public:
     GenericWindow(WinClassEx *wclass, const wchar_t *caption);
     GenericWindow(WinClassEx *wclass) : GenericWindow(wclass, L"Generic Window") { }
-	void Show(int cmdShow);
+	void show(int cmdShow);
+    void update() { ::UpdateWindow(handle); }
 	void setMenuBar(MenuBar &menuBar) { menuBar.setMenu(handle); }
 };
 
 class MDIClient : public WindowHandle
 {
 public:
-    MDIClient(WinClassEx *wclass, HWND parent)
+    MDIClient(WinClassEx *wclass, HWND parent, CLIENTCREATESTRUCT &css)
     {
         handle = ::CreateWindowEx(WS_EX_CLIENTEDGE, wclass->getClassName(),
             NULL, CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL,
             CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-            parent, 0, wclass->getHinst(), NULL);
+            parent, 0, wclass->getHinst(), (LPVOID)&css);
     }
 
     void show() { ::ShowWindow(handle, SW_SHOW); }

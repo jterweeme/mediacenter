@@ -46,7 +46,7 @@ void FileBrowser::browse()
 	::GetOpenFileName(&ofn);
 }
 
-void GenericWindow::Show(int cmdShow)
+void GenericWindow::show(int cmdShow)
 {
 	::ShowWindow(handle, cmdShow);
 	::UpdateWindow(handle);

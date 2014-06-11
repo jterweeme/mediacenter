@@ -8,20 +8,7 @@
 
 HINSTANCE g_hInst;
 
-static HWND mdicclienthandle;
-
-class MyMDIClient : public MDIClient
-{
-public:
-    MyMDIClient(WinClassEx *wclass, HWND parent) : MDIClient(wclass, parent)
-    {
-        ::mdicclienthandle = this->handle = ::CreateWindowEx(WS_EX_CLIENTEDGE, L"MDI",
-            NULL, CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL,
-            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
-            parent, 0, g_hInst, NULL);
-    }
-    void show() { ::ShowWindow(mdicclienthandle, SW_SHOW); }
-};
+static HWND mdic;
 
 class StatusBar : public WindowHandle
 {
@@ -50,14 +37,14 @@ ToolBar *tb1;
 class MainWindow : public GenericWindow
 {
 private:
+    FileBrowser *fb;
     MainWindow(WinClassEx *wclass) : GenericWindow(wclass, L"Venster1") { fb = new FileBrowser(*this); }
     static MainWindow *instance;
-    FileBrowser *fb;
     LRESULT CALLBACK control(HWND h, uint32_t msg, WPARAM w, LPARAM l);
     LRESULT CALLBACK MDIcontrol(HWND h, uint32_t msg, WPARAM w, LPARAM l);
     
 public:
-    static LRESULT CALLBACK WindowProcedure(HWND h, uint32_t msg, WPARAM w, LPARAM l);
+    static LRESULT CALLBACK WndProc(HWND h, uint32_t msg, WPARAM w, LPARAM l);
     static LRESULT CALLBACK MDIProc(HWND h, uint32_t msg, WPARAM w, LPARAM l);
     static MainWindow *createInstance(WinClassEx *wc);
     static MainWindow *getInstance();
@@ -67,14 +54,9 @@ public:
 
 class MainClass
 {
-private:
-	MainClass(HINSTANCE h, int m);
-	static MainClass *instance;
 public:
+	MainClass(HINSTANCE h, int m);
 	int mainLoop();
-	static MainClass *getInstance(HINSTANCE h, int m);
-	static MainClass *getInstance();
-	
 };
 
 class MyMenuBar : public MenuBar
@@ -95,7 +77,6 @@ MainWindow *MainWindow::createInstance(WinClassEx *wc)
 }
 
 MDIClientWinClass *mcwc;
-MyMDIClient *mdic;
 
 MainWindow *MainWindow::getInstance()
 {
@@ -105,32 +86,17 @@ MainWindow *MainWindow::getInstance()
     return NULL;
 }
 
-MainClass *MainClass::getInstance(HINSTANCE h, int m)
-{
-	if (!instance)
-		instance = new MainClass(h, m);
-
-	return instance;
-}
-
-MainClass *MainClass::getInstance()
-{
-	if (instance)
-		return instance;
-
-	return NULL;
-}
-
-MainClass *MainClass::instance = NULL;
 MainWindow *MainWindow::instance = NULL;
 
 MainClass::MainClass(HINSTANCE h, int m)
 {
-	MyWinClass wclass(MainWindow::WindowProcedure, h);
+	MyWinClass wclass(MainWindow::WndProc, h);
 	wclass.registerClass();
+    mcwc = new MDIClientWinClass(MainWindow::MDIProc, g_hInst);
+    mcwc->registerClass();
 	MainWindow *mw = MainWindow::createInstance(&wclass);
-	mw->Show(m);
-	
+	mw->show(m);
+    mw->update();
 }
 
 ToolBar::ToolBar(HWND parent)
@@ -197,17 +163,26 @@ LRESULT CALLBACK MainWindow::control(HWND h, uint32_t msg, WPARAM w, LPARAM l)
 	{
     case Message::CREATE:
     {
-        mcwc = new MDIClientWinClass(0, g_hInst);
+        
         gsb = new StatusBar(h);
         tb1 = new ToolBar(h);
         CLIENTCREATESTRUCT css;
-        mdic = new MyMDIClient(mcwc, h);
-        mdic->show();
+        css.hWindowMenu = GetSubMenu(GetMenu(h), 2);
+        css.idFirstChild = 50000;
+
+        // classname moet mdiclient zijn!
+        mdic = CreateWindowEx(WS_EX_CLIENTEDGE, L"mdiclient", NULL,
+            WS_CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_HSCROLL,
+            CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
+            h, (HMENU)4999, g_hInst, (LPVOID)&css);
+
+        ::ShowWindow(mdic, SW_SHOW);
     }
         break;
-	case Message::COMMAND:
-		switch (w)
-		{
+    case Message::COMMAND:
+    {
+        switch (w)
+        {
         case MyMenuBar::FILE_NEW:
         {
             MDICREATESTRUCT mcs;
@@ -218,39 +193,49 @@ LRESULT CALLBACK MainWindow::control(HWND h, uint32_t msg, WPARAM w, LPARAM l)
             mcs.x = mcs.cx = CW_USEDEFAULT;
             mcs.y = mcs.cy = CW_USEDEFAULT;
             mcs.style = MDIS_ALLCHILDSTYLES;
-            hChild = (HWND)SendMessage(mdicclienthandle, WM_MDICREATE, 0, (LONG)&mcs);
+            hChild = (HWND)SendMessage(mdic, WM_MDICREATE, 0, (LONG)&mcs);
 
             if (!hChild)
-            {
                 throw "MDI Child creation failed";
-            }
         }
             break;
-		case MyMenuBar::FILE_OPEN:
+        case MyMenuBar::FILE_OPEN:
         case ToolBar::CM_FILE_OPEN:
-			fb->browse();
-			break;
-		case MyMenuBar::FILE_EXIT:
-			::SendMessage(h, Message::CLOSE, 0, 0);
-			break;
+            fb->browse();
+            break;
+        case MyMenuBar::FILE_EXIT:
+            ::SendMessage(h, Message::CLOSE, 0, 0);
+            break;
         case MyMenuBar::HELP_ABOUT:
             ::MessageBox(h, L"Venster1\ndoorJasper ter Weeme", L"About", 0);
             break;
-		}
-		break;
+        }
+        break;
+    }
     case Message::SIZE:
         ::SendMessage(gsb->getHandle(), Message::SIZE, 0, 0);
+        RECT rectClient, rectStatus, rectTool;
+        UINT uToolHeight, uStatusHeight, uClientAlreaHeight;
+        GetClientRect(h, &rectClient);
+        GetWindowRect(gsb->getHandle(), &rectStatus);
+        GetWindowRect(tb1->getHandle(), &rectTool);
+        uToolHeight = rectTool.bottom - rectTool.top;
+        uStatusHeight = rectStatus.bottom - rectStatus.top;
+        uClientAlreaHeight = rectClient.bottom;
+        MoveWindow(mdic, 0, uToolHeight, rectClient.right, uClientAlreaHeight - uStatusHeight - uToolHeight, TRUE);
         break;
-	case Message::DESTROY:
-		::PostQuitMessage(0);
-		return 0;
-	}
+    case Message::DESTROY:
+        ::PostQuitMessage(0);
+        return 0;
+    default:
+        return ::DefFrameProc(h, mdic, msg, w, l);
+    }
 
-	return ::DefWindowProc(h, msg, w, l);
+    return 0;
 }
 
 LRESULT CALLBACK
-MainWindow::WindowProcedure(HWND h, unsigned int msg, WPARAM w, LPARAM l)
+MainWindow::WndProc(HWND h, unsigned int msg, WPARAM w, LPARAM l)
 {
 	return getInstance()->control(h, msg, w, l);
 }
@@ -262,12 +247,12 @@ MainWindow::MDIProc(HWND h, uint32_t msg, WPARAM w, LPARAM l)
 }
 
 int WINAPI 
-WinMain(HINSTANCE h, HINSTANCE p, char *c, int m)
+WinMain(HINSTANCE h, HINSTANCE p, char *c, int n)
 {
     g_hInst = h;
     ::InitCommonControls();
-	MainClass *mc = MainClass::getInstance(h, m);
-	return mc->mainLoop();
+    MainClass mc(h, n);
+	return mc.mainLoop();
 }
 
 

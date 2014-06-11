@@ -18,8 +18,11 @@ public:
     MDIClientWinClass(WNDPROC wp, HINSTANCE hinst) : WinClassEx(wp, L"MDI", hinst)
     {
         wclass.lpszMenuName = NULL;
+        wclass.lpszClassName = L"MDI";
         wclass.hbrBackground = (HBRUSH)(COLOR_3DFACE + 1);
     }
+
+    void Register() { }
 };
 #endif
 
