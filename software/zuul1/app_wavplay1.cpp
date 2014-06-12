@@ -5,6 +5,7 @@ Jasper ter Weeme
 
 #include <system.h>
 #include "misc.h"
+#include "sdcard.h"
 
 int delay = 10;
 

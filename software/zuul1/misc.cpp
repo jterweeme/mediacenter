@@ -24,12 +24,26 @@ void Utility::to_bytes(const uint32_t val, uint8_t *bytes)
     bytes[3] = (uint8_t) (val >> 24);
 }
 
-uint32_t Utility::to_int32(const uint8_t *bytes)
+uint32_t Utility::to_int32(const uint8_t * const bytes)
 {
     return (uint32_t) bytes[0]
         | ((uint32_t) bytes[1] << 8)
         | ((uint32_t) bytes[2] << 16)
         | ((uint32_t) bytes[3] << 24);
+}
+
+unsigned int bitReverse(unsigned int x, const int log2n)
+{
+    int n = 0;
+    
+    for (int i = 0; i < log2n; i++)
+    {
+        n <<= 1;
+        n |= (x & 1);
+        x >>= 1;
+    }
+    
+    return n;
 }
 
 // 0,1,2,3,4,5,6,7,8,9,a,b,c,d,e,f
@@ -76,6 +90,37 @@ void QuadroSegment::setInt(unsigned int n)
     *base = lut[a] << 24 | lut[b] << 16 | lut[c] << 8 | lut[d];
 }
 
+template<class T> void Utility::fft(T a, T b, const int log2n)
+{
+    typedef typename mstd::iterator_traits<T>::value_type complex;
+    const complex J(0, 1);
+    int n = 1 << log2n;
+    
+    for (unsigned int i = 0; i < n; ++i)
+        b[Utility::bitReverse(i, log2n)] = a[i];
+
+    for (int s = 1; s <= log2n; ++s)
+    {
+        int m = 1 << s;
+        int m2 = m >> 1;
+        complex w(1, 0);
+        complex wm = exp(-J * (PI / m2));
+
+        for (int j = 0; j < m2; ++j)
+        {
+            for (int k = j; k < n; k += m)
+            {
+                complex t = w * b[k + m2];
+                complex u = b[k];
+                b[k] = u + t;
+                b[k + m2] = u - t;
+            }
+
+            w *= wm;
+        }
+    }
+}
+
 void LCD::setPos(uint8_t x, uint8_t y)
 {
 }
@@ -84,14 +129,6 @@ alt_up_char_buffer_dev *VGA::openDev(const char *name)
 {
     alt_up_char_buffer_dev *dev = (alt_up_char_buffer_dev *)alt_find_dev(name, &alt_dev_list);
     return dev;
-}
-
-void SDCard2::command(uint16_t cmd, uint32_t arg1)
-{
-    *argument_reg = arg1;
-    *command_reg = cmd;
-    while (*aux_status & 0x04) { }  // wait until complete
-
 }
 
 uint16_t Utility::be_16_toh(uint16_t x)
@@ -167,7 +204,7 @@ void Uart::printf(const char *format, ...)
             this->puts(s);
             break;
         case 'x':
-            char c[3] = {0};
+            //char c[3] = {0};
             break;
         }
     }

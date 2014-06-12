@@ -1,6 +1,7 @@
 #include <system.h>
 #include <stdlib.h>
 #include "misc.h"
+#include "sdcard.h"
 
 class Box
 {

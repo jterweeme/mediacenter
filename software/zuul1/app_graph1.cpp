@@ -8,7 +8,7 @@ int main()
     static const uint16_t WIDTH = 840;
     static const uint16_t HEIGHT = 480;
 
-    for (uint16_t i = 0; i < WIDTH * HEIGHT; i++)
+    for (uint32_t i = 0; i < WIDTH * HEIGHT; i++)
         pixelBuffer[i] = 0;
 
     return 0;

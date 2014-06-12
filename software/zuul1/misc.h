@@ -13,7 +13,7 @@ Alex Aalbertsberg
 #include <unistd.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
 #include <priv/alt_file.h>
-#include "sdcard.h"
+#include "mystl.h"
 
 class Utility
 {
@@ -23,34 +23,10 @@ public:
     static uint32_t to_int32(const uint8_t *bytes);
     static uint16_t be_16_toh(uint16_t x);
     static uint32_t be_32_toh(uint32_t x);
+    static const double PI = 3.1415926536;
+    static unsigned int bitReverse(unsigned int x, const int log2n);
+    template <class T> void fft(T a, T b, int log2n);
 };
-
-namespace mstd
-{
-    class string
-    {
-    public:
-        string() { }
-        //string(const char *input) { }
-    };
-
-    template <class T> class vector
-    {
-    private:
-        size_t size;
-        size_t capacity;
-        T *buffer;
-    public:
-        typedef T *iterator;
-        size_t getSize() const { return size; }
-        vector(size_t capacity) : capacity(capacity), size(0) { buffer = new T[capacity]; }
-        void push_back(const T &value) { buffer[size++] = value; }
-        iterator begin() { return buffer; }
-        iterator end() { return buffer + getSize(); }
-    };
-};
-
-using namespace mstd;
 
 extern const uint8_t lut[];
 
@@ -59,14 +35,14 @@ template <class T> class Segment
 protected:
     volatile T *base;
 public:
-    Segment(volatile T *base) { this->base = base; }
+    Segment(volatile T * const base) : base(base) { }
     void write(T value) { *base = value; }
 };
 
 class DuoSegment : public Segment<uint16_t>
 {
 public:
-    DuoSegment(volatile uint16_t *base) : Segment<uint16_t>(base) { }
+    DuoSegment(volatile uint16_t * const base) : Segment<uint16_t>(base) { }
     void setInt(unsigned int n);
     void setHex(uint8_t n);
 };
@@ -74,7 +50,7 @@ public:
 class QuadroSegment : public Segment<uint32_t>
 {
 public:
-    QuadroSegment(volatile uint32_t *base) : Segment<uint32_t>(base) { }
+    QuadroSegment(volatile uint32_t * const base) : Segment<uint32_t>(base) { }
     void setInt(unsigned int n);
     void setHex(uint16_t n);
 };
@@ -113,6 +89,7 @@ class Observer
 {
 public:
     virtual void update() = 0;
+    virtual ~Observer() { }
 };
 
 class KeyBoard
@@ -271,35 +248,6 @@ public:
     static const uint8_t I2C_ADDR = 0x50;
 };
 
-class SDCard2
-{
-public:
-    volatile void *base;
-    volatile uint16_t *aux_status;
-    volatile uint16_t *command_reg;
-    volatile uint32_t *argument_reg;
-    volatile uint8_t *data;
-public:
-    SDCard2(volatile void *base)
-        :
-            base(base),
-            aux_status((volatile uint16_t *)((uint8_t *)base + 0x234)),
-            command_reg((volatile uint16_t *)((uint8_t *)base + 0x230)),
-            argument_reg((volatile uint32_t *)((uint8_t *)base + 0x22c)),
-            data((volatile uint8_t *)((uint8_t *)base))
-    { }
-
-    inline void waitForInsert() { while (!(*aux_status & 0x02)) { } }
-    void command(uint16_t cmd, uint32_t arg1);
-    static const uint8_t READ_BLOCK = 17;
-    void read(uint32_t offset) { command(READ_BLOCK, offset); }
-};
-
-class Obese
-{
-public:
-};
-
 class PixelBuffer
 {
 public:
@@ -312,7 +260,7 @@ private:
     alt_up_char_buffer_dev *openDev(const char *name);
 public:
     VGA(const char *devName);
-    int clear() { ::alt_up_char_buffer_clear(charBuffer); }
+    int clear() { return ::alt_up_char_buffer_clear(charBuffer); }
     int draw(const char, const int, const int);
     int draw(const char *, const int, const int);
     void shiftLeft(int n);

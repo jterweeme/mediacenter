@@ -1607,5 +1607,12 @@ const char *MyFileRecord::toString()
     return (const char *)fr->name;
 }
 
+void SDCard2::command(uint16_t cmd, uint32_t arg1)
+{
+    *argument_reg = arg1;
+    *command_reg = cmd;
+    while (*aux_status & 0x04) { }  // wait until complete
+}
+
 
 

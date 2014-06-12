@@ -203,15 +203,45 @@ public:
         sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
     }
 
-    bool isPresent() { this->alt_up_sd_card_is_Present(); }
-    bool isFAT16() { this->alt_up_sd_card_is_FAT16(); }
+    bool isPresent() { return this->alt_up_sd_card_is_Present(); }
+    bool isFAT16() { return this->alt_up_sd_card_is_FAT16(); }
     bool write(int, char);
     bool fclose(int);
-    short int readFile(int fd) { this->alt_up_sd_card_read(fd); }
-    short int findNext(char *fn) { this->alt_up_sd_card_find_next(fn); }
-    short int findNext(char *fn, t_file_record *fr) { this->alt_up_sd_card_find_next(fn, fr); }
+    short int readFile(int fd) { return this->alt_up_sd_card_read(fd); }
+    short int findNext(char *fn) { return this->alt_up_sd_card_find_next(fn); }
+    short int findNext(char *fn, t_file_record *fr) { return this->alt_up_sd_card_find_next(fn, fr); }
     
 };
+
+class SDCard2
+{
+public:
+    volatile void *base;
+    volatile uint16_t *aux_status;
+    volatile uint16_t *command_reg;
+    volatile uint32_t *argument_reg;
+    volatile uint8_t *data;
+public:
+    SDCard2(volatile void *base)
+        :
+            base(base),
+            aux_status((volatile uint16_t *)((uint8_t *)base + 0x234)),
+            command_reg((volatile uint16_t *)((uint8_t *)base + 0x230)),
+            argument_reg((volatile uint32_t *)((uint8_t *)base + 0x22c)),
+            data((volatile uint8_t *)((uint8_t *)base))
+    { }
+
+    inline void waitForInsert() { while (!(*aux_status & 0x02)) { } }
+    void command(uint16_t cmd, uint32_t arg1);
+    static const uint8_t READ_BLOCK = 17;
+    void read(uint32_t offset) { command(READ_BLOCK, offset); }
+};
+
+class Obese
+{
+public:
+};
+
 
 #endif
 

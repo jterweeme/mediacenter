@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include "misc.h"
 #include "md5.h"
+#include "sdcard.h"
 
 class MD5Test1
 {

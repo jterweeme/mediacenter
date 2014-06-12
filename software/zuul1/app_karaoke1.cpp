@@ -20,7 +20,7 @@ public:
 
 void Karaoke1::init()
 {
-    qs = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
+    qs = new QuadroSegment((volatile uint32_t * const)MYSEGDISP2_0_BASE);
     qs->setInt(0);
     vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
     vgaTerminal->clear();
@@ -29,9 +29,10 @@ void Karaoke1::init()
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Uart\r\n");
     sdCard = new SDCardEx();
+    using mstd::vector;
 
     sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
-            (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
+            (volatile void * const)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
     
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
@@ -46,10 +47,10 @@ void Karaoke1::init()
             KarTrack track = *it;
             track.parse();
 
-            for (MIDIEventVector::iterator it = track.events.begin();
-                    it != track.events.end(); ++it)
+            for (MIDIEventVector::iterator event = track.events.begin();
+                    event != track.events.end(); ++event)
             {
-                vgaTerminal->puts((*it)->toString());
+                vgaTerminal->puts((*event)->toString());
                 vgaTerminal->puts("\r\n");
                 //TextEvent *te = dynamic_cast<TextEvent *>(*it);
                 
@@ -121,7 +122,7 @@ void Karaoke1::init()
         const int offset = 1270; //500*1279; //= 500*1280;
         pixels8[offset + x] = 0xff;
     }
-    int x = sin(100);
+    //int x = sin(100);
     
 }
 

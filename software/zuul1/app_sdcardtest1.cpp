@@ -1,6 +1,7 @@
 #include <system.h>
 #include <stdio.h>
 #include "misc.h"
+#include "sdcard.h"
 
 class SDCardTest
 {
