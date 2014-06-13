@@ -245,7 +245,7 @@ std::string EventVector::toString()
     ss << "Events: " << size() << std::endl;
     int i = 0;
     
-    for (std::vector<Event *>::iterator it = begin(); it != end(); ++it)
+    for (iterator it = begin(); it != end(); ++it)
         ss << ++i << ": " << (*it)->toString() << std::endl;
 
     return ss.str();
