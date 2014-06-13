@@ -23,11 +23,12 @@ DOWNLOAD := app_karaoke1.elf
 all: app_primes1.hex app_sdcardtest1.hex app_test1.hex app_wavplay1.hex \
     app_md5test1.elf app_kbtest2.hex app_vgatest1.hex \
     app_karaoke1.hex app_ofm1.hex app_mytest1.hex app_eepromtest1.hex \
-    app_sdcardtest3.hex app_graph1.hex
+    app_sdcardtest3.hex app_graph1.hex app_fourier1.hex
 
 app_graph1.hex: app_graph1.flash
 app_audiotest1.hex: app_audiotest1.flash
 app_eepromtest1.hex: app_eepromtest1.flash
+app_fourier1.hex: app_fourier1.flash
 app_jtagtest1.hex: app_jtagtest1.flash
 app_karaoke1.hex: app_karaoke1.flash
 app_kbtest1.hex: app_kbtest1.flash
@@ -49,6 +50,7 @@ app_wavplay1.hex: app_wavplay1.flash
 app_graph1.flash: app_graph1.elf
 app_audiotest1.flash: app_audiotest1.elf
 app_eepromtest1.flash: app_eepromtest1.elf
+app_fourier1.flash: app_fourier1.elf
 app_jtagtest1.flash: app_jtagtest1.elf
 app_karaoke1.flash: app_karaoke1.elf
 app_kbtest1.flash: app_kbtest1.elf
@@ -70,6 +72,7 @@ app_wavplay1.flash: app_wavplay1.elf
 app_graph1.elf: app_graph1.o
 app_audiotest1.elf: app_audiotest1.o misc.o sdcard.o
 app_eepromtest1.elf: app_eepromtest1.o misc.o sdcard.o
+app_fourier1.elf: app_fourier1.o misc.o
 app_jtagtest1.elf: app_jtagtest1.o sdcard.o
 app_karaoke1.elf: app_karaoke1.o misc.o sdcard.o mymidi.o
 app_kbtest1.elf: app_kbtest1.o misc.o sdcard.o
@@ -91,6 +94,7 @@ app_wavplay1.elf: app_wavplay1.o misc.o sdcard.o
 app_graph1.o: app_graph1.cpp
 AUDIO.o: AUDIO.cpp AUDIO.h
 app_audiotest1.o: app_audiotest1.cpp
+app_fourier1.o: app_fourier1.cpp misc.h
 crc16.o: crc16.cpp
 crc7.o: crc7.cpp
 debug.o: debug.cpp

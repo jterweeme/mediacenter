@@ -90,6 +90,7 @@ void QuadroSegment::setInt(unsigned int n)
     *base = lut[a] << 24 | lut[b] << 16 | lut[c] << 8 | lut[d];
 }
 
+/*
 template<class T> void Utility::fft(T a, T b, const int log2n)
 {
     typedef typename mstd::iterator_traits<T>::value_type complex;
@@ -119,7 +120,7 @@ template<class T> void Utility::fft(T a, T b, const int log2n)
             w *= wm;
         }
     }
-}
+}*/
 
 void LCD::setPos(uint8_t x, uint8_t y)
 {

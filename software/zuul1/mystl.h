@@ -1,5 +1,6 @@
 #ifndef _MYSTL_H_
 #define _MYSTL_H_
+#include <string.h>
 
 namespace mstd
 {
@@ -12,6 +13,17 @@ namespace mstd
     template <class T> struct iterator_traits<T*>
     {
         //typedef random_access_iterator_tag iterator_category;
+    };
+
+    template <typename T> struct complex
+    {
+        typedef T value_type;
+
+        T real;
+        T i;
+
+        complex(const T real, const T i) : real(real), i(i) { }
+        complex() { }
     };
 
     class string
