@@ -11,12 +11,12 @@ class Signaal
 public:
     std::vector<Sample> data;
     Signaal(std::vector<Sample> &data) : data(data) { }
-    std::vector<Sample> fft(unsigned int log2n);
+    std::vector<Sample> fft(unsigned log2n);
 };
 
 
 
-unsigned int bitReverse(unsigned int x, int log2n)
+unsigned bitReverse(unsigned x, int log2n)
 {
     int n = 0;
 
