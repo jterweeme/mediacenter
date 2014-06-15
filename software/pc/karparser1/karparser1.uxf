@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?><diagram program="umlet" version="11.3">
+  <zoom_level>10</zoom_level>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>50</x>
+      <y>230</y>
+      <w>250</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>*Options*
+--
+int track
+bool help
+bool header
+bool lyrics
+bool events
+--
+Options()
+int getTrack()
+bool getHelp()
+bool getHeader()
+bool getLyrics()
+bool getEvents()
+int parse(int argc, char **argv)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>530</x>
+      <y>380</y>
+      <w>220</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>
+*Header*
+--
++uint32_t chunkID;
++uint32_t chunkSize;
++uint16_t formatType;
++uint16_t tracks;
++uint16_t timeDivision;
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>800</x>
+      <y>340</y>
+      <w>190</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>
+*Event*
+--
++uint8_t eventID
+--
++Event(): void
++Event(uint8_t id): void
++toString(): std::string
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>620</x>
+      <y>60</y>
+      <w>240</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>
+*MyException*
+--
+msg: const char *
+--
+MyException()
+MyException(const char *msg)
+const char *toString()
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1360</x>
+      <y>560</y>
+      <w>180</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>
+*ProgramChange*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>970</x>
+      <y>110</y>
+      <w>100</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>
+*Utility*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1080</x>
+      <y>350</y>
+      <w>140</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>
+*MetaEvent*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>560</x>
+      <y>240</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*ChannelAftertouch*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>960</x>
+      <y>360</y>
+      <w>140</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;120;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1120</x>
+      <y>160</y>
+      <w>170</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>
+*EventVector*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1020</x>
+      <y>580</y>
+      <w>190</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+*TextEvent*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1110</x>
+      <y>380</y>
+      <w>50</w>
+      <h>220</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;30;200</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>590</x>
+      <y>570</y>
+      <w>200</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+*CTrack*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>340</x>
+      <y>290</y>
+      <w>160</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>
+*KarFile*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>170</x>
+      <y>590</y>
+      <w>250</w>
+      <h>160</h>
+    </coordinates>
+    <panel_attributes>
+*KarParser1*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1350</x>
+      <y>360</y>
+      <w>230</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*TimeSignature*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1190</x>
+      <y>360</y>
+      <w>180</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>30;30;160;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Interface</type>
+    <coordinates>
+      <x>1360</x>
+      <y>180</y>
+      <w>160</w>
+      <h>90</h>
+    </coordinates>
+    <panel_attributes>std::vector&lt;Event *&gt;
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Relation</type>
+    <coordinates>
+      <x>1260</x>
+      <y>160</y>
+      <w>190</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>170;30;30;30</additional_attributes>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>600</x>
+      <y>740</y>
+      <w>190</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*KeySignature*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>1050</x>
+      <y>760</y>
+      <w>170</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>*LyricsEvent*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <type>com.umlet.element.Class</type>
+    <coordinates>
+      <x>200</x>
+      <y>50</y>
+      <w>230</w>
+      <h>110</h>
+    </coordinates>
+    <panel_attributes>*TimeSignature*
+--
+--</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
