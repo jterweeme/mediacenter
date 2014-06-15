@@ -7,7 +7,7 @@ LDFLAGS := -T'../bsp//linker.x' $(MACHINE) -L ../bsp
 DOWNLOAD := app_karaoke1.elf
 
 %.o:
-	nios2-elf-g++ $(INCLUDES) -O1 -Wall -g -c -o $@ $<
+	nios2-elf-g++ $(INCLUDES) -O2 -Wall -g -c -o $@ $<
 
 %.elf:
 	nios2-elf-g++ $(LDFLAGS) -o $@ $^

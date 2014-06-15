@@ -15,6 +15,7 @@ public:
     uint8_t id;
     MIDIEvent() { }
     MIDIEvent(uint8_t id) : id(id) { }
+    virtual ~MIDIEvent() { }
     virtual const char *toString() { return "XEvent"; }
 };
 
@@ -99,10 +100,10 @@ public:
 class KarFile
 {
 public:
+    mstd::vector<KarTrack> tracks;
     MyFile *myFile;
     uint8_t *buf;
     CKarHeader header;
-    mstd::vector<KarTrack> tracks;
 public:
     KarFile(MyFile *myFile) : tracks(100), myFile(myFile) { }
     void read();

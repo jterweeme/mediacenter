@@ -131,7 +131,7 @@ public:
     MyFile(int fd, SDCardEx *sd) { this->fd = fd; this->sd = sd; }
     short int read();   // readByte
     size_t fread(void *ptr, size_t size, size_t nmemb);
-    unsigned int getSize();
+    unsigned getSize();
 };
 
 
@@ -149,8 +149,8 @@ protected:
     bool Write_Sector_Data(int sector_index, int partition_offset);
     bool Save_Modified_Sector();
     bool Read_Sector_Data(int sector_index, int partition_offset);
-    bool get_cluster_flag(unsigned int cluster_index, unsigned short int *flag);
-    bool mark_cluster(unsigned int cluster_index, short int flag, bool first_fat);
+    bool get_cluster_flag(unsigned cluster_index, unsigned short int *flag);
+    bool mark_cluster(unsigned cluster_index, short int flag, bool first_fat);
     void alt_up_sd_card_set_attributes(short int file_handle, short int attributes);
     short int alt_up_sd_card_get_attributes(short int file_handle);
     short int alt_up_sd_card_read(short int file_handle);

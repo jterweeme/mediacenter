@@ -117,7 +117,7 @@ void MD5Test1::init()
         unsigned int fileSize = testRecord.file_size_in_bytes;
         myFile2 = sdCard->openFile("VOGUE.KAR");
 
-        for (int i = 0; i < fileSize && myFile != NULL; i++)
+        for (size_t i = 0; i < fileSize && myFile != NULL; i++)
             buf[i] = myFile->read();
 
         uart->puts("bestand ingelezen\r\n");

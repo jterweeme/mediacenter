@@ -12,32 +12,88 @@ namespace mstd
 
     template <class T> struct iterator_traits<T*>
     {
-        //typedef random_access_iterator_tag iterator_category;
     };
+
+    template<typename T> class complex;
+    template<> class complex<float>;
+    template<> class complex<double>;
+    template<> class complex<long double>;
 
     template <typename T> struct complex
     {
         typedef T value_type;
-
-        T real;
+        T r;
         T i;
-
-        complex(const T real, const T i) : real(real), i(i) { }
+        T real() { return r; }
+        T imag() { return i; }
+        void real(T val) { r = val; }
+        void imag(T val) { i = val; }
+        complex<T> & operator = (const T&);
+        complex(const T real, const T i) : r(real), i(i) { }
         complex() { }
+        complex<T>& operator += (const T &t) { r += t; return *this; }
+        template <typename U> complex<T>& operator = (const complex<U>&);
+        complex<T> operator + (const complex<T> &x) { return x; }
     };
+
+    template<> struct complex<double>
+    {
+        typedef double value_type;
+        double r;
+        double i;
+        double real() { return r; }
+        double imag() { return i; }
+        complex(double r = 0.0, double i = 0.0) : r(r), i(i) { }
+        complex<double> operator -= (complex<double> d) { r -= d.r; i -= d.i; return *this; }
+        complex<double> operator *= (double d) { r *= d; i *= d; return *this; }
+        complex<double> operator *= (complex<double> d) { r *= d.r; i *= d.i; return *this; }
+    };
+
+    //template <typename T> inline complex<T> exp(const complex<T> &z) { return __complex
+
+    template <typename T>
+    inline complex<T> operator*(const complex<T> &x, const T &y)
+    {
+        complex<T> r = x;
+        r *= y;
+        return r;
+    }
+
+    template <typename T>
+    inline complex<T> operator*(const complex<T> &x, const complex<T> &y)
+    {
+        complex<T> r = x;
+        r *= y;
+        return r;
+    }
+
+    template<typename T>
+    inline complex<T> operator-(const complex<T> &x, const complex<T> &y)
+    {
+        complex<T> r = x;
+        r -= y;
+        return r;
+    }
+
+    template <typename T>
+    inline complex<T> operator+(const complex<T> &x, const complex<T> &y)
+    {
+        complex<T> r = x;
+        r -= y;
+        return r;
+    }
 
     class string
     {
     public:
         string() { }
-        //string(const char *input) { }
     };
 
     template <class T> class vector
     {
-    private:
-        size_t size;
+    protected:
         size_t capacity;
+        size_t size;
         T *buffer;
     public:
         typedef T *iterator;
@@ -46,6 +102,7 @@ namespace mstd
         void push_back(const T &value) { buffer[size++] = value; }
         iterator begin() { return buffer; }
         iterator end() { return buffer + getSize(); }
+        T & operator [] (unsigned index) { return buffer[index]; }
     };
 };
 

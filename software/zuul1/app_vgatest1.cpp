@@ -37,6 +37,7 @@ int VGATest::run()
     vga->puts("\r\nNieuwe regel");
     vga->puts("\r\nNieuwe regel");
     Uart::getInstance()->puts("onzin\r\n");
+    return 0;
 }
 
 int main()

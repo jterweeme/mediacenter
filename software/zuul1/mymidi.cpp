@@ -29,10 +29,10 @@ void CKarHeader::read(MyFile *file)
 
 void KarFile::readToBuf()
 {
-    unsigned int size = myFile->getSize();
+    unsigned size = myFile->getSize();
     buf = new uint8_t[size];    // zodat de grootste erin past
 
-    for (int i = 0; i < size; i++)
+    for (unsigned i = 0; i < size; i++)
         buf[i] = myFile->read();
 }
 

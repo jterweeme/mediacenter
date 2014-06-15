@@ -81,7 +81,7 @@ void WavPlay1::init()
 
 int WavPlay1::run()
 {
-    uint8_t buf[2120000];
+    uint8_t buf[2000];
     uint16_t sample, sample_r;
 
     if (sdCard->isPresent() && sdCard->isFAT16())
@@ -95,6 +95,8 @@ int WavPlay1::run()
             myFile->read();      // skip header
 
 
+        while (true)
+        {
         for (int i = 0; i < sizeof(buf); i++)
         {
             buf[i] = myFile->read();
@@ -114,6 +116,7 @@ int WavPlay1::run()
 
             for (int j = 0; j < ::delay; j++)
                 soundCard->writeDacOut(sample, sample);
+        }
         }
         
         uart->puts("done\r\n");

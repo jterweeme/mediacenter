@@ -7,6 +7,7 @@
 #include <sys/alt_irq.h>
 #include "misc.h"
 #include <fcntl.h>
+#include <math.h>
 
 void Utility::toHex(const uint8_t input, char *output)
 {
@@ -32,7 +33,67 @@ uint32_t Utility::to_int32(const uint8_t * const bytes)
         | ((uint32_t) bytes[3] << 24);
 }
 
-unsigned int bitReverse(unsigned int x, const int log2n)
+/*
+void Utility::itoa(int n, char *s)
+{
+    int i, sign;
+
+    if ((sign = n) < 0)
+        n = -n;
+
+    i = 0;
+
+    do
+    {
+        s[i++] = n % 10 + '0';
+    }
+    while ((n /= 10) > 0);
+
+    if (
+}*/
+
+const Sample& jexp(const Sample& s)
+{
+    return Sample(::exp(s.r), ::exp(s.i));
+}
+
+Signaal Signaal::fft(int log2n)
+{
+    Signaal uitvoer(8);
+    uitvoer.size = 8;
+    
+    const Sample J(0, -1);
+    const unsigned n = 1 << log2n;
+
+    for (unsigned i = 0; i < n; ++i)
+        uitvoer[Utility::bitReverse(i, log2n)] = buffer[i];
+
+    for (unsigned s = 1; s <= log2n; ++s)
+    {
+        const unsigned m = 1 << s;
+        const unsigned m2 = m >> 1;
+        Sample w(1,0);
+        //const Sample wm = ::jexp(J);
+        const Sample wm = ::jexp(J * (Utility::PI/m2));
+        
+        for (int j = 0; j < m2; ++j)
+        {
+            for (int k = j; k < n; k += m)
+            {
+                Sample t = w * uitvoer[k + m2];
+                Sample u = uitvoer[k];
+                uitvoer[k] = u + t;
+                uitvoer[k + m2] = u - t;
+            }
+
+            w *= wm;
+        }
+    }
+
+    return uitvoer;
+}
+
+unsigned int Utility::bitReverse(unsigned int x, const int log2n)
 {
     int n = 0;
     
@@ -185,7 +246,6 @@ void Uart::printf(const char *format, ...)
 {
     va_list argp;
     va_start(argp, format);
-    char *s;
 
     for (const char *p = format; *p != '\0'; p++)
     {
@@ -198,11 +258,17 @@ void Uart::printf(const char *format, ...)
         switch (*++p)
         {
         case 'u':   // unsigned int
+        {
+            int i = va_arg(argp, int);
+            //this->puts(itoa(i));
             putc('9');
+        }
             break;
         case 's':   // string
-            s = va_arg(argp, char *);
+        {
+            char *s = va_arg(argp, char *);
             this->puts(s);
+        }
             break;
         case 'x':
             //char c[3] = {0};
