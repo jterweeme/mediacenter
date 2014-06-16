@@ -144,6 +144,7 @@ public:
 
 class InfraRoodBase
 {
+protected:
     volatile void * const base;
     volatile uint32_t * const base32;
 public:
@@ -153,19 +154,16 @@ public:
     uint32_t read() { return base32[0]; }
 };
 
-class InfraRood
+class InfraRood : public InfraRoodBase
 {
     Observer *observer;
     void isr(void *context);
-    volatile void *base;
-    volatile uint32_t *base32;
     static InfraRood *instance;
 public:
     InfraRood(volatile void * const base, const int irq, const int ctl);
     static InfraRood *getInstance() { return instance; }
     void setObserver(Observer *observer) { this->observer = observer; }
     static void isrBridge(void *context) { getInstance()->isr(context); }
-    uint32_t read() { return base32[0]; }
 };
 
 class TerasicRemote

@@ -215,12 +215,9 @@ InfraRoodBase::InfraRoodBase(volatile void * const base, const int irq,
 }
 
 InfraRood::InfraRood(volatile void * const base, const int irq, const int ctl) :
-    base(base),
-    base32((volatile uint32_t * const)base)
+    InfraRoodBase(base, irq, ctl, isrBridge)
 {
     instance = this;
-    ::alt_ic_isr_register(ctl, irq, isrBridge, 0, 0);
-    base32[0] = 0;
 }
 
 void InfraRood::isr(void *context)
