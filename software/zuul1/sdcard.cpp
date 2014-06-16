@@ -7,21 +7,6 @@
 #include <string.h>
 #include "sdcard.h"
 
-bool is_sd_card_formated_as_FAT16 = false;
-volatile short int *aux_status_register = NULL;
-volatile int *status_register = NULL;
-volatile short int *CSD_register_w0 = NULL;
-volatile short int *command_register = NULL;
-volatile int *command_argument_register = NULL;
-volatile char *buffer_memory = NULL;
-int fat_partition_offset_in_512_byte_sectors = 0;
-int fat_partition_size_in_512_byte_sectors = 0;
-t_FAT_12_16_boot_sector boot_sector_data;
-alt_up_sd_card_dev	*device_pointer = NULL;
-bool current_sector_modified = false;
-unsigned current_sector_index = 0;
-t_find_data search_data;
-
 bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
 {
     bool result = false;
@@ -42,7 +27,6 @@ bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
     return result;
 }
 
-
 bool SDCard::Save_Modified_Sector()
 {
     bool result = true;
@@ -52,7 +36,6 @@ bool SDCard::Save_Modified_Sector()
 
     return result;
 }
-
 
 bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 {
@@ -100,9 +83,9 @@ bool SDCard::mark_cluster(unsigned cluster_index, short int flag, bool first_fat
     unsigned sector_index = (cluster_index / 256) + fat_partition_offset_in_512_byte_sectors;
     
     if (first_fat)
-        sector_index  = sector_index + boot_sector_data.first_fat_sector_offset;
+        sector_index = sector_index + boot_sector_data.first_fat_sector_offset;
     else
-        sector_index  = sector_index + boot_sector_data.second_fat_sector_offset;
+        sector_index = sector_index + boot_sector_data.second_fat_sector_offset;
      
     if (sector_index != current_sector_index)
         if (Read_Sector_Data(sector_index, 0) == false)
@@ -1681,41 +1664,62 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
     return result;
 }
 
+SDCard::SDCard(const char *name, volatile void * const base)
+  :
+    initialized(false),
+    is_sd_card_formated_as_FAT16(false),
+    aux_status_register(NULL),
+    status_register(NULL),
+    CSD_register_w0(NULL),
+    command_register(NULL),
+    command_argument_register(NULL),
+    buffer_memory(NULL),
+    fat_partition_offset_in_512_byte_sectors(0),
+    fat_partition_size_in_512_byte_sectors(0),
+    device_pointer(NULL),
+    current_sector_modified(false),
+    current_sector_index(0)
+{
+    sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
+}
+
+SDCardEx::SDCardEx(const char *name, volatile void * const base)
+    : SDCard(name, base)
+{ }
 
 bool SDCard::alt_up_sd_card_fclose(short int file_handle)
 {
     bool result = false;
-    //if ((alt_up_sd_card_is_Present()) && (is_sd_card_formated_as_FAT16))
-    {
-        if (active_files[file_handle].in_use) 
-        {
-			if (active_files[file_handle].modified)
-			{
-				unsigned record_sector = active_files[file_handle].file_record_sector_in_cluster;
-				if (active_files[file_handle].file_record_cluster == 0)
-				{
-					record_sector = record_sector + boot_sector_data.root_directory_sector_offset;
-				}
-				else
-				{
-                    record_sector = record_sector + boot_sector_data.data_sector_offset + 
-                        (active_files[file_handle].file_record_cluster - 2) *
-                        boot_sector_data.sectors_per_cluster;
-				}
 
-                if (Read_Sector_Data(record_sector, fat_partition_offset_in_512_byte_sectors))
-                {
-                    if (Write_File_Record_At_Offset(
+    if (active_files[file_handle].in_use) 
+    {
+        if (active_files[file_handle].modified)
+        {
+            unsigned record_sector = active_files[file_handle].file_record_sector_in_cluster;
+
+            if (active_files[file_handle].file_record_cluster == 0)
+            {
+                record_sector = record_sector + boot_sector_data.root_directory_sector_offset;
+            }
+            else
+            {
+                record_sector = record_sector + boot_sector_data.data_sector_offset + 
+                    (active_files[file_handle].file_record_cluster - 2) *
+                    boot_sector_data.sectors_per_cluster;
+            }
+
+            if (Read_Sector_Data(record_sector, fat_partition_offset_in_512_byte_sectors))
+            {
+                if (Write_File_Record_At_Offset(
                             active_files[file_handle].file_record_offset,
                             &(active_files[file_handle])))
-					{
-						result = Save_Modified_Sector();
-					}
-				}
-			}
-			active_files[file_handle].in_use = false;
-			result = true;
+                {
+                    result = Save_Modified_Sector();
+                }
+            }
         }
+        active_files[file_handle].in_use = false;
+        result = true;
     }
     
     return result;

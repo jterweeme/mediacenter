@@ -135,14 +135,14 @@ void CombinedSegment::setHex(const uint32_t n)
     q->setHex((uint16_t)n);
 }
 
-void CombinedSegment::setInt(unsigned int n)
+void CombinedSegment::setInt(const unsigned n)
 {
     l->setInt(n / 1000000);
     r->setInt(n / 10000);
     q->setInt(n);
 }
 
-void QuadroSegment::setInt(unsigned int n)
+void QuadroSegment::setInt(const unsigned n)
 {
     unsigned int a = n / 1000 % 10;
     unsigned int b = n / 100 % 10;

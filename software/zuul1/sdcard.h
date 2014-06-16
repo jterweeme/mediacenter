@@ -181,12 +181,27 @@ protected:
     
     volatile void *base;
 public:
+    SDCard(const char *name, volatile void * const base);
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
     static const uint8_t CMD_READ_BLOCK = 17;
     static const uint8_t CMD_WRITE_BLOCK = 24;
     static const uint8_t MAX_FILES_OPENED = 20;
     bool initialized;
     t_file_record active_files[MAX_FILES_OPENED];
+    t_find_data search_data;
+    bool is_sd_card_formated_as_FAT16;
+    volatile short int *aux_status_register;
+    volatile int *status_register;
+    volatile short int *CSD_register_w0;
+    volatile short int *command_register;
+    volatile int *command_argument_register;
+    volatile char *buffer_memory;
+    int fat_partition_offset_in_512_byte_sectors;
+    int fat_partition_size_in_512_byte_sectors;
+    t_FAT_12_16_boot_sector boot_sector_data;
+    alt_up_sd_card_dev  *device_pointer;
+    bool current_sector_modified;
+    unsigned current_sector_index;
 };
 
 class SDCardEx : public SDCard
@@ -194,12 +209,7 @@ class SDCardEx : public SDCard
 public:
     uint16_t fopen(char *fn, bool create = false);
 public:
-    SDCardEx(const char *name, volatile void * const base)
-    {
-        initialized = false;
-        sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
-    }
-
+    SDCardEx(const char *name, volatile void * const base);
     MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
     bool isPresent() { return this->alt_up_sd_card_is_Present(); }
     bool isFAT16() { return this->alt_up_sd_card_is_FAT16(); }
@@ -221,12 +231,12 @@ public:
     volatile uint8_t *data;
 public:
     SDCard2(volatile void *base)
-        :
-            base(base),
-            aux_status((volatile uint16_t *)((uint8_t *)base + 0x234)),
-            command_reg((volatile uint16_t *)((uint8_t *)base + 0x230)),
-            argument_reg((volatile uint32_t *)((uint8_t *)base + 0x22c)),
-            data((volatile uint8_t *)((uint8_t *)base))
+      :
+        base(base),
+        aux_status((volatile uint16_t *)((uint8_t *)base + 0x234)),
+        command_reg((volatile uint16_t *)((uint8_t *)base + 0x230)),
+        argument_reg((volatile uint32_t *)((uint8_t *)base + 0x22c)),
+        data((volatile uint8_t *)((uint8_t *)base))
     { }
 
     inline void waitForInsert() { while (!(*aux_status & 0x02)) { } }

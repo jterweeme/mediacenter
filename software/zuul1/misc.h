@@ -115,8 +115,8 @@ public:
     { }
 #endif
 
-    void setInt(unsigned int n);
-    void setHex(uint32_t n);
+    void setInt(const unsigned n);
+    void setHex(const uint32_t n);
 };
 
 class GreenLeds

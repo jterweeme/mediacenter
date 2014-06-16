@@ -51,6 +51,7 @@ WavPlay1::WavPlay1() :
 void Beam::update()
 {
     uint32_t button = InfraRood::getInstance()->read();
+    static unsigned volume = 100;
     
     switch (button >> 16)
     {
@@ -61,7 +62,10 @@ void Beam::update()
         ::delay--;
         break;
     case ::TerasicRemote::VOL_UP:
-        wavPlay->getSoundCard().setOutputVolume(120);
+        wavPlay->getSoundCard().setOutputVolume(++volume);
+        break;
+    case ::TerasicRemote::VOL_DOWN:
+        wavPlay->getSoundCard().setOutputVolume(--volume);
         break;
     }
 }
