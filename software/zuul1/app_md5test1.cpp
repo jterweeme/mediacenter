@@ -108,14 +108,13 @@ void MD5Test1::init()
     MyFile *myFile;
     MyFile *myFile2;
     uint8_t result[16];
-    char outputString[100] = {0};
 
     if (sdCard->isPresent() && sdCard->isFAT16())
     {
-        myFile = sdCard->openFile("CROCKETS.WAV");
+        myFile = sdCard->openFile("vogue.kar");
         t_file_record testRecord = sdCard->active_files[myFile->fd];
         unsigned int fileSize = testRecord.file_size_in_bytes;
-        myFile2 = sdCard->openFile("VOGUE.KAR");
+        //myFile2 = sdCard->openFile("VOGUE.KAR");
 
         for (size_t i = 0; i < fileSize && myFile != NULL; i++)
             buf[i] = myFile->read();

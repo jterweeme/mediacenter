@@ -20,9 +20,8 @@ typedef mstd::complex<double> Sample;
 class Signaal : public mstd::vector<Sample>
 {
 public:
-    Signaal(int capacity) : mstd::vector<Sample>(capacity) { }
-    
-    Signaal fft(int log2n);
+    Signaal(const int capacity) : mstd::vector<Sample>(capacity) { }
+    Signaal fft(const unsigned log2n);
 };
 
 class Utility

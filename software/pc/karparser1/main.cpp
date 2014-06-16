@@ -435,7 +435,7 @@ std::string CTrack::lyrics()
                 switch (c)
                 {
                 case '@':   // sla dit over voor nu
-                    i = te->length;
+                    i = te->length;     // waarom deed ik dit
                     break;
                 case '/':   // line break
                     ss << std::endl;

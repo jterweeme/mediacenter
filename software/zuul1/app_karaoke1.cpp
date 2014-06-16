@@ -50,12 +50,32 @@ void Karaoke1::init()
             for (MIDIEventVector::iterator event = track.events.begin();
                     event != track.events.end(); ++event)
             {
-                vgaTerminal->puts((*event)->toString());
-                vgaTerminal->puts("\r\n");
-                //TextEvent *te = dynamic_cast<TextEvent *>(*it);
+                //vgaTerminal->puts((*event)->toString());
+                //vgaTerminal->puts("\r\n");
+                TextEvent *te = dynamic_cast<TextEvent *>(*event);
                 
-                //if (te)
-                //    vgaTerminal->puts("TextEvent");
+                if (te)
+                {
+                    for (size_t i = 0; i < te->length; ++i)
+                    {
+                        char c = te->text[i];
+
+                        switch (c)
+                        {
+                        case '@':
+                            break;
+                        case '/':
+                            vgaTerminal->puts("\r\n");
+                            break;
+                        case '\\':
+                            vgaTerminal->puts("\r\n\r\n");
+                            break;
+                        default:
+                            vgaTerminal->putc(c);
+                            break;
+                        }
+                    }
+                }
             }
 
             uint32_t chunkSize = ::Utility::be_32_toh(track.chunkSizeBE);

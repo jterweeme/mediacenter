@@ -95,9 +95,9 @@ bool SDCard::get_cluster_flag(unsigned int cluster_index, unsigned short int *fl
 }
 
 
-bool SDCard::mark_cluster(unsigned int cluster_index, short int flag, bool first_fat)
+bool SDCard::mark_cluster(unsigned cluster_index, short int flag, bool first_fat)
 {
-    unsigned int sector_index = (cluster_index / 256) +  fat_partition_offset_in_512_byte_sectors;
+    unsigned sector_index = (cluster_index / 256) + fat_partition_offset_in_512_byte_sectors;
     
     if (first_fat)
         sector_index  = sector_index + boot_sector_data.first_fat_sector_offset;
@@ -126,16 +126,24 @@ bool SDCard::Check_for_Master_Boot_Record(void)
 
 		if ((end & 0x0000ffff) == 0x0000aa55)
 		{
-			for (index = 0; index < 4; index++)
-			{
-				int partition_data_offset = (index * 16) + 0x01be;
-				char type;
-				type = (unsigned char) IORD_8DIRECT(device_pointer->base,partition_data_offset + 0x04);
+            for (index = 0; index < 4; index++)
+            {
+                int partition_data_offset = (index * 16) + 0x01be;
+
+                char type = (unsigned char)IORD_8DIRECT(device_pointer->base,
+                        partition_data_offset + 0x04);
 
 				if ((type == 1) || (type == 4) || (type == 6) || (type == 14))
 				{
-					offset = (((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x0A)) << 16) | ((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x08));
-					partition_size = (((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x0E)) << 16) | ((unsigned short int) IORD_16DIRECT(device_pointer->base,partition_data_offset + 0x0C));
+					offset = (((unsigned short)IORD_16DIRECT(device_pointer->base,
+                            partition_data_offset + 0x0A)) << 16) |
+                            ((unsigned short)IORD_16DIRECT(device_pointer->base,
+                                partition_data_offset + 0x08));
+
+					partition_size = (((unsigned short)IORD_16DIRECT(device_pointer->base,
+                            partition_data_offset + 0x0E)) << 16) |
+                            ((unsigned short)IORD_16DIRECT(device_pointer->base,
+                            partition_data_offset + 0x0C));
 		            
 					if (partition_size > 0)
 					{
@@ -166,15 +174,15 @@ bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
 			record->name[counter] = (char) IORD_8DIRECT(device_pointer->base, offset+counter);
 
 		for (counter = 0; counter < 3; counter++)
-			record->extension[counter] = (char) IORD_8DIRECT(device_pointer->base, offset+counter+8);
+			record->extension[counter] = (char)IORD_8DIRECT(device_pointer->base, offset+counter+8);
 
-		record->attributes          =   (char) IORD_8DIRECT(device_pointer->base, offset+11);
+		record->attributes   = (char)IORD_8DIRECT(device_pointer->base, offset+11);
 		record->create_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+14);
 		record->create_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+16);
-		record->last_access_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+18);
-		record->last_modified_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+22);
-		record->last_modified_date = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+24);
-		record->start_cluster_index =(unsigned short int)IORD_16DIRECT(device_pointer->base, offset+26);
+		record->last_access_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+18);
+		record->last_modified_time = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+22);
+		record->last_modified_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+24);
+		record->start_cluster_index =(unsigned short)IORD_16DIRECT(device_pointer->base, offset+26);
 		record->file_size_in_bytes  =(unsigned int) IORD_32DIRECT(device_pointer->base, offset+28);
 		record->file_record_cluster = cluster_index;
 		record->file_record_sector_in_cluster = sector_in_cluster;
@@ -183,7 +191,6 @@ bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
 	}
 	return result;
 }
-
 
 bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
 {
@@ -236,32 +243,76 @@ bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
 
 		for (counter = 0; counter < 8; counter++)
 		{
-			boot_sector_data.OEM_name[counter] = (char) IORD_8DIRECT(device_pointer->base, 3+counter);
+            boot_sector_data.OEM_name[counter] = (char)IORD_8DIRECT(device_pointer->base,
+                            3+counter);
 		}
-		boot_sector_data.sector_size_in_bytes = (((unsigned char)IORD_8DIRECT(device_pointer->base, 12)) << 8 ) | ((char) IORD_8DIRECT(device_pointer->base, 11));
-		boot_sector_data.sectors_per_cluster = ((unsigned char) IORD_8DIRECT(device_pointer->base, 13));
-		boot_sector_data.reserved_sectors = ((unsigned short int) IORD_16DIRECT(device_pointer->base, 14));
-		boot_sector_data.number_of_FATs = ((unsigned char) IORD_8DIRECT(device_pointer->base, 16));
-		boot_sector_data.max_number_of_dir_entires = (((unsigned short int)(((unsigned char) IORD_8DIRECT(device_pointer->base, 18)))) << 8 ) | ((unsigned char) IORD_8DIRECT(device_pointer->base, 17));
-		boot_sector_data.number_of_sectors_in_partition = (((unsigned short int)(((unsigned char) IORD_8DIRECT(device_pointer->base, 20)))) << 8 ) | ((unsigned char) IORD_8DIRECT(device_pointer->base, 19));
-		boot_sector_data.media_descriptor = ((unsigned char) IORD_8DIRECT(device_pointer->base, 21));
-		boot_sector_data.number_of_sectors_per_table = ((unsigned short int) IORD_16DIRECT(device_pointer->base, 22));
-		boot_sector_data.number_of_sectors_per_track = ((unsigned short int) IORD_16DIRECT(device_pointer->base, 24));
-		boot_sector_data.number_of_heads = ((unsigned short int) IORD_16DIRECT(device_pointer->base, 26));
-		boot_sector_data.number_of_hidden_sectors = ((unsigned int) IORD_32DIRECT(device_pointer->base, 28));
-		boot_sector_data.total_sector_count_if_above_32MB = ((unsigned int) IORD_32DIRECT(device_pointer->base, 32));
-		boot_sector_data.drive_number = ((unsigned char) IORD_8DIRECT(device_pointer->base, 36));
-		boot_sector_data.current_head = ((unsigned char) IORD_8DIRECT(device_pointer->base, 37));
-		boot_sector_data.boot_signature = ((unsigned char) IORD_8DIRECT(device_pointer->base, 38));
-		boot_sector_data.first_fat_sector_offset = boot_sector_data.reserved_sectors;
-		boot_sector_data.second_fat_sector_offset = boot_sector_data.first_fat_sector_offset + boot_sector_data.number_of_sectors_per_table;
-		boot_sector_data.root_directory_sector_offset = boot_sector_data.second_fat_sector_offset + boot_sector_data.number_of_sectors_per_table; 
-		boot_sector_data.data_sector_offset = boot_sector_data.root_directory_sector_offset + (32*boot_sector_data.max_number_of_dir_entires / boot_sector_data.sector_size_in_bytes);    
+
+        boot_sector_data.sector_size_in_bytes =
+                (((unsigned char)IORD_8DIRECT(device_pointer->base, 12)) << 8 ) |
+                ((char) IORD_8DIRECT(device_pointer->base, 11));
+
+        boot_sector_data.sectors_per_cluster =
+                ((unsigned char)IORD_8DIRECT(device_pointer->base, 13));
+
+        boot_sector_data.reserved_sectors =
+                ((unsigned short)IORD_16DIRECT(device_pointer->base, 14));
+
+        boot_sector_data.number_of_FATs = ((unsigned char) IORD_8DIRECT(device_pointer->base, 16));
+
+        boot_sector_data.max_number_of_dir_entires =
+                (((unsigned short)
+                    (((unsigned char)IORD_8DIRECT(device_pointer->base, 18)))) << 8 ) |
+                ((unsigned char)IORD_8DIRECT(device_pointer->base, 17));
+
+        boot_sector_data.number_of_sectors_in_partition =
+                (((unsigned short)
+                    (((unsigned char)IORD_8DIRECT(device_pointer->base, 20)))) << 8 ) |
+                    ((unsigned char) IORD_8DIRECT(device_pointer->base, 19));
+
+        boot_sector_data.media_descriptor =
+                ((unsigned char)IORD_8DIRECT(device_pointer->base, 21));
+
+        boot_sector_data.number_of_sectors_per_table =
+                ((unsigned short int) IORD_16DIRECT(device_pointer->base, 22));
+        boot_sector_data.number_of_sectors_per_track =
+                ((unsigned short int) IORD_16DIRECT(device_pointer->base, 24));
+
+        boot_sector_data.number_of_heads =
+                ((unsigned short int)IORD_16DIRECT(device_pointer->base, 26));
+
+        boot_sector_data.number_of_hidden_sectors = 
+                ((unsigned int)IORD_32DIRECT(device_pointer->base, 28));
+
+        boot_sector_data.total_sector_count_if_above_32MB =
+                ((unsigned)IORD_32DIRECT(device_pointer->base, 32));
+
+        boot_sector_data.drive_number = ((unsigned char) IORD_8DIRECT(device_pointer->base, 36));
+        boot_sector_data.current_head = ((unsigned char) IORD_8DIRECT(device_pointer->base, 37));
+        boot_sector_data.boot_signature = ((unsigned char) IORD_8DIRECT(device_pointer->base, 38));
+        boot_sector_data.first_fat_sector_offset = boot_sector_data.reserved_sectors;
+
+        boot_sector_data.second_fat_sector_offset = boot_sector_data.first_fat_sector_offset +
+                boot_sector_data.number_of_sectors_per_table;
+
+        boot_sector_data.root_directory_sector_offset =
+                boot_sector_data.second_fat_sector_offset +
+                boot_sector_data.number_of_sectors_per_table;
+
+        boot_sector_data.data_sector_offset =
+                boot_sector_data.root_directory_sector_offset +
+                (32*boot_sector_data.max_number_of_dir_entires /
+                boot_sector_data.sector_size_in_bytes);    
 	    
 		if (boot_sector_data.number_of_sectors_in_partition > 0)
-			num_clusters = (boot_sector_data.number_of_sectors_in_partition / boot_sector_data.sectors_per_cluster);
+        {
+			num_clusters = (boot_sector_data.number_of_sectors_in_partition /
+                boot_sector_data.sectors_per_cluster);
+        }
 		else
-			num_clusters = (boot_sector_data.total_sector_count_if_above_32MB / boot_sector_data.sectors_per_cluster);
+        {
+			num_clusters = (boot_sector_data.total_sector_count_if_above_32MB /
+                    boot_sector_data.sectors_per_cluster);
+        }
 
 		if (num_clusters < 4087)
 			boot_sector_data.bits_for_cluster_index = 12;
@@ -270,14 +321,23 @@ bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
 		else
 			boot_sector_data.bits_for_cluster_index = 32;
 	    
-		for (counter = 0; counter < 4; counter++)
-			boot_sector_data.volume_id[counter] = ((char) IORD_8DIRECT(device_pointer->base, 39+counter));
+        for (counter = 0; counter < 4; counter++)
+        {
+            boot_sector_data.volume_id[counter] =
+                ((char)IORD_8DIRECT(device_pointer->base, 39+counter));
+        }
 
-		for (counter = 0; counter < 11; counter++)
-			boot_sector_data.volume_label[counter] = ((char) IORD_8DIRECT(device_pointer->base, 43+counter));
+        for (counter = 0; counter < 11; counter++)
+        {
+            boot_sector_data.volume_label[counter] =
+                ((char)IORD_8DIRECT(device_pointer->base, 43+counter));
+        }
 
-		for (counter = 0; counter < 8; counter++)
-            boot_sector_data.file_system_type[counter] = ((char)IORD_8DIRECT(device_pointer->base, 54+counter));
+        for (counter = 0; counter < 8; counter++)
+        {
+            boot_sector_data.file_system_type[counter] =
+                ((char)IORD_8DIRECT(device_pointer->base, 54+counter));
+        }
 
 		for (counter = 0; counter < MAX_FILES_OPENED; counter++)
 			active_files[counter].in_use = false;
@@ -313,7 +373,8 @@ bool SDCard::Look_for_FAT16()
             if (boot_sector_data.bits_for_cluster_index != 16)
                 result = false;
             else
-                fat_partition_size_in_512_byte_sectors = boot_sector_data.number_of_sectors_in_partition;
+                fat_partition_size_in_512_byte_sectors =
+                        boot_sector_data.number_of_sectors_in_partition;
         }
     }
 	return result;
@@ -341,7 +402,8 @@ bool SDCard::check_file_name_for_FAT16_compliance(char *file_name)
     for(index = 0; index < length; index++)
     {
         if ((file_name[index] == ' ') ||
-            ((last_dir_break_position == (index - 1)) && ((file_name[index] == '\\') || (file_name[index] == '/'))) ||
+            ((last_dir_break_position == (index - 1)) &&
+                    ((file_name[index] == '\\') || (file_name[index] == '/'))) ||
             ((index - last_period == 9) && (file_name[index] != '.')) ||
             ((last_dir_break_position != last_period) && (index - last_period > 3) &&
              (file_name[index] != '\\') && (file_name[index] != '/'))
@@ -350,6 +412,7 @@ bool SDCard::check_file_name_for_FAT16_compliance(char *file_name)
             result = false;
             break;
         }
+
         if ((file_name[index] == '\\') || (file_name[index] == '/'))
         {
             last_period = index;
@@ -436,7 +499,9 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
         
         if (home_dir_cluster == 0)
         {
-            int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) / boot_sector_data.sector_size_in_bytes);
+            int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+                    boot_sector_data.sector_size_in_bytes);
+
             int sector_index;
             
             for (sector_index = 0; sector_index < max_root_dir_sectors; sector_index++)
@@ -452,7 +517,8 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
                         Read_File_Record_At_Offset(file_counter*32, file_record, 0, sector_index);
                         if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
                         {
-                            bool match = match_file_record_to_name_ext(file_record, name, extension);
+                            bool match = match_file_record_to_name_ext(file_record,
+                                            name, extension);
                             if (match)
                             {
                                 new_cluster = file_record->start_cluster_index;
@@ -492,18 +558,25 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
 
                 int sector_index;
                 
-                for (sector_index = 0; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
+                for (sector_index = 0;
+                        sector_index < boot_sector_data.sectors_per_cluster;
+                        sector_index++)
                 {
-                    if (Read_Sector_Data(sector_index + start_sector, fat_partition_offset_in_512_byte_sectors))
+                    if (Read_Sector_Data(sector_index + start_sector,
+                            fat_partition_offset_in_512_byte_sectors))
                     {
                         int file_counter;
                         
                         for (file_counter = 0; file_counter < 16; file_counter++)
                         {                         
-                            Read_File_Record_At_Offset(file_counter*32, file_record, cluster, sector_index);
+                            Read_File_Record_At_Offset(file_counter*32,
+                                    file_record, cluster, sector_index);
+
                             if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
                             {
-								bool match = match_file_record_to_name_ext(file_record, name, extension);
+                                bool match = match_file_record_to_name_ext(file_record,
+                                                name, extension);
+
                                 if (match)
                                 {
                                     new_cluster = file_record->start_cluster_index;
@@ -522,11 +595,11 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
                 }
                 if (new_cluster == home_dir_cluster)
                 {
-					unsigned short int next_cluster;
+                    unsigned short next_cluster;
 
-					if (get_cluster_flag(new_cluster, &next_cluster))
-					{
-						if ((next_cluster & 0x0000fff8) == 0x0000fff8)
+                    if (get_cluster_flag(new_cluster, &next_cluster))
+                    {
+                        if ((next_cluster & 0x0000fff8) == 0x0000fff8)
 							return false;
 
 						new_cluster = (next_cluster & 0x0000fff8);
@@ -602,12 +675,14 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
 
     if (directory_start_cluster == 0)
     {
-        int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) / boot_sector_data.sector_size_in_bytes);
+        int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+                boot_sector_data.sector_size_in_bytes);
+
         int sector_index;
         
         for (sector_index = 0; sector_index < max_root_dir_sectors; sector_index++)
         {
-            if (Read_Sector_Data(   sector_index + boot_sector_data.root_directory_sector_offset,
+            if (Read_Sector_Data(sector_index + boot_sector_data.root_directory_sector_offset,
                                     fat_partition_offset_in_512_byte_sectors))
             {
                 int file_counter;
@@ -646,17 +721,22 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
 
             int sector_index;
             
-            for (sector_index = 0; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
+            for (sector_index = 0;
+                    sector_index < boot_sector_data.sectors_per_cluster;
+                    sector_index++)
             {
-                if (Read_Sector_Data(sector_index + start_sector, fat_partition_offset_in_512_byte_sectors))
+                if (Read_Sector_Data(sector_index + start_sector,
+                        fat_partition_offset_in_512_byte_sectors))
                 {
                     for (int file_counter = 0; file_counter < 16; file_counter++)
                     {
-                        Read_File_Record_At_Offset(file_counter*32, file_record, cluster, sector_index);
+                        Read_File_Record_At_Offset(file_counter*32,
+                                    file_record, cluster, sector_index);
 
                         if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
                         {
-                            bool match = match_file_record_to_name_ext(file_record, name, extension);
+                            bool match = match_file_record_to_name_ext(file_record,
+                                            name, extension);
 
                             if (match)
                             {                               
@@ -701,34 +781,40 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
 
 bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 {
-    unsigned int sector = boot_sector_data.first_fat_sector_offset;
-    unsigned int cluster_index = 2;
+    unsigned sector = boot_sector_data.first_fat_sector_offset;
+    unsigned cluster_index = 2;
     short int cluster = -1;
     bool result = false;
 	unsigned max_cluster_index = 0;
-	unsigned int non_data_sectors = boot_sector_data.data_sector_offset;
-	unsigned int less_than_32 = boot_sector_data.number_of_sectors_in_partition;
-	unsigned int greater_than_32 = boot_sector_data.total_sector_count_if_above_32MB;
+	unsigned non_data_sectors = boot_sector_data.data_sector_offset;
+	unsigned less_than_32 = boot_sector_data.number_of_sectors_in_partition;
+	unsigned greater_than_32 = boot_sector_data.total_sector_count_if_above_32MB;
 
 	if (less_than_32 > greater_than_32)
-		max_cluster_index = ((less_than_32 - non_data_sectors) / boot_sector_data.sectors_per_cluster) + 1;
+    {
+		max_cluster_index = ((less_than_32 - non_data_sectors) /
+                boot_sector_data.sectors_per_cluster) + 1;
+    }
 	else
-		max_cluster_index = ((greater_than_32 - non_data_sectors) / boot_sector_data.sectors_per_cluster) + 1;
+    {
+		max_cluster_index = ((greater_than_32 - non_data_sectors) /
+                    boot_sector_data.sectors_per_cluster) + 1;
+    }
 
     while (sector != boot_sector_data.second_fat_sector_offset)
     {
         if (Read_Sector_Data( sector, fat_partition_offset_in_512_byte_sectors))
         {
-            do {
-                cluster = ((unsigned short int) IORD_16DIRECT(device_pointer->base, 2*(cluster_index % 256)));
+            do
+            {
+                cluster = ((unsigned short)IORD_16DIRECT(device_pointer->base,
+                                    2*(cluster_index % 256)));
+
                 if (cluster == 0)
-                {
                     break;
-                }
                 else
-                {
                     cluster_index++;
-                } 
+
             } while ((cluster_index % 256) != 0);
         }
         if (cluster == 0)
@@ -746,24 +832,29 @@ bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 }
 
 
-int SDCard::find_first_empty_record_in_a_subdirectory(int start_cluster_index)
+int SDCard::find_first_empty_record_in_a_subdirectory(const int start_cluster_index)
 {
     int result = -1;
     int cluster = start_cluster_index;
-    do {
-        int start_sector = ( cluster - 2 ) * ( boot_sector_data.sectors_per_cluster ) + boot_sector_data.data_sector_offset;
+
+    do
+    {
+        int start_sector = (cluster - 2) * (boot_sector_data.sectors_per_cluster) +
+                    boot_sector_data.data_sector_offset;
+
         int sector_index;
         
         for (sector_index = 0; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
         {
-            if (Read_Sector_Data(sector_index + start_sector, fat_partition_offset_in_512_byte_sectors))
+            if (Read_Sector_Data(sector_index + start_sector,
+                    fat_partition_offset_in_512_byte_sectors))
             {
-                int file_counter;
-                
-                for (file_counter = 0; file_counter < 16; file_counter++)
+                for (int file_counter = 0; file_counter < 16; file_counter++)
                 {
-                    unsigned short int leading_char;                    
-                    leading_char = ((unsigned char) IORD_8DIRECT(device_pointer->base, file_counter*32));
+                    unsigned short int leading_char;
+
+                    leading_char = ((unsigned char)IORD_8DIRECT(device_pointer->base,
+                                file_counter*32));
 
                     if ((leading_char == 0x00e5) || (leading_char == 0))
                     {
@@ -811,7 +902,9 @@ int SDCard::find_first_empty_record_in_a_subdirectory(int start_cluster_index)
 
 int SDCard::find_first_empty_record_in_root_directory()
 {
-    int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) / boot_sector_data.sector_size_in_bytes);
+    int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+            boot_sector_data.sector_size_in_bytes);
+
     int sector_index;
     int result = -1;
     
@@ -825,7 +918,10 @@ int SDCard::find_first_empty_record_in_root_directory()
             for (file_counter = 0; file_counter < 16; file_counter++)
             {
                 unsigned short int leading_char;
-                leading_char = ((unsigned char) IORD_8DIRECT(device_pointer->base, file_counter*32));
+
+                leading_char = ((unsigned char)IORD_8DIRECT(device_pointer->base,
+                                    file_counter*32));
+
                 if ((leading_char == 0x00e5) || (leading_char == 0))
                 {
                     result = (sector_index*16 + file_counter) << 16;
@@ -900,7 +996,8 @@ bool SDCard::create_file(char *name, t_file_record *file_record, t_file_record *
                 location = get_dir_divider_location( &(name[last_dir_separator]) );
             }
             
-            convert_filename_to_name_extension(&(name[last_dir_separator]), (char *)file_record->name, (char *)file_record->extension);
+            convert_filename_to_name_extension(&(name[last_dir_separator]),
+                    (char *)file_record->name, (char *)file_record->extension);
                          
             file_record->attributes = 0;
             file_record->create_time = 0;
@@ -919,9 +1016,13 @@ bool SDCard::create_file(char *name, t_file_record *file_record, t_file_record *
             file_record->home_directory_cluster = home_dir->start_cluster_index;
             file_record->in_use = true;
             file_record->modified = true;
+
             file_record_sector = (file_record->file_record_cluster == 0) ? 
-                                    (boot_sector_data.root_directory_sector_offset + file_record->file_record_sector_in_cluster):  
-                                    (boot_sector_data.data_sector_offset + (file_record->file_record_cluster-2)*boot_sector_data.sectors_per_cluster +
+                                    (boot_sector_data.root_directory_sector_offset +
+                                    file_record->file_record_sector_in_cluster):  
+                            (boot_sector_data.data_sector_offset +
+                            (file_record->file_record_cluster-2) *
+                            boot_sector_data.sectors_per_cluster +
                                      file_record->file_record_sector_in_cluster);
 
 			if (Read_Sector_Data(file_record_sector, fat_partition_offset_in_512_byte_sectors))
@@ -1076,16 +1177,17 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 
         if (cluster == 0)
         {
-				int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+                int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
                         boot_sector_data.sector_size_in_bytes);
 
-				int sector_index = search_data.current_sector_in_cluster;
-				int file_counter = search_data.file_index_in_sector+1;
+                int sector_index = search_data.current_sector_in_cluster;
+                int file_counter = search_data.file_index_in_sector+1;
     
-				for (; sector_index < max_root_dir_sectors; sector_index++)
-				{
-					if (Read_Sector_Data(sector_index + boot_sector_data.root_directory_sector_offset,
-											fat_partition_offset_in_512_byte_sectors))
+                for (; sector_index < max_root_dir_sectors; sector_index++)
+                {
+                    if (Read_Sector_Data(sector_index +
+                            boot_sector_data.root_directory_sector_offset,
+                            fat_partition_offset_in_512_byte_sectors))
 					{
 						for (; file_counter < 16; file_counter++)
 						{
@@ -1116,16 +1218,21 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 				int file_counter = search_data.file_index_in_sector+1;
 				do 
 				{
-					int start_sector = ( cluster - 2 ) * ( boot_sector_data.sectors_per_cluster ) + boot_sector_data.data_sector_offset;
+                    int start_sector = (cluster - 2) * 
+                        (boot_sector_data.sectors_per_cluster) +
+                        boot_sector_data.data_sector_offset;
+
 					int sector_index = search_data.current_sector_in_cluster;
 			        
 					for (; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
 					{
-						if (Read_Sector_Data(sector_index + start_sector, fat_partition_offset_in_512_byte_sectors))
+                        if (Read_Sector_Data(sector_index + start_sector,
+                                fat_partition_offset_in_512_byte_sectors))
 						{        
 							for (; file_counter < 16; file_counter++)
 							{
-								if (Read_File_Record_At_Offset(file_counter*32, &file_record, cluster, sector_index))
+                                if (Read_File_Record_At_Offset(file_counter*32,
+                                            &file_record, cluster, sector_index))
 								{
 									if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
 									{
@@ -1225,18 +1332,23 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 				int file_counter = search_data.file_index_in_sector+1;
 				do 
 				{
-					int start_sector = ( cluster - 2 ) * ( boot_sector_data.sectors_per_cluster ) + boot_sector_data.data_sector_offset;
+                    int start_sector = (cluster - 2) *
+                        (boot_sector_data.sectors_per_cluster) +
+                        boot_sector_data.data_sector_offset;
+
 					int sector_index = search_data.current_sector_in_cluster;
 			        
 					for (; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
 					{
-						if (Read_Sector_Data(sector_index + start_sector, fat_partition_offset_in_512_byte_sectors))
+                        if (Read_Sector_Data(sector_index + start_sector,
+                                fat_partition_offset_in_512_byte_sectors))
 						{        
 							for (; file_counter < 16; file_counter++)
 							{
-								if (Read_File_Record_At_Offset(file_counter*32, &file_record, cluster, sector_index))
+                                if (Read_File_Record_At_Offset(file_counter*32,
+                                        &file_record, cluster, sector_index))
 								{
-									if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
+                                    if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
 									{
 										search_data.current_cluster_index = cluster;
 										search_data.file_index_in_sector = file_counter;
@@ -1284,7 +1396,6 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name)
 
 uint16_t SDCardEx::fopen(char *name, bool create)
 {
-    Uart *uart = Uart::getInstance();
     short int file_record_index = -1;
     unsigned int home_directory_cluster = 0;
     t_file_record home_dir;
@@ -1387,17 +1498,24 @@ short int SDCard::alt_up_sd_card_read(short int file_handle)
     {
         if (active_files[file_handle].in_use)
         {
-            if (active_files[file_handle].current_byte_position < active_files[file_handle].file_size_in_bytes)
+            if (active_files[file_handle].current_byte_position <
+                    active_files[file_handle].file_size_in_bytes)
             {
-                int data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].current_cluster_index - 2)*boot_sector_data.sectors_per_cluster +
+                int data_sector = boot_sector_data.data_sector_offset +
+                        (active_files[file_handle].current_cluster_index - 2) *
+                            boot_sector_data.sectors_per_cluster +
                                   active_files[file_handle].current_sector_in_cluster;
                 
-                if ((active_files[file_handle].current_byte_position > 0) && ((active_files[file_handle].current_byte_position % 512) == 0))
+                if ((active_files[file_handle].current_byte_position > 0) &&
+                    ((active_files[file_handle].current_byte_position % 512) == 0))
                 {
-                    if (active_files[file_handle].current_sector_in_cluster == boot_sector_data.sectors_per_cluster - 1)
+                    if (active_files[file_handle].current_sector_in_cluster ==
+                            boot_sector_data.sectors_per_cluster - 1)
                     {
-                        unsigned short int next_cluster;
-                        if (get_cluster_flag(active_files[file_handle].current_cluster_index, &next_cluster))
+                        unsigned short next_cluster;
+
+                        if (get_cluster_flag(active_files[file_handle].current_cluster_index,
+                                &next_cluster))
                         {
                             if ((next_cluster & 0x0000fff8) == 0x0000fff8)
                             {
@@ -1407,8 +1525,11 @@ short int SDCard::alt_up_sd_card_read(short int file_handle)
                             {
                                 active_files[file_handle].current_cluster_index = next_cluster;
 								active_files[file_handle].current_sector_in_cluster = 0;
-                                data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].current_cluster_index - 2)*boot_sector_data.sectors_per_cluster +
-                                  active_files[file_handle].current_sector_in_cluster;                                
+
+                                data_sector = boot_sector_data.data_sector_offset +
+                                    (active_files[file_handle].current_cluster_index - 2) *
+                                    boot_sector_data.sectors_per_cluster +
+                                  active_files[file_handle].current_sector_in_cluster;
                             }
                         }
                         else
@@ -1418,16 +1539,23 @@ short int SDCard::alt_up_sd_card_read(short int file_handle)
                     }
                     else
                     {
-                        active_files[file_handle].current_sector_in_cluster = active_files[file_handle].current_sector_in_cluster + 1;
+                        active_files[file_handle].current_sector_in_cluster =
+                            active_files[file_handle].current_sector_in_cluster + 1;
+
                         data_sector = data_sector + 1;
                     }
                 }
-                if (current_sector_index != (data_sector + fat_partition_offset_in_512_byte_sectors))
+                if (current_sector_index != (data_sector+fat_partition_offset_in_512_byte_sectors))
+                {
                     if (!Read_Sector_Data(data_sector, fat_partition_offset_in_512_byte_sectors))
 						return -2;
+                }
 
-                ch = (unsigned char) IORD_8DIRECT(buffer_memory, (active_files[file_handle].current_byte_position % 512));
-                active_files[file_handle].current_byte_position = active_files[file_handle].current_byte_position + 1;
+                ch = (unsigned char)IORD_8DIRECT(buffer_memory,
+                        (active_files[file_handle].current_byte_position % 512));
+
+                active_files[file_handle].current_byte_position =
+                        active_files[file_handle].current_byte_position + 1;
             }
         }
     }
@@ -1444,25 +1572,36 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
     {
         if (active_files[file_handle].in_use)
         {
-            int data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].current_cluster_index - 2)*boot_sector_data.sectors_per_cluster +
+            int data_sector = boot_sector_data.data_sector_offset +
+                    (active_files[file_handle].current_cluster_index - 2) *
+                    boot_sector_data.sectors_per_cluster +
                               active_files[file_handle].current_sector_in_cluster;
-			short int buffer_offset = active_files[file_handle].current_byte_position % boot_sector_data.sector_size_in_bytes;
 
-			if (active_files[file_handle].current_byte_position < active_files[file_handle].file_size_in_bytes)
+            short int buffer_offset = active_files[file_handle].current_byte_position %
+                    boot_sector_data.sector_size_in_bytes;
+
+			if (active_files[file_handle].current_byte_position <
+                    active_files[file_handle].file_size_in_bytes)
             {
                 if ((active_files[file_handle].current_byte_position > 0) && (buffer_offset == 0))
                 {
-                    if (active_files[file_handle].current_sector_in_cluster == boot_sector_data.sectors_per_cluster - 1)
+                    if (active_files[file_handle].current_sector_in_cluster ==
+                            boot_sector_data.sectors_per_cluster - 1)
                     {
                         unsigned short int next_cluster;
-                        if (get_cluster_flag(active_files[file_handle].current_cluster_index, &next_cluster))
+
+                        if (get_cluster_flag(active_files[file_handle].current_cluster_index,
+                                &next_cluster))
                         {
                             if (next_cluster < 0x0000fff8)
                             {
                                 active_files[file_handle].current_cluster_index = next_cluster;
-								active_files[file_handle].current_sector_in_cluster = 0;
-                                data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].current_cluster_index - 2)*boot_sector_data.sectors_per_cluster +
-                                  active_files[file_handle].current_sector_in_cluster;                                
+                                active_files[file_handle].current_sector_in_cluster = 0;
+
+                                data_sector = boot_sector_data.data_sector_offset +
+                                    (active_files[file_handle].current_cluster_index - 2) *
+                                    boot_sector_data.sectors_per_cluster +
+                                  active_files[file_handle].current_sector_in_cluster;
                             }
                         }
                         else
@@ -1472,7 +1611,9 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
                     }
                     else
                     {
-                        active_files[file_handle].current_sector_in_cluster = active_files[file_handle].current_sector_in_cluster + 1;
+                        active_files[file_handle].current_sector_in_cluster =
+                            active_files[file_handle].current_sector_in_cluster + 1;
+
                         data_sector = data_sector + 1;
                     }
                 }
@@ -1481,15 +1622,21 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 			{
 				if ((active_files[file_handle].current_byte_position > 0) && (buffer_offset == 0))
 				{
-					if (active_files[file_handle].current_sector_in_cluster == boot_sector_data.sectors_per_cluster - 1)
+                    if (active_files[file_handle].current_sector_in_cluster ==
+                            boot_sector_data.sectors_per_cluster - 1)
 					{
 						unsigned int cluster_number;
 
 						if (find_first_empty_cluster(&cluster_number))
 						{
-							mark_cluster(active_files[file_handle].current_cluster_index, ((unsigned short int) (cluster_number & 0x0000ffff)), true);
+                            mark_cluster(active_files[file_handle].current_cluster_index,
+                                ((unsigned short)(cluster_number & 0x0000ffff)), true);
+
 							mark_cluster(cluster_number, 0xffff, true);
-							mark_cluster(active_files[file_handle].current_cluster_index, ((unsigned short int) (cluster_number & 0x0000ffff)), false);
+
+                            mark_cluster(active_files[file_handle].current_cluster_index,
+                                ((unsigned short)(cluster_number & 0x0000ffff)), false);
+
 							mark_cluster(cluster_number, 0xffff, false);
 							active_files[file_handle].current_cluster_index = cluster_number;
 							active_files[file_handle].current_sector_in_cluster = 0;
@@ -1501,27 +1648,36 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 					}
 					else
 					{
-						active_files[file_handle].current_sector_in_cluster = active_files[file_handle].current_byte_position / boot_sector_data.sector_size_in_bytes;
+                        active_files[file_handle].current_sector_in_cluster =
+                            active_files[file_handle].current_byte_position /
+                                boot_sector_data.sector_size_in_bytes;
 					}
-					data_sector = boot_sector_data.data_sector_offset + (active_files[file_handle].current_cluster_index - 2)*boot_sector_data.sectors_per_cluster +
+
+                    data_sector = boot_sector_data.data_sector_offset +
+                        (active_files[file_handle].current_cluster_index - 2) *
+                            boot_sector_data.sectors_per_cluster +
                           active_files[file_handle].current_sector_in_cluster;
-				}
-			}
-            if (current_sector_index != data_sector + fat_partition_offset_in_512_byte_sectors)
-            {
-                if (!Read_Sector_Data(data_sector, fat_partition_offset_in_512_byte_sectors))
-                {
-					return false;
                 }
             }
-			IOWR_8DIRECT(buffer_memory, buffer_offset, byte_of_data);
-			active_files[file_handle].current_byte_position = active_files[file_handle].current_byte_position + 1;
 
-			if (active_files[file_handle].current_byte_position >= active_files[file_handle].file_size_in_bytes)
+            if (current_sector_index != data_sector + fat_partition_offset_in_512_byte_sectors)
+                if (!Read_Sector_Data(data_sector, fat_partition_offset_in_512_byte_sectors))
+					return false;
+
+            IOWR_8DIRECT(buffer_memory, buffer_offset, byte_of_data);
+
+            active_files[file_handle].current_byte_position =
+                active_files[file_handle].current_byte_position + 1;
+
+            if (active_files[file_handle].current_byte_position >=
+                    active_files[file_handle].file_size_in_bytes)
 			{
-				active_files[file_handle].file_size_in_bytes = active_files[file_handle].file_size_in_bytes + 1;
+                active_files[file_handle].file_size_in_bytes =
+                    active_files[file_handle].file_size_in_bytes + 1;
+
 				active_files[file_handle].modified = true;
 			}
+
             current_sector_modified = true;
 			result = true;
 		}
@@ -1540,19 +1696,23 @@ bool SDCard::alt_up_sd_card_fclose(short int file_handle)
         {
 			if (active_files[file_handle].modified)
 			{
-				unsigned int record_sector = active_files[file_handle].file_record_sector_in_cluster;
+				unsigned record_sector = active_files[file_handle].file_record_sector_in_cluster;
 				if (active_files[file_handle].file_record_cluster == 0)
 				{
 					record_sector = record_sector + boot_sector_data.root_directory_sector_offset;
 				}
 				else
 				{
-					record_sector = record_sector + boot_sector_data.data_sector_offset + 
-									(active_files[file_handle].file_record_cluster - 2)*boot_sector_data.sectors_per_cluster;
+                    record_sector = record_sector + boot_sector_data.data_sector_offset + 
+                        (active_files[file_handle].file_record_cluster - 2) *
+                        boot_sector_data.sectors_per_cluster;
 				}
-				if (Read_Sector_Data(record_sector, fat_partition_offset_in_512_byte_sectors))
-				{
-					if (Write_File_Record_At_Offset(active_files[file_handle].file_record_offset, &(active_files[file_handle])))
+
+                if (Read_Sector_Data(record_sector, fat_partition_offset_in_512_byte_sectors))
+                {
+                    if (Write_File_Record_At_Offset(
+                            active_files[file_handle].file_record_offset,
+                            &(active_files[file_handle])))
 					{
 						result = Save_Modified_Sector();
 					}
@@ -1568,13 +1728,16 @@ bool SDCard::alt_up_sd_card_fclose(short int file_handle)
 
 short int MyFile::read()
 {
-    sd->readFile(fd);
+    return sd->readFile(fd);
 }
 
 size_t MyFile::fread(void *ptr, size_t size, size_t nmemb)
 {
-    for (int i = 0; i < size * nmemb; i++)
+    size_t i;
+    for (i = 0; i < size * nmemb; i++)
         *((uint8_t *)ptr + i) = (uint8_t)this->read();
+
+    return i;
 }
 
 unsigned int MyFile::getSize()

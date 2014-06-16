@@ -57,7 +57,7 @@ const Sample& jexp(const Sample& s)
     return Sample(::exp(s.r), ::exp(s.i));
 }
 
-Signaal Signaal::fft(int log2n)
+Signaal Signaal::fft(const unsigned log2n)
 {
     Signaal uitvoer(8);
     uitvoer.size = 8;
