@@ -1,31 +1,23 @@
-#include <stdio.h>
 #include <system.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include "misc.h"
 
 class PrimesTest1
 {
+    QuadroSegment seg;
 public:
+    PrimesTest1();
     int run();
-private:
-    QuadroSegment *seg;
-    Uart *uart;
-    LCD *lcd;
 };
+
+PrimesTest1::PrimesTest1() :
+    seg(MYSEGDISP2_0_BASE)
+{
+    seg.setInt(0);
+}
 
 int PrimesTest1::run()
 {
-    seg = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
-    uart = Uart::getInstance();
-
-    int aantal = 0;
-    seg->setInt(0);
-    lcd = new LCD((volatile uint8_t *)LCD_BASE);
-    //lcd->init(::open(ILCD_NAME, O_WRONLY));
-    //lcd->write("Hoera");
-
-    for (int i = 2; i < 0xffff; i++)
+    for (int i = 2, aantal = 0; i < 0xffff; i++)
     {
         bool priem = true;
 
@@ -34,7 +26,7 @@ int PrimesTest1::run()
                 priem = false;
 
         if (priem)
-            seg->setInt(++aantal);
+            seg.setInt(++aantal);
     }
 
     return 0;

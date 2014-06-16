@@ -106,7 +106,6 @@ void MD5Test1::init()
     size_t fileSize = 9365708;
     uint8_t buf[fileSize];
     MyFile *myFile;
-    MyFile *myFile2;
     uint8_t result[16];
 
     if (sdCard.isPresent() && sdCard.isFAT16())

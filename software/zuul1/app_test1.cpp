@@ -1,21 +1,7 @@
-#include <stdio.h>
 #include <system.h>
 #include <stdint.h>
 #include <sys/alt_irq.h>
-#include <fcntl.h>
 #include "misc.h"
-
-class DuoSegmentLinks : public ::DuoSegment
-{
-public:
-    DuoSegmentLinks() : DuoSegment((volatile uint16_t *)VA_S1_BASE) { }
-};
-
-class DuoSegmentRechts : public ::DuoSegment
-{
-public:
-    DuoSegmentRechts() : DuoSegment((volatile uint16_t *)VA_S2_BASE) { }
-};
 
 class Beam : public Observer
 {
@@ -115,20 +101,37 @@ void Beam::update()
 class Test1
 {
 private:
-    ::DuoSegmentLinks segmentLinks;
-    ::DuoSegmentRechts segmentRechts;
-    ::QuadroSegment *segmentQuadro;
-    ::InfraRood *ir;
+    ::DuoSegment segmentLinks;
+    ::DuoSegment segmentRechts;
+    ::QuadroSegment segmentQuadro;
+    ::InfraRood ir;
     ::Uart uart;
-    ::VGATerminal *vgaTerminal;
-    ::GreenLeds *gl;
+    ::VGATerminal vgaTerminal;
+    ::GreenLeds gl;
     ::LCD *lcd;
     ::EEProm *eeprom;
     ::I2C *i2cBus1;
 public:
     void init();
-    Test1() : uart((volatile uint32_t * const)UART_BASE) { }
+    Test1();
 };
+
+Test1::Test1() :
+    segmentLinks(VA_S1_BASE),
+    segmentRechts(VA_S2_BASE),
+    segmentQuadro(MYSEGDISP2_0_BASE),
+
+    ir((volatile uint32_t * const)INFRARED_0_BASE, INFRARED_0_IRQ,
+            INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID),
+
+    uart((volatile uint32_t * const)UART_BASE),
+    vgaTerminal("/dev/video_character_buffer_with_dma_0"),
+    gl((volatile uint8_t *)LEDG_BASE)
+{
+    vgaTerminal.clear();
+    vgaTerminal.puts("Opstarten\r\n");
+    gl.set(0x03);
+}
 
 int main()
 {
@@ -142,23 +145,7 @@ int main()
 
 void Test1::init()
 {
-    vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
-    vgaTerminal->clear();
-    segmentQuadro = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
-    segmentQuadro->setInt(12345);
-    segmentQuadro->setHex(0xabcd);
-    segmentLinks.write(0x3024);
-    segmentLinks.write(0x2430);
-    segmentLinks.setInt(12345);
-    segmentRechts.write(0x9992);
-    segmentRechts.setHex(0x3f);
-    ir = ::InfraRood::getInstance();
-    int ctl = INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID;
-    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
-    ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
-    vgaTerminal->puts("Opstarten\r\n");
-    gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
-    gl->set(0x03);
+    ir.setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, &segmentQuadro)));
     lcd = new LCD((volatile uint8_t *)LCD_BASE);
     lcd->puts("Xargon");
 }

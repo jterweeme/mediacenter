@@ -204,11 +204,23 @@ uint32_t Utility::be_32_toh(uint32_t x)
     return (x & 0x00ff00ff) << 8 | (x & 0xff00ff00) >> 8;
 }
 
-void InfraRood::init(volatile uint32_t * base, int irq, int ctl)
+InfraRoodBase::InfraRoodBase(volatile void * const base, const int irq,
+    const int ctl, alt_isr_func isr)
+  :
+    base(base),
+    base32((volatile uint32_t * const)base)
 {
-    this->base = base;
-    alt_ic_isr_register(ctl, irq, isrBridge, 0, 0);
-    base[0] = 0;
+    ::alt_ic_isr_register(ctl, irq, isr, 0, 0);
+    base32[0] = 0;
+}
+
+InfraRood::InfraRood(volatile void * const base, const int irq, const int ctl) :
+    base(base),
+    base32((volatile uint32_t * const)base)
+{
+    instance = this;
+    ::alt_ic_isr_register(ctl, irq, isrBridge, 0, 0);
+    base32[0] = 0;
 }
 
 void InfraRood::isr(void *context)
@@ -216,26 +228,11 @@ void InfraRood::isr(void *context)
     if (observer != 0)
         observer->update();
 
-    base[3] = 0;
-    base[0] = 0;    // reset interrupt
+    base32[3] = 0;
+    base32[0] = 0;    // reset interrupt
 }
 
-void InfraRood::setObserver(Observer *observer)
-{
-    this->observer = observer;
-}
-
-void InfraRood::isrBridge(void *context)
-{
-    InfraRood::getInstance()->isr(context);
-}
-
-InfraRood *InfraRood::getInstance()
-{
-    static InfraRood instance;
-    return &instance;
-}
-
+InfraRood *InfraRood::instance;
 
 Uart *Uart::getInstance()
 {

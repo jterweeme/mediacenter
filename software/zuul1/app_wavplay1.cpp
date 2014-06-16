@@ -21,7 +21,7 @@ private:
     LCD *lcd;
     MyFile *myFile;
     CombinedSegment *cs;
-    InfraRood *ir;
+    InfraRood ir;
 public:
     WavPlay1();
     SoundCard& getSoundCard() { return soundCard; }
@@ -41,7 +41,10 @@ public:
 
 WavPlay1::WavPlay1() :
     i2c((volatile uint32_t * const)SND_I2C_SCL_BASE, (volatile uint32_t * const)SND_I2C_SDA_BASE),
-    soundCard(&i2c, (volatile uint32_t * const)AUDIO_IF_0_BASE)
+    soundCard(&i2c, (volatile uint32_t * const)AUDIO_IF_0_BASE),
+
+    ir((volatile uint32_t * const)INFRARED_0_BASE, INFRARED_0_IRQ,
+        INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID)
 {
 }
 
@@ -77,13 +80,11 @@ void WavPlay1::init()
     lcd->clear();
     //lcd->home();
     lcd->puts("CROCKETS.WAV");
-    ir = InfraRood::getInstance();
-    int ctl = VA_S3_IRQ_INTERRUPT_CONTROLLER_ID;
-    ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
-    ir->setObserver(new Beam(this));
+    //ir = InfraRood::getInstance();
+    //int ctl = VA_S3_IRQ_INTERRUPT_CONTROLLER_ID;
+    //ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
+    ir.setObserver(new Beam(this));
 }
-
-
 
 int WavPlay1::run()
 {

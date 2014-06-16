@@ -13,6 +13,7 @@ Alex Aalbertsberg
 #include <unistd.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
 #include <priv/alt_file.h>
+#include <sys/alt_irq.h>
 #include "mystl.h"
 
 typedef mstd::complex<double> Sample;
@@ -70,8 +71,6 @@ public:
 
 extern const uint8_t lut[];
 
-
-
 template <class T> class Segment
 {
 protected:
@@ -85,6 +84,7 @@ class DuoSegment : public Segment<uint16_t>
 {
 public:
     DuoSegment(volatile uint16_t * const base) : Segment<uint16_t>(base) { }
+    DuoSegment(uint32_t base) : Segment<uint16_t>((volatile uint16_t * const)base) { }
     void setInt(unsigned int n);
     void setHex(uint8_t n);
 };
@@ -93,6 +93,7 @@ class QuadroSegment : public Segment<uint32_t>
 {
 public:
     QuadroSegment(volatile uint32_t * const base) : Segment<uint32_t>(base) { }
+    QuadroSegment(uint32_t base) : Segment<uint32_t>((volatile uint32_t * const)base) { }
     void setInt(unsigned int n);
     void setHex(uint16_t n);
 };
@@ -136,10 +137,35 @@ public:
 
 class KeyBoard
 {
-private:
     volatile uint8_t *base;
 public:
     void init(volatile uint8_t *base) { this->base = base; }
+};
+
+class InfraRoodBase
+{
+    volatile void * const base;
+    volatile uint32_t * const base32;
+public:
+    InfraRoodBase(volatile void * const base, const int irq,
+        const int ctl, alt_isr_func isr);
+
+    uint32_t read() { return base32[0]; }
+};
+
+class InfraRood
+{
+    Observer *observer;
+    void isr(void *context);
+    volatile void *base;
+    volatile uint32_t *base32;
+    static InfraRood *instance;
+public:
+    InfraRood(volatile void * const base, const int irq, const int ctl);
+    static InfraRood *getInstance() { return instance; }
+    void setObserver(Observer *observer) { this->observer = observer; }
+    static void isrBridge(void *context) { getInstance()->isr(context); }
+    uint32_t read() { return base32[0]; }
 };
 
 class TerasicRemote
@@ -170,22 +196,6 @@ public:
     static const uint16_t RIGHT = 0xe718;
     static const uint16_t MUTE = 0xf30c;
 };
-
-class InfraRood
-{
-private:
-    InfraRood() { }
-    Observer *observer;
-    void isr(void *context);
-    static void isrBridge(void *context);
-    volatile uint32_t * base;
-public:
-    static InfraRood *getInstance();
-    void setObserver(Observer *);
-    void init(volatile uint32_t * const base, int irq, int ctl);
-    uint32_t read() { return base[0]; }
-};
-
 class Uart2
 {
 protected:
@@ -205,6 +215,7 @@ private:
 public:
     Uart();
     Uart(volatile uint32_t *const base);
+    Uart(uint32_t base);
     static Uart *getInstance();
     void init(volatile uint32_t *base) { this->base = base; }
 };
@@ -228,6 +239,7 @@ private:
     static const uint8_t CMDHOME = 2;
 public:
     LCD(volatile uint8_t *base) : base(base) { }
+    LCD(uint32_t base) : base((volatile uint8_t * const)base) { }
     inline void putc(const char c) { base[DATA_REG] = c; }
     inline void puts(const char *s) { while (*s) putc(*s++); }
     inline void cmd(uint8_t c) { base[COMMAND_REG] = c; }
@@ -265,7 +277,7 @@ private:
     I2C *i2cBus;
     volatile uint32_t *base;
 public:
-    SoundCard(I2C *i2cBus, volatile uint32_t *base) { this->i2cBus = i2cBus; this->base = base; }
+    SoundCard(I2C *i2cBus, volatile uint32_t * const base) : i2cBus(i2cBus), base(base) { }
     bool init();
     bool regWrite(uint8_t index, uint16_t data);
     void writeDacOut(uint16_t left, uint16_t right);
