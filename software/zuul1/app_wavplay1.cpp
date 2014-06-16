@@ -67,9 +67,8 @@ void WavPlay1::init()
 {
     uart = Uart::getInstance();
     uart->init((volatile uint32_t * const)UART_BASE);
-    sdCard = new SDCardEx();
     volatile void * const sdbase = (volatile void * const)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
-    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, sdbase);
+    sdCard = new SDCardEx(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, sdbase);
     soundCard.init();
     soundCard.setOutputVolume(100);
     //soundCard->setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);

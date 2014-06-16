@@ -163,7 +163,7 @@ protected:
     bool check_file_name_for_FAT16_compliance(char *file_name);
     int get_dir_divider_location(char *name);
     bool match_file_record_to_name_ext(t_file_record *file_record, char *name, char *extension);
-    bool find_first_empty_cluster(unsigned int *cluster_number);
+    bool find_first_empty_cluster(unsigned *cluster_number);
     int find_first_empty_record_in_a_subdirectory(int start_cluster_index);
     int find_first_empty_record_in_root_directory();
     void convert_filename_to_name_extension(char *filename, char *name, char *extension);
@@ -185,7 +185,6 @@ public:
     static const uint8_t CMD_READ_BLOCK = 17;
     static const uint8_t CMD_WRITE_BLOCK = 24;
     static const uint8_t MAX_FILES_OPENED = 20;
-
     bool initialized;
     t_file_record active_files[MAX_FILES_OPENED];
 };
@@ -195,14 +194,13 @@ class SDCardEx : public SDCard
 public:
     uint16_t fopen(char *fn, bool create = false);
 public:
-    MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
-
-    void init(const char *name, volatile void *base)
+    SDCardEx(const char *name, volatile void * const base)
     {
         initialized = false;
         sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
     }
 
+    MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
     bool isPresent() { return this->alt_up_sd_card_is_Present(); }
     bool isFAT16() { return this->alt_up_sd_card_is_FAT16(); }
     bool write(int, char);

@@ -236,13 +236,37 @@ InfraRood *InfraRood::getInstance()
     return &instance;
 }
 
+
 Uart *Uart::getInstance()
 {
-    static Uart instance;
-    return &instance;
+    if (!instance)
+    {
+        static Uart inst;
+        instance = &inst;
+    }
+
+    return instance;
 }
 
-void Uart::printf(const char *format, ...)
+Uart *Uart::instance;
+
+Uart::Uart() : Uart2()
+{
+    if (instance)
+        throw "Bestaat al";
+
+    instance = this;
+}
+
+Uart::Uart(volatile uint32_t * const base) : Uart2(base)
+{
+    if (instance)
+        throw "Bestaat al";
+
+    instance = this;
+}
+
+void Uart2::printf(const char *format, ...)
 {
     va_list argp;
     va_start(argp, format);
@@ -279,7 +303,7 @@ void Uart::printf(const char *format, ...)
     va_end(argp);
 }
 
-void Uart::putc(const char c)
+void Uart2::putc(const char c)
 {
     while ((base[2] & (1<<6)) == 0) { }
     base[1] = c;

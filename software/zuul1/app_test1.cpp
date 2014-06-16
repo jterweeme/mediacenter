@@ -114,19 +114,20 @@ void Beam::update()
 
 class Test1
 {
-public:
-    void init();
 private:
     ::DuoSegmentLinks segmentLinks;
     ::DuoSegmentRechts segmentRechts;
     ::QuadroSegment *segmentQuadro;
     ::InfraRood *ir;
-    ::Uart *uart;
+    ::Uart uart;
     ::VGATerminal *vgaTerminal;
     ::GreenLeds *gl;
     ::LCD *lcd;
     ::EEProm *eeprom;
     ::I2C *i2cBus1;
+public:
+    void init();
+    Test1() : uart((volatile uint32_t * const)UART_BASE) { }
 };
 
 int main()
@@ -155,14 +156,9 @@ void Test1::init()
     int ctl = INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID;
     ir->init((volatile uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, ctl);
     ir->setObserver(new Beam(new CombinedSegment(&segmentLinks, &segmentRechts, segmentQuadro)));
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
     vgaTerminal->puts("Opstarten\r\n");
     gl = new GreenLeds((volatile uint8_t *)LEDG_BASE);
     gl->set(0x03);
-    //volatile uint32_t *sram = (volatile uint32_t *)MYSRAM_0_BASE;
-    //sram[100] = 0x012345678;
-    //segmentQuadro->setHex(sram[100]);
     lcd = new LCD((volatile uint8_t *)LCD_BASE);
     lcd->puts("Xargon");
 }

@@ -19,7 +19,7 @@ int fat_partition_size_in_512_byte_sectors = 0;
 t_FAT_12_16_boot_sector boot_sector_data;
 alt_up_sd_card_dev	*device_pointer = NULL;
 bool current_sector_modified = false;
-unsigned int current_sector_index = 0;
+unsigned current_sector_index = 0;
 t_find_data search_data;
 
 bool SDCard::Write_Sector_Data(int sector_index, int partition_offset)
@@ -445,13 +445,11 @@ int SDCard::get_dir_divider_location(char *name)
     return index;
 }
 
-
 bool SDCard::match_file_record_to_name_ext(t_file_record *file_record, char *name, char *extension)
 {
     bool match = true;
-	int index;
 
-    for (index = 0; index < 8; index++)
+    for (int index = 0; index < 8; index++)
     {
         if (CHAR_TO_UPPER(file_record->name[index]) != CHAR_TO_UPPER(name[index]))
         {
@@ -459,7 +457,7 @@ bool SDCard::match_file_record_to_name_ext(t_file_record *file_record, char *nam
 			break;
         }
     }
-    for (index = 0; index < 3; index++)
+    for (int index = 0; index < 3; index++)
     {
         if (CHAR_TO_UPPER(file_record->extension[index]) != CHAR_TO_UPPER(extension[index]))
         {
@@ -469,7 +467,6 @@ bool SDCard::match_file_record_to_name_ext(t_file_record *file_record, char *nam
     }
 	return match;
 }
-
 
 bool SDCard::get_home_directory_cluster_for_file(char *file_name,
         int *home_directory_cluster, t_file_record *file_record)
@@ -778,7 +775,6 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
     return result;   
 }
 
-
 bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 {
     unsigned sector = boot_sector_data.first_fat_sector_offset;
@@ -817,10 +813,10 @@ bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 
             } while ((cluster_index % 256) != 0);
         }
+
         if (cluster == 0)
-        {
             break;
-        }
+
         sector++;
     }
     if ((cluster == 0) && (cluster <= max_cluster_index))
@@ -917,7 +913,7 @@ int SDCard::find_first_empty_record_in_root_directory()
             
             for (file_counter = 0; file_counter < 16; file_counter++)
             {
-                unsigned short int leading_char;
+                unsigned short leading_char;
 
                 leading_char = ((unsigned char)IORD_8DIRECT(device_pointer->base,
                                     file_counter*32));
@@ -972,7 +968,7 @@ void SDCard::convert_filename_to_name_extension(char *filename, char *name, char
 
 bool SDCard::create_file(char *name, t_file_record *file_record, t_file_record *home_dir)
 {
-    unsigned int cluster_number;
+    unsigned cluster_number;
     bool result = false;
     
     if (find_first_empty_cluster(&cluster_number))
@@ -983,10 +979,9 @@ bool SDCard::create_file(char *name, t_file_record *file_record, t_file_record *
             record_index = find_first_empty_record_in_root_directory();
         else
             record_index = find_first_empty_record_in_a_subdirectory(home_dir->start_cluster_index);           
-
         if (record_index >= 0)
         {   
-            unsigned int file_record_sector;
+            unsigned file_record_sector;
             int location = get_dir_divider_location( name );
             int last_dir_separator = 0;
 
@@ -1588,7 +1583,7 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
                     if (active_files[file_handle].current_sector_in_cluster ==
                             boot_sector_data.sectors_per_cluster - 1)
                     {
-                        unsigned short int next_cluster;
+                        unsigned short next_cluster;
 
                         if (get_cluster_flag(active_files[file_handle].current_cluster_index,
                                 &next_cluster))
@@ -1618,21 +1613,21 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
                     }
                 }
             }
-			else
-			{
-				if ((active_files[file_handle].current_byte_position > 0) && (buffer_offset == 0))
-				{
+            else
+            {
+                if ((active_files[file_handle].current_byte_position > 0) && (buffer_offset == 0))
+                {
                     if (active_files[file_handle].current_sector_in_cluster ==
                             boot_sector_data.sectors_per_cluster - 1)
-					{
-						unsigned int cluster_number;
+                    {
+                        unsigned cluster_number;
 
-						if (find_first_empty_cluster(&cluster_number))
-						{
+                        if (find_first_empty_cluster(&cluster_number))
+                        {
                             mark_cluster(active_files[file_handle].current_cluster_index,
                                 ((unsigned short)(cluster_number & 0x0000ffff)), true);
 
-							mark_cluster(cluster_number, 0xffff, true);
+                            mark_cluster(cluster_number, 0xffff, true);
 
                             mark_cluster(active_files[file_handle].current_cluster_index,
                                 ((unsigned short)(cluster_number & 0x0000ffff)), false);

@@ -186,17 +186,27 @@ public:
     uint32_t read() { return base[0]; }
 };
 
-class Uart
+class Uart2
 {
-private:
-    Uart() { }
+protected:
     volatile uint32_t *base;
 public:
-    static Uart *getInstance();
-    void init(volatile uint32_t *base) { this->base = base; }
+    Uart2() { }
+    Uart2(volatile uint32_t * const base) : base(base) { }
     void putc(const char);
     void puts(const char *s) { while (*s) putc(*s++); }
     void printf(const char *format, ...);
+};
+
+class Uart : public Uart2  // singleton versie
+{
+private:
+    static Uart *instance;
+public:
+    Uart();
+    Uart(volatile uint32_t *const base);
+    static Uart *getInstance();
+    void init(volatile uint32_t *base) { this->base = base; }
 };
 
 class JtagUart

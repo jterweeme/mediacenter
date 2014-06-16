@@ -6,12 +6,12 @@
 
 class MD5Test1
 {
-public:
-    void init();
 private:
     Uart *uart;
-    SDCardEx *sdCard;
-    CombinedSegment *cs;
+    SDCardEx sdCard;
+public:
+    MD5Test1();
+    void init();
 };
 
 void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
@@ -93,26 +93,26 @@ void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
     Utility::to_bytes(h3, digest + 12);
 }
 
+MD5Test1::MD5Test1() :
+    sdCard(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
+            (volatile void * const)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE)
+{ }
+
 void MD5Test1::init()
 {
     uart = Uart::getInstance();
     uart->init((volatile uint32_t *)UART_BASE);
     uart->puts("Initialize MD5Test1\r\n");
-    sdCard = new SDCardEx();
-
-    sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
-            (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
-
     size_t fileSize = 9365708;
     uint8_t buf[fileSize];
     MyFile *myFile;
     MyFile *myFile2;
     uint8_t result[16];
 
-    if (sdCard->isPresent() && sdCard->isFAT16())
+    if (sdCard.isPresent() && sdCard.isFAT16())
     {
-        myFile = sdCard->openFile("vogue.kar");
-        t_file_record testRecord = sdCard->active_files[myFile->fd];
+        myFile = sdCard.openFile("vogue.kar");
+        t_file_record testRecord = sdCard.active_files[myFile->fd];
         unsigned int fileSize = testRecord.file_size_in_bytes;
         //myFile2 = sdCard->openFile("VOGUE.KAR");
 
