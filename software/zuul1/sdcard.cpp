@@ -96,9 +96,9 @@ bool SDCard::mark_cluster(unsigned cluster_index, short int flag, bool first_fat
     return true;
 }
 
-
 bool SDCard::Check_for_Master_Boot_Record(void)
 {
+    Uart::getInstance()->puts("check mbr\r\n");
 	bool result = false;
 	int index;
 	int end, offset, partition_size;
@@ -143,36 +143,35 @@ bool SDCard::Check_for_Master_Boot_Record(void)
 	return result;
 }
 
-
 bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
         unsigned int cluster_index, unsigned int sector_in_cluster)
 {
-	bool result = false;
+    bool result = false;
 
     if ((offset & 0x01f) == 0)
-	{
-		int counter;
+    {
+        int counter;
 
-		for (counter = 0; counter < 8; counter++)
-			record->name[counter] = (char) IORD_8DIRECT(device_pointer->base, offset+counter);
+        for (counter = 0; counter < 8; counter++)
+            record->name[counter] = (char)base8[offset + counter];
 
 		for (counter = 0; counter < 3; counter++)
-			record->extension[counter] = (char)IORD_8DIRECT(device_pointer->base, offset+counter+8);
+            record->extension[counter] = (char)base8[offset + counter + 8];
 
-		record->attributes   = (char)IORD_8DIRECT(device_pointer->base, offset+11);
-		record->create_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+14);
-		record->create_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+16);
-		record->last_access_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+18);
-		record->last_modified_time = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+22);
-		record->last_modified_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+24);
-		record->start_cluster_index =(unsigned short)IORD_16DIRECT(device_pointer->base, offset+26);
-		record->file_size_in_bytes  =(unsigned int) IORD_32DIRECT(device_pointer->base, offset+28);
-		record->file_record_cluster = cluster_index;
-		record->file_record_sector_in_cluster = sector_in_cluster;
-		record->file_record_offset = offset;
-		result = true;
-	}
-	return result;
+        record->attributes = (char)IORD_8DIRECT(device_pointer->base, offset+11);
+        record->create_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+14);
+        record->create_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+16);
+        record->last_access_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+18);
+        record->last_modified_time = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+22);
+        record->last_modified_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+24);
+        record->start_cluster_index =(unsigned short)IORD_16DIRECT(device_pointer->base, offset+26);
+        record->file_size_in_bytes  =(unsigned int) IORD_32DIRECT(device_pointer->base, offset+28);
+        record->file_record_cluster = cluster_index;
+        record->file_record_sector_in_cluster = sector_in_cluster;
+        record->file_record_offset = offset;
+        result = true;
+    }
+    return result;
 }
 
 bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
@@ -208,7 +207,6 @@ bool SDCard::Write_File_Record_At_Offset(int offset, t_file_record *record)
     return result;
 }
 
-
 bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
 {
 	bool result = false;
@@ -240,7 +238,7 @@ bool SDCard::Check_for_DOS_FAT(int FAT_partition_start_sector)
         boot_sector_data.reserved_sectors =
                 ((unsigned short)IORD_16DIRECT(device_pointer->base, 14));
 
-        boot_sector_data.number_of_FATs = ((unsigned char) IORD_8DIRECT(device_pointer->base, 16));
+        boot_sector_data.number_of_FATs = ((unsigned char)IORD_8DIRECT(device_pointer->base, 16));
 
         boot_sector_data.max_number_of_dir_entires =
                 (((unsigned short)
@@ -615,7 +613,6 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
     return result;
 }
 
-
 bool SDCard::find_file_in_directory(int directory_start_cluster,
             char *file_name, t_file_record *file_record)
 {
@@ -686,10 +683,9 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
             {
                 break;
             }
+
             if (result)
-            {
                 break;
-            }
         }
     }
     else
@@ -1051,28 +1047,6 @@ void SDCard::copy_file_record_name_to_string(t_file_record *file_record, char *f
 	file_name[flength] = 0;
 }
 
-alt_up_sd_card_dev* SDCard::alt_up_sd_card_open_dev(const char* name, volatile void *base)
-{
-    this->base = base;
-	alt_up_sd_card_dev *dev = (alt_up_sd_card_dev *) alt_find_dev(name, &alt_dev_list);
-
-	if (dev != NULL)
-	{
-		aux_status_register = ((short int *) SD_CARD_AUX_STATUS(dev->base));
-		status_register = ((int *) SD_CARD_STATUS(dev->base));
-		CSD_register_w0 = ((short int *) SD_CARD_CSD(dev->base, 0));
-		command_register = ((short int *) SD_CARD_COMMAND(dev->base));
-		command_argument_register = ((int *) SD_CARD_ARGUMENT(dev->base));
-		buffer_memory = (char *) SD_CARD_BUFFER(dev->base, 0);
-		device_pointer = dev;
-		initialized = false;
-		is_sd_card_formated_as_FAT16 = false;
-		search_data.valid = false;
-	}
-	return dev;
-}
-
-
 bool SDCard::alt_up_sd_card_is_Present()
 {
     bool result = false;
@@ -1120,7 +1094,6 @@ bool SDCard::alt_up_sd_card_is_FAT16(void)
 	return result;
 }
 
-
 short int SDCard::alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name)
 {
 	short int result = 2;
@@ -1155,69 +1128,69 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 
         if (cluster == 0)
         {
-                int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
-                        boot_sector_data.sector_size_in_bytes);
+            int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
+                    boot_sector_data.sector_size_in_bytes);
 
-                int sector_index = search_data.current_sector_in_cluster;
-                int file_counter = search_data.file_index_in_sector+1;
-    
-                for (; sector_index < max_root_dir_sectors; sector_index++)
+            int sector_index = search_data.current_sector_in_cluster;
+            int file_counter = search_data.file_index_in_sector+1;
+
+            for (; sector_index < max_root_dir_sectors; sector_index++)
+            {
+                if (Read_Sector_Data(sector_index +
+                        boot_sector_data.root_directory_sector_offset,
+                        fat_partition_offset_in_512_byte_sectors))
                 {
-                    if (Read_Sector_Data(sector_index +
-                            boot_sector_data.root_directory_sector_offset,
-                            fat_partition_offset_in_512_byte_sectors))
-					{
-						for (; file_counter < 16; file_counter++)
-						{
-                            if (Read_File_Record_At_Offset(file_counter*32, &file_record,
-                                    0, sector_index))
-							{
-								if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
-								{
-									search_data.file_index_in_sector = file_counter;
-									search_data.current_sector_in_cluster = sector_index;
-									copy_file_record_name_to_string(&file_record, file_name);
-                                    ::memcpy(fr, &file_record, sizeof(file_record));
-									return 0;
-								}
-							}
-						}
-						file_counter = 0;
-					}
-					else
-					{
-						break;
-					}
-				}
-				result = -1;
-			}
-			else
-			{
-				int file_counter = search_data.file_index_in_sector+1;
-				do 
-				{
+                    for (; file_counter < 16; file_counter++)
+                    {
+                        if (Read_File_Record_At_Offset(file_counter*32, &file_record,
+                                0, sector_index))
+                        {
+                            if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
+                            {
+                                search_data.file_index_in_sector = file_counter;
+                                search_data.current_sector_in_cluster = sector_index;
+                                copy_file_record_name_to_string(&file_record, file_name);
+                                ::memcpy(fr, &file_record, sizeof(file_record));
+                                return 0;
+                            }
+                        }
+                    }
+                    file_counter = 0;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            result = -1;
+        }
+        else
+        {
+                int file_counter = search_data.file_index_in_sector+1;
+                do 
+                {
                     int start_sector = (cluster - 2) * 
                         (boot_sector_data.sectors_per_cluster) +
                         boot_sector_data.data_sector_offset;
 
-					int sector_index = search_data.current_sector_in_cluster;
+                    int sector_index = search_data.current_sector_in_cluster;
 			        
-					for (; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
-					{
+                    for (; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
+                    {
                         if (Read_Sector_Data(sector_index + start_sector,
                                 fat_partition_offset_in_512_byte_sectors))
-						{        
-							for (; file_counter < 16; file_counter++)
-							{
+                        {        
+                            for (; file_counter < 16; file_counter++)
+                            {
                                 if (Read_File_Record_At_Offset(file_counter*32,
                                             &file_record, cluster, sector_index))
-								{
-									if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
-									{
-										search_data.current_cluster_index = cluster;
-										search_data.file_index_in_sector = file_counter;
-										search_data.current_sector_in_cluster = sector_index;
-										copy_file_record_name_to_string(&file_record, file_name);
+                                {
+                                    if ((file_record.name[0] != 0) && (file_record.name[0] != 0xe5))
+                                    {
+                                        search_data.current_cluster_index = cluster;
+                                        search_data.file_index_in_sector = file_counter;
+                                        search_data.current_sector_in_cluster = sector_index;
+                                        copy_file_record_name_to_string(&file_record, file_name);
                                         ::memcpy(fr, &file_record, sizeof(file_record));
 										return 0;
 									}
@@ -1229,24 +1202,24 @@ short int SDCard::alt_up_sd_card_find_next(char *file_name, t_file_record *fr)
 						{
 							break;
 						}
-					}
-					if (sector_index >= boot_sector_data.sectors_per_cluster)
-					{
-						short int new_cluster;
+                }
+                if (sector_index >= boot_sector_data.sectors_per_cluster)
+                {
+                    short int new_cluster;
 
-						if (get_cluster_flag(cluster, (unsigned short *)&new_cluster))
-						{
-							if ((new_cluster & 0x0000fff8) == 0x0000fff8)
-							{
-								result = -1;
-								search_data.valid = false;
-							}
-							cluster = ((new_cluster) & 0x0000fff8);
-						}
-						else
-						{
-							result = -1;
-						}
+                    if (get_cluster_flag(cluster, (unsigned short *)&new_cluster))
+                    {
+                        if ((new_cluster & 0x0000fff8) == 0x0000fff8)
+                        {
+                            result = -1;
+                            search_data.valid = false;
+                        }
+                        cluster = ((new_cluster) & 0x0000fff8);
+                    }
+                    else
+                    {
+                        result = -1;
+                    }
                 }              
             }
             while (cluster < 0x0000fff8);
@@ -1666,21 +1639,27 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 
 SDCard::SDCard(const char *name, volatile void * const base)
   :
+    base(base),
+    base8((volatile uint8_t * const)base),
     initialized(false),
     is_sd_card_formated_as_FAT16(false),
-    aux_status_register(NULL),
-    status_register(NULL),
-    CSD_register_w0(NULL),
-    command_register(NULL),
-    command_argument_register(NULL),
-    buffer_memory(NULL),
+    aux_status_register((volatile uint16_t * const)(base8 + 0x234)),
+    status_register((volatile uint32_t * const)(base8 + 0x224)),
+    CSD_register_w0((volatile uint16_t * const)(base8 + 0x210)),
+    command_register((uint16_t *)(base8 + 0x230)),
+    command_argument_register((uint32_t *)(base8 + 0x22c)),
+    buffer_memory(base8),
     fat_partition_offset_in_512_byte_sectors(0),
     fat_partition_size_in_512_byte_sectors(0),
     device_pointer(NULL),
     current_sector_modified(false),
     current_sector_index(0)
 {
-    sd_card_dev = this->alt_up_sd_card_open_dev(name, base);
+	alt_up_sd_card_dev *dev = (alt_up_sd_card_dev *)alt_find_dev(name, &alt_dev_list);
+    device_pointer = dev;
+    initialized = false;
+    is_sd_card_formated_as_FAT16 = false;
+    search_data.valid = false;
 }
 
 SDCardEx::SDCardEx(const char *name, volatile void * const base)

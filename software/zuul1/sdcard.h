@@ -139,7 +139,6 @@ public:
 class SDCard
 {
 protected:
-    alt_up_sd_card_dev *sd_card_dev;
     bool alt_up_sd_card_fclose(short int file_handle);
     short int alt_up_sd_card_find_next(char *file_name);
     short int alt_up_sd_card_find_next(char *file_name, t_file_record *fr);
@@ -179,7 +178,8 @@ protected:
     bool Read_File_Record_At_Offset(int offset, t_file_record *record,
         unsigned int cluster_index, unsigned int sector_in_cluster);
     
-    volatile void *base;
+    volatile void * const base;
+    volatile uint8_t * const base8;
 public:
     SDCard(const char *name, volatile void * const base);
     short int alt_up_sd_card_find_first(char *directory_to_search_through, char *file_name);
@@ -190,12 +190,12 @@ public:
     t_file_record active_files[MAX_FILES_OPENED];
     t_find_data search_data;
     bool is_sd_card_formated_as_FAT16;
-    volatile short int *aux_status_register;
-    volatile int *status_register;
-    volatile short int *CSD_register_w0;
-    volatile short int *command_register;
-    volatile int *command_argument_register;
-    volatile char *buffer_memory;
+    volatile uint16_t * const aux_status_register;
+    volatile uint32_t * const status_register;
+    volatile uint16_t * const CSD_register_w0;
+    volatile uint16_t * const command_register;
+    volatile uint32_t * const command_argument_register;
+    volatile uint8_t * const buffer_memory;
     int fat_partition_offset_in_512_byte_sectors;
     int fat_partition_size_in_512_byte_sectors;
     t_FAT_12_16_boot_sector boot_sector_data;
