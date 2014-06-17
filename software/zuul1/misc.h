@@ -320,6 +320,7 @@ class VGA
 private:
     alt_up_char_buffer_dev *charBuffer;
     alt_up_char_buffer_dev *openDev(const char *name);
+    uint8_t buffer[80*60];
 public:
     VGA(const char *devName);
     int clear() { return ::alt_up_char_buffer_clear(charBuffer); }

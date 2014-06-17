@@ -305,11 +305,18 @@ void Uart2::putc(const char c)
 
 VGA::VGA(const char *devName)
 {
+    for (size_t i = 0; i < sizeof(buffer); i++)
+        buffer[i] = 0;
+
     charBuffer = openDev(devName);
 }
 
-int VGA::draw(const char c, const int x, const int y)
+int VGA::draw(const char c, int x, int y)
 {
+    if (x >= 80 || y >= 60)
+        return -1;
+
+    buffer[y * 80 + x] = c;
     return ::alt_up_char_buffer_draw(charBuffer, c, x, y);
 }
 
@@ -338,6 +345,13 @@ void VGATerminal::putc(const char c)
     {
         x = 0;
         y++;
+    }
+
+    if (y >= 60)
+    {
+        shiftLeft(80);
+        y--;
+        putc(c);
     }
 }
 
@@ -401,7 +415,15 @@ void SoundCard::setSampleRate(uint8_t ssr)
 
 void VGA::shiftLeft(int n)
 {
-    
+    ::alt_up_char_buffer_clear(charBuffer);
+
+    for (size_t i = 0; i < sizeof(buffer); i++)
+        buffer[i] = (i + n) <= sizeof(buffer) ? buffer[i+n] : 0;
+        
+   
+    for (int row = 0; row < 50; row++)
+        for (int column = 0; column < 80; column++)
+            draw(buffer[row * 80 + column], column, row);
 }
 
 void EEProm::write(uint8_t c)
