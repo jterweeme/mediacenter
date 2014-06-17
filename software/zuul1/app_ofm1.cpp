@@ -8,7 +8,7 @@ class Box
 private:
     VGA *vga;
 public:
-    Box(VGA *vga) { this->vga = vga; }
+    Box(VGA *vga) : vga(vga) { }
     void draw();
 };
 
@@ -22,43 +22,48 @@ public:
 class OrthodoxFileManager1
 {
 public:
-    OrthodoxFileManager1() { }
+    OrthodoxFileManager1();
     void init();
     int run();
 private:
-    VGA *vga;
+    VGA vga;
     Box *box;
     SDCardEx *sdCard;
-    Uart *uart;
+    Uart uart;
     QuadroSegment *quadroSegment;
 };
 
+OrthodoxFileManager1::OrthodoxFileManager1()
+  :
+    vga("/dev/video_character_buffer_with_dma_0"),
+    uart((uint32_t *)UART_BASE)
+{ }
+
 void OrthodoxFileManager1::init()
 {
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
-    uart->puts("StartUp OFM1...\r\n");
+    uart.puts("StartUp OFM1...\r\n");
     quadroSegment = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
 
     sdCard = new SDCardEx(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
             (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
 
-    vga = new VGA("/dev/video_character_buffer_with_dma_0");
-    box = new Box(vga);
-    vga->clear();
-    
+    box = new Box(&vga);
+    vga.clear();
 }
 
 void Box::draw()
 {
-    vga->draw("+--------------------------------------++--------------------------------------+", 0, 0);
-    vga->draw("|                                      ||                                      |", 0, 1);
-    vga->draw("|                                      ||                                      |", 0, 2);
-    vga->draw("|                                      ||                                      |", 0, 3);
-    vga->draw("|                                      ||                                      |", 0, 4);
+vga->draw("+--------------------------------------++--------------------------------------+",
+0, 0);
+vga->draw("|                                      ||                                      |",
+0, 1);
+vga->draw("|                                      ||                                      |",
+0, 2);
+vga->draw("|                                      ||                                      |",
+0, 3);
+vga->draw("|                                      ||                                      |",
+0, 4);
 }
-
-
 
 int OrthodoxFileManager1::run()
 {
@@ -73,17 +78,24 @@ int OrthodoxFileManager1::run()
 
         while ((foo = sdCard->findNext(fn, &fr)) >= 0)
         {
-            uart->puts(fn);
-            uart->puts("\r\n");
-            ::memset(dinges, 0, sizeof(dinges));
-            ::sprintf(dinges, "%s %u\r\n", (const char *)fr.name, fr.file_size_in_bytes);
-            uart->puts(dinges);
+            uint8_t wav[3] = {'W','A','V'};
+
+            if (::memcmp(fr.extension, wav, 3) == 0)
+            {
+                MyFileRecord record(fr);
+                record.toString();
+                //uart->puts(fn);
+                uart.puts("\r\n");
+            }
+            //::memset(dinges, 0, sizeof(dinges));
+            //::sprintf(dinges, "%s %u\r\n", (const char *)fr.name, fr.file_size_in_bytes);
+            //uart->puts(dinges);
             //uart->puts("\r\n");
         }
     }
     else
     {
-        uart->puts("Geen FAT16\r\n");
+        uart.puts("Geen FAT16\r\n");
     }
 
     return 0;

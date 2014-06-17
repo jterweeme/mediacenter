@@ -1,6 +1,8 @@
 #ifndef _MYSTL_H_
 #define _MYSTL_H_
+#include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 namespace mstd
 {
@@ -47,6 +49,13 @@ namespace mstd
         complex<double> operator -= (complex<double> d) { r -= d.r; i -= d.i; return *this; }
         complex<double> operator *= (double d) { r *= d; i *= d; return *this; }
         complex<double> operator *= (complex<double> d) { r *= d.r; i *= d.i; return *this; }
+
+        const char *toString()
+        {
+            char foo[80] = {0};
+            ::snprintf(foo, sizeof(foo), "%f %f", r, i);
+            return foo;
+        }
     };
 
     //template <typename T> inline complex<T> exp(const complex<T> &z) { return __complex

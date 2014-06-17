@@ -74,7 +74,8 @@ Signaal Signaal::fft(const unsigned log2n)
         const unsigned m2 = m >> 1;
         Sample w(1,0);
         //const Sample wm = ::jexp(J);
-        const Sample wm = ::jexp(J * (Utility::PI/m2));
+        Sample wm = ::jexp(J * (Utility::PI/m2));
+        //Sample wm = J * 2.0;
         
         for (int j = 0; j < m2; ++j)
         {

@@ -26,7 +26,8 @@ typedef struct alt_up_sd_card_dev
 }
 alt_up_sd_card_dev;
 
-typedef struct s_file_record {
+typedef struct s_file_record
+{
     unsigned char name[8];
     unsigned char extension[3];
     unsigned char attributes;
@@ -46,9 +47,11 @@ typedef struct s_file_record {
     unsigned int home_directory_cluster;
     bool         modified;
     bool         in_use;
-} t_file_record;
+}
+t_file_record;
 
-typedef struct s_FAT_12_16_boot_sector {
+typedef struct s_FAT_12_16_boot_sector
+{
     unsigned char jump_instruction[3];
     char OEM_name[8];
     unsigned short int sector_size_in_bytes;
@@ -74,15 +77,18 @@ typedef struct s_FAT_12_16_boot_sector {
     unsigned int second_fat_sector_offset;
     unsigned int root_directory_sector_offset;
     unsigned int data_sector_offset;
-} t_FAT_12_16_boot_sector;
+}
+t_FAT_12_16_boot_sector;
 
-typedef struct s_find_data {
+typedef struct s_find_data
+{
     unsigned int directory_root_cluster;
     unsigned int current_cluster_index;
     unsigned int current_sector_in_cluster;
     short int file_index_in_sector;
     bool valid;
-} t_find_data;
+}
+t_find_data;
 
 
 
@@ -116,9 +122,9 @@ class SDCardEx;
 class MyFileRecord
 {
 private:
-    t_file_record *fr;
+    t_file_record fr;
 public:
-    MyFileRecord(t_file_record *fr);
+    MyFileRecord(t_file_record &fr) : fr(fr) { }
     const char *toString();
 };
 
