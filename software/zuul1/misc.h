@@ -84,7 +84,7 @@ struct RIFFHeader
     uint16_t bitsPerSample_LE;
     uint32_t subChunk2ID_BE;
     uint32_t subChunk2Size_LE;
-};
+}   __attribute__ ((packed));
 
 extern const uint8_t lut[];
 

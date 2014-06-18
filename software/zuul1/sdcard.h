@@ -31,22 +31,22 @@ typedef struct s_file_record
     unsigned char name[8];
     unsigned char extension[3];
     unsigned char attributes;
-    unsigned short int create_time;
-    unsigned short int create_date;
-    unsigned short int last_access_date;
-    unsigned short int last_modified_time;
-    unsigned short int last_modified_date;
-    unsigned short int start_cluster_index;
-    unsigned int file_size_in_bytes;
-    unsigned int current_cluster_index;
-    unsigned int current_sector_in_cluster;
-    unsigned int current_byte_position;
-    unsigned int file_record_cluster;
-    unsigned int file_record_sector_in_cluster;
-    short int    file_record_offset;
-    unsigned int home_directory_cluster;
-    bool         modified;
-    bool         in_use;
+    unsigned short create_time;
+    unsigned short create_date;
+    unsigned short last_access_date;
+    unsigned short last_modified_time;
+    unsigned short last_modified_date;
+    unsigned short start_cluster_index;
+    unsigned file_size_in_bytes;
+    unsigned current_cluster_index;
+    unsigned current_sector_in_cluster;
+    unsigned current_byte_position;
+    unsigned file_record_cluster;
+    unsigned file_record_sector_in_cluster;
+    short file_record_offset;
+    unsigned home_directory_cluster;
+    bool modified;
+    bool in_use;
 }
 t_file_record;
 
@@ -115,13 +115,16 @@ t_find_data;
     alt_dev_reg(&device.dev);                          	\
 }
 
-
-
-class SDCardEx;
+class ISDCardEx
+{
+public:
+    virtual short readFile(int fd) = 0;
+    virtual size_t getSize(int i) = 0;
+    virtual ~ISDCardEx() { }
+};
 
 class MyFileRecord
 {
-private:
     t_file_record fr;
 public:
     MyFileRecord(t_file_record &fr) : fr(fr) { }
@@ -130,18 +133,15 @@ public:
 
 class MyFile
 {
+    ISDCardEx *sd;
 public:
     int fd;
-    SDCardEx *sd;
-public:
-    MyFile(int fd, SDCardEx *sd) { this->fd = fd; this->sd = sd; }
-    short int read();   // readByte
+    MyFile(int fd, ISDCardEx *sd) : sd(sd), fd(fd) { }
+    short int read() { return sd->readFile(fd); }
     size_t fread(void *ptr, size_t size, size_t nmemb);
-    unsigned getSize();
+    unsigned getSize() { return sd->getSize(this->fd); }
 };
 
-
-// moet nog Singleton worden
 class SDCard
 {
 protected:
@@ -174,15 +174,23 @@ protected:
     void convert_filename_to_name_extension(char *filename, char *name, char *extension);
     bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir);
     void copy_file_record_name_to_string(t_file_record *file_record, char *file_name);
-
     bool find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *fr);
-
-    bool get_home_directory_cluster_for_file(char *file_name,
-            int *home_directory_cluster, t_file_record *file_record);
-
-    bool Read_File_Record_At_Offset(int offset, t_file_record *record,
-        unsigned cluster_index, unsigned sector_in_cluster);
-    
+    bool get_home_directory_cluster_for_file(char *file_name,int *hdc, t_file_record *file_record);
+    bool Read_File_Record_At_Offset(int ofs,t_file_record *record,unsigned clus,unsigned sct);
+private:
+    volatile uint16_t * const aux_status_register;
+    volatile uint32_t * const status_register;
+    volatile uint16_t * const CSD_register_w0;
+    volatile uint16_t * const command_register;
+    volatile uint32_t * const command_argument_register;
+    volatile uint8_t * const buffer_memory;
+    bool is_sd_card_formated_as_FAT16;
+    int fat_partition_offset_in_512_byte_sectors;
+    int fat_partition_size_in_512_byte_sectors;
+    t_FAT_12_16_boot_sector boot_sector_data;
+    alt_up_sd_card_dev  *device_pointer;
+    bool current_sector_modified;
+    unsigned current_sector_index;
     volatile void * const base;
     volatile uint8_t * const base8;
 public:
@@ -194,36 +202,23 @@ public:
     bool initialized;
     t_file_record active_files[MAX_FILES_OPENED];
     t_find_data search_data;
-    bool is_sd_card_formated_as_FAT16;
-    volatile uint16_t * const aux_status_register;
-    volatile uint32_t * const status_register;
-    volatile uint16_t * const CSD_register_w0;
-    volatile uint16_t * const command_register;
-    volatile uint32_t * const command_argument_register;
-    volatile uint8_t * const buffer_memory;
-    int fat_partition_offset_in_512_byte_sectors;
-    int fat_partition_size_in_512_byte_sectors;
-    t_FAT_12_16_boot_sector boot_sector_data;
-    alt_up_sd_card_dev  *device_pointer;
-    bool current_sector_modified;
-    unsigned current_sector_index;
 };
 
-class SDCardEx : public SDCard
+class SDCardEx : public SDCard, ISDCardEx
 {
 public:
     uint16_t fopen(char *fn, bool create = false);
-public:
     SDCardEx(const char *name, volatile void * const base);
     MyFile *openFile(char *fn) { return new MyFile(fopen(fn), this); }
     bool isPresent() { return this->alt_up_sd_card_is_Present(); }
     bool isFAT16() { return this->alt_up_sd_card_is_FAT16(); }
-    bool write(int, char);
-    bool fclose(int);
+    bool write(int sd_fileh, char c) { return this->alt_up_sd_card_write(sd_fileh, c); }
+    bool fclose(int sd_fileh) { return alt_up_sd_card_fclose(sd_fileh); }
     short readFile(int fd) { return this->alt_up_sd_card_read(fd); }
     short findNext(char *fn) { return this->alt_up_sd_card_find_next(fn); }
     short findNext(char *fn, t_file_record *fr) { return this->alt_up_sd_card_find_next(fn, fr); }
-    
+    size_t getSize(int i) { return active_files[i].file_size_in_bytes; }
+    ~SDCardEx() { }
 };
 
 class SDCard2

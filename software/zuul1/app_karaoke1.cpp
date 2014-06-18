@@ -1,3 +1,8 @@
+/*
+Jasper ter Weeme
+Alex Aalbertsberg
+*/
+
 #include <system.h>
 #include "misc.h"
 #include "mymidi.h"

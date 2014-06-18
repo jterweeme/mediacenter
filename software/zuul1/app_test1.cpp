@@ -5,7 +5,6 @@
 
 class Beam : public Observer
 {
-private:
     CombinedSegment *cs;
 public:
     Beam(CombinedSegment *cs) : cs(cs) { }
@@ -100,7 +99,6 @@ void Beam::update()
 
 class Test1
 {
-private:
     ::DuoSegment segmentLinks;
     ::DuoSegment segmentRechts;
     ::QuadroSegment segmentQuadro;
@@ -116,15 +114,13 @@ public:
     Test1();
 };
 
-Test1::Test1() :
+Test1::Test1()
+  :
     segmentLinks(VA_S1_BASE),
     segmentRechts(VA_S2_BASE),
     segmentQuadro(MYSEGDISP2_0_BASE),
-
-    ir((volatile uint32_t * const)INFRARED_0_BASE, INFRARED_0_IRQ,
-            INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID),
-
-    uart((volatile uint32_t * const)UART_BASE),
+    ir((uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID),
+    uart((uint32_t *)UART_BASE),
     vgaTerminal("/dev/video_character_buffer_with_dma_0"),
     gl((volatile uint8_t *)LEDG_BASE)
 {

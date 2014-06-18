@@ -66,8 +66,8 @@ bool SDCard::Read_Sector_Data(int sector_index, int partition_offset)
 
 bool SDCard::get_cluster_flag(unsigned int cluster_index, unsigned short int *flag)
 {
-    unsigned int sector_index = (cluster_index / 256) + fat_partition_offset_in_512_byte_sectors;
-    sector_index  = sector_index + boot_sector_data.first_fat_sector_offset;
+    unsigned sector_index = (cluster_index / 256) + fat_partition_offset_in_512_byte_sectors;
+    sector_index += boot_sector_data.first_fat_sector_offset;
      
     if (sector_index != current_sector_index)
         if (Read_Sector_Data(sector_index, 0) == false)
@@ -83,9 +83,9 @@ bool SDCard::mark_cluster(unsigned cluster_index, short int flag, bool first_fat
     unsigned sector_index = (cluster_index / 256) + fat_partition_offset_in_512_byte_sectors;
     
     if (first_fat)
-        sector_index = sector_index + boot_sector_data.first_fat_sector_offset;
+        sector_index += boot_sector_data.first_fat_sector_offset;
     else
-        sector_index = sector_index + boot_sector_data.second_fat_sector_offset;
+        sector_index += boot_sector_data.second_fat_sector_offset;
      
     if (sector_index != current_sector_index)
         if (Read_Sector_Data(sector_index, 0) == false)
@@ -142,32 +142,32 @@ bool SDCard::Check_for_Master_Boot_Record(void)
 	return result;
 }
 
-bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
-        unsigned cluster_index, unsigned sector_in_cluster)
+bool SDCard::Read_File_Record_At_Offset(int ofs, t_file_record *record,
+            unsigned clus, unsigned sct)
 {
     bool result = false;
 
-    if ((offset & 0x01f) == 0)
+    if ((ofs & 0x01f) == 0)
     {
         int counter;
 
         for (counter = 0; counter < 8; counter++)
-            record->name[counter] = (char)base8[offset + counter];
+            record->name[counter] = (char)base8[ofs + counter];
 
 		for (counter = 0; counter < 3; counter++)
-            record->extension[counter] = (char)base8[offset + counter + 8];
+            record->extension[counter] = (char)base8[ofs + counter + 8];
 
-        record->attributes = (char)IORD_8DIRECT(device_pointer->base, offset+11);
-        record->create_time = (unsigned short int)IORD_16DIRECT(device_pointer->base, offset+14);
-        record->create_date = (unsigned short int) IORD_16DIRECT(device_pointer->base, offset+16);
-        record->last_access_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+18);
-        record->last_modified_time = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+22);
-        record->last_modified_date = (unsigned short)IORD_16DIRECT(device_pointer->base, offset+24);
-        record->start_cluster_index =(unsigned short)IORD_16DIRECT(device_pointer->base, offset+26);
-        record->file_size_in_bytes  =(unsigned int) IORD_32DIRECT(device_pointer->base, offset+28);
-        record->file_record_cluster = cluster_index;
-        record->file_record_sector_in_cluster = sector_in_cluster;
-        record->file_record_offset = offset;
+        record->attributes = (char)IORD_8DIRECT(device_pointer->base, ofs+11);
+        record->create_time = (unsigned short int)IORD_16DIRECT(device_pointer->base,ofs+14);
+        record->create_date = (unsigned short int) IORD_16DIRECT(device_pointer->base,ofs+16);
+        record->last_access_date = (unsigned short)IORD_16DIRECT(device_pointer->base,ofs+18);
+        record->last_modified_time = (unsigned short)IORD_16DIRECT(device_pointer->base,ofs+22);
+        record->last_modified_date = (unsigned short)IORD_16DIRECT(device_pointer->base,ofs+24);
+        record->start_cluster_index =(unsigned short)IORD_16DIRECT(device_pointer->base,ofs+26);
+        record->file_size_in_bytes  =(unsigned int) IORD_32DIRECT(device_pointer->base,ofs+28);
+        record->file_record_cluster = clus;
+        record->file_record_sector_in_cluster = sct;
+        record->file_record_offset = ofs;
         result = true;
     }
     return result;
@@ -449,7 +449,7 @@ bool SDCard::match_file_record_to_name_ext(t_file_record *file_record, char *nam
 }
 
 bool SDCard::get_home_directory_cluster_for_file(char *file_name,
-        int *home_directory_cluster, t_file_record *file_record)
+        int *hdc, t_file_record *file_record)
 {
     bool result = false;
     int home_dir_cluster = 0;
@@ -603,7 +603,7 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
             result = true;
     }
     
-    *home_directory_cluster = home_dir_cluster;
+    *hdc = home_dir_cluster;
     if (home_dir_cluster == 0)
     {
         file_record->file_record_cluster = 0;
@@ -746,7 +746,7 @@ bool SDCard::find_first_empty_cluster(unsigned int *cluster_number)
 {
     unsigned sector = boot_sector_data.first_fat_sector_offset;
     unsigned cluster_index = 2;
-    short int cluster = -1;
+    short cluster = -1;
     bool result = false;
 	unsigned max_cluster_index = 0;
 	unsigned non_data_sectors = boot_sector_data.data_sector_offset;
@@ -805,16 +805,15 @@ int SDCard::find_first_empty_record_in_a_subdirectory(const int start_cluster_in
         int start_sector = (cluster - 2) * (boot_sector_data.sectors_per_cluster) +
                     boot_sector_data.data_sector_offset;
 
-        int sector_index;
-        
-        for (sector_index = 0; sector_index < boot_sector_data.sectors_per_cluster; sector_index++)
+        for (int sector_index = 0; sector_index < boot_sector_data.sectors_per_cluster;
+                    sector_index++)
         {
             if (Read_Sector_Data(sector_index + start_sector,
                     fat_partition_offset_in_512_byte_sectors))
             {
                 for (int file_counter = 0; file_counter < 16; file_counter++)
                 {
-                    unsigned short int leading_char;
+                    unsigned short leading_char;
 
                     leading_char = ((unsigned char)IORD_8DIRECT(device_pointer->base,
                                 file_counter*32));
@@ -833,7 +832,7 @@ int SDCard::find_first_empty_record_in_a_subdirectory(const int start_cluster_in
         }
         if (result < 0)
         {
-			unsigned short int new_cluster;
+			unsigned short new_cluster;
 			if (get_cluster_flag(cluster, &new_cluster))
 			{
 				if ((new_cluster & 0x0000fff8) == 0x0000fff8)
@@ -868,21 +867,16 @@ int SDCard::find_first_empty_record_in_root_directory()
     int max_root_dir_sectors = ((32*boot_sector_data.max_number_of_dir_entires) /
             boot_sector_data.sector_size_in_bytes);
 
-    int sector_index;
     int result = -1;
     
-    for (sector_index = 0; sector_index < max_root_dir_sectors; sector_index++)
+    for (int sector_index = 0; sector_index < max_root_dir_sectors; sector_index++)
     {
         if (Read_Sector_Data(sector_index + boot_sector_data.root_directory_sector_offset,
                                 fat_partition_offset_in_512_byte_sectors))
         {
-            int file_counter;
-            
-            for (file_counter = 0; file_counter < 16; file_counter++)
+            for (int file_counter = 0; file_counter < 16; file_counter++)
             {
-                unsigned short leading_char;
-
-                leading_char = ((unsigned char)IORD_8DIRECT(device_pointer->base,
+                uint16_t leading_char = ((unsigned char)IORD_8DIRECT(device_pointer->base,
                                     file_counter*32));
 
                 if ((leading_char == 0x00e5) || (leading_char == 0))
@@ -919,7 +913,10 @@ void SDCard::convert_filename_to_name_extension(char *filename, char *name, char
             name[counter] = ' ';
         }
     }
-    if (filename[local] == '.') local++;
+
+    if (filename[local] == '.')
+        local++;
+
     for(counter = 0; counter < 3; counter++)
     {
         if (filename[local] != 0)
@@ -1696,11 +1693,6 @@ bool SDCard::alt_up_sd_card_fclose(short int file_handle)
     return result;
 }
 
-short int MyFile::read()
-{
-    return sd->readFile(fd);
-}
-
 size_t MyFile::fread(void *ptr, size_t size, size_t nmemb)
 {
     size_t i;
@@ -1708,21 +1700,6 @@ size_t MyFile::fread(void *ptr, size_t size, size_t nmemb)
         *((uint8_t *)ptr + i) = (uint8_t)this->read();
 
     return i;
-}
-
-unsigned int MyFile::getSize()
-{
-    return sd->active_files[this->fd].file_size_in_bytes;
-}
-
-bool SDCardEx::write(int sd_fileh, char c)
-{
-    return this->alt_up_sd_card_write(sd_fileh, c);
-}
-
-bool SDCardEx::fclose(int sd_fileh)
-{
-    return alt_up_sd_card_fclose(sd_fileh);
 }
 
 const char *MyFileRecord::toString()
