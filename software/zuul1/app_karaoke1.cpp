@@ -7,7 +7,7 @@
 class Karaoke1
 {
 private:
-    VGATerminal *vgaTerminal;
+    VGATerminal vgaTerminal;
     Uart uart;
     QuadroSegment *qs;
     SDCardEx sdCard;
@@ -22,23 +22,23 @@ public:
 
 Karaoke1::Karaoke1()
   :
+    vgaTerminal("/dev/video_character_buffer_with_dma_0"),
     uart((uint32_t *)UART_BASE),
     sdCard(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, (void *)SD_BASE)
 {
+    vgaTerminal.clear();
+    vgaTerminal.puts("Karaoke 1\r\n");
 }
 
 void Karaoke1::init()
 {
     qs = new QuadroSegment((volatile uint32_t * const)MYSEGDISP2_0_BASE);
     qs->setInt(0);
-    vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
-    vgaTerminal->clear();
-    vgaTerminal->puts("Karaoke 1\r\n");
     using mstd::vector;
 
     if (sdCard.isPresent() && sdCard.isFAT16())
     {
-        myFile = sdCard.openFile("VOGUE.KAR");
+        myFile = sdCard.openFile("DADDYC~1.KAR");
         karFile = new KarFile(myFile);
         karFile->read();
         
@@ -51,8 +51,6 @@ void Karaoke1::init()
             for (MIDIEventVector::iterator event = track.events.begin();
                     event != track.events.end(); ++event)
             {
-                //vgaTerminal->puts((*event)->toString());
-                //vgaTerminal->puts("\r\n");
                 TextEvent *te = dynamic_cast<TextEvent *>(*event);
                 
                 if (te)
@@ -66,13 +64,13 @@ void Karaoke1::init()
                         case '@':
                             break;
                         case '/':
-                            vgaTerminal->puts("\r\n");
+                            vgaTerminal.puts("\r\n");
                             break;
                         case '\\':
-                            vgaTerminal->puts("\r\n\r\n");
+                            vgaTerminal.puts("\r\n\r\n");
                             break;
                         default:
-                            vgaTerminal->putc(c);
+                            vgaTerminal.putc(c);
                             break;
                         }
                     }
@@ -81,17 +79,17 @@ void Karaoke1::init()
 
             uint32_t chunkSize = ::Utility::be_32_toh(track.chunkSizeBE);
             qs->setHex(chunkSize);
-            vgaTerminal->puts(it->toString());
-            vgaTerminal->puts("\r\n");
+            vgaTerminal.puts(it->toString());
+            vgaTerminal.puts("\r\n");
             //break;
         }
 
-        vgaTerminal->puts(karFile->toString());
-        vgaTerminal->puts("\r\n");
+        vgaTerminal.puts(karFile->toString());
+        vgaTerminal.puts("\r\n");
     }
     else
     {
-        vgaTerminal->puts("\r\nGeen SD Kaart aanwezig!");
+        vgaTerminal.puts("\r\nGeen SD Kaart aanwezig!");
     }
     
     mstd::vector<int> vector1(100);
@@ -113,7 +111,7 @@ void Karaoke1::init()
     if (!pb)
         throw "Dinges";
 
-    vgaTerminal->puts("Onzin");
+    vgaTerminal.puts("Onzin");
 
     for (int i = 0; i < 1280*768; i++)
         pixels8[i] = 0x40;

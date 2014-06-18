@@ -5,7 +5,6 @@
 
 class Box
 {
-private:
     VGA *vga;
 public:
     Box(VGA *vga) : vga(vga) { }
@@ -21,33 +20,24 @@ public:
 
 class OrthodoxFileManager1
 {
+    VGATerminal vga;
+    Box box;
+    SDCardEx sdCard;
+    Uart uart;
+    static const uint32_t SD_BASE = ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
 public:
     OrthodoxFileManager1();
-    void init();
     int run();
-private:
-    VGA vga;
-    Box *box;
-    SDCardEx *sdCard;
-    Uart uart;
-    QuadroSegment *quadroSegment;
 };
 
 OrthodoxFileManager1::OrthodoxFileManager1()
   :
     vga("/dev/video_character_buffer_with_dma_0"),
+    box(&vga),
+    sdCard(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, (void *)SD_BASE),
     uart((uint32_t *)UART_BASE)
-{ }
-
-void OrthodoxFileManager1::init()
 {
     uart.puts("StartUp OFM1...\r\n");
-    quadroSegment = new QuadroSegment((volatile uint32_t *)MYSEGDISP2_0_BASE);
-
-    sdCard = new SDCardEx(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
-            (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
-
-    box = new Box(&vga);
     vga.clear();
 }
 
@@ -67,30 +57,26 @@ vga->draw("|                                      ||                            
 
 int OrthodoxFileManager1::run()
 {
-    box->draw();
+    box.draw();
 
-    if (sdCard->isPresent() && sdCard->isFAT16())
+    if (sdCard.isPresent() && sdCard.isFAT16())
     {
         char fn[13] = {0};
         t_file_record fr;
-        int foo = sdCard->alt_up_sd_card_find_first("/.", fn);
+        int foo = sdCard.alt_up_sd_card_find_first("/.", fn);
         char dinges[255];
 
-        while ((foo = sdCard->findNext(fn, &fr)) >= 0)
+        while ((foo = sdCard.findNext(fn, &fr)) >= 0)
         {
-            uint8_t wav[3] = {'W','A','V'};
+            uint8_t wav[3] = {'K','A','R'};
 
             if (::memcmp(fr.extension, wav, 3) == 0)
             {
                 MyFileRecord record(fr);
-                record.toString();
-                //uart->puts(fn);
+                vga.puts(record.toString());
+                vga.puts("\r\n");
                 uart.puts("\r\n");
             }
-            //::memset(dinges, 0, sizeof(dinges));
-            //::sprintf(dinges, "%s %u\r\n", (const char *)fr.name, fr.file_size_in_bytes);
-            //uart->puts(dinges);
-            //uart->puts("\r\n");
         }
     }
     else
@@ -104,7 +90,6 @@ int OrthodoxFileManager1::run()
 int main()
 {
     OrthodoxFileManager1 ofm1;
-    ofm1.init();
     return ofm1.run();
 }
 

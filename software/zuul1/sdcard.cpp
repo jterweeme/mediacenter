@@ -143,7 +143,7 @@ bool SDCard::Check_for_Master_Boot_Record(void)
 }
 
 bool SDCard::Read_File_Record_At_Offset(int offset, t_file_record *record,
-        unsigned int cluster_index, unsigned int sector_in_cluster)
+        unsigned cluster_index, unsigned sector_in_cluster)
 {
     bool result = false;
 
@@ -1728,7 +1728,7 @@ bool SDCardEx::fclose(int sd_fileh)
 const char *MyFileRecord::toString()
 {
     Uart *uart = Uart::getInstance();
-    char fileName[13] = {0};
+    char fileName[15] = {0};
 
     for (unsigned i = 0; i < 12; i++)
         fileName[i] = 0x20;
@@ -1751,33 +1751,6 @@ void SDCard2::command(uint16_t cmd, uint32_t arg1)
     *command_reg = cmd;
     while (*aux_status & 0x04) { }  // wait until complete
 }
-
-/*
-void MPlayer::play(MyFile *myFile)
-{
-    uint8_t buf[900000];
-    uint16_t sample, sample_r;
-
-    for (int i = 0; i < 44; i++)
-        myFile->read();
-
-    while (true)
-    {
-        for (size_t i = 0; i < sizeof(buf); i++)
-            buf[i] = myFile->read();
-
-        for (size_t i = 0; i < sizeof(buf);)
-        {
-            sample = 0;
-            sample_r = 0;
-            sample += buf[i++];
-            sample += buf[i++] << 8;
-
-            for (volatile int j = 0; j < this->delay; j++)
-                soundCard->writeDacOut(sample, sample);
-        }
-    }
-}*/
 
 void MPlayer::play()
 {

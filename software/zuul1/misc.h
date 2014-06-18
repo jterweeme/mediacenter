@@ -69,6 +69,23 @@ public:
     }*/
 };
 
+struct RIFFHeader
+{
+    uint32_t chunkID_BE;
+    uint32_t chunkSize_LE;
+    uint32_t format_BE;
+    uint32_t subChunk1ID_BE;
+    uint32_t subChunk1Size_LE;
+    uint16_t audioFormat_LE;
+    uint16_t numChannels_LE;
+    uint32_t sampleRate_LE;
+    uint32_t byteRate_LE;
+    uint16_t blockAlign_LE;
+    uint16_t bitsPerSample_LE;
+    uint32_t subChunk2ID_BE;
+    uint32_t subChunk2Size_LE;
+};
+
 extern const uint8_t lut[];
 
 template <class T> class Segment
@@ -100,7 +117,6 @@ public:
 
 class CombinedSegment
 {
-private:
     DuoSegment *l;
     DuoSegment *r;
     QuadroSegment *q;
@@ -121,7 +137,6 @@ public:
 
 class GreenLeds
 {
-private:
     volatile uint8_t *base;
 public:
     GreenLeds(volatile uint8_t *base) : base(base) { }
@@ -220,7 +235,6 @@ public:
 
 class JtagUart
 {
-private:
     int fd;
 public:
     void init(int fd) { this->fd = fd; }
@@ -229,7 +243,6 @@ public:
 
 class LCD
 {
-private:
     volatile uint8_t *base;
     static const uint8_t COMMAND_REG = 0;
     static const uint8_t DATA_REG = 1;
@@ -248,7 +261,6 @@ public:
 
 class I2C
 {
-private:
     volatile uint32_t *scl;
     volatile uint32_t *sda;
 public:
@@ -271,7 +283,6 @@ public:
 
 class SoundCard
 {
-private:
     I2C *i2cBus;
     volatile uint32_t *base;
 public:
@@ -301,7 +312,6 @@ public:
 
 class EEProm
 {
-private:
     I2C *bus;
 public:
     EEProm(I2C *bus) { this->bus = bus; }
@@ -317,7 +327,6 @@ public:
 
 class VGA
 {
-private:
     alt_up_char_buffer_dev *charBuffer;
     alt_up_char_buffer_dev *openDev(const char *name);
     uint8_t buffer[80*60];
@@ -331,7 +340,6 @@ public:
 
 class VGATerminal : public VGA
 {
-private:
     int x, y;
     static const uint8_t COLS = 80;
 public:
