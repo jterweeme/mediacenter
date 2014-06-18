@@ -612,10 +612,9 @@ bool SDCard::get_home_directory_cluster_for_file(char *file_name,
     return result;
 }
 
-bool SDCard::find_file_in_directory(int directory_start_cluster,
-            char *file_name, t_file_record *file_record)
+bool SDCard::find_file_in_directory(int directory_start_cluster,char *file_name,t_file_record *fr)
 {
-    int location = get_dir_divider_location( file_name );
+    int location = get_dir_divider_location(file_name);
     int last_dir_separator = 0;
     char name[8] = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
     char extension[3] = { ' ', ' ', ' ' };
@@ -657,10 +656,10 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
                 
                 for (file_counter = 0; file_counter < 16; file_counter++)
                 {
-                    Read_File_Record_At_Offset(file_counter*32, file_record, 0, sector_index);
-                    if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
+                    Read_File_Record_At_Offset(file_counter*32, fr, 0, sector_index);
+                    if ((fr->name[0] != 0xe5) && (fr->name[0] != 0x00))
                     {
-                        bool match = match_file_record_to_name_ext(file_record, name, extension);
+                        bool match = match_file_record_to_name_ext(fr, name, extension);
 
                         if (match)
                         {
@@ -697,16 +696,14 @@ bool SDCard::find_file_in_directory(int directory_start_cluster,
                 {
                     for (int file_counter = 0; file_counter < 16; file_counter++)
                     {
-                        Read_File_Record_At_Offset(file_counter*32,
-                                    file_record, cluster, sector_index);
+                        Read_File_Record_At_Offset(file_counter*32, fr, cluster, sector_index);
 
-                        if ((file_record->name[0] != 0xe5) && (file_record->name[0] != 0x00))
+                        if ((fr->name[0] != 0xe5) && (fr->name[0] != 0x00))
                         {
-                            bool match = match_file_record_to_name_ext(file_record,
-                                            name, extension);
+                            bool match=match_file_record_to_name_ext(fr,name,extension);
 
                             if (match)
-                            {                               
+                            { 
                                 result = true;
                                 break;
                             }
@@ -1753,6 +1750,62 @@ void SDCard2::command(uint16_t cmd, uint32_t arg1)
     *argument_reg = arg1;
     *command_reg = cmd;
     while (*aux_status & 0x04) { }  // wait until complete
+}
+
+/*
+void MPlayer::play(MyFile *myFile)
+{
+    uint8_t buf[900000];
+    uint16_t sample, sample_r;
+
+    for (int i = 0; i < 44; i++)
+        myFile->read();
+
+    while (true)
+    {
+        for (size_t i = 0; i < sizeof(buf); i++)
+            buf[i] = myFile->read();
+
+        for (size_t i = 0; i < sizeof(buf);)
+        {
+            sample = 0;
+            sample_r = 0;
+            sample += buf[i++];
+            sample += buf[i++] << 8;
+
+            for (volatile int j = 0; j < this->delay; j++)
+                soundCard->writeDacOut(sample, sample);
+        }
+    }
+}*/
+
+void MPlayer::play()
+{
+    uint8_t buf[900000];
+    uint16_t sample, sample_r;
+
+    for (mstd::vector<MyFile *>::iterator it = queue.begin(); it < queue.end(); it++)
+    {
+        for (int i = 0; i < 44; i++)
+            (*it)->read();
+
+        while (true)
+        {
+            for (size_t i = 0; i < sizeof(buf); i++)
+                buf[i] = (*it)->read();
+
+            for (size_t i = 0; i < sizeof(buf);)
+            {
+                sample = 0;
+                sample_r = 0;
+                sample += buf[i++];
+                sample += buf[i++] << 8;
+
+                for (volatile int j = 0; j < this->delay; j++)
+                    soundCard->writeDacOut(sample, sample);
+            }
+        }
+    }
 }
 
 

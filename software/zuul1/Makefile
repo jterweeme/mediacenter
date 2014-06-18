@@ -24,7 +24,7 @@ all: app_primes1.hex app_sdcardtest1.hex app_test1.hex app_wavplay1.hex \
     app_md5test1.elf app_kbtest2.hex app_vgatest1.hex \
     app_karaoke1.hex app_ofm1.hex app_mytest1.hex app_eepromtest1.hex \
     app_sdcardtest3.hex app_graph1.hex app_fourier1.hex \
-	app_wavplay2.hex
+	app_wavplay2.hex app_wavmix1.hex
 
 app_graph1.hex: app_graph1.flash
 app_audiotest1.hex: app_audiotest1.flash
@@ -45,6 +45,7 @@ app_sdcardtest3.hex: app_sdcardtest3.flash
 app_test1.hex: app_test1.flash
 app_vgatest1.hex: app_vgatest1.flash
 app_vgatest2.hex: app_vgatest2.flash
+app_wavmix1.hex: app_wavmix1.flash
 app_wavplay1.hex: app_wavplay1.flash
 app_wavplay2.hex: app_wavplay2.flash
 
@@ -67,6 +68,7 @@ app_sdcardtest3.flash: app_sdcardtest3.elf
 app_test1.flash: app_test1.elf
 app_vgatest1.flash: app_vgatest1.elf
 app_vgatest2.flash: app_vgatest2.elf
+app_wavmix1.flash: app_wavmix1.elf
 app_wavplay1.flash: app_wavplay1.elf
 app_wavplay2.flash: app_wavplay2.elf
 
@@ -89,6 +91,7 @@ app_sdcardtest3.elf: app_sdcardtest3.o misc.o sdcard.o
 app_test1.elf: app_test1.o misc.o sdcard.o
 app_vgatest1.elf: app_vgatest1.o misc.o sdcard.o
 app_vgatest2.elf: app_vgatest2.o vgascreen.o sdcard.o
+app_wavmix1.elf: app_wavmix1.o misc.o sdcard.o
 app_wavplay1.elf: app_wavplay1.o misc.o sdcard.o
 app_wavplay2.elf: app_wavplay2.o misc.o sdcard.o
 
@@ -128,6 +131,7 @@ vgascreen.o: vgascreen.cpp
 app_vgatest1.o: app_vgatest1.cpp
 app_vgatest2.o: app_vgatest2.cpp
 WaveLib.o: WaveLib.cpp
+app_wavmix1.o: app_wavmix1.cpp misc.h sdcard.h
 app_wavplay1.o: app_wavplay1.cpp misc.h sdcard.h
 app_wavplay2.o: app_wavplay2.cpp misc.h sdcard.h
 

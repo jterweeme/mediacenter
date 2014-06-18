@@ -8,15 +8,24 @@ class Karaoke1
 {
 private:
     VGATerminal *vgaTerminal;
-    Uart *uart;
+    Uart uart;
     QuadroSegment *qs;
-    SDCardEx *sdCard;
+    SDCardEx sdCard;
     MyFile *myFile;
     KarFile *karFile;
+    static const uint32_t SD_BASE = ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
 public:
+    Karaoke1();
     void init();
     int run();
 };
+
+Karaoke1::Karaoke1()
+  :
+    uart((uint32_t *)UART_BASE),
+    sdCard(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, (void *)SD_BASE)
+{
+}
 
 void Karaoke1::init()
 {
@@ -25,21 +34,13 @@ void Karaoke1::init()
     vgaTerminal = new VGATerminal("/dev/video_character_buffer_with_dma_0");
     vgaTerminal->clear();
     vgaTerminal->puts("Karaoke 1\r\n");
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
-    uart->puts("Uart\r\n");
-
-    sdCard = new SDCardEx(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
-            (volatile void * const)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
-
     using mstd::vector;
 
-    if (sdCard->isPresent() && sdCard->isFAT16())
+    if (sdCard.isPresent() && sdCard.isFAT16())
     {
-        myFile = sdCard->openFile("VOGUE.KAR");
+        myFile = sdCard.openFile("VOGUE.KAR");
         karFile = new KarFile(myFile);
         karFile->read();
-        //qs->setHex(::Utility::be_32_toh(karFile->tracks[0]->chunkSizeBE));
         
         for (vector<KarTrack>::iterator it = karFile->tracks.begin();
                 it != karFile->tracks.end(); ++it)
@@ -87,17 +88,6 @@ void Karaoke1::init()
 
         vgaTerminal->puts(karFile->toString());
         vgaTerminal->puts("\r\n");
-        //uart->printf("He%ulo Wo%rld\r\n");
-/*
-        for (int i = 0; i < 100; i++)
-        {
-            uint16_t foo;
-            foo = myFile->read();
-            
-        }*/
-            
-        //karFile = new KarFile(myFile);
-        
     }
     else
     {
@@ -114,18 +104,9 @@ void Karaoke1::init()
     for (mstd::vector<int>::iterator it = vector1.begin(); it != vector1.end(); ++it)
         dinges += *it;
 
-    uart->printf("Hello %s\r\n", "World");
-    //vgaTerminal->clear();
-
-    //alt_up_pixel_buffer_dma_dev *pbd;
-    //pbd = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
-    
-    //if (pbd)
-    //    vgaTerminal->puts("OK\r\n");
- 
+    uart.printf("Hello %s\r\n", "World");
     volatile uint32_t * const pixels = (volatile uint32_t * const)SRAM_BASE;
     volatile uint8_t * const pixels8 = (volatile uint8_t * const)SRAM_BASE;
-
     alt_up_pixel_buffer_dma_dev *pb;
     pb = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");
  

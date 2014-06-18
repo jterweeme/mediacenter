@@ -54,7 +54,8 @@ void Utility::itoa(int n, char *s)
 
 const Sample& jexp(const Sample& s)
 {
-    return Sample(::exp(s.r), ::exp(s.i));
+    //return Sample(::exp(s.r), ::exp(s.i));
+    return Sample(s.r, s.i);
 }
 
 Signaal Signaal::fft(const unsigned log2n)
@@ -68,14 +69,19 @@ Signaal Signaal::fft(const unsigned log2n)
     for (unsigned i = 0; i < n; ++i)
         uitvoer[Utility::bitReverse(i, log2n)] = buffer[i];
 
+    Uart *uart = Uart::getInstance();
+
     for (unsigned s = 1; s <= log2n; ++s)
     {
         const unsigned m = 1 << s;
         const unsigned m2 = m >> 1;
         Sample w(1,0);
-        //const Sample wm = ::jexp(J);
-        Sample wm = ::jexp(J * (Utility::PI/m2));
-        //Sample wm = J * 2.0;
+        const double pim = Utility::PI / m2;
+        Sample foo = J * pim;
+        //Sample wm = ::jexp(foo);
+        Sample wm = Sample(::exp(foo.r), ::exp(foo.i));
+        uart->puts(wm.toString());
+        uart->puts("\r\n");
         
         for (int j = 0; j < m2; ++j)
         {

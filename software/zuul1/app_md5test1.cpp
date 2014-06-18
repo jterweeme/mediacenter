@@ -7,11 +7,13 @@
 class MD5Test1
 {
 private:
-    Uart *uart;
+    Uart uart;
+    VGATerminal vga;
     SDCardEx sdCard;
+    static const uint32_t SD_BASE = ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
 public:
     MD5Test1();
-    void init();
+    int run();
 };
 
 void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
@@ -32,19 +34,14 @@ void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
     for (offset = initial_len + 1; offset < new_len; offset++)
         msg[offset] = 0; // append "0" bits
 
-    // append the len in bits at the end of the buffer.
     Utility::to_bytes(initial_len*8, msg + new_len);
-    // initial_len>>29 == initial_len*8>>32, but avoids overflow.
     Utility::to_bytes(initial_len>>29, msg + new_len + 4);
 
-    // Process the message in successive 512-bit chunks:
-    //for each 512-bit chunk of message:
     for(offset=0; offset<new_len; offset += (512/8)) {
 
-        // break chunk into sixteen 32-bit words w[j], 0 ≤ j ≤ 15
         for (i = 0; i < 16; i++)
             w[i] = Utility::to_int32(msg + offset + i*4);
-        // Initialize hash value for this chunk:
+
         a = h0;
         b = h1;
         c = h2;
@@ -93,50 +90,53 @@ void md5(const uint8_t *initial_msg, size_t initial_len, uint8_t *digest)
     Utility::to_bytes(h3, digest + 12);
 }
 
-MD5Test1::MD5Test1() :
-    sdCard(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
-            (volatile void * const)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE)
-{ }
-
-void MD5Test1::init()
+MD5Test1::MD5Test1()
+  :
+    uart((uint32_t *)UART_BASE),
+    vga("/dev/video_character_buffer_with_dma_0"),
+    sdCard(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, (void *)SD_BASE)
 {
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
-    uart->puts("Initialize MD5Test1\r\n");
-    size_t fileSize = 9365708;
-    uint8_t buf[fileSize];
-    MyFile *myFile;
-    uint8_t result[16];
+    uart.puts("Initialze MD5Test1\r\n");
+    vga.clear();
+    vga.puts("Initialize MD5Test1\r\n");
+}
 
+int MD5Test1::run()
+{
     if (sdCard.isPresent() && sdCard.isFAT16())
     {
+        MyFile *myFile;
+        uint8_t result[16];
         myFile = sdCard.openFile("vogue.kar");
         t_file_record testRecord = sdCard.active_files[myFile->fd];
-        unsigned int fileSize = testRecord.file_size_in_bytes;
-        //myFile2 = sdCard->openFile("VOGUE.KAR");
+        size_t fileSize = testRecord.file_size_in_bytes;
+        uint8_t buf[fileSize];
 
         for (size_t i = 0; i < fileSize && myFile != NULL; i++)
             buf[i] = myFile->read();
 
-        uart->puts("bestand ingelezen\r\n");
+        uart.puts("bestand ingelezen\r\n");
+        vga.puts("bestand ingelezen\r\n");
         md5(buf, fileSize, result);
         char x[3] = {0};
 
         for (int i = 0; i < 16; i++)
         {
             Utility::toHex(result[i], x);
-            uart->puts(x);
+            uart.puts(x);
+            vga.puts(x);
         }
 
-        uart->puts("\r\ndone\r\n");
+        uart.puts("\r\ndone\r\n");
+        vga.puts("\r\ndone\r\n");
     }
+    return 0;
 }
 
 int main()
 {
     MD5Test1 md5test1;
-    md5test1.init();
-    return 0;
+    return md5test1.run();
 }
 
 

@@ -146,8 +146,8 @@ class SDCard
 {
 protected:
     bool alt_up_sd_card_fclose(short int file_handle);
-    short int alt_up_sd_card_find_next(char *file_name);
-    short int alt_up_sd_card_find_next(char *file_name, t_file_record *fr);
+    short alt_up_sd_card_find_next(char *file_name);
+    short alt_up_sd_card_find_next(char *file_name, t_file_record *fr);
     alt_up_sd_card_dev *alt_up_sd_card_open_dev(const char *name, volatile void *base);
     bool alt_up_sd_card_is_Present();
     bool alt_up_sd_card_is_FAT16();
@@ -157,8 +157,8 @@ protected:
     bool get_cluster_flag(unsigned cluster_index, unsigned short int *flag);
     bool mark_cluster(unsigned cluster_index, short int flag, bool first_fat);
     void alt_up_sd_card_set_attributes(short int file_handle, short int attributes);
-    short int alt_up_sd_card_get_attributes(short int file_handle);
-    short int alt_up_sd_card_read(short int file_handle);
+    short alt_up_sd_card_get_attributes(short int file_handle);
+    short alt_up_sd_card_read(short int file_handle);
     bool alt_up_sd_card_write(short int file_handle, char byte_of_data);
     bool Check_for_Master_Boot_Record(void);
     bool Write_File_Record_At_Offset(int offset, t_file_record *record);
@@ -175,14 +175,13 @@ protected:
     bool create_file(char *name, t_file_record *file_record, t_file_record *home_dir);
     void copy_file_record_name_to_string(t_file_record *file_record, char *file_name);
 
-    bool find_file_in_directory(int directory_start_cluster, char *file_name,
-                t_file_record *file_record);
+    bool find_file_in_directory(int directory_start_cluster, char *file_name, t_file_record *fr);
 
     bool get_home_directory_cluster_for_file(char *file_name,
             int *home_directory_cluster, t_file_record *file_record);
 
     bool Read_File_Record_At_Offset(int offset, t_file_record *record,
-        unsigned int cluster_index, unsigned int sector_in_cluster);
+        unsigned cluster_index, unsigned sector_in_cluster);
     
     volatile void * const base;
     volatile uint8_t * const base8;
@@ -221,9 +220,9 @@ public:
     bool isFAT16() { return this->alt_up_sd_card_is_FAT16(); }
     bool write(int, char);
     bool fclose(int);
-    short int readFile(int fd) { return this->alt_up_sd_card_read(fd); }
-    short int findNext(char *fn) { return this->alt_up_sd_card_find_next(fn); }
-    short int findNext(char *fn, t_file_record *fr) { return this->alt_up_sd_card_find_next(fn, fr); }
+    short readFile(int fd) { return this->alt_up_sd_card_read(fd); }
+    short findNext(char *fn) { return this->alt_up_sd_card_find_next(fn); }
+    short findNext(char *fn, t_file_record *fr) { return this->alt_up_sd_card_find_next(fn, fr); }
     
 };
 
@@ -256,6 +255,16 @@ class Obese
 public:
 };
 
+class MPlayer
+{
+    SoundCard *const soundCard;
+    mstd::vector<MyFile *> queue;
+public:
+    unsigned delay;
+    MPlayer(SoundCard *sndCard) : soundCard(sndCard), queue(10), delay(18) { }
+    void enqueue(MyFile *myFile) { queue.push_back(myFile); }
+    void play();
+};
 
 #endif
 
