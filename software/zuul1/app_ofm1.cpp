@@ -68,7 +68,7 @@ int OrthodoxFileManager1::run()
         char fn[13] = {0};
         t_file_record fr;
         int foo = sdCard.alt_up_sd_card_find_first("/.", fn);
-        char dinges[255];
+        //char dinges[255];
 
         while ((foo = sdCard.findNext(fn, &fr)) >= 0)
         {

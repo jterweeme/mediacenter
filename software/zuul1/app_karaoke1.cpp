@@ -108,7 +108,7 @@ void Karaoke1::init()
         dinges += *it;
 
     uart.printf("Hello %s\r\n", "World");
-    volatile uint32_t * const pixels = (volatile uint32_t * const)SRAM_BASE;
+    //volatile uint32_t * const pixels = (volatile uint32_t * const)SRAM_BASE;
     volatile uint8_t * const pixels8 = (volatile uint8_t * const)SRAM_BASE;
     alt_up_pixel_buffer_dma_dev *pb;
     pb = alt_up_pixel_buffer_dma_open_dev("/dev/video_pixel_buffer_dma_0");

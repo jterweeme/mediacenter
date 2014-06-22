@@ -34,7 +34,7 @@ int Fourier1::run()
     segLinks.setInt(10);
 
     mstd::complex<double> x(5, 4);
-    segLinks.setInt(x.real());
+    //segLinks.setInt(x.real());
     uart->printf("%u\r\n", 5);
 
     cx a[] = {cx(0,0), cx(1,1), cx(3,3), cx(4,4), cx(4,4), cx(3,3), cx(1,1), cx(0,0) };

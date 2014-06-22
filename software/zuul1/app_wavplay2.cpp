@@ -112,7 +112,7 @@ int WavPlay2::run()
             if (::memcmp(fr.extension, wav, 3) == 0 && ::memcmp(fr.name, wav2, 8) == 0)
             {
                 MyFileRecord record(fr);
-                const char *fileName = record.toString();
+                //const char *fileName = record.toString();
                 myFile = sdCard->openFile((char *)"CROCKETS.WAV");
         
                 if (myFile <= 0)

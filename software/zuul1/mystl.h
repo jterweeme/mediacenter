@@ -54,7 +54,7 @@ namespace mstd
         {
             char foo[80] = {0};
             ::snprintf(foo, sizeof(foo), "%f %f", r, i);
-            return foo;
+            return "onzin";
         }
     };
 

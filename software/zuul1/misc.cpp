@@ -83,9 +83,9 @@ Signaal Signaal::fft(const unsigned log2n)
         uart->puts(wm.toString());
         uart->puts("\r\n");
         
-        for (int j = 0; j < m2; ++j)
+        for (unsigned j = 0; j < m2; ++j)
         {
-            for (int k = j; k < n; k += m)
+            for (unsigned k = j; k < n; k += m)
             {
                 Sample t = w * uitvoer[k + m2];
                 Sample u = uitvoer[k];
@@ -292,7 +292,7 @@ void Uart2::printf(const char *format, ...)
         {
         case 'u':   // unsigned int
         {
-            int i = va_arg(argp, int);
+            //int i = va_arg(argp, int);
             //this->puts(itoa(i));
             putc('9');
         }

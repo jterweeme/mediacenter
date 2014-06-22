@@ -1628,21 +1628,21 @@ bool SDCard::alt_up_sd_card_write(short int file_handle, char byte_of_data)
 
 SDCard::SDCard(const char *name, volatile void * const base)
   :
-    base(base),
-    base8((volatile uint8_t * const)base),
-    initialized(false),
-    is_sd_card_formated_as_FAT16(false),
     aux_status_register((volatile uint16_t * const)(base8 + 0x234)),
     status_register((volatile uint32_t * const)(base8 + 0x224)),
     CSD_register_w0((volatile uint16_t * const)(base8 + 0x210)),
     command_register((uint16_t *)(base8 + 0x230)),
     command_argument_register((uint32_t *)(base8 + 0x22c)),
     buffer_memory(base8),
+    is_sd_card_formated_as_FAT16(false),
     fat_partition_offset_in_512_byte_sectors(0),
     fat_partition_size_in_512_byte_sectors(0),
     device_pointer(NULL),
     current_sector_modified(false),
-    current_sector_index(0)
+    current_sector_index(0),
+    base(base),
+    base8((volatile uint8_t * const)base),
+    initialized(false)
 {
 	alt_up_sd_card_dev *dev = (alt_up_sd_card_dev *)alt_find_dev(name, &alt_dev_list);
     device_pointer = dev;

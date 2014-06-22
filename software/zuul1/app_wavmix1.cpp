@@ -55,7 +55,7 @@ int App::run()
     
     do
     {
-        uint16_t sample = 0;
+        //uint16_t sample = 0;
         uint16_t buf = 0;
         input1->fread((char *)&buf, sizeof(uint16_t), 1);
         
