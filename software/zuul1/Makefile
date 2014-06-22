@@ -20,11 +20,11 @@ DOWNLOAD := app_karaoke1.elf
 
 .PHONY: all
 
-all: app_primes1.hex app_sdcardtest1.hex app_test1.hex app_wavplay1.hex \
-    app_md5test1.elf app_kbtest2.hex app_vgatest1.hex \
-    app_karaoke1.hex app_ofm1.hex app_mytest1.hex app_eepromtest1.hex \
-    app_sdcardtest3.hex app_graph1.hex app_fourier1.hex \
-	app_wavplay2.hex app_wavmix1.hex
+all: app_primes1.hex app_sdcardtest1.hex app_test1.elf app_wavplay1.hex \
+    app_md5test1.hex app_kbtest2.hex app_vgatest1.hex \
+    app_karaoke1.hex app_ofm1.elf app_mytest1.elf app_eepromtest1.elf \
+    app_sdcardtest3.hex app_graph1.elf app_fourier1.elf \
+	app_wavplay2.elf app_wavmix1.elf
 
 app_graph1.hex: app_graph1.flash
 app_audiotest1.hex: app_audiotest1.flash

@@ -44,7 +44,7 @@ WavPlay1::WavPlay1()
     ir((uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID)
 {
     soundCard.init();
-    soundCard.setOutputVolume(100);
+    soundCard.setOutputVolume(120);
     soundCard.setSampleRate(SoundCard::RATE_ADC44K1_DAC44K1);
     soundCard.setSampleRate(3);
     lcd.clear();
