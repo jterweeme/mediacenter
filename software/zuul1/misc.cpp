@@ -100,6 +100,14 @@ Signaal Signaal::fft(const unsigned log2n)
     return uitvoer;
 }
 
+void JtagUart::putc(const char c)
+{
+    while (*ctl & 0xffff0000 == 0) { }
+    base[0] = c;
+}
+
+JtagUart *JtagUart::instance;
+
 unsigned int Utility::bitReverse(unsigned int x, const int log2n)
 {
     int n = 0;

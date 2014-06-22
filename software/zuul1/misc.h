@@ -223,7 +223,6 @@ public:
 
 class Uart : public Uart2  // singleton versie
 {
-private:
     static Uart *instance;
 public:
     Uart();
@@ -235,10 +234,14 @@ public:
 
 class JtagUart
 {
-    int fd;
+    static JtagUart *instance;
+    volatile uint32_t * const base;
+    volatile uint32_t * const ctl;
 public:
-    void init(int fd) { this->fd = fd; }
-    void write(const char *s) { ::write(fd, s, ::strlen(s)); }
+    JtagUart(volatile uint32_t * const base) : base(base), ctl(base + 4) { instance = this; }
+    static JtagUart *getInstance() { return instance; }
+    void putc(const char);
+    void puts(const char *s) { while (*s) putc(*s++); }
 };
 
 class LCD
