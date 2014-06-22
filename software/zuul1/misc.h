@@ -36,37 +36,6 @@ public:
     static const double PI = 3.1415926536;
     static unsigned int bitReverse(unsigned int x, const int log2n);
     static void itoa(int n, char *s);
-
-/*
-    static void fft(ComplexDouble *a, ComplexDouble *b, int log2n)
-    {
-        const ComplexDouble J(0, 1);
-        int n = 1 << log2n;
-
-        for (unsigned int i = 0; i < n; ++i)
-            b[Utility::bitReverse(i, log2n)] = a[i];
-
-        for (int s = 1; s <= log2n; ++s)
-        {
-            int m = 1 << s;
-            int m2 = m >> 1;
-            complex w(1, 0);
-            complex wm = exp(-J * (PI / m2));
-
-            for (int j = 0; j < m2; ++j)
-            {
-                for (int k = j; k < n; k += m)
-                {
-                    complex t = w * b[k + m2];
-                    complex u = b[k];
-                    b[k] = u + t;
-                    b[k + m2] = u - t;
-                }
-
-                w *= wm;
-            }
-        }
-    }*/
 };
 
 struct RIFFHeader
@@ -225,11 +194,9 @@ class Uart : public Uart2  // singleton versie
 {
     static Uart *instance;
 public:
-    Uart();
     Uart(volatile uint32_t *const base);
     Uart(uint32_t base);
     static Uart *getInstance();
-    void init(volatile uint32_t *base) { this->base = base; }
 };
 
 class JtagUart

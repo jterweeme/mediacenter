@@ -9,15 +9,12 @@ Jasper ter Weeme
 
 int delay = 20;
 
-
-
 class WavPlay2
 {
-private:
     I2C i2c;
     SoundCard soundCard;
     SDCardEx *sdCard;
-    Uart *uart;
+    Uart uart;
     LCD *lcd;
     MyFile *myFile;
     CombinedSegment *cs;
@@ -40,11 +37,10 @@ public:
 };
 
 WavPlay2::WavPlay2() :
-    i2c((volatile uint32_t * const)SND_I2C_SCL_BASE, (volatile uint32_t * const)SND_I2C_SDA_BASE),
+    i2c((uint32_t *)SND_I2C_SCL_BASE, (uint32_t *)SND_I2C_SDA_BASE),
     soundCard(&i2c, (volatile uint32_t * const)AUDIO_IF_0_BASE),
-
-    ir((volatile uint32_t * const)INFRARED_0_BASE, INFRARED_0_IRQ,
-        INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID)
+    uart((uint32_t *)UART_BASE),
+    ir((uint32_t *)INFRARED_0_BASE, INFRARED_0_IRQ, INFRARED_0_IRQ_INTERRUPT_CONTROLLER_ID)
 {
 }
 
@@ -75,8 +71,6 @@ void Beam::update()
 
 void WavPlay2::init()
 {
-    uart = Uart::getInstance();
-    uart->init((uint32_t *)UART_BASE);
     volatile void * const sdbase = (void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE;
     sdCard = new SDCardEx(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME, sdbase);
     soundCard.init();
@@ -143,7 +137,7 @@ int WavPlay2::run()
             }
         }
         
-        uart->puts("done\r\n");
+        uart.puts("done\r\n");
     }
     return 0;
 }

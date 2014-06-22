@@ -76,14 +76,6 @@
          type = "String";
       }
    }
-   element mytimer1_0.avalon_slave
-   {
-      datum baseAddress
-      {
-         value = "136328536";
-         type = "String";
-      }
-   }
    element infrared_0.avalon_slave
    {
       datum baseAddress
@@ -97,6 +89,14 @@
       datum baseAddress
       {
          value = "136328288";
+         type = "String";
+      }
+   }
+   element mytimer1_0.avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "136328536";
          type = "String";
       }
    }
@@ -256,43 +256,32 @@
          type = "String";
       }
    }
-   element snd_i2c_scl.s1
+   element sw.s1
    {
       datum baseAddress
       {
-         value = "136328432";
+         value = "136328400";
          type = "String";
       }
    }
-   element ledr.s1
+   element timer_0.s1
    {
       datum baseAddress
       {
-         value = "136328384";
+         value = "136328256";
          type = "String";
       }
    }
-   element snd_i2c_sda.s1
+   element new_sdram_controller_0.s1
    {
-      datum baseAddress
+      datum _lockedAddress
       {
-         value = "136328448";
-         type = "String";
+         value = "1";
+         type = "boolean";
       }
-   }
-   element ledg.s1
-   {
       datum baseAddress
       {
-         value = "136328368";
-         type = "String";
-      }
-   }
-   element eep_i2c_scl.s1
-   {
-      datum baseAddress
-      {
-         value = "136328480";
+         value = "0";
          type = "String";
       }
    }
@@ -312,6 +301,30 @@
          type = "String";
       }
    }
+   element eep_i2c_scl.s1
+   {
+      datum baseAddress
+      {
+         value = "136328480";
+         type = "String";
+      }
+   }
+   element ledg.s1
+   {
+      datum baseAddress
+      {
+         value = "136328368";
+         type = "String";
+      }
+   }
+   element ledr.s1
+   {
+      datum baseAddress
+      {
+         value = "136328384";
+         type = "String";
+      }
+   }
    element va.s1
    {
       datum baseAddress
@@ -320,32 +333,19 @@
          type = "String";
       }
    }
-   element new_sdram_controller_0.s1
+   element uart.s1
    {
-      datum _lockedAddress
-      {
-         value = "1";
-         type = "boolean";
-      }
       datum baseAddress
       {
-         value = "0";
+         value = "136328320";
          type = "String";
       }
    }
-   element sw.s1
+   element snd_i2c_sda.s1
    {
       datum baseAddress
       {
-         value = "136328400";
-         type = "String";
-      }
-   }
-   element timer_0.s1
-   {
-      datum baseAddress
-      {
-         value = "136328256";
+         value = "136328448";
          type = "String";
       }
    }
@@ -357,11 +357,11 @@
          type = "String";
       }
    }
-   element uart.s1
+   element snd_i2c_scl.s1
    {
       datum baseAddress
       {
-         value = "136328320";
+         value = "136328432";
          type = "String";
       }
    }
@@ -521,7 +521,7 @@
  <parameter name="projectName" value="mediacenter.qpf" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1403445335910" />
+ <parameter name="timeStamp" value="1403449642138" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface
@@ -691,7 +691,7 @@
   <parameter name="setting_interruptControllerType" value="Internal" />
   <parameter name="setting_branchPredictionType" value="Automatic" />
   <parameter name="setting_bhtPtrSz" value="8" />
-  <parameter name="muldiv_multiplierType" value="NoneSmall" />
+  <parameter name="muldiv_multiplierType" value="EmbeddedMulFast" />
   <parameter name="mpu_minInstRegionSize" value="12" />
   <parameter name="mpu_minDataRegionSize" value="12" />
   <parameter name="mmu_uitlbNumEntries" value="4" />

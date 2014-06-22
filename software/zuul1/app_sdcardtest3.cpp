@@ -4,19 +4,23 @@
 
 class SDCardTest3
 {
-public:
-    void init();
-private:
     SDCard2 *sd;
-    Uart *uart;
+    Uart uart;
+public:
+    SDCardTest3();
+    int run();
 };
 
-void SDCardTest3::init()
+SDCardTest3::SDCardTest3()
+  :
+    uart((uint32_t *)UART_BASE)
+{
+}
+
+int SDCardTest3::run()
 {
     sd = new SDCard2((void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
-    uart->puts("Init SDCardTest3\r\n");
+    uart.puts("Init SDCardTest3\r\n");
     sd->waitForInsert();
 
     for (int i = 0; i < 28800; i++)
@@ -26,17 +30,18 @@ void SDCardTest3::init()
     {
         char x[3] = {0};
         Utility::toHex(sd->data[i], x);
-        uart->puts(x);
+        uart.puts(x);
     }
 
-    uart->puts("\r\n");
-    uart->puts("done\r\n");
+    uart.puts("\r\n");
+    uart.puts("done\r\n");
+    return 0;
 }
 
 int main()
 {
     SDCardTest3 sd3;
-    sd3.init();
+    sd3.run();
     return 0;
 }
 

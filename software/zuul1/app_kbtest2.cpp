@@ -9,15 +9,21 @@
 
 class KeyBoardTest2
 {
+    Uart uart;
+    DuoSegment *segLinks;
 public:
+    KeyBoardTest2();
     void init();
     int run();
     uint8_t keystroke;
     static void isrBridge(void *context);
-private:
-    Uart *uart;
-    DuoSegment *segLinks;
 };
+
+KeyBoardTest2::KeyBoardTest2()
+  :
+    uart((uint32_t *)UART_BASE)
+{
+}
 
 void KeyBoardTest2::isrBridge(void *context)
 {
@@ -27,9 +33,7 @@ void KeyBoardTest2::isrBridge(void *context)
 
 void KeyBoardTest2::init()
 {
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
-    uart->puts("Init KBTest2\r\n");
+    uart.puts("Init KBTest2\r\n");
     ::printf("Init\r\n");
     segLinks = new DuoSegment((volatile uint16_t *)VA_S1_BASE);
     segLinks->setHex(0);

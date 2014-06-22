@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>Jun 22, 2014 4:37:56 PM</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1403447876940</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>Jun 22, 2014 5:11:38 PM</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1403449898128</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>/data/stenden/fpga/tmp/mediacenter/software/bsp</BspGeneratedLocation>
         <BspSettingsFile>./settings.bsp</BspSettingsFile>
         <SopcDesignFile>../../de2_115.sopcinfo</SopcDesignFile>
@@ -782,7 +782,7 @@
                 <SettingName>hal.enable_mul_div_emulation</SettingName>
                 <Identifier>ALT_NO_INSTRUCTION_EMULATION</Identifier>
                 <Type>Boolean</Type>
-                <Value>1</Value>
+                <Value>0</Value>
                 <DefaultValue>0</DefaultValue>
                 <DestinationFile>public_mk_define</DestinationFile>
                 <Description>Adds code to emulate multiply and divide instructions in case they are executed but aren't present in the CPU. Normally this isn't required because the compiler won't use multiply and divide instructions that aren't present in the CPU. If false, adds -DALT_NO_INSTRUCTION_EMULATION to ALT_CPPFLAGS in public.mk.</Description>

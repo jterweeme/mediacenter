@@ -9,38 +9,41 @@ Jasper ter Weeme
 
 class SDCardTest
 {
-public:
-    int run();
-    void init();
-private:
     SDCardEx *sdCard;
     int bestand;
-    Uart *uart;
+    Uart uart;
+public:
+    SDCardTest();
+    int run();
+    void init();
 };
+
+SDCardTest::SDCardTest()
+  :
+    uart((uint32_t *)UART_BASE)
+{
+}
 
 char buffer[512] = "WELCOME TO THE INTERFACE!!\r\n\0";
 
 void SDCardTest::init()
 {
     sdCard = new SDCardEx(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
-        (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
+        (void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
 
     //sdCard->init(ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_NAME,
     //    (volatile void *)ALTERA_UP_SD_CARD_AVALON_INTERFACE_0_BASE);
-
-    uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
 }
 
 int SDCardTest::run()
 {
     if (!sdCard->isPresent() || !sdCard->isFAT16())
     {
-        uart->puts("Geen FAT16\r\n");
+        uart.puts("Geen FAT16\r\n");
         return -1;
     }
 
-    uart->puts("Kaart is FAT16\r\n");
+    uart.puts("Kaart is FAT16\r\n");
     bestand = sdCard->fopen("lucky.txt");
         
     if (bestand < 0)

@@ -1751,7 +1751,7 @@ void MPlayer::play()
                 sample += buf[i++];
                 sample += buf[i++] << 8;
 
-                for (volatile int j = 0; j < this->delay; j++)
+                for (volatile unsigned j = 0; j < this->delay; j++)
                     soundCard->writeDacOut(sample, sample);
             }
         }

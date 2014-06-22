@@ -9,17 +9,19 @@
 
 class MyTimerTest
 {
+    Uart uart;
 public:
+    MyTimerTest();
     void init();
     int run();
     static void isr(void *context);
 };
 
-void MyTimerTest::init()
+MyTimerTest::MyTimerTest()
+  :
+    uart((uint32_t *)UART_BASE)
 {
-    Uart *uart = Uart::getInstance();
-    uart->init((volatile uint32_t *)UART_BASE);
-    uart->puts("init\r\n");
+    uart.puts("init\r\n");
     ::alt_ic_isr_register(MYTIMER1_0_IRQ_INTERRUPT_CONTROLLER_ID, MYTIMER1_0_IRQ, isr, 0, 0);
 }
 
@@ -41,7 +43,6 @@ void MyTimerTest::isr(void *context)
 int main()
 {
     MyTimerTest mtt;
-    mtt.init();
     return mtt.run();
 }
 

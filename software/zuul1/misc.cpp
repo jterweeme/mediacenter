@@ -33,28 +33,8 @@ uint32_t Utility::to_int32(const uint8_t * const bytes)
         | ((uint32_t) bytes[3] << 24);
 }
 
-/*
-void Utility::itoa(int n, char *s)
+const Sample jexp(const Sample& s)
 {
-    int i, sign;
-
-    if ((sign = n) < 0)
-        n = -n;
-
-    i = 0;
-
-    do
-    {
-        s[i++] = n % 10 + '0';
-    }
-    while ((n /= 10) > 0);
-
-    if (
-}*/
-
-const Sample& jexp(const Sample& s)
-{
-    //return Sample(::exp(s.r), ::exp(s.i));
     return Sample(s.r, s.i);
 }
 
@@ -166,38 +146,6 @@ void QuadroSegment::setInt(const unsigned n)
     *base = lut[a] << 24 | lut[b] << 16 | lut[c] << 8 | lut[d];
 }
 
-/*
-template<class T> void Utility::fft(T a, T b, const int log2n)
-{
-    typedef typename mstd::iterator_traits<T>::value_type complex;
-    const complex J(0, 1);
-    int n = 1 << log2n;
-    
-    for (unsigned int i = 0; i < n; ++i)
-        b[Utility::bitReverse(i, log2n)] = a[i];
-
-    for (int s = 1; s <= log2n; ++s)
-    {
-        int m = 1 << s;
-        int m2 = m >> 1;
-        complex w(1, 0);
-        complex wm = exp(-J * (PI / m2));
-
-        for (int j = 0; j < m2; ++j)
-        {
-            for (int k = j; k < n; k += m)
-            {
-                complex t = w * b[k + m2];
-                complex u = b[k];
-                b[k] = u + t;
-                b[k + m2] = u - t;
-            }
-
-            w *= wm;
-        }
-    }
-}*/
-
 void LCD::setPos(uint8_t x, uint8_t y)
 {
 }
@@ -249,23 +197,12 @@ InfraRood *InfraRood::instance;
 Uart *Uart::getInstance()
 {
     if (!instance)
-    {
-        static Uart inst;
-        instance = &inst;
-    }
+        throw "geen instance";
 
     return instance;
 }
 
 Uart *Uart::instance;
-
-Uart::Uart() : Uart2()
-{
-    if (instance)
-        throw "Bestaat al";
-
-    instance = this;
-}
 
 Uart::Uart(volatile uint32_t * const base) : Uart2(base)
 {
