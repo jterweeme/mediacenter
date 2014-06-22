@@ -24,7 +24,7 @@ all: app_primes1.hex app_sdcardtest1.hex app_test1.elf app_wavplay1.hex \
     app_md5test1.hex app_kbtest2.hex app_vgatest1.hex \
     app_karaoke1.hex app_ofm1.elf app_mytest1.elf app_eepromtest1.elf \
     app_sdcardtest3.hex app_graph1.elf app_fourier1.elf \
-	app_wavplay2.elf app_wavmix1.elf app_jtagtest1.elf
+	app_wavplay2.elf app_wavmix1.elf app_jtagtest1.elf app_zuul1.elf
 
 app_graph1.hex: app_graph1.flash
 app_audiotest1.hex: app_audiotest1.flash
@@ -94,13 +94,14 @@ app_vgatest2.elf: app_vgatest2.o vgascreen.o sdcard.o
 app_wavmix1.elf: app_wavmix1.o misc.o sdcard.o
 app_wavplay1.elf: app_wavplay1.o misc.o sdcard.o
 app_wavplay2.elf: app_wavplay2.o misc.o sdcard.o
+app_zuul1.elf: app_zuul1.o misc.o
 
-app_graph1.o: app_graph1.cpp
-AUDIO.o: AUDIO.cpp AUDIO.h
 app_audiotest1.o: app_audiotest1.cpp
+app_graph1.o: app_graph1.cpp
 app_fourier1.o: app_fourier1.cpp misc.h
 app_jtagtest1.o: app_jtagtest1.cpp
 app_eepromtest1.o: app_eepromtest1.cpp
+AUDIO.o: AUDIO.cpp AUDIO.h
 FatFileSystem.o: FatFileSystem.cpp
 FatInternal.o: FatInternal.cpp
 app_karaoke1.o: app_karaoke1.cpp mymidi.h misc.h sdcard.h
@@ -110,25 +111,27 @@ md5.o: md5.cpp
 app_md5test1.o: app_md5test1.cpp
 misc.o: misc.cpp misc.h
 mymidi.o: mymidi.cpp mymidi.h misc.h
+ps2.o: ps2.cpp
+sdaudio2.o: sdaudio2.cpp misc.h LED.h AUDIO.h AUDIO_REG.h
+sdcard.o: sdcard.cpp sdcard.h
+SEG7.o: SEG7.cpp
 app_mytest1.o: app_mytest1.cpp misc.h
 app_ofm1.o: app_ofm1.cpp
 app_piano1.o: app_piano1.cpp
 app_primes1.o: app_primes1.cpp
-ps2.o: ps2.cpp
-sdaudio2.o: sdaudio2.cpp misc.h LED.h AUDIO.h AUDIO_REG.h
-sdcard.o: sdcard.cpp sdcard.h
 app_sdcardtest1.o: app_sdcardtest1.cpp
 app_sdcardtest2.o: app_sdcardtest2.cpp
 app_sdcardtest3.o: app_sdcardtest3.cpp
-SEG7.o: SEG7.cpp
 app_test1.o: app_test1.cpp misc.h mystl.h
-vgascreen.o: vgascreen.cpp
 app_vgatest1.o: app_vgatest1.cpp
 app_vgatest2.o: app_vgatest2.cpp
-WaveLib.o: WaveLib.cpp
 app_wavmix1.o: app_wavmix1.cpp misc.h sdcard.h
 app_wavplay1.o: app_wavplay1.cpp misc.h sdcard.h
 app_wavplay2.o: app_wavplay2.cpp misc.h sdcard.h
+app_zuul1.o: app_zuul1.cpp misc.h
+vgascreen.o: vgascreen.cpp
+WaveLib.o: WaveLib.cpp
+
 
 zuul1.png: zuul1.uxf
 	umlet -action=convert -format=png -filename=$< -output=$@

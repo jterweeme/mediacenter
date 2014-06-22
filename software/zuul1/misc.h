@@ -10,7 +10,6 @@ Alex Aalbertsberg
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
-#include <unistd.h>
 #include <altera_up_avalon_video_character_buffer_with_dma.h>
 #include <priv/alt_file.h>
 #include <sys/alt_irq.h>
@@ -23,6 +22,14 @@ class Signaal : public mstd::vector<Sample>
 public:
     Signaal(const int capacity) : mstd::vector<Sample>(capacity) { }
     Signaal fft(const unsigned log2n);
+};
+
+class Terminal
+{
+public:
+    virtual void putc(const char c) = 0;
+    virtual void puts(const char *s) { while (*s) putc(*s++); }
+    virtual ~Terminal() { }
 };
 
 class Utility
@@ -99,7 +106,6 @@ public:
         : CombinedSegment(new DuoSegment(l), new DuoSegment(r), new QuadroSegment(q))
     { }
 #endif
-
     void setInt(const unsigned n);
     void setHex(const uint32_t n);
 };
@@ -178,28 +184,27 @@ public:
     static const uint16_t RIGHT = 0xe718;
     static const uint16_t MUTE = 0xf30c;
 };
-class Uart2
+class Uart2 : public Terminal
 {
 protected:
     volatile uint32_t *base;
 public:
-    Uart2() { }
     Uart2(volatile uint32_t * const base) : base(base) { }
     void putc(const char);
-    void puts(const char *s) { while (*s) putc(*s++); }
+    char read() { return base[0]; }
     void printf(const char *format, ...);
 };
 
-class Uart : public Uart2  // singleton versie
+class Uart : public Uart2
 {
     static Uart *instance;
+    static void isrBridge(void *context);
 public:
     Uart(volatile uint32_t *const base);
-    Uart(uint32_t base);
     static Uart *getInstance();
 };
 
-class JtagUart
+class JtagUart : public Terminal
 {
     static JtagUart *instance;
     volatile uint32_t * const base;
@@ -208,10 +213,9 @@ public:
     JtagUart(volatile uint32_t * const base) : base(base), ctl(base + 4) { instance = this; }
     static JtagUart *getInstance() { return instance; }
     void putc(const char);
-    void puts(const char *s) { while (*s) putc(*s++); }
 };
 
-class LCD
+class LCD : public Terminal
 {
     volatile uint8_t *base;
     static const uint8_t COMMAND_REG = 0;
@@ -308,14 +312,13 @@ public:
     void shiftLeft(int n);
 };
 
-class VGATerminal : public VGA
+class VGATerminal : public VGA, public Terminal
 {
     int x, y;
     static const uint8_t COLS = 80;
 public:
     VGATerminal(const char *devName) : VGA(devName) { x = y = 0; }
     void putc(const char c);
-    void puts(const char *s) { while (*s) putc(*s++); }
 };
 
 #endif
