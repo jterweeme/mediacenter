@@ -106,10 +106,10 @@ unsigned int Utility::bitReverse(unsigned int x, const int log2n)
 const uint8_t lut[] = {0x40, 0xf9, 0x24, 0x30, 0x99, 0x92, 0x82, 0xf8,
                 0x00, 0x10, 0x08, 0x83, 0xc6, 0xa1, 0x86, 0x8e};
 
-void DuoSegment::setInt(const unsigned int n)
+void DuoSegment::setInt(const unsigned n)
 {
-    unsigned int a = n / 10 % 10;
-    unsigned int b = n % 10;
+    const unsigned a = n / 10 % 10;
+    const unsigned b = n % 10;
     *base = lut[a] << 8 | lut[b];
 }
 

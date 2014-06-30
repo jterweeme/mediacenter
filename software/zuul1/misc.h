@@ -213,6 +213,7 @@ public:
     JtagUart(volatile uint32_t * const base) : base(base), ctl(base + 4) { instance = this; }
     static JtagUart *getInstance() { return instance; }
     void putc(const char);
+    char read() { return base[0]; }
 };
 
 class LCD : public Terminal

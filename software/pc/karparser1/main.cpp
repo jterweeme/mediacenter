@@ -234,9 +234,13 @@ public:
 
 std::string TextEvent::toString()
 {
-    std::stringstream ss;
-    ss << "Text Event: " << text;
-    return ss.str();
+    std::string s;
+    s += "Text Event: ";
+    s += text;
+    //std::stringstream ss;
+    //ss << "Text Event: " << text;
+    //return ss.str();
+    return s;
 }
 
 std::string EventVector::toString()
